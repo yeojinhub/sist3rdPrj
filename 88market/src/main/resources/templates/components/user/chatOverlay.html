@@ -1,0 +1,91 @@
+<th:block th:fragment="chatOverlay">
+<link rel="stylesheet" th:href="@{/css/user/components/chat.css}">
+	<script>
+		$(function() {
+			// 채팅하기 버튼 클릭 이벤트
+			$('#chat').click(function() {
+				$('.chat-overlay').fadeIn(300);
+				$('.chat-modal').addClass('show');
+			});
+
+			// 오버레이 클릭 시 모달 닫기
+			$('.chat-overlay').click(function() {
+				$('.chat-modal').removeClass('show');
+				setTimeout(function() {
+					$('.chat-overlay').fadeOut(300);
+				}, 300);
+			});
+
+			// X 버튼 클릭 시 모달 닫기
+			$('.close-button').click(function() {
+				$('.chat-modal').removeClass('show');
+				setTimeout(function() {
+					$('.chat-overlay').fadeOut(300);
+				}, 300);
+			});
+
+			// 모달 내부 클릭 시 이벤트 전파 막기 (오버레이 클릭 방지)
+			$('.chat-modal').click(function(e) {
+				e.stopPropagation();
+			});
+		});
+	</script>
+	<!-- 채팅 모달 오버레이 -->
+	<div class="chat-overlay"></div>
+
+	<!-- 채팅 모달 -->
+	<div class="chat-modal">
+		<div class="chat-container">
+			<!-- 헤더 부분 -->
+			<div class="chat-header">
+				<h1 class="chat-title">채팅</h1>
+				<button class="close-button">X</button>
+			</div>
+
+			<!-- 채팅 목록 -->
+			<div class="chat-list">
+				<!-- 첫 번째 채팅 아이템 -->
+				<div class="chat-item">
+					<div class="profile-image"></div>
+					<div class="chat-content">
+						<div class="chat-info">
+							<span class="username">웅이대</span> <span class="time">오후
+								4:12</span>
+						</div>
+						<div class="last-message">상품권 판매중인가요?</div>
+					</div>
+				</div>
+
+				<!-- 두 번째 채팅 아이템 (읽지 않은 메시지 있음) -->
+				<div class="chat-item">
+					<div class="profile-image profile-image-2"></div>
+					<div class="chat-content">
+						<div class="chat-info">
+							<span class="username">요구르트아줌마</span> <span class="time">오전
+								8:42</span>
+						</div>
+						<div class="last-message">오늘 거래하시나요?</div>
+					</div>
+					<div class="unread-count">
+						<span class="count-number">2</span>
+					</div>
+				</div>
+
+				<!-- 세 번째 채팅 아이템 (읽지 않은 메시지 있음) -->
+				<div class="chat-item">
+					<div class="profile-image profile-image-3"></div>
+					<div class="chat-content">
+						<div class="chat-info">
+							<span class="username">아저씨</span> <span class="time">오전
+								11:37</span>
+						</div>
+						<div class="last-message">안전거래 안하시죠?</div>
+					</div>
+					<div class="unread-count">
+						<span class="count-number">1</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>

@@ -1,0 +1,22 @@
+/* 푸터 */
+.footer {
+    background-color: #eeeeee;
+    padding: 50px 0;
+    margin-top: 60px;
+}
+.footer-container {
+    max-width: 1408px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.company-info h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.company-info p, .footer-links p, .copyright p {
+    font-size: 15px;
+    color: #5b5b5b;
+    line-height: 1.5;
+}
+.copyright p { text-align: right; }

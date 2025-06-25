@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 공지사항</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/noticeList.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<div class="admin-wrapper">
+		<!-- 사이드 네비게이션 -->
+		<aside class="side-nav">
+			<div class="logo-section">
+				<img th:src="@{/images/logo.png}" alt="88마켓 로고">
+			</div>
+			<div class="site-shortcut">
+				<a th:href="@{/}">사이트 바로가기</a>
+			</div>
+			<nav class="menu">
+				<ul>
+					<li><a href="#">대시보드</a></li>
+					<li><a href="#">계정 관리</a></li>
+					<li><a href="#">상품관리</a></li>
+					<li><a href="#">기획전 관리</a></li>
+					<li><a href="#">카테고리 관리</a></li>
+					<li class="active"><a href="#">게시판 관리</a>
+						<ul class="sub-menu">
+							<li class="active-sub"><a href="#">ㄴ 공지사항 관리</a></li>
+							<li><a href="#">ㄴ FAQ 관리</a></li>
+							<li><a href="#">ㄴ 문의사항 관리</a></li>
+							<li><a href="#">ㄴ 이벤트 관리</a></li>
+						</ul></li>
+					<li><a href="#">채팅 관리</a></li>
+					<li><a href="#">신고 관리</a></li>
+				</ul>
+			</nav>
+		</aside>
+
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>게시판 관리 &gt;</span> <span class="current-page">공지사항 관리</span>
+				</div>
+				<div class="user-menu">
+					<span><strong>김민경</strong> 관리자님</span> <a href="#">로그아웃</a>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (공지사항 관리) -->
+			<main class="container">
+				<section class="search-section">
+					<div class="search-box">
+						<select class="search-filter">
+							<option value="제목">제목</option>
+						</select> <input type="text" class="search-input" placeholder="검색">
+						<button class="search-button">검색</button>
+					</div>
+				</section>
+
+				<section class="notice-section">
+					<table class="notice-table">
+						<thead>
+							<tr>
+								<th><input type="checkbox"></th>
+								<th>번호</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>작성일</th>
+								<th>상태</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><input type="checkbox" checked></td>
+								<td>1</td>
+								<td class="notice-title">팔팔마켓 이용 정책 (2023. 06. 29 개정)</td>
+								<td>이대웅</td>
+								<td>2024-01-15</td>
+								<td><span class="status-badge status-visible">보여짐</span></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" checked></td>
+								<td>2</td>
+								<td class="notice-title">거래제한 상품 안내 (2025. 06. 10 개정)</td>
+								<td>강태일</td>
+								<td>2024-01-15</td>
+								<td><span class="status-badge status-hidden">숨겨짐</span></td>
+							</tr>
+							<!-- 나머지 데이터 행들... -->
+							<tr>
+								<td><input type="checkbox" checked></td>
+								<td>3</td>
+								<td class="notice-title">새로운 기능 안내</td>
+								<td>관리자</td>
+								<td>2024-01-15</td>
+								<td><span class="status-badge status-visible">보여짐</span></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" checked></td>
+								<td>4</td>
+								<td class="notice-title">새로운 기능 안내</td>
+								<td>관리자</td>
+								<td>2024-01-15</td>
+								<td><span class="status-badge status-visible">보여짐</span></td>
+							</tr>
+							<tr>
+								<td><input type="checkbox" checked></td>
+								<td>5</td>
+								<td class="notice-title">새로운 기능 안내</td>
+								<td>관리자</td>
+								<td>2024-01-15</td>
+								<td><span class="status-badge status-visible">보여짐</span></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="table-footer">
+						<div class="table-controls">
+							<button class="control-button">등록</button>
+							<button class="control-button">삭제</button>
+							<button class="control-button">Hide</button>
+						</div>
+						<div class="pagination">
+							<a href="#">&lt;</a> <a href="#" class="active">1</a> <a href="#">2</a>
+							<a href="#">3</a> <a href="#">4</a> <a href="#">5</a> <a href="#">&gt;</a>
+						</div>
+					</div>
+				</section>
+			</main>
+		</div>
+	</div>
+</body>
+</html>

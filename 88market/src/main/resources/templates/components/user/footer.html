@@ -1,0 +1,24 @@
+<footer class="footer" th:fragment="footer">
+<link rel="stylesheet" th:href="@{/css/user/components/footer.css}">
+	<div class="footer-container">
+		<div class="company-info">
+			<h4>(주) 팔팔마켓 사업자 정보</h4>
+			<p>
+				(주) 팔팔마켓<br> 사업자 등록번호 : 123-456-7891<br> 주소 : 서울 강남고 테헤란로
+				132 8층
+			</p>
+		</div>
+
+		<div class="footer-links">
+			<p>
+				이용약관 | 개인정보처리방침 | 분쟁처리절차 | 청소년보호정책 | 사업자정보 확인<br>
+				게시글 수집 및 이용안내 | <span th:onclick="|location.href='@{/serviceCenter}'|" style="cursor: pointer;">팔팔마켓 고객센터</span>
+			</p>
+		</div>
+
+		<div class="copyright">
+			<p>COPYRIGHT ⓒ 2025 Korea Expressway Corporation. All Right
+				reserved.</p>
+		</div>
+	</div>
+</footer>

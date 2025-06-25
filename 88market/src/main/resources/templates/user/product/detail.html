@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 상세정보</title>
+<!-- 상품 상세 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/product_detail.css}">
+<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+	
+	<!-- 메인 콘텐츠 -->
+	<main class="product-page-container">
+		<div class="product-main-content">
+			<!-- 왼쪽 영역: 상품 이미지 및 상세 설명 -->
+			<section class="product-gallery-section">
+				<!-- 메인 이미지 캐러셀 -->
+				<div class="main-image-carousel">
+					<img th:src="@{/images/main/img1.png}" alt="레이저 키요 프로 웹캠">
+					<button class="carousel-nav prev-btn">&lt;</button>
+					<button class="carousel-nav next-btn">&gt;</button>
+					<div class="image-counter">1/4</div>
+				</div>
+
+				<!-- 상품 정보 -->
+				<article class="product-description">
+					<h3>상품정보</h3>
+					<p>불량 체크만 마친 미사용 개봉품입니다--- 궁금하신 점 문의 주세요---</p>
+				</article>
+			</section>
+
+			<!-- 오른쪽 영역: 구매 정보 및 판매자 정보 -->
+			<section class="product-purchase-section">
+				<!-- 상품 기본 정보 -->
+				<div class="product-summary">
+					<span class="product-category">디지털기기</span>
+					<h1>레이저 키요 프로 웹캠 풀박</h1>
+					<div class="price-wrapper">
+						<strong class="product-price">100,000원</strong> 
+						<span class="badge safety-badge">안전거래</span>
+					</div>
+					<p class="product-meta">16분 전 · 조회 62회 · 채팅 3 · 찜 1</p>
+				</div>
+
+				<!-- 상품 거래 조건 -->
+				<div class="transaction-specs">
+					<div class="spec-item">
+						<span class="spec-title">제품상태</span> 
+						<span class="spec-value">중고</span>
+					</div>
+					<div class="spec-item">
+						<span class="spec-title">거래방식</span> 
+						<span class="spec-value">직거래, 택배</span>
+					</div>
+					<div class="spec-item">
+						<span class="spec-title">배송비</span> 
+						<span class="spec-value">포함</span>
+					</div>
+					<div class="spec-item">
+						<span class="spec-title">안전결제</span> 
+						<span class="spec-value">사용</span>
+					</div>
+				</div>
+
+				<!-- 행동 버튼 -->
+				<div class="action-buttons">
+					<button class="wish-btn">♡</button>
+					<button class="btn-chat">채팅하기</button>
+					<button class="btn-buy">구매하기</button>
+				</div>
+
+				<!-- 판매자 정보 -->
+				<div class="seller-info">
+					<h4>가게정보</h4>
+					<div class="seller-profile">
+						<div class="seller-name">송민철영</div>
+						<div class="trust-score">
+							<span>신뢰지수 455</span>
+							<div class="trust-gauge-bar">
+								<div class="gauge" style="width: 75%;"></div>
+							</div>
+						</div>
+					</div>
+					<div class="seller-stats">
+						<span>안전거래 <b>0</b></span> 
+						<span>거래후기 <b>1</b></span>
+					</div>
+
+					<!-- 판매자의 다른 상품 -->
+					<h5>레이저키요...</h5>
+					<div class="seller-other-item">
+						<img th:src="@{/images/main/img2.png}" alt="판매자의 다른 상품">
+						<div class="item-info">
+							<p>레이저 키요 프로 웹캠 풀박</p>
+							<strong>220,000원</strong> 
+							<span class="badge safety-badge">안전거래</span>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- 추천 상품 섹션 -->
+		<section class="related-products-section">
+			<h2>이런 상품은 어때요?</h2>
+			<div class="card-list-wrapper">
+				<!-- 관련 상품 카드 -->
+				<div class="product-card">
+					<a href="#">
+						<div class="product-image-container">
+							<img th:src="@{/images/main/img3.png}" alt="RAZER 구현 편차계">
+						</div>
+						<div class="product-info">
+							<p class="product-name">RAZER 구현 편차계</p>
+							<strong class="product-price">15,000원</strong>
+							<p class="product-meta">구매가능 | 2일 전</p>
+						</div>
+					</a>
+				</div>
+				<div class="product-card">
+					<a href="#">
+						<div class="product-image-container">
+							<img th:src="@{/images/main/img4.png}" alt="레이저 오로치 v2 화이트">
+						</div>
+						<div class="product-info">
+							<p class="product-name">레이저 오로치 v2 화이트</p>
+							<strong class="product-price">20,000원</strong>
+							<p class="product-meta">판매중 | 2일 전</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+</body>
+</html>

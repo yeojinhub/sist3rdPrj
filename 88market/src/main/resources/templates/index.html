@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 당신이 찾는 중고거래 플랫폼</title>
+<!-- 메인 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/main.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<!-- 메인 콘텐츠 -->
+	<main class="page-container">
+		<!-- 이벤트 배너 섹션 -->
+		<section class="card-section event-section">
+			<div class="card-list-wrapper">
+				<div class="event-card">
+					<a href="#"> <img th:src="@{/images/main/event1.png}"
+						alt="혜택! 최대 27만원 드립니다">
+					</a>
+				</div>
+				<div class="event-card">
+					<a href="#"> <img th:src="@{/images/main/event2.png}"
+						alt="단 한번의 터치, 의심없이 깨끗하게">
+					</a>
+				</div>
+				<div class="event-card">
+					<a href="#"> <img th:src="@{/images/main/event3.png}"
+						alt="월 평균 168만원 지금 입금되는 부업">
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- 찜이 많은 상품 섹션 -->
+		<section class="card-section">
+			<h2 class="section-title">찜이 많은 상품</h2>
+			<div class="card-list-wrapper">
+				<div class="product-card">
+					<a href="/detail?id=1">
+						<div class="product-image-container">
+							<img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
+						</div>
+						<div class="product-info">
+							<p class="product-name">닌텐도 스위치 타이틀 닌텐도 스위치 칩, sd메모리</p>
+							<strong class="product-price">1,000원</strong>
+							<p class="product-meta">글·사진 | 3시간 전</p>
+						</div>
+					</a>
+				</div>
+				<div class="product-card">
+					<a href="/detail?id=2">
+						<div class="product-image-container">
+							<img th:src="@{/images/main/img4.png}" alt="레고 스타워즈">
+						</div>
+						<div class="product-info">
+							<p class="product-name">레고 스타워즈 75439 ucs 슬레이브</p>
+							<strong class="product-price">205,000원</strong>
+							<p class="product-meta">2시간 전</p>
+						</div>
+					</a>
+				</div>
+				<div class="product-card">
+					<a href="/detail?id=3">
+						<div class="product-image-container">
+							<img th:src="@{/images/main/img3.png}" alt="수월우 무결점">
+						</div>
+						<div class="product-info">
+							<p class="product-name">수월우 무결점</p>
+							<strong class="product-price">500,000원</strong>
+							<p class="product-meta">1시간 전</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- 다른 사람들은 이 키워드를 주목하고 있어요 -->
+		<section class="card-section">
+			<h2 class="section-title">
+				다른 사람들은 이 키워드를 주목하고 있어요 <span class="text-highlight">댄스</span>
+			</h2>
+			<div class="card-list-wrapper">
+				<div class="product-card">
+					<a href="/detail?id=5">
+						<div class="product-image-container">
+							<img th:src="@{/images/main/img2.png}" alt="댄스 노란모자">
+						</div>
+						<div class="product-info">
+							<p class="product-name">댄스 노란모자 토들러</p>
+							<strong class="product-price">50,000원</strong>
+							<p class="product-meta">10분 전</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- 많이 본 상품 섹션 -->
+		<section class="card-section">
+			<h2 class="section-title">많이 본 상품</h2>
+			<div class="card-list-wrapper">
+				<div class="product-card">
+					<a href="/detail?id=4">
+						<div class="product-image-container">
+							<img th:src="@{/images/main/img1.png}" alt="닌텐도 스위치 타이틀">
+						</div>
+						<div class="product-info">
+							<p class="product-name">닌텐도 스위치 타이틀(너굴 상점)</p>
+							<strong class="product-price">1,000원</strong>
+							<p class="product-meta">글·사진 | 4시간 전</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section>
+
+	</main>
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+</body>
+</html>

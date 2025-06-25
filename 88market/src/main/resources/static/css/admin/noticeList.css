@@ -1,0 +1,282 @@
+/* 기본 스타일 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* 전체 레이아웃 */
+.admin-wrapper {
+    display: flex;
+}
+
+/* 사이드 네비게이션 */
+.side-nav {
+    width: 250px;
+    background-color: #353535;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-section {
+    padding: 20px;
+    text-align: center;
+    background-color: #353535;
+}
+
+.logo-section img {
+    max-width: 100%;
+    height: auto;
+}
+
+.site-shortcut {
+    padding: 15px 20px;
+    background-color: #353535;
+    text-align: center;
+}
+
+.site-shortcut a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu ul li a {
+    display: block;
+    padding: 15px 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.menu ul li.active > a {
+    color: white;
+}
+
+.menu ul li.active .sub-menu {
+    display: block;
+}
+
+.sub-menu {
+    list-style: none;
+    padding-left: 0;
+    background-color: #353535;
+}
+
+.sub-menu li a {
+    font-size: 1em;
+    font-weight: normal;
+    padding-left: 40px;
+}
+.sub-menu li.active-sub {
+    background-color: #7fd0f4;
+}
+
+.sub-menu li.active-sub a {
+    color: #000000;
+    font-weight: 800; /* Extra Bold */
+}
+
+
+/* 메인 컨텐츠 영역 */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 헤더 */
+.main-header {
+    background-color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.breadcrumbs span {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.breadcrumbs .current-page {
+    color: #555;
+}
+
+.user-menu {
+    font-size: 1.1em;
+}
+.user-menu strong {
+    font-weight: bold;
+}
+
+.user-menu a {
+    margin-left: 20px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* 컨테이너 (테이블 등) */
+.container {
+    padding: 30px;
+    background-color: #eeeeee;
+    flex-grow: 1;
+}
+
+.search-section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+}
+
+.search-filter {
+    padding: 20px;
+    border: 1px solid #868b94;
+    border-radius: 8px;
+    font-size: 12px;
+    height: 25px;
+	
+}
+
+ .search-input {
+    padding: 10px;
+    border: 1px solid #868b94;
+    border-radius: 8px;
+    font-size: 16px;
+    height: 25px;
+}
+
+.search-input {
+    flex-grow: 1;
+}
+
+.search-button {
+    padding: 12px 25px;
+    background-color: #353535;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.notice-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+}
+
+.notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.notice-table th, .notice-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #e6e6e6;
+    font-size: 15px;
+}
+
+.notice-table thead {
+    background-color: #f7f7f7;
+}
+
+.notice-table th {
+    font-weight: 600;
+    color: #4d4d4d;
+}
+
+.notice-table .notice-title {
+    text-align: left;
+    color: #212121;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.status-visible {
+    background-color: rgba(127, 208, 244, 0.2);
+    color: #727272;
+}
+
+.status-hidden {
+    background-color: rgba(244, 230, 127, 0.2);
+    color: #727272;
+}
+
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.table-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-button {
+    padding: 12px 35px;
+    background-color: #e5f6fd;
+    border: 1px solid #dddddd;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #737373;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #999999;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.pagination a.active {
+    background-color: #7fd0f4;
+    color: white;
+}
