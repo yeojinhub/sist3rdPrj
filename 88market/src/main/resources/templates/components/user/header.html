@@ -42,11 +42,13 @@
 					class="nav-link active">기획관</a> <a href="#" class="nav-link">디지털
 					가전</a> <a href="#" class="nav-link">쿠폰</a> <a href="#" class="nav-link">사기조회</a>
 				<a href="#" class="nav-link">시세조회</a> <a href="/notice" class="nav-link">공지사항</a>
-				<a href="#" class="nav-link">찜한 상품</a>
+				<span class="nav-link" id="wishlist">찜한 상품</span>
 			</nav>
 		</div>
 	</div>
 
 	<!-- 채팅 오버레이 -->
 	<th:block th:insert="~{components/user/chatOverlay :: chatOverlay}"></th:block>
+	<!-- 찜목록 오버레이 -->
+	<th:block th:insert="~{components/user/wishlistOverlay :: wishlistOverlay}"></th:block>
 </header>

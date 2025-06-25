@@ -1,11 +1,13 @@
 <th:block th:fragment="chatOverlay">
-<link rel="stylesheet" th:href="@{/css/user/components/chat.css}">
+	<link rel="stylesheet" th:href="@{/css/user/components/chat.css}">
 	<script>
 		$(function() {
 			// 채팅하기 버튼 클릭 이벤트
 			$('#chat').click(function() {
 				$('.chat-overlay').fadeIn(300);
 				$('.chat-modal').addClass('show');
+				// HTML과 BODY 모두에 클래스 추가
+				$('html, body').addClass('modal-open');
 			});
 
 			// 오버레이 클릭 시 모달 닫기
@@ -13,18 +15,21 @@
 				$('.chat-modal').removeClass('show');
 				setTimeout(function() {
 					$('.chat-overlay').fadeOut(300);
+					// HTML과 BODY 모두에서 클래스 제거
+					$('html, body').removeClass('modal-open');
 				}, 300);
 			});
-
 			// X 버튼 클릭 시 모달 닫기
 			$('.close-button').click(function() {
 				$('.chat-modal').removeClass('show');
 				setTimeout(function() {
 					$('.chat-overlay').fadeOut(300);
+					// HTML과 BODY 모두에서 클래스 제거
+					$('html, body').removeClass('modal-open');
 				}, 300);
 			});
 
-			// 모달 내부 클릭 시 이벤트 전파 막기 (오버레이 클릭 방지)
+			// 모달 내부 클릭 시 이벤트 전파 막기
 			$('.chat-modal').click(function(e) {
 				e.stopPropagation();
 			});

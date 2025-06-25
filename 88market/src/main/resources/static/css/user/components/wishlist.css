@@ -1,0 +1,281 @@
+/* 1. html, body 기본값 (스크롤바 공간 유지) */
+html, body {
+	scrollbar-gutter: stable;
+	margin: 0;
+	padding: 0;
+}
+
+/* 모달 열렸을 때 배경 스크롤 막기 */
+body.modal-open {
+	overflow: hidden;
+	position: fixed;
+	width: 100%;
+}
+
+/* 2. 찜하기 오버레이 */
+.wishlist-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 9999;
+	display: none;
+}
+
+/* 3. 찜하기 모달 */
+.wishlist-modal {
+    position: fixed;
+    top: 0;
+    right: -500px;
+    width: 500px;
+    height: 100vh;
+    background: #fff;
+    z-index: 10000;
+    transition: right 0.3s;
+    box-shadow: none; /* 이 부분 수정 */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.wishlist-modal.show {
+	right: 0;
+}
+
+/* 4. 찜하기 컨테이너 */
+.wishlist-container {
+	width: 100%;
+	height: 100vh;
+	background-color: #ffffff;
+	font-family: 'Noto Sans KR', 'Inter', sans-serif;
+	display: flex;
+	flex-direction: column;
+}
+
+/* 5. 헤더 */
+.wishlist-header {
+	width: 100%;
+	height: 60px;
+	background-color: #ffffff;
+	border-bottom: 1px solid #c8c8c8;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	padding: 0 15px;
+	box-sizing: border-box;
+}
+
+.back-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px;
+    font-weight: 400;
+    color: #000000;
+    cursor: pointer;
+    letter-spacing: 0;
+}
+
+.my-interest-title {
+	font-size: 14px;
+	color: #666;
+	margin-right: 10px;
+}
+
+.main-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+    letter-spacing: 0;
+}
+
+/* 6. 검색바 */
+.search-bar-wishlist {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	padding: 15px;
+	position: relative;
+}
+
+.search-container-wishlist {
+	position: relative;
+	width: 400px; /* 검색창 너비 */
+}
+
+.search-input-wishlist {
+	width: 100%;
+	height: 40px;
+	padding: 10px 15px 10px 40px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	font-size: 14px;
+	outline: none;
+	box-sizing: border-box;
+}
+
+.fa-search {
+	position: absolute;
+	left: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #999;
+	font-size: 16px;
+	pointer-events: none;
+}
+
+/* 7. 찜한 상품 목록 */
+.wishlist-list {
+	width: 100%;
+	flex: 1 1 auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 0 10px;
+	box-sizing: border-box;
+	background: #fff;
+	max-height: calc(100vh - 140px); /* 헤더와 검색바 높이 제외 */
+}
+
+/* 스크롤바 스타일링 */
+.wishlist-list::-webkit-scrollbar {
+	width: 6px;
+}
+
+.wishlist-list::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+.wishlist-list::-webkit-scrollbar-thumb {
+	background: #c1c1c1;
+	border-radius: 3px;
+}
+
+.wishlist-list::-webkit-scrollbar-thumb:hover {
+	background: #a8a8a8;
+}
+
+/* 8. 찜한 상품 아이템 */
+.wishlist-item {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	padding: 20px 0;
+	border-bottom: 1px solid #efefef;
+	position: relative;
+}
+
+.wishlist-item:last-child {
+	border-bottom: none;
+}
+
+/* 9. 상품 이미지 */
+.item-image-container {
+	width: 100px;
+	height: 100px;
+	border-radius: 8px;
+	position: relative;
+	overflow: hidden;
+	flex-shrink: 0;
+	margin-right: 15px;
+}
+
+.item-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.carousel-indicator {
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+}
+
+.dot {
+	width: 4px;
+	height: 4px;
+	background-color: #ffffff;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.dot.active {
+	background-color: #7fd0f4;
+}
+
+/* 10. 상품 정보 */
+.item-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.item-name {
+	font-size: 16px;
+	font-weight: 400;
+	color: #000000;
+	margin: 0 0 8px 0;
+	line-height: 1.4;
+}
+
+.item-price {
+	font-size: 18px;
+	font-weight: 700;
+	color: #000000;
+	margin: 0 0 5px 0;
+}
+
+.item-location {
+	font-size: 14px;
+	color: #595959;
+	margin: 0 0 8px 0;
+}
+
+.safe-deal-badge {
+	display: inline-block;
+	background-color: #7fd0f4;
+	width: 60px;
+	color: #ffffff;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: 500;
+	text-align: center;
+}
+
+/* 11. 찜 아이콘 */
+.like-icon {
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+	position: absolute;
+	top: 20px;
+	right: 0;
+	transition: opacity 0.2s;
+}
+
+.like-icon:hover {
+	opacity: 0.7;
+}
+
+.like-icon.liked {
+	filter: hue-rotate(320deg) saturate(2);
+}
+
+/* 12. 반응형 */
+@media ( max-width : 600px) {
+	.wishlist-modal, .wishlist-container {
+		width: 100vw;
+		min-width: unset;
+	}
+	.wishlist-item {
+		width: 100%;
+	}
+}
