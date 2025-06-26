@@ -1,0 +1,16 @@
+@charset "UTF-8";
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 250px;
+  height: 100vh;
+  background: #2c3e50;
+  color: #ecf0f1;
+  overflow-y: auto;
+  /* 기타 스타일… */
+}
+.content {
+  margin-left: 250px;
+  padding: 20px;
+}
+/* submenu 토글, active 스타일 등은 admin.js에서 제어 */
