@@ -47,4 +47,14 @@ public class UserMainController {
 		return "user/account/signup";
 	}
 	
+	@GetMapping("/sell")
+	public String sell() {
+		return "user/product/sell";
+	}
+	
+	@GetMapping("/planingsell")
+	public String planingsell() {
+		return "user/planingsell";
+	}
+	
 }
