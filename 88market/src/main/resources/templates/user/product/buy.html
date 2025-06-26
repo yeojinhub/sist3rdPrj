@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 구매하기</title>
+<!-- 메인 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/buy.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<main class="purchase-container_buy">
+		<div class="main-content_buy">
+			<div class="order-info_buy">
+				<h1 class="page-title_buy">주문 / 결제</h1>
+				<h2 class="section-title_buy">주문 / 배송 정보</h2>
+
+				<div class="info-section_buy">
+					<h3 class="info-title_buy">주문자</h3>
+					<div class="input-group_buy">
+						<input type="text" value="홍길동" readonly class="input-field_buy">
+						<input type="text" value="010-1234-5678" readonly
+							class="input-field_buy">
+					</div>
+					<input type="email" value="asdf1234@naver.com" readonly
+						class="input-field_buy full-width_buy">
+				</div>
+
+				<div class="info-section_buy">
+					<div class="title-bar_buy">
+						<h3 class="info-title_buy">배송지 정보</h3>
+						<label class="checkbox-label_buy"> <input type="checkbox"
+							checked> 주문자 정보와 동일
+						</label>
+					</div>
+					<div class="input-group_buy">
+						<input type="text" value="홍길동" readonly class="input-field_buy">
+						<input type="text" value="010-1234-5678" readonly
+							class="input-field_buy">
+					</div>
+					<input type="text" value="서울 서대문구 성산로7길 89-9 (연희동)" readonly
+						class="input-field_buy full-width_buy"> <input type="text"
+						value="주식회사 아임랩" readonly class="input-field_buy full-width_buy">
+				</div>
+
+				<div class="info-section_buy">
+					<h3 class="info-title_buy">결제수단</h3>
+					<div class="payment-option_buy">
+						<p>팔팔페이</p>
+						<p class="balance_buy">30,000</p>
+						<input type="radio" name="payment" id="palpay" checked>
+						<button class="action-button_buy blue_buy">전액사용</button>
+					</div>
+					<div class="payment-option_buy">
+						<p>신용/체크카드</p>
+						<input type="radio" name="payment" id="card">
+						<button class="action-button_buy grey_buy">
+							일시불 <img src="path/to/arrow-down.svg" alt="">
+						</button>
+					</div>
+				</div>
+
+				<div class="order-item-info_buy">
+					<h3 class="info-title_buy">주문 상품 정보</h3>
+					<div class="item-details_buy">
+						<img th:src="@{/images/main/img3.png}" alt="레이저 키요 프로 웹캠"
+							class="product-image_buy">
+						<div class="item-text_buy">
+							<p class="item-name_buy">레이저 키요 프로 웹캠 풀박</p>
+							<p class="item-price_buy">100,000원</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<aside class="summary-sider_buy">
+				<div class="summary-box_buy">
+					<h3 class="summary-title_buy">최종 결제 금액</h3>
+					<div class="price-details_buy">
+						<p>
+							<span>총 상품 가격</span><span>100,000원</span>
+						</p>
+						<p>
+							<span>배송비</span><span>0원</span>
+						</p>
+					</div>
+					<div class="total-price_buy">
+						<p>
+							<span>총 결제 금액</span><span class="final-price_buy">100,000원</span>
+						</p>
+					</div>
+					<p class="disclaimer_buy">“팔팔마켓” 상점의 판매상품을 제외한 모든 상품들에 대하여,
+						(주)팔켓마켓은 통신판매중개자로서 거래 당사자가 아니며 판매 회원과 구매 회원 간의 상품거래 정보 및 거래에 관여하지
+						않고, 어떠한 의무와 책임도 부담하지 않습니다.</p>
+					<button class="order-button_buy">주문하기</button>
+				</div>
+			</aside>
+		</div>
+	</main>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+</body>
+</html>

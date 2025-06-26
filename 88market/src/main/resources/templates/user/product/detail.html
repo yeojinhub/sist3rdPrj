@@ -75,14 +75,14 @@
 				<div class="action-buttons">
 					<button class="wish-btn">♡</button>
 					<button class="btn-chat">채팅하기</button>
-					<button class="btn-buy">구매하기</button>
+					<button class="btn-buy" th:onclick="|location.href='@{/buy}'|">구매하기</button>
 				</div>
 
 				<!-- 판매자 정보 -->
 				<div class="seller-info">
 					<h4>가게정보</h4>
 					<div class="seller-profile">
-						<div class="seller-name">송민철영</div>
+						<div class="seller-name" th:onclick="|location.href='@{/seller?id=1}'|" style="cursor: pointer;">송민철영</div>
 						<div class="trust-score">
 							<span>신뢰지수 455</span>
 							<div class="trust-gauge-bar">

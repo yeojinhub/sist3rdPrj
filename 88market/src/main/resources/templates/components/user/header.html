@@ -1,5 +1,16 @@
 <header class="header" th:fragment="header">
 	<link rel="stylesheet" th:href="@{/css/user/components/header.css}">
+	<script>
+		$(function () {
+			$('.search-input').keyup((e)=>{
+				var keyword = $('.search-input').val();
+				
+				if(e.which == 13) {
+					location.href = '/search?keyword=' + keyword;
+				}
+			})
+		})
+	</script>
 	<div class="header-background">
 		<div class="header-container">
 			<!-- 로고 -->
@@ -18,7 +29,7 @@
 				<div class="menu-item" th:onclick="|location.href='@{/login}'|">
 					<i class="fa-solid fa-user"></i> <span>내 정보</span>
 				</div>
-				<div class="menu-item">
+				<div class="menu-item" th:onclick="|location.href='@{/sell}'|">
 					<i class="fa-solid fa-cart-shopping"></i> <span>판매하기</span>
 				</div>
 				<div class="menu-item">
@@ -40,7 +51,7 @@
 			<nav class="nav-menu">
 				<a href="/event" class="nav-link">이벤트</a> <a href="/planingsell"
 					class="nav-link active">기획관</a> <a href="#" class="nav-link">디지털
-					가전</a> <a href="#" class="nav-link">쿠폰</a> <a href="#" class="nav-link">사기조회</a>
+					가전</a> <a href="#" class="nav-link">쿠폰</a> <a href="/anticheat" class="nav-link">사기조회</a>
 				<a href="#" class="nav-link">시세조회</a> <a href="/notice" class="nav-link">공지사항</a>
 				<span class="nav-link" id="wishlist">찜한 상품</span>
 			</nav>

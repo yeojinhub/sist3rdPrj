@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 사기조회</title>
+<!-- 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/anti_cheat.css}">
+<!-- 외부파일(jQuery, bootstrep 등 -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<div th:insert="~{components/user/header :: header}"></div>
+
+	<main class="fraud-check-container_cheat">
+		<section class="intro-section_cheat">
+			<h1>안전하고 편리한 중고거래 서비스</h1>
+			<p>거래 전 사기 이력 조회부터 예상치 못한 피해 시 거래 피해 보상제까지</p>
+		</section>
+
+		<section class="search-section_cheat">
+			<h2>통합 사기조회</h2>
+			<p>중고거래 플랫폼, 커뮤니티 어디에서 거래하든 사기 피해사례를 조회할 수 있어요.</p>
+			<div class="search-box_cheat">
+				<input type="text" placeholder="휴대전화번호, 계좌번호, 메신저 ID, 이메일 입력">
+				<button type="button">조회</button>
+			</div>
+			<p class="search-notice_cheat">최근 3개월 내 중고나라, 사이버범죄 신고시스템에 등록된 사기
+				피해사례를 조회합니다.</p>
+		</section>
+
+		<section class="stats-section_cheat">
+			<div class="stat-item_cheat">
+				<div class="icon-today_cheat"></div>
+				<div>
+					<p>오늘 조회수</p>
+					<strong>4,902 <span class="unit_cheat">건</span></strong>
+				</div>
+			</div>
+			<div class="stat-item_cheat">
+				<div class="icon-cumulative_cheat"></div>
+				<div>
+					<p>누적 조회수</p>
+					<strong>462.2<span class="unit_cheat">만 건</span></strong>
+				</div>
+			</div>
+			<div class="stat-item_cheat">
+				<div class="icon-prevention_cheat"></div>
+				<div>
+					<p>누적 사기 예방 수</p>
+					<strong>33.2<span class="unit_cheat">만 건</span></strong>
+				</div>
+			</div>
+		</section>
+		<p class="stats-notice_cheat">* 오늘 조회수: 전일 오후 11:59 기준</p>
+
+		<div class="content-wrapper_cheat">
+			<section class="live-monitoring_cheat">
+				<h3>실시간 사기 모니터링 현황</h3>
+				<p>팔팔마켓의 실시간 사기 모니터링 현황을 확인해 보세요.</p>
+				<table>
+					<thead>
+						<tr>
+							<th>일시</th>
+							<th>사기정보</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>2025-06-16 16:58:31</td>
+							<td>bl***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 16:46:35</td>
+							<td>62***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 16:34:20</td>
+							<td>lv***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 16:12:35</td>
+							<td>mo***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 16:11:34</td>
+							<td>01084******</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 16:09:22</td>
+							<td>rk***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 16:07:11</td>
+							<td>wj***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<section class="fraud-patterns_cheat">
+				<h3>주요 사기 패턴 확인하기 _ 이 외 패턴</h3>
+				<div class="pattern-carousel_cheat">
+					<button class="arrow_cheat prev_cheat">&lt;</button>
+					<div class="pattern-content_cheat">
+						<h4>구매 게시글 접근</h4>
+						<p>구매(삽니다) 게시글에 판매자인 척 접근하여 잠적하는 사기 수법</p>
+						<ul>
+							<li>사기꾼이 사용하는 물품 사진은 <span class="highlight_cheat">도용된
+									사진</span>일 확률이 높아요!
+							</li>
+						</ul>
+						<h4>무료나눔 개인정보 도용</h4>
+						<p>무료 나눔 이벤트를 가장하여 개인정보를 수집하는 사기 수법</p>
+						<ul>
+							<li><span class="highlight_cheat">개인 정보가 유출</span>되어 계정 도용이
+								일어날 수 있어요!</li>
+						</ul>
+					</div>
+					<button class="arrow_cheat next_cheat">&gt;</button>
+				</div>
+				<div class="pagination_cheat">5 / 6</div>
+			</section>
+		</div>
+	</main>
+
+	<!-- 푸터 -->
+	<div th:insert="~{components/user/footer :: footer}"></div>
+</body>
+</html>
