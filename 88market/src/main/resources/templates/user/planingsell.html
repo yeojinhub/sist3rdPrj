@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 기획관</title>
+<!-- 메인 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/planingsell.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<main class="main-container_plan">
+    <div class="hero-section_plan">
+        <div class="hero-text-container_plan">
+            <h1 class="hero-title_plan">관심 폭발! 사람들이 찜한 인기 상품</h1>
+            <p class="hero-description_plan">
+                좋은 퀄리티의 상품을 분편함 1도 없이 개인 간 거래 그 이상, 믿을 수 있는 셀러 상품을 만나보세요. "팔팔마켓의 인증셀러" 매달 열리는 "인증셀러 기획전" 당신의 삼품, 팔팔마켓 앱 메인에 띄어 드립니다.<br>
+                "팔팔마켓 셀러지원센터" 검색 후 인증셀러 신청하기
+            </p>
+        </div>
+        <div class="brand-buttons_plan">
+            <button class="brand-button_plan active">삼성</button>
+            <button class="brand-button_plan">LG</button>
+            <button class="brand-button_plan">애플</button>
+            <button class="brand-button_plan">샤오미</button>
+            <button class="brand-button_plan">로지텍</button>
+            <button class="brand-button_plan">닌텐도</button>
+        </div>
+    </div>
+    
+    <div class="product-grid_plan">
+        <div class="product-card_plan">
+            <div class="product-image_plan">
+                <img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
+                <div class="product-status_plan">판매중</div>
+            </div>
+            <div class="product-info_plan">
+                <h3 class="product-title_plan">상품명이 들어갑니다</h3>
+                <p class="product-price_plan">150,000원</p>
+                <div class="product-meta_plan">
+                    <span class="product-location_plan">서울시 강남구</span>
+                    <span class="product-time_plan">1시간 전</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="product-card_plan">
+            <div class="product-image_plan">
+                <img th:src="@{/images/main/img1.png}" alt="닌텐도 스위치 타이틀">
+                <div class="product-status_plan">판매중</div>
+            </div>
+            <div class="product-info_plan">
+                <h3 class="product-title_plan">상품명이 들어갑니다</h3>
+                <p class="product-price_plan">89,000원</p>
+                <div class="product-meta_plan">
+                    <span class="product-location_plan">서울시 송파구</span>
+                    <span class="product-time_plan">2시간 전</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+	<!-- 최근본상품 오버레이 -->
+	<th:block th:insert="~{components/user/recentProduct :: recentProduct}"></th:block>
+</body>
+</html>
