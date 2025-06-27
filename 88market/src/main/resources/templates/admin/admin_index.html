@@ -8,16 +8,13 @@
 </head>
 <body>
    <!-- 고정 사이드바 -->
-  <div th:replace="@{/admin/fragments/side_bar :: sidebar}"></div>
-  <div class="content">
-    <h1>관리자 홈</h1>
+  <div th:replace="~{ fragments/admin/admin_sidebar :: sidebar}"></div>
     <!-- 실제 컨텐츠 영역 -->
   <div class="content">
-    <div th:insert="${contentFragment}"></div>
+    <h1>관리자 홈</h1>
+    <div></div>
   </div>
 
   <!-- 필요하다면 하단 스크립트 -->
-  <script th:src="@{/js/admin.js}"></script>
-  </div>
 </body>
 </html>
