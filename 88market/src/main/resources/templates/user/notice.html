@@ -1,74 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>88마켓 - 공지사항</title>
-<!-- 공지사항 CSS -->
-<link rel="stylesheet" th:href="@{/css/user/notice-main.css}">
-<!-- 외부파일(jQuery, bootstrep 등 -->
-<th:block th:replace="~{components/user/external :: external}"></th:block>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>88마켓 - 공지사항</title>
+	<!-- 공지사항 CSS -->
+	<link rel="stylesheet" th:href="@{/css/user/notice-main.css}">
+	<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+	<th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
 <script>
-	$(function() {
-
+	$(function () {
+		$("#accordion").accordion({
+			collapsible: true,
+			active: false,
+			heightStyle: "content",
+			icons: {
+				header: "ui-icon-triangle-1-e",
+				activeHeader: "ui-icon-triangle-1-s"
+			}
+		});
 	});
 </script>
+
 <body>
 	<!-- 헤더 -->
 	<div th:insert="~{components/user/header :: header}"></div>
-	
+
 	<!-- 메인 콘텐츠 -->
 	<main class="main-content">
 		<div class="content-container">
-			<!-- 페이지 제목 -->
 			<h1 class="page-title">공지사항</h1>
-
-			<!-- 공지사항 목록 -->
-			<div class="notice-list">
-				<div class="notice-item">
-					<div class="notice-content">
-						<h3 class="notice-title">88마켓 이용 정책 (2025. 06. 29 개정)</h3>
-						<span class="notice-date">2025-06-29</span>
+			<div id="accordion" class="notice-list">
+				<th:block th:each="notice : ${noticeList}">
+					<h3>
+						<div class="notice-header-row">
+							<div class="notice-header-left">
+								<div class="notice-title" th:text="${notice.title}">공지 제목</div>
+								<div class="notice-date" th:text="${#dates.format(notice.inputDate, 'yyyy-MM-dd')}">
+									2025-06-29</div>
+							</div>
+						</div>
+					</h3>
+					<div>
+						<div class="notice-detail" th:utext="${notice.content}">공지 상세 내용이 들어갑니다.</div>
 					</div>
-					<span class="expand-icon">∨</span>
-				</div>
-
-				<div class="notice-item">
-					<div class="notice-content">
-						<h3 class="notice-title">88마켓 이용 정책 (2025. 02. 17 개정)</h3>
-						<span class="notice-date">2025-02-17</span>
-					</div>
-					<span class="expand-icon">∨</span>
-				</div>
-
-				<div class="notice-item">
-					<div class="notice-content">
-						<h3 class="notice-title">거래제한 상품 안내 (2025. 06. 10 개정)</h3>
-						<span class="notice-date">2025-06-10</span>
-					</div>
-					<span class="expand-icon">∨</span>
-				</div>
-
-				<div class="notice-item">
-					<div class="notice-content">
-						<h3 class="notice-title">[서비스 점검] SK텔링크 휴대폰 결제 서비스 점검 안내</h3>
-						<span class="notice-date">2025-05-27</span>
-					</div>
-					<span class="expand-icon">∨</span>
-				</div>
-
-				<div class="notice-item">
-					<div class="notice-content">
-						<h3 class="notice-title">[한국간편결제진흥원 요청] 정부 지원 모바일상품권 거래 금지 안내</h3>
-						<span class="notice-date">2025-04-30</span>
-					</div>
-					<span class="expand-icon">∨</span>
-				</div>
+				</th:block>
 			</div>
 		</div>
 	</main>
+
 	<!-- 푸터 -->
 	<div th:insert="~{components/user/footer :: footer}"></div>
 </body>
+
 </html>

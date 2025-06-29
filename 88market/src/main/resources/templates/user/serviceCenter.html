@@ -1,68 +1,102 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>88마켓 - 고객센터</title>
-<!-- FAQ CSS -->
-<link rel="stylesheet" th:href="@{/css/user/serviceCenter.css}">
-<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
-<th:block th:replace="~{components/user/external :: external}"></th:block>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>88마켓 - 고객센터</title>
+    <!-- FAQ CSS -->
+    <link rel="stylesheet" th:href="@{/css/user/serviceCenter.css}">
+    <!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+    <th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
 <script>
-	$(function() {
+    $(function () {
+        // URL에서 type 파라미터 값을 가져오기
+        var selectedType = '';
+        var urlParams = new URLSearchParams(window.location.search);
+        selectedType = urlParams.get('type') || '';
+        
+        // 선택된 카테고리 버튼에 active 클래스 추가
+        if (selectedType) {
+            $('.faq-categories button').each(function() {
+                if ($(this).text() === selectedType) {
+                    $(this).addClass('active');
+                }
+            });
+        } else {
+            // type이 없으면 '전체' 버튼에 active 클래스 추가
+            $('.faq-categories button:first').addClass('active');
+        }
+        
 
-	});
+        $("#faq-accordion").accordion({
+            collapsible: true,
+            active: false,
+            heightStyle: "content",
+            icons: {
+                header: "ui-icon-triangle-1-e",
+                activeHeader: "ui-icon-triangle-1-s"
+            }
+        });
+    });
+
+    function faqType(type) {
+        location.href = '/serviceCenter?type=' + type;
+    }
+
+    function faqSearch(keyword) {
+        location.href = '/serviceCenter?keyword=' + keyword;
+    }
 </script>
 <body>
-	<!-- 헤더 -->
-	<th:block th:insert="~{components/user/header :: header}"></th:block>
+    <!-- 헤더 -->
+    <th:block th:insert="~{components/user/header :: header}"></th:block>
 
-	<!-- 메인 콘텐츠 (FAQ) -->
-	<main class="faq-content">
-		<h2>고객센터</h2>
-		<hr>
-		<h3>자주 묻는 질문 FAQ</h3>
-		<div class="faq-search">
-			<span>🔍</span> <input type="text" placeholder="궁금하신 점을 검색해주세요.">
-		</div>
-		<div class="faq-categories">
-			<button class="active">전체</button>
-			<button>거래문의</button>
-			<button>이용문의</button>
-			<button>회원/계정</button>
-			<button>에코마일</button>
-			<button>운영정책</button>
-			<button>기타</button>
-		</div>
-		<div class="faq-list">
-			<div class="faq-item">
-				<div class="faq-question">
-					<span>[판매자] 안전거래로 물건을 판매했는데 판매대금은 언제 입금되나요?</span> <span
-						class="faq-category">거래문의</span>
-				</div>
-				<div class="faq-toggle">∨</div>
-			</div>
-			<div class="faq-item">
-				<div class="faq-question">
-					<span>계좌 전송 기능이 무엇인가요?</span> <span class="faq-category">거래문의</span>
-				</div>
-				<div class="faq-toggle">∨</div>
-			</div>
-			<div class="faq-item">
-				<div class="faq-question">
-					<span>응답률과 평균 응답 시간이 궁금해요.</span> <span class="faq-category">이용문의</span>
-				</div>
-				<div class="faq-toggle">∨</div>
-			</div>
-		</div>
-		<div class="inquiry-buttons">
-			<button class="inquiry-btn">1:1 문의</button>
-			<button class="inquiry-history-btn">문의내역</button>
-		</div>
-	</main>
+    <!-- 메인 콘텐츠 (FAQ) -->
+    <main class="faq-content">
+        <h2 th:onclick="|location.href='@{/serviceCenter}'|" style="cursor: pointer;">고객센터</h2>
+        <hr>
+        <h3>자주 묻는 질문 FAQ</h3>
+        <div class="faq-search">
+            <span>🔍</span>
+            <input type="text" placeholder="궁금하신 점을 검색해주세요." th:value="${keyword}" th:onchange="faqSearch(this.value)">
+        </div>
+        <div class="faq-categories" th:if="${!typeButtonHide}">
+            <button th:onclick="faqType('')">전체</button>
+            <button th:onclick="faqType('거래문의')">거래문의</button>
+            <button th:onclick="faqType('이용문의')">이용문의</button>
+            <button th:onclick="faqType('회원/계정')">회원/계정</button>
+            <button th:onclick="faqType('에코마일')">에코마일</button>
+            <button th:onclick="faqType('운영정책')">운영정책</button>
+            <button th:onclick="faqType('기타')">기타</button>
+        </div>
+        <th:block th:if="${faqList.size() == 0}">
+            <img src="/images/no_result.png" alt="검색 결과가 없습니다.">
+            <h2>검색 결과가 없습니다.</h2>
+        </th:block>
+        <div id="faq-accordion" class="faq-list">
+            <th:block th:each="faq : ${faqList}">
+                <h3>
+                    <div class="faq-header-row">
+                        <div class="faq-header-left">
+                            <div class="faq-title" th:text="${faq.title}">질문 제목</div>
+                            <div class="faq-category" th:text="${faq.type}">카테고리</div>
+                        </div>
+                    </div>
+                </h3>
+                <div>
+                    <div class="faq-detail" th:utext="${faq.content}">답변 내용이 들어갑니다.</div>
+                </div>
+            </th:block>
+        </div>
+        <div class="inquiry-buttons">
+            <button class="inquiry-btn">1:1 문의</button>
+            <button class="inquiry-history-btn">문의내역</button>
+        </div>
+    </main>
 
-	<!-- 푸터 -->
-	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+    <!-- 푸터 -->
+    <th:block th:insert="~{components/user/footer :: footer}"></th:block>
+
 </body>
 </html>
