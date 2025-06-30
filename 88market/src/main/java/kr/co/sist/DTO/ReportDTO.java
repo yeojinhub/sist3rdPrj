@@ -24,6 +24,7 @@ public class ReportDTO {
 	private String name; /* 신고자 */
 	private Date inputDate; /* 신고일 */
 	private int reportType; /* 신고타입(1,2) */
+	private String searchType; /* 사기조회가능여부(Y,N)*/
 	
 	private String userNum; /* 사용자번호 */
 

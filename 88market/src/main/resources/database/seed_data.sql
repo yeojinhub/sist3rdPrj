@@ -63,12 +63,27 @@ INSERT INTO BANK(USER_NUM, NAME, BANK_NAME, BANK_NUM)
 VALUES ((select user_num from users where user_num=3), '이민호',    '우리은행', '345-678-9012');
 
 /* FAQ */
-INSERT INTO FAQ(FAQ_NUM, TITLE, CONTENT, NAME, ADM_NUM)
-VALUES (SEQ_FAQ_NUM.NEXTVAL, '회원가입 오류', '가입 시 이메일 인증이 안 됩니다.', '홍길동', '1');
-INSERT INTO FAQ(FAQ_NUM, TITLE, CONTENT, NAME, ADM_NUM)
-VALUES (SEQ_FAQ_NUM.NEXTVAL, '결제 취소 방법', '환불은 어떻게 진행되나요?',      '김영희', '2');
-INSERT INTO FAQ(FAQ_NUM, TITLE, CONTENT, NAME, ADM_NUM)
-VALUES (SEQ_FAQ_NUM.NEXTVAL, '배송 조회',      '상품 배송 조회는 어디서?',      '이민호', '3');
+-- FAQ 가데이터 삽입
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '거래 문의에 대한 FAQ', '거래 관련 문제가 발생했을 경우 해결 방법은 XXX입니다.', (select name from admin where adm_num=1), SYSDATE, '거래문의', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '회원가입 문제 해결', '회원가입 시 이메일 인증 오류가 발생하는 경우, 다시 시도해 보세요.', (select name from admin where adm_num=1), SYSDATE, '회원/계정', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '운영 정책 변경 안내', '운영 정책이 변경되어 사용자는 이를 꼭 확인해야 합니다.', (select name from admin where adm_num=1), SYSDATE, '운영정책', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '서비스 이용에 관한 안내', '서비스 이용 중 발생할 수 있는 문제와 해결 방법을 안내드립니다.', (select name from admin where adm_num=1), SYSDATE, '이용문의', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '계정 복구 절차 안내', '계정을 복구하는 방법은 이메일을 통해 인증을 받는 방식입니다.', (select name from admin where adm_num=1), SYSDATE, '회원/계정', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '시스템 점검 안내', '시스템 점검은 매주 금요일에 진행됩니다. 점검 시간 동안 서비스 이용에 불편이 있을 수 있습니다.', (select name from admin where adm_num=1), SYSDATE, '기타', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '기타 자주 묻는 질문', '기타 자주 묻는 질문은 고객센터에서 확인하실 수 있습니다.', (select name from admin where adm_num=1), SYSDATE, '기타', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '로그인 문제 해결법', '로그인 시 문제가 발생하면, 비밀번호를 재설정해 보세요.', (select name from admin where adm_num=1), SYSDATE, '회원/계정', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '결제 오류 해결 방법', '결제 오류가 발생하면 고객센터에 문의해 주세요.', (select name from admin where adm_num=1), SYSDATE, '거래문의', 1);
+INSERT INTO FAQ (FAQ_NUM, TITLE, CONTENT, NAME, INPUT_DATE, FAQ_TYPE, ADM_NUM) VALUES
+(SEQ_FAQ_NUM.NEXTVAL, '서비스 이용 약관 안내', '서비스 이용 약관에 동의하시려면, 아래 링크를 클릭하세요.', (select name from admin where adm_num=1), SYSDATE, '운영정책', 1);
 
 /* REVIEW */
 INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, KEYWORD, PRD_NUM)
