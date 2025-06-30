@@ -15,10 +15,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public class FaqDTO {
     private int faqNum;
-    private int admNum;
     private String title;
     private String content;
     private String name;
-    private String type;
+    private String faqType;
     private Date inputDate;
+    private int admNum;
 }

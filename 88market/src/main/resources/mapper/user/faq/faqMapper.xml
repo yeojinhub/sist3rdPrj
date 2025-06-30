@@ -7,7 +7,7 @@
         SELECT * FROM FAQ
     </select>
     <select id="selectFaqListByType" resultType="kr.co.sist.DTO.FaqDTO" parameterType="String">
-        SELECT * FROM FAQ WHERE TYPE = #{type}
+        SELECT * FROM FAQ WHERE FAQ_TYPE = #{type}
     </select>
     <select id="selectFaqListByKeyword" resultType="kr.co.sist.DTO.FaqDTO" parameterType="String">
         SELECT * FROM FAQ WHERE TITLE LIKE '%' || #{keyword} || '%'

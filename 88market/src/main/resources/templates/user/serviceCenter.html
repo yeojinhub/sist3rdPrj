@@ -66,7 +66,6 @@
             <button th:onclick="faqType('거래문의')">거래문의</button>
             <button th:onclick="faqType('이용문의')">이용문의</button>
             <button th:onclick="faqType('회원/계정')">회원/계정</button>
-            <button th:onclick="faqType('에코마일')">에코마일</button>
             <button th:onclick="faqType('운영정책')">운영정책</button>
             <button th:onclick="faqType('기타')">기타</button>
         </div>
@@ -80,7 +79,7 @@
                     <div class="faq-header-row">
                         <div class="faq-header-left">
                             <div class="faq-title" th:text="${faq.title}">질문 제목</div>
-                            <div class="faq-category" th:text="${faq.type}">카테고리</div>
+                            <div class="faq-category" th:text="${faq.faqType}">카테고리</div>
                         </div>
                     </div>
                 </h3>
