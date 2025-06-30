@@ -1,51 +1,72 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>88마켓 - 로그인</title>
-<!-- 로그인 CSS -->
-<link rel="stylesheet" th:href="@{/css/user/login.css}">
-<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
-<th:block th:replace="~{components/user/external :: external}"></th:block>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>88마켓 - 로그인</title>
+  <!-- 로그인 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/login.css}">
+  <!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+  <th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
-<script>
-	$(function() {
 
-	});
-</script>
 <body>
-	<!-- 헤더 -->
-	<th:block th:insert="~{components/user/header :: header}"></th:block>
+  <!-- 헤더 -->
+  <th:block th:insert="~{components/user/header :: header}"></th:block>
 
-	<!-- 메인 콘텐츠 -->
-	<main class="product-page-container">
-		<div class="login-container">
-			<div class="login-box">
-				<img class="market-icon" th:src="@{/images/logo.png}" alt="88마켓 아이콘">
-				<h1>88마켓에 오신 것을 환영합니다.</h1>
+  <!-- 메인 콘텐츠 -->
+  <main class="product-page-container">
+    <div class="login-container">
+      <div class="login-box">
+        <img class="market-icon" th:src="@{/images/logo.png}" alt="88마켓 아이콘">
+        <h1>88마켓에 오신 것을 환영합니다.</h1>
 
-				<div class="login-options">
-					<div class="remember-login">
-						<div class="checkbox-wrapper">
-							<div class="checkbox"></div>
-							<span>&lt;</span>
-						</div>
-						<span>로그인 유지하기</span>
-					</div>
+        <div class="login-options">
+          <div class="remember-login">
+            <div class="checkbox-wrapper">
+              <div class="checkbox"></div>
+              <span>&lt;</span>
+            </div>
+            <span>로그인 유지하기</span>
+          </div>
 
-					<button class="btn btn-naver"
-						th:onclick="|location.href='@{/mypage}'|">네이버로 시작하기</button>
-					<button class="btn btn-kakao">카카오로 시작하기</button>
-					<button class="btn btn-email">이메일로 시작하기</button>
-					<button class="btn btn-signup"
-						th:onclick="|location.href='@{/signup}'|">회원가입</button>
-				</div>
-			</div>
-		</div>
-	</main>
+          <form method="post" action="/login">
+			  <button type="submit" name="loginType" value="naver" class="btn btn-naver">네이버로 시작하기</button>
+			  <button type="submit" name="loginType" value="kakao" class="btn btn-kakao">카카오로 시작하기</button>
+			  <button type="submit" name="loginType" value="email" class="btn btn-email">이메일로 시작하기</button>
+			</form>
+          <button class="btn btn-signup"
+                  th:onclick="|location.href='@{/signup}'|">회원가입</button>
+        </div>
+      </div>
+    </div>
+  </main>
 
-	<!-- 푸터 -->
-	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+  <!-- 푸터 -->
+  <th:block th:insert="~{components/user/footer :: footer}"></th:block>
+
+  <!-- 하드코딩 로그인 스크립트 -->
+  <script>
+    $(function () {
+      // user01: 네이버
+      $('.btn-naver').click(function () {
+        sessionStorage.setItem("user", "user01");
+        location.href = "/";
+      });
+
+      // user02: 카카오
+      $('.btn-kakao').click(function () {
+        sessionStorage.setItem("user", "user02");
+        location.href = "/";
+      });
+
+      // user03: 이메일
+      $('.btn-email').click(function () {
+        sessionStorage.setItem("user", "user03");
+        location.href = "/";
+      });
+    });
+  </script>
 </body>
 </html>
+
