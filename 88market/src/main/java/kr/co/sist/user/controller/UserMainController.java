@@ -58,18 +58,18 @@ public class UserMainController {
 	
 	@GetMapping("/serviceCenter")
 	public String serviceCenter(
-		Model model,
-		@RequestParam(value="type", defaultValue="") String type,
-		@RequestParam(value="keyword", defaultValue="") String keyword) {
-			if (keyword.equals("")) {
-				List<FaqDTO> faqList = type.equals("") ? faqService.selectFaqList() : faqService.selectFaqListByType(type);
-				model.addAttribute("faqList", faqList);
-				model.addAttribute("typeButtonHide", false);
-			} else {
-				List<FaqDTO> faqList = faqService.selectFaqListByKeyword(keyword);
-				model.addAttribute("faqList", faqList);
-				model.addAttribute("typeButtonHide", true);
-			}
+			Model model,
+			@RequestParam(value="type", defaultValue="") String type,
+			@RequestParam(value="keyword", defaultValue="") String keyword) {
+		if (keyword.equals("")) {
+			List<FaqDTO> faqList = type.equals("") ? faqService.selectFaqList() : faqService.selectFaqListByType(type);
+			model.addAttribute("faqList", faqList);
+			model.addAttribute("typeButtonHide", false);
+		} else {
+			List<FaqDTO> faqList = faqService.selectFaqListByKeyword(keyword);
+			model.addAttribute("faqList", faqList);
+			model.addAttribute("typeButtonHide", true);
+		}
 		return "user/serviceCenter";
 	}
 	

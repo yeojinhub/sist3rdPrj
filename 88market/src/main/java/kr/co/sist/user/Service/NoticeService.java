@@ -10,10 +10,10 @@ import kr.co.sist.user.DAO.NoticeDAO;
 
 @Service
 public class NoticeService {
-    @Autowired
-    private NoticeDAO noticeDAO;
-
-    public List<NoticeDTO> selectNoticeList() {
-        return noticeDAO.selectNoticeList();
-    }
+	@Autowired
+	private NoticeDAO noticeDAO;
+	
+	public List<NoticeDTO> selectNoticeList() {
+		return noticeDAO.selectNoticeList();
+	}
 }
