@@ -1,6 +1,7 @@
 <footer class="footer" th:fragment="footer">
 <link rel="stylesheet" th:href="@{/css/user/components/footer.css}">
 	<div class="footer-container">
+	<div class="footer-top">
 		<div class="company-info">
 			<h4>(주) 팔팔마켓 사업자 정보</h4>
 			<p>
@@ -8,14 +9,28 @@
 				132 8층
 			</p>
 		</div>
+      <div class="sns-icons">
+        <a href="#"><img th:src="@{/images/footer/naver.png}" alt="Naver" class="naver"></a>
+        <a href="#"><img th:src="@{/images/footer/facebook.png}" alt="Facebook"></a>
+        <a href="#"><img th:src="@{/images/footer/instagram.png}" alt="Instargram"></a>
+        <a href="#"><img th:src="@{/images/footer/youtube.png}" alt="Youtube"></a>
+      </div>
 
+	</div>
+		
 		<div class="footer-links">
 			<p>
 				이용약관 | 개인정보처리방침 | 분쟁처리절차 | 청소년보호정책 | 사업자정보 확인<br>
 				게시글 수집 및 이용안내 | <span th:onclick="|location.href='@{/serviceCenter}'|" style="cursor: pointer;">팔팔마켓 고객센터</span>
 			</p>
 		</div>
-
+		<div class="disclaimer">
+		 	<p>
+				“팔팔마켓” 상점의 판매상품을 제외한 모든 상품들에 대하여, (주)팔팔마켓은 통신판매중개자로서 거래 당사자가 아니며,
+				판매 회원과 구매 회원 간의 상품거래 정보 및 거래에 관여하지 않고, 어떠한 의무와 책임도 부담하지 않습니다.
+			</p>
+		</div>
+		<hr>
 		<div class="copyright">
 			<p>COPYRIGHT ⓒ 2025 Korea Expressway Corporation. All Right
 				reserved.</p>

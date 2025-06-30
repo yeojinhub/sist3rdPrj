@@ -1,100 +1,251 @@
 /* 전체 페이지 컨테이너 스타일 */
 .page-container {
     width: 100%;
-    max-width: 1280px; /* 콘텐츠의 최대 너비를 제한하여 가독성을 높입니다. */
-    margin: 0 auto; /* 페이지를 화면 중앙에 배치합니다. */
+    max-width: 1280px;
+    margin: 0 auto;
     padding: 20px;
-    box-sizing: border-box; /* padding이 너비에 포함되도록 설정합니다. */
+    box-sizing: border-box;
 }
 
 /* 카드 섹션 공통 스타일 */
 .card-section {
+    overflow: visible;
     width: 100%;
-    margin-bottom: 50px; /* 각 섹션 사이에 충분한 여백을 줍니다. */
+    margin-bottom: 50px;
 }
 
 /* 섹션 제목 스타일 */
 .section-title {
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 20px; /* 제목과 카드 목록 사이의 여백입니다. */
+    margin-bottom: 20px;
 }
 
 /* 제목 내 강조 텍스트 스타일 */
 .text-highlight {
-    color: #2DB400; /* 예시 색상 (네이버 그린) */
+    color: #2DB400;
 }
 
-/* 카드 목록을 감싸는 래퍼 스타일 */
-.card-list-wrapper {
-    display: flex; /* 카드들을 가로로 나열합니다. */
-    overflow-x: auto; /* 내용이 넘칠 경우 가로 스크롤을 생성합니다. */
-    gap: 20px; /* 카드와 카드 사이의 간격을 설정합니다. */
-    padding-bottom: 15px; /* 스크롤바가 콘텐츠를 가리지 않도록 하단에 패딩을 줍니다. */
-    
-    /* 스크롤바를 시각적으로 숨깁니다 (기능은 유지). */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+
+/* 카드 목록을 감싸는 래퍼 스타일 - 이벤트 */
+.card-list-wrapper.autoplay {
+    overflow: hidden !important;
+    padding-top: 60px !important;
+    margin-top: 0 !important;
+    position: relative !important;
 }
-/* Chrome, Safari, Opera에서 스크롤바 숨기기 */
+
+/* 카드 목록을 감싸는 래퍼 스타일 - 이벤트 외 물품들 */
+.card-list-wrapper-items {
+    position: relative;
+    overflow: hidden !important;
+    overflow-x: auto;
+    gap: 20px !important;
+    padding-bottom: 15px;
+
+    /* 스크롤바 시각적 숨김 */
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* Firefox */
+    content: none !important; /* 중복 제거 후 하나만 남김 */
+}
+
+/* Chrome, Safari, Opera 스크롤바 숨기기 */
 .card-list-wrapper::-webkit-scrollbar {
     display: none;
 }
 
-/* 이벤트 섹션의 카드 스타일 (더 큰 카드) */
+/* Slick 화살표 스타일 (공통) */
+.slick-prev:before,
+.slick-next:before {
+    content: '';
+    background: none !important;
+    color: transparent !important;
+    opacity: 0 !important;
+}
+
+/* Slick 트랙 및 슬라이드 오버플로우 설정 */
+.slick-track,
+.slick-slide,
+.slick-list {
+    overflow: visible !important;
+}
+
+/* .card-list-wrapper 전용 화살표 스타일 */
+.card-list-wrapper .slick-prev,
+.card-list-wrapper .slick-next {
+    border-radius: 4px !important;
+    width: 55px !important;
+    height: 55px !important;
+    z-index: 10;
+    top: 48%;
+    transform: translateY(-50%);
+    position: absolute; /* 위치 지정이 필요할 수 있음 */
+}
+
+.card-list-wrapper .slick-prev {
+    left: 0px !important;
+    background-image: url('/images/main/prev-shadow.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 50px 50px !important;
+}
+
+.card-list-wrapper .slick-next {
+    right: 0px !important;
+    background-image: url('/images/main/next-shadow.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 50px 50px !important;
+}
+
+
+
+
+/* .card-list-wrapper-items 전용 화살표 스타일 */
+.card-list-wrapper-items .slick-prev,
+.card-list-wrapper-items .slick-next {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 4px !important;
+    width: 55px !important;
+    height: 55px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    top: 31%;
+    transform: translateY(-50%);
+    position: absolute; /* 위치 지정이 필요할 수 있음 */
+}
+
+.card-list-wrapper-items .slick-prev {
+    left: 0px !important;
+    background-image: url('/images/main/prev-shadow.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 50px 50px !important;
+}
+
+.card-list-wrapper-items .slick-next {
+    right: 0px !important;
+    background-image: url('/images/main/next-shadow.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 50px 50px !important;
+}
+
+/* 추가 위치 조정 */
+.slick-prev {
+    left: 10px;
+}
+.next-btn {
+    right: 10px;
+}
+
+/* 이벤트 섹션 카드 스타일 */
 .event-card {
-    flex: 0 0 auto; /* 카드가 부모 요소에 맞춰 줄어들거나 늘어나지 않도록 고정합니다. */
-    width: 400px; /* 일반 상품 카드보다 넓은 너비를 가집니다. */
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
     border-radius: 12px;
-    overflow: hidden; /* 이미지의 둥근 모서리를 적용하기 위함입니다. */
-    transition: transform 0.2s ease-in-out; /* 부드러운 효과를 위한 transition */
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    z-index: 5;
+    position: relative;
 }
 
 .event-card:hover {
-    transform: translateY(-5px); /* 호버 시 살짝 위로 올라가는 효과 */
+    transform: translateY(-5px);
+    z-index: 10;
 }
 
 .event-card img {
     width: 100%;
-    height: auto;
-    display: block; /* 이미지 하단의 불필요한 공백을 제거합니다. */
+    display: block;
 }
+
+/* slick dots 스타일 */
+.slick-dots {
+    position: relative !important;
+    bottom: auto !important;
+    margin-top: 20px !important;
+    display: flex !important;
+    justify-content: center !important;
+    padding: 10px 0;
+    z-index: 20 !important;
+}
+
+.slick-dots li button:before {
+    font-size: 12px;
+    color: #999;
+    opacity: 1;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #7dd0f5 !important;
+    opacity: 1;
+}
+
+
+/* 행동 버튼 */
+
+/* 상품 메타 + 찜 버튼 한 줄 정렬 */
+.product-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 기존 찜 버튼 스타일 유지 + 정렬 개선 */
+.wish-btn {
+    flex-shrink: 0;
+    margin-left: 8px;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    color: #FF4081;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.wish-btn.active {
+  color: #FF0000; /* 눌렀을 때 빨간색 */
+}
+
 
 /* 일반 상품 카드 스타일 */
 .product-card {
-    flex: 0 0 auto; /* 카드의 크기를 고정합니다. */
-    width: 200px; /* 상품 카드의 너비를 설정합니다. */
-    border: 1px solid #e0e0e0; /* 카드에 옅은 테두리를 추가합니다. */
-    border-radius: 8px; /* 모서리를 둥글게 처리합니다. */
+    flex: 0 0 auto;
+    width: 200px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
     overflow: hidden;
     background-color: #ffffff;
     transition: box-shadow 0.2s ease-in-out;
 }
 
 .product-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 효과를 줍니다. */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* 상품 카드의 링크 스타일 */
+/* 상품 카드 링크 */
 .product-card a {
     text-decoration: none;
-    color: inherit; /* 부모 요소의 색상을 상속받습니다. */
+    color: inherit;
     display: block;
 }
 
 /* 상품 이미지 컨테이너 */
 .product-image-container {
     width: 100%;
-    aspect-ratio: 1 / 1; /* 이미지 비율을 1:1로 유지합니다. */
+    aspect-ratio: 1 / 1;
 }
 
 .product-image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 이미지가 컨테이너에 꽉 차도록 설정합니다. */
+    object-fit: cover;
 }
 
-/* 상품 정보 영역 스타일 */
+/* 상품 정보 영역 */
 .product-info {
     padding: 15px;
 }
@@ -102,13 +253,12 @@
 .product-name {
     font-size: 14px;
     margin-bottom: 8px;
-    /* 텍스트가 두 줄을 넘어갈 경우 ...으로 표시합니다. */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    height: 2.5em; /* 대략 두 줄 높이 */
+    height: 5em;
 }
 
 .product-price {
