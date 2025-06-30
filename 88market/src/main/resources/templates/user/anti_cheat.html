@@ -10,9 +10,41 @@
 <th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
 <script>
-	$(function() {
+	$(document)
+			.ready(
+					function() {
+						$('.pattern-slides_cheat')
+								.slick(
+										{
+											dots : false,
+											infinite : true,
+											speed : 500,
+											slidesToShow : 1,
+											slidesToScroll : 1,
+											autoplay : true,
+											autoplaySpeed : 4000,
+											pauseOnHover : true,
+											prevArrow : '<button type="button" class="slick-prev"></button>',
+											nextArrow : '<button type="button" class="slick-next"></button>',
+											responsive : [ {
+												breakpoint : 768,
+												settings : {
+													arrows : true,
+													dots : false
+												}
+											} ]
+										});
 
-	});
+						// 페이지네이션 업데이트
+						$('.pattern-slides_cheat').on(
+								'afterChange',
+								function(event, slick, currentSlide) {
+									var currentPage = currentSlide + 1;
+									var totalPages = slick.slideCount;
+									$('.pattern-pagination_cheat').text(
+											currentPage + '/' + totalPages);
+								});
+					});
 </script>
 <body>
 	<!-- 헤더 -->
@@ -37,28 +69,38 @@
 
 		<section class="stats-section_cheat">
 			<div class="stat-item_cheat">
-				<div class="icon-today_cheat"></div>
+				<div class="icon-container_cheat">
+					<img src="/images/anticheat/anticheat_icon1.png" alt="오늘 조회수 아이콘"
+						class="stat-icon_cheat">
+				</div>
 				<div>
 					<p>오늘 조회수</p>
-					<strong>4,902 <span class="unit_cheat">건</span></strong>
+					<strong>14 <span class="unit_cheat">건</span></strong>
 				</div>
 			</div>
 			<div class="stat-item_cheat">
-				<div class="icon-cumulative_cheat"></div>
+				<div class="icon-container_cheat">
+					<img src="/images/anticheat/anticheat_icon2.png" alt="누적 조회수 아이콘"
+						class="stat-icon_cheat">
+				</div>
 				<div>
 					<p>누적 조회수</p>
-					<strong>462.2<span class="unit_cheat">만 건</span></strong>
+					<strong>1,243<span class="unit_cheat">건</span></strong>
 				</div>
 			</div>
 			<div class="stat-item_cheat">
-				<div class="icon-prevention_cheat"></div>
+				<div class="icon-container_cheat">
+					<img src="/images/anticheat/anticheat_icon3.png"
+						alt="누적 사기 예방 수 아이콘" class="stat-icon_cheat">
+				</div>
 				<div>
 					<p>누적 사기 예방 수</p>
-					<strong>33.2<span class="unit_cheat">만 건</span></strong>
+					<strong>16<span class="unit_cheat">건</span></strong>
 				</div>
 			</div>
 		</section>
-		<p class="stats-notice_cheat">* 오늘 조회수: 전일 오후 11:59 기준</p>
+
+		<p class="stats-notice_cheat"># 오늘 조회수: 전일 오후 11:59 기준</p>
 
 		<div class="content-wrapper_cheat">
 			<section class="live-monitoring_cheat">
@@ -104,33 +146,113 @@
 							<td>2025-06-16 15:53:43</td>
 							<td>ju***********</td>
 						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
+						<tr>
+							<td>2025-06-16 15:53:43</td>
+							<td>ju***********</td>
+						</tr>
 					</tbody>
 				</table>
 			</section>
 
 			<section class="fraud-patterns_cheat">
-				<h3>주요 사기 패턴 확인하기 _ 이 외 패턴</h3>
+				<h3>주요 사기 패턴 확인하기</h3>
 				<div class="pattern-carousel_cheat">
-					<button class="arrow_cheat prev_cheat">&lt;</button>
-					<div class="pattern-content_cheat">
-						<h4>구매 게시글 접근</h4>
-						<p>구매(삽니다) 게시글에 판매자인 척 접근하여 잠적하는 사기 수법</p>
-						<ul>
-							<li>사기꾼이 사용하는 물품 사진은 <span class="highlight_cheat">도용된
-									사진</span>일 확률이 높아요!
-							</li>
-						</ul>
-						<h4>무료나눔 개인정보 도용</h4>
-						<p>무료 나눔 이벤트를 가장하여 개인정보를 수집하는 사기 수법</p>
-						<ul>
-							<li><span class="highlight_cheat">개인 정보가 유출</span>되어 계정 도용이
-								일어날 수 있어요!</li>
-						</ul>
+					<div class="pattern-slides_cheat">
+						<!-- 슬라이드 1 -->
+						<div class="pattern-slide_cheat">
+							<div class="pattern-image_cheat">
+								<img src="/images/anticheat/anticheat_img1.png"
+									alt="구매 게시글 접근 패턴">
+							</div>
+							<div class="pattern-content_cheat">
+								<p>구매(삽니다) 게시글에 판매자인 척 접근하여 잠적하는 사기 수법</p>
+								<ul>
+									<li>사기꾼이 사용하는 물품 사진은 <span class="highlight_cheat">도용된
+											사진</span>일 확률이 높아요!
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<!-- 슬라이드 2 -->
+						<div class="pattern-slide_cheat">
+							<div class="pattern-image_cheat">
+								<img src="/images/anticheat/anticheat_img2.png"
+									alt="무료나눔 개인정보 도용 패턴">
+							</div>
+							<div class="pattern-content_cheat">
+								<p>무료 나눔 이벤트를 가장하여 개인정보를 수집하는 사기 수법</p>
+								<ul>
+									<li><span class="highlight_cheat">개인 정보가 유출</span>되어 계정
+										도용이 일어날 수 있어요!</li>
+								</ul>
+							</div>
+						</div>
+
+						<!-- 슬라이드 3 -->
+						<div class="pattern-slide_cheat">
+							<div class="pattern-image_cheat">
+								<img src="/images/anticheat/anticheat_img3.png" alt="사기 패턴 3">
+							</div>
+							<div class="pattern-content_cheat">
+								<p>택배비를 먼저 요구하거나 가짜 택배 정보를 제공하는 사기 수법</p>
+								<ul>
+									<li><span class="highlight_cheat">선입금 요구</span>는 대부분
+										사기입니다!</li>
+								</ul>
+							</div>
+						</div>
+
+						<!-- 슬라이드 4 -->
+						<div class="pattern-slide_cheat">
+							<div class="pattern-image_cheat">
+								<img src="/images/anticheat/anticheat_img4.png" alt="사기 패턴 4">
+							</div>
+							<div class="pattern-content_cheat">
+								<p>정품인 것처럼 속여서 가품을 판매하는 사기 수법</p>
+								<ul>
+									<li><span class="highlight_cheat">시세보다 저렴한 가격</span>은
+										의심해보세요!</li>
+								</ul>
+							</div>
+						</div>
 					</div>
-					<button class="arrow_cheat next_cheat">&gt;</button>
+					<div class="pattern-pagination_cheat">1/4</div>
 				</div>
-				<div class="pagination_cheat">5 / 6</div>
 			</section>
+
 		</div>
 	</main>
 
