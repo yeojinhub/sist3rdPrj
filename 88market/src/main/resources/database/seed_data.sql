@@ -1,106 +1,106 @@
--- °¡µ¥ÀÌÅÍ »ðÀÔ (°¢ Å×ÀÌºí´ç ÃÖ¼Ò 3°³¾¿)
+-- ê°€ë°ì´í„° ì‚½ìž… (ê° í…Œì´ë¸”ë‹¹ ìµœì†Œ 3ê°œì”©)
 
 /* USERS */
 INSERT INTO USERS(USER_NUM, NAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS)
-VALUES (SEQ_USER_NUM.NEXTVAL, 'È«±æµ¿',    'hong@example.com',    'pass123', '010-1111-1111', '12345', '¼­¿ï °­³²±¸ ¿ª»ïµ¿ 123-45');
+VALUES (SEQ_USER_NUM.NEXTVAL, 'í™ê¸¸ë™',    'hong@example.com',    'pass123', '010-1111-1111', '12345', 'ì„œìš¸ ê°•ë‚¨êµ¬ ì—­ì‚¼ë™ 123-45');
 INSERT INTO USERS(USER_NUM, NAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS)
-VALUES (SEQ_USER_NUM.NEXTVAL, '±è¿µÈñ',    'younghee@example.com','pwd456',   '010-2222-2222', '23456', '°æ±â ¼º³²½Ã ºÐ´ç±¸ ¼­Çöµ¿ 67-89');
+VALUES (SEQ_USER_NUM.NEXTVAL, 'ê¹€ì˜í¬',    'younghee@example.com','pwd456',   '010-2222-2222', '23456', 'ê²½ê¸° ì„±ë‚¨ì‹œ ë¶„ë‹¹êµ¬ ì„œí˜„ë™ 67-89');
 INSERT INTO USERS(USER_NUM, NAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS)
-VALUES (SEQ_USER_NUM.NEXTVAL, 'ÀÌ¹ÎÈ£',    'minho@example.com',   'abc789',   '010-3333-3333', '34567', 'ÀÎÃµ ³²µ¿±¸ ±¸¿ùµ¿ 12-34');
+VALUES (SEQ_USER_NUM.NEXTVAL, 'ì´ë¯¼í˜¸',    'minho@example.com',   'abc789',   '010-3333-3333', '34567', 'ì¸ì²œ ë‚¨ë™êµ¬ êµ¬ì›”ë™ 12-34');
 
 /* ADMIN */
 INSERT INTO ADMIN(ADM_NUM, NAME, ID, PASS, TEL)
-VALUES (SEQ_ADM_NUM.NEXTVAL, '°ü¸®ÀÚA',
+VALUES (SEQ_ADM_NUM.NEXTVAL, 'ê´€ë¦¬ìžA',
 				'admin' || LPAD(SEQ_ADM_NUM.NEXTVAL, 2, '0'),
 				'admPass1', '010-1111-1111');
 INSERT INTO ADMIN(ADM_NUM, NAME, ID, PASS, TEL)
-VALUES (SEQ_ADM_NUM.NEXTVAL, '°ü¸®ÀÚB',
+VALUES (SEQ_ADM_NUM.NEXTVAL, 'ê´€ë¦¬ìžB',
 				'admin' || LPAD(SEQ_ADM_NUM.NEXTVAL, 2, '0'),
 				'admPass2', '010-2222-2222');
 INSERT INTO ADMIN(ADM_NUM, NAME, ID, PASS, TEL)
-VALUES (SEQ_ADM_NUM.NEXTVAL, '°ü¸®ÀÚC',
+VALUES (SEQ_ADM_NUM.NEXTVAL, 'ê´€ë¦¬ìžC',
 				'admin' || LPAD(SEQ_ADM_NUM.NEXTVAL, 2, '0'),
 				'admPass3', '010-3333-3333');
 
 /* CATEGORY */
 INSERT INTO CATEGORY(CAT_NUM, NAME)
-VALUES (SEQ_CAT_NUM.NEXTVAL, 'ÀüÀÚÁ¦Ç°');
+VALUES (SEQ_CAT_NUM.NEXTVAL, 'ì „ìžì œí’ˆ');
 INSERT INTO CATEGORY(CAT_NUM, NAME)
-VALUES (SEQ_CAT_NUM.NEXTVAL, 'µµ¼­');
+VALUES (SEQ_CAT_NUM.NEXTVAL, 'ë„ì„œ');
 INSERT INTO CATEGORY(CAT_NUM, NAME)
-VALUES (SEQ_CAT_NUM.NEXTVAL, 'ÀÇ·ù');
+VALUES (SEQ_CAT_NUM.NEXTVAL, 'ì˜ë¥˜');
 
 /* COMPANY */
 INSERT INTO COMPANY(COM_NUM, COM_NAME, CEO_NAME, NAME, ID, PASS, TEL, ZIPCODE, ADDRESS)
-VALUES (SEQ_COM_NUM.NEXTVAL, 'ABC Corp',    '±è´ëÇ¥', 'È«±æµ¿', 'abc123', 'compPass1', '02-111-2222', '56789', '¼­¿ï ¸¶Æ÷±¸ ¿ùµåÄÅºÏ·Î 400');
+VALUES (SEQ_COM_NUM.NEXTVAL, 'ABC Corp',    'ê¹€ëŒ€í‘œ', 'í™ê¸¸ë™', 'abc123', 'compPass1', '02-111-2222', '56789', 'ì„œìš¸ ë§ˆí¬êµ¬ ì›”ë“œì»µë¶ë¡œ 400');
 INSERT INTO COMPANY(COM_NUM, COM_NAME, CEO_NAME, NAME, ID, PASS, TEL, ZIPCODE, ADDRESS)
-VALUES (SEQ_COM_NUM.NEXTVAL, 'XYZ Ltd',     'ÀÌ´ëÇ¥', '±è¿µÈñ', 'xyz123', 'compPass2', '031-333-4444', '67890', '°æ±â ¼º³²½Ã ºÐ´ç±¸ ÆÇ±³·Î 50');
+VALUES (SEQ_COM_NUM.NEXTVAL, 'XYZ Ltd',     'ì´ëŒ€í‘œ', 'ê¹€ì˜í¬', 'xyz123', 'compPass2', '031-333-4444', '67890', 'ê²½ê¸° ì„±ë‚¨ì‹œ ë¶„ë‹¹êµ¬ íŒêµë¡œ 50');
 INSERT INTO COMPANY(COM_NUM, COM_NAME, CEO_NAME, NAME, ID, PASS, TEL, ZIPCODE, ADDRESS)
-VALUES (SEQ_COM_NUM.NEXTVAL, 'Å×Å©³ëº£ÀÌ¼Ç','¹Ú´ëÇ¥', 'ÀÌ¹ÎÈ£', 'tech123','compPass3', '042-555-6666', '78901', '´ëÀü ¼­±¸ µÐ»ê·Î 99');
+VALUES (SEQ_COM_NUM.NEXTVAL, 'í…Œí¬ë…¸ë² ì´ì…˜','ë°•ëŒ€í‘œ', 'ì´ë¯¼í˜¸', 'tech123','compPass3', '042-555-6666', '78901', 'ëŒ€ì „ ì„œêµ¬ ë‘”ì‚°ë¡œ 99');
 
 /* PRODUCT */
 INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, USER_NUM, CAT_NUM, COM_NUM, LOCATION1)
-VALUES (SEQ_PRD_NUM.NEXTVAL, 'ÃÖ½Å ½º¸¶Æ®Æù',     '2025³âÇü Ç®½ºÅ©¸° ½º¸¶Æ®Æù', 900000, 1, 1, 1, '´öÆòÈÞ°Ô¼Ò');
+VALUES (SEQ_PRD_NUM.NEXTVAL, 'ìµœì‹  ìŠ¤ë§ˆíŠ¸í°',     '2025ë…„í˜• í’€ìŠ¤í¬ë¦° ìŠ¤ë§ˆíŠ¸í°', 900000, 1, 1, 1, 'ë•í‰íœ´ê²Œì†Œ');
 INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, USER_NUM, CAT_NUM, COM_NUM, LOCATION1)
-VALUES (SEQ_PRD_NUM.NEXTVAL, 'º£½ºÆ®¼¿·¯ ¼Ò¼³',   '2025 È­Á¦ÀÇ ¼Ò¼³ ´ÜÇàº»',     20000, 2, 2, 2, 'Çà´ãµµÈÞ°Ô¼Ò');
+VALUES (SEQ_PRD_NUM.NEXTVAL, 'ë² ìŠ¤íŠ¸ì…€ëŸ¬ ì†Œì„¤',   '2025 í™”ì œì˜ ì†Œì„¤ ë‹¨í–‰ë³¸',     20000, 2, 2, 2, 'í–‰ë‹´ë„íœ´ê²Œì†Œ');
 INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, USER_NUM, CAT_NUM, COM_NUM, LOCATION1)
-VALUES (SEQ_PRD_NUM.NEXTVAL, '¿©¸§ ¹ÝÆÈ Æ¼¼ÅÃ÷',   '½Ã¿øÇÑ ÄÚÆ° ¹ÝÆÈÆ¼',           15000, 3, 3, 3, 'Á×¾ÏÈÞ°Ô¼Ò');
+VALUES (SEQ_PRD_NUM.NEXTVAL, 'ì—¬ë¦„ ë°˜íŒ” í‹°ì…”ì¸ ',   'ì‹œì›í•œ ì½”íŠ¼ ë°˜íŒ”í‹°',           15000, 3, 3, 3, 'ì£½ì•”íœ´ê²Œì†Œ');
 
 /* NOTICE */
 INSERT INTO NOTICE(NOT_NUM, ADM_NUM, TITLE, CONTENT, NAME)
-VALUES (SEQ_NOT_NUM.NEXTVAL, 1, '½Ã½ºÅÛ Á¡°Ë ¾È³»',    '7¿ù 1ÀÏ »õº® 02:00 ~ 04:00 ½Ã½ºÅÛ Á¡°ËÀÌ ÀÖ½À´Ï´Ù.', '°ü¸®ÀÚA');
+VALUES (SEQ_NOT_NUM.NEXTVAL, 1, 'ì‹œìŠ¤í…œ ì ê²€ ì•ˆë‚´',    '7ì›” 1ì¼ ìƒˆë²½ 02:00 ~ 04:00 ì‹œìŠ¤í…œ ì ê²€ì´ ìžˆìŠµë‹ˆë‹¤.', 'ê´€ë¦¬ìžA');
 INSERT INTO NOTICE(NOT_NUM, ADM_NUM, TITLE, CONTENT, NAME)
-VALUES (SEQ_NOT_NUM.NEXTVAL, 2, 'ÀÌº¥Æ® °øÁö',        '7¿ù ÇÑ ´Þ°£ ±¸¸Å ±Ý¾× 5% Àû¸³ ÀÌº¥Æ®',               '°ü¸®ÀÚB');
+VALUES (SEQ_NOT_NUM.NEXTVAL, 2, 'ì´ë²¤íŠ¸ ê³µì§€',        '7ì›” í•œ ë‹¬ê°„ êµ¬ë§¤ ê¸ˆì•¡ 5% ì ë¦½ ì´ë²¤íŠ¸',               'ê´€ë¦¬ìžB');
 INSERT INTO NOTICE(NOT_NUM, ADM_NUM, TITLE, CONTENT, NAME)
-VALUES (SEQ_NOT_NUM.NEXTVAL, 3, '½Å±Ô ±â´É Ãâ½Ã',     '»óÇ° ÃßÃµ ¾Ë°í¸®ÁòÀÌ ¾÷µ¥ÀÌÆ® µÇ¾ú½À´Ï´Ù.',         '°ü¸®ÀÚC');
+VALUES (SEQ_NOT_NUM.NEXTVAL, 3, 'ì‹ ê·œ ê¸°ëŠ¥ ì¶œì‹œ',     'ìƒí’ˆ ì¶”ì²œ ì•Œê³ ë¦¬ì¦˜ì´ ì—…ë°ì´íŠ¸ ë˜ì—ˆìŠµë‹ˆë‹¤.',         'ê´€ë¦¬ìžC');
 
 /* BANK */
 INSERT INTO BANK(USER_NUM, NAME, BANK_NAME, BANK_NUM)
-VALUES ((select user_num from users where user_num=1), 'È«±æµ¿',    '±¹¹ÎÀºÇà', '123-456-7890');
+VALUES ((select user_num from users where user_num=1), 'í™ê¸¸ë™',    'êµ­ë¯¼ì€í–‰', '123-456-7890');
 INSERT INTO BANK(USER_NUM, NAME, BANK_NAME, BANK_NUM)
-VALUES ((select user_num from users where user_num=2), '±è¿µÈñ',    '½ÅÇÑÀºÇà', '234-567-8901');
+VALUES ((select user_num from users where user_num=2), 'ê¹€ì˜í¬',    'ì‹ í•œì€í–‰', '234-567-8901');
 INSERT INTO BANK(USER_NUM, NAME, BANK_NAME, BANK_NUM)
-VALUES ((select user_num from users where user_num=3), 'ÀÌ¹ÎÈ£',    '¿ì¸®ÀºÇà', '345-678-9012');
+VALUES ((select user_num from users where user_num=3), 'ì´ë¯¼í˜¸',    'ìš°ë¦¬ì€í–‰', '345-678-9012');
 
 /* FAQ */
 INSERT INTO FAQ(FAQ_NUM, TITLE, CONTENT, NAME, ADM_NUM)
-VALUES (SEQ_FAQ_NUM.NEXTVAL, 'È¸¿ø°¡ÀÔ ¿À·ù', '°¡ÀÔ ½Ã ÀÌ¸ÞÀÏ ÀÎÁõÀÌ ¾È µË´Ï´Ù.', 'È«±æµ¿', '1');
+VALUES (SEQ_FAQ_NUM.NEXTVAL, 'íšŒì›ê°€ìž… ì˜¤ë¥˜', 'ê°€ìž… ì‹œ ì´ë©”ì¼ ì¸ì¦ì´ ì•ˆ ë©ë‹ˆë‹¤.', 'í™ê¸¸ë™', '1');
 INSERT INTO FAQ(FAQ_NUM, TITLE, CONTENT, NAME, ADM_NUM)
-VALUES (SEQ_FAQ_NUM.NEXTVAL, '°áÁ¦ Ãë¼Ò ¹æ¹ý', 'È¯ºÒÀº ¾î¶»°Ô ÁøÇàµÇ³ª¿ä?',      '±è¿µÈñ', '2');
+VALUES (SEQ_FAQ_NUM.NEXTVAL, 'ê²°ì œ ì·¨ì†Œ ë°©ë²•', 'í™˜ë¶ˆì€ ì–´ë–»ê²Œ ì§„í–‰ë˜ë‚˜ìš”?',      'ê¹€ì˜í¬', '2');
 INSERT INTO FAQ(FAQ_NUM, TITLE, CONTENT, NAME, ADM_NUM)
-VALUES (SEQ_FAQ_NUM.NEXTVAL, '¹è¼Û Á¶È¸',      '»óÇ° ¹è¼Û Á¶È¸´Â ¾îµð¼­?',      'ÀÌ¹ÎÈ£', '3');
+VALUES (SEQ_FAQ_NUM.NEXTVAL, 'ë°°ì†¡ ì¡°íšŒ',      'ìƒí’ˆ ë°°ì†¡ ì¡°íšŒëŠ” ì–´ë””ì„œ?',      'ì´ë¯¼í˜¸', '3');
 
 /* REVIEW */
-INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, USER_NUM, PRD_NUM)
-VALUES (SEQ_REV_NUM.NEXTVAL, '»óÇ°ÀÌ Á¤¸» ¸¸Á·½º·´½À´Ï´Ù!', 'È«±æµ¿', '1', '1');
-INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, USER_NUM, PRD_NUM)
-VALUES (SEQ_REV_NUM.NEXTVAL, 'Ã¥ÀÌ ³Ê¹« Àç¹ÌÀÖ¾î¿ä.',     '±è¿µÈñ', '2', '2');
-INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, USER_NUM, PRD_NUM)
-VALUES (SEQ_REV_NUM.NEXTVAL, 'Æ¼¼ÅÃ÷°¡ ÇÍÀÌ ¿¹»µ¿ä.',     'ÀÌ¹ÎÈ£', '3', '3');
+INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, KEYWORD, PRD_NUM)
+VALUES (SEQ_REV_NUM.NEXTVAL, 'ìƒí’ˆì´ ì •ë§ ë§Œì¡±ìŠ¤ëŸ½ìŠµë‹ˆë‹¤!', 'í™ê¸¸ë™', 'ìµœê³ ì˜ˆìš”', '1');
+INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, KEYWORD, PRD_NUM)
+VALUES (SEQ_REV_NUM.NEXTVAL, 'ì±…ì´ ë„ˆë¬´ ìž¬ë¯¸ìžˆì–´ìš”.',     'ê¹€ì˜í¬', 'ì¢‹ì•„ìš”', '2');
+INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, KEYWORD, PRD_NUM)
+VALUES (SEQ_REV_NUM.NEXTVAL, 'í‹°ì…”ì¸ ê°€ í•ì´ ì˜ˆë»ìš”.',     'ì´ë¯¼í˜¸', 'ì¢‹ì•„ìš”', '3');
 
 /* TRADES */
 INSERT INTO TRADES(TRADE_ID, BUYER_ID, TRADE_STATUS, TRADE_DATE, PRD_NUM)
 VALUES ((select email from users where user_num=1),
-				(select email from users where user_num=2), '°Å·¡¿Ï·á', SYSDATE, 1);
+				(select email from users where user_num=2), 'ê±°ëž˜ì™„ë£Œ', SYSDATE, 1);
 INSERT INTO TRADES(TRADE_ID, BUYER_ID, TRADE_STATUS, TRADE_DATE, PRD_NUM)
 VALUES ((select email from users where user_num=2),
-				(select email from users where user_num=3), 'ÆÇ¸ÅÁß',  SYSDATE, 2);
+				(select email from users where user_num=3), 'íŒë§¤ì¤‘',  SYSDATE, 2);
 INSERT INTO TRADES(TRADE_ID, BUYER_ID, TRADE_STATUS, TRADE_DATE, PRD_NUM)
 VALUES ((select email from users where user_num=3),
-				(select email from users where user_num=1), '¿¹¾àÁß',SYSDATE, 3);
+				(select email from users where user_num=1), 'ì˜ˆì•½ì¤‘',SYSDATE, 3);
 
 /* PAYMENTS */
 INSERT INTO PAYMENTS(PATMENT_ID, AMOUNT, METHOD, PATMENT_DATE, TRADE_ID)
 VALUES ((select TRADE_ID from TRADES where BUYER_ID='younghee@example.com'),
-				900000, 'Ä«µå°áÁ¦', SYSDATE,
+				900000, 'ì¹´ë“œê²°ì œ', SYSDATE,
 				(select TRADE_ID from TRADES where TRADE_ID='hong@example.com'));
 INSERT INTO PAYMENTS(PATMENT_ID, AMOUNT, METHOD, PATMENT_DATE, TRADE_ID)
 VALUES ((select TRADE_ID from TRADES where BUYER_ID='minho@example.com'),
-				20000,  '°èÁÂÀÌÃ¼', SYSDATE,
+				20000,  'ê³„ì¢Œì´ì²´', SYSDATE,
 				(select TRADE_ID from TRADES where TRADE_ID='hong@example.com'));
 INSERT INTO PAYMENTS(PATMENT_ID, AMOUNT, METHOD, PATMENT_DATE, TRADE_ID)
 VALUES ((select TRADE_ID from TRADES where BUYER_ID='younghee@example.com'),
-				15000,  'ÈÞ´ëÆù°áÁ¦', SYSDATE,
+				15000,  'íœ´ëŒ€í°ê²°ì œ', SYSDATE,
 				(select TRADE_ID from TRADES where TRADE_ID='minho@example.com'));
 
 /* FAVORITE */
@@ -113,19 +113,19 @@ VALUES (SEQ_FAV_NUM.NEXTVAL, 3, 3);
 
 /* INQUIRY */
 INSERT INTO INQUIRY(INQ_NUM, TITLE, CONTENT, NAME, USER_NUM, ADM_NUM)
-VALUES (SEQ_INQ_NUM.NEXTVAL, '»óÇ° ¹®ÀÇ',     '»ö»ó ¿É¼Ç Ãß°¡ °¡´ÉÇÒ±î¿ä?',   'È«±æµ¿', 1, 1);
+VALUES (SEQ_INQ_NUM.NEXTVAL, 'ìƒí’ˆ ë¬¸ì˜',     'ìƒ‰ìƒ ì˜µì…˜ ì¶”ê°€ ê°€ëŠ¥í• ê¹Œìš”?',   'í™ê¸¸ë™', 1, 1);
 INSERT INTO INQUIRY(INQ_NUM, TITLE, CONTENT, NAME, USER_NUM, ADM_NUM)
-VALUES (SEQ_INQ_NUM.NEXTVAL, 'Ãë¼Ò ¿äÃ»',     'ÁÖ¹® Ãë¼Ò ¾î¶»°Ô ÇÏ³ª¿ä?',     '±è¿µÈñ', 2, 2);
+VALUES (SEQ_INQ_NUM.NEXTVAL, 'ì·¨ì†Œ ìš”ì²­',     'ì£¼ë¬¸ ì·¨ì†Œ ì–´ë–»ê²Œ í•˜ë‚˜ìš”?',     'ê¹€ì˜í¬', 2, 2);
 INSERT INTO INQUIRY(INQ_NUM, TITLE, CONTENT, NAME, USER_NUM, ADM_NUM)
-VALUES (SEQ_INQ_NUM.NEXTVAL, '±³È¯ ¹®ÀÇ',     '»çÀÌÁî ±³È¯ °¡´ÉÇÑ°¡¿ä?',       'ÀÌ¹ÎÈ£', 3, 3);
+VALUES (SEQ_INQ_NUM.NEXTVAL, 'êµí™˜ ë¬¸ì˜',     'ì‚¬ì´ì¦ˆ êµí™˜ ê°€ëŠ¥í•œê°€ìš”?',       'ì´ë¯¼í˜¸', 3, 3);
 
 /* ANSWER */
 INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, NAME)
-VALUES (1, 'Re: »óÇ° ¹®ÀÇ', '³×, »ö»ó ¿É¼Ç ±â´É °ð Ãß°¡µË´Ï´Ù.', (select name from admin where adm_num=1));
+VALUES (1, 'Re: ìƒí’ˆ ë¬¸ì˜', 'ë„¤, ìƒ‰ìƒ ì˜µì…˜ ê¸°ëŠ¥ ê³§ ì¶”ê°€ë©ë‹ˆë‹¤.', (select name from admin where adm_num=1));
 INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, NAME)
-VALUES (2, 'Re: Ãë¼Ò ¿äÃ»', '¸¶ÀÌÆäÀÌÁö > ÁÖ¹®³»¿ª¿¡¼­ °¡´ÉÇÕ´Ï´Ù.', (select name from admin where adm_num=2));
+VALUES (2, 'Re: ì·¨ì†Œ ìš”ì²­', 'ë§ˆì´íŽ˜ì´ì§€ > ì£¼ë¬¸ë‚´ì—­ì—ì„œ ê°€ëŠ¥í•©ë‹ˆë‹¤.', (select name from admin where adm_num=2));
 INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, NAME)
-VALUES (3, 'Re: ±³È¯ ¹®ÀÇ', '»çÀÌÁî ±³È¯ ½ÅÃ»¼­ ÀÛ¼º ºÎÅ¹µå¸³´Ï´Ù.', (select name from admin where adm_num=3));
+VALUES (3, 'Re: êµí™˜ ë¬¸ì˜', 'ì‚¬ì´ì¦ˆ êµí™˜ ì‹ ì²­ì„œ ìž‘ì„± ë¶€íƒë“œë¦½ë‹ˆë‹¤.', (select name from admin where adm_num=3));
 
 /* IMAGE */
 INSERT INTO IMAGE(IMG_NUM, SUB_IMAGE1, SUB_IMAGE2, SUB_IMAGE3, SUB_IMAGE4, IMAGE_TYPE)
@@ -137,30 +137,30 @@ VALUES (SEQ_IMG_NUM.NEXTVAL, '/img/p3_1.jpg', '/img/p3_2.jpg', '/img/p3_3.jpg', 
 
 /* EVENT */
 INSERT INTO EVENT(EVT_NUM, TITLE, CONTENT, NAME, START_DATE, END_DATE, ADM_NUM)
-VALUES (SEQ_EVT_NUM.NEXTVAL, '7¿ù ¼¼ÀÏ', '7¿ù ÇÑ ´Þ°£ Àü »óÇ° 10% ÇÒÀÎ',
+VALUES (SEQ_EVT_NUM.NEXTVAL, '7ì›” ì„¸ì¼', '7ì›” í•œ ë‹¬ê°„ ì „ ìƒí’ˆ 10% í• ì¸',
 				(SELECT NAME FROM ADMIN WHERE ADM_NUM=1), SYSDATE, SYSDATE+30, 1);
 INSERT INTO EVENT(EVT_NUM, TITLE, CONTENT, NAME, START_DATE, END_DATE, EVT_TYPE, ADM_NUM)
-VALUES (SEQ_EVT_NUM.NEXTVAL, '¹éÅõ½ºÄð', 'ÇÐ»ýÁõ Á¦½Ã ½Ã Ãß°¡ Àû¸³',
+VALUES (SEQ_EVT_NUM.NEXTVAL, 'ë°±íˆ¬ìŠ¤ì¿¨', 'í•™ìƒì¦ ì œì‹œ ì‹œ ì¶”ê°€ ì ë¦½',
 				(SELECT NAME FROM ADMIN WHERE ADM_NUM=2), SYSDATE, SYSDATE+15, 2, 2);
 INSERT INTO EVENT(EVT_NUM, TITLE, CONTENT, NAME, START_DATE, END_DATE, EVT_TYPE, ADM_NUM)
-VALUES (SEQ_EVT_NUM.NEXTVAL, 'ÇÑ±Û³¯ ±â³ä', 'ÇÑ±Û³¯ ´çÀÏ ±¸¸Å °í°´ °æÇ° ÃßÃ·',
+VALUES (SEQ_EVT_NUM.NEXTVAL, 'í•œê¸€ë‚  ê¸°ë…', 'í•œê¸€ë‚  ë‹¹ì¼ êµ¬ë§¤ ê³ ê° ê²½í’ˆ ì¶”ì²¨',
 				(SELECT NAME FROM ADMIN WHERE ADM_NUM=3),
 				TO_DATE('2025-10-09','YYYY-MM-DD'), TO_DATE('2025-10-09','YYYY-MM-DD'), 3, 3);
 
 /* ADDRESS */
 INSERT INTO ADDRESS(ADDR_NUM, NAME, RECIPIENT_NAME, TEL, ZIPCODE, ADDRESS, USER_NUM)
-VALUES (SEQ_ADDR_NUM.NEXTVAL, 'Áý',     'È«±æµ¿',    '010-1111-1111', '12345', '¼­¿ï °­³²±¸ ¿ª»ïµ¿ 123-45', 1);
+VALUES (SEQ_ADDR_NUM.NEXTVAL, 'ì§‘',     'í™ê¸¸ë™',    '010-1111-1111', '12345', 'ì„œìš¸ ê°•ë‚¨êµ¬ ì—­ì‚¼ë™ 123-45', 1);
 INSERT INTO ADDRESS(ADDR_NUM, NAME, RECIPIENT_NAME, TEL, ZIPCODE, ADDRESS, USER_NUM)
-VALUES (SEQ_ADDR_NUM.NEXTVAL, 'È¸»ç',   '±è¿µÈñ',    '010-2222-2222', '23456', '°æ±â ¼º³²½Ã ºÐ´ç±¸ ¼­Çöµ¿ 67-89', 2);
+VALUES (SEQ_ADDR_NUM.NEXTVAL, 'íšŒì‚¬',   'ê¹€ì˜í¬',    '010-2222-2222', '23456', 'ê²½ê¸° ì„±ë‚¨ì‹œ ë¶„ë‹¹êµ¬ ì„œí˜„ë™ 67-89', 2);
 INSERT INTO ADDRESS(ADDR_NUM, NAME, RECIPIENT_NAME, TEL, ZIPCODE, ADDRESS, USER_NUM)
-VALUES (SEQ_ADDR_NUM.NEXTVAL, 'Ä£±¸Áý','ÀÌ¹ÎÈ£',    '010-3333-3333', '34567', 'ÀÎÃµ ³²µ¿±¸ ±¸¿ùµ¿ 12-34',    3);
+VALUES (SEQ_ADDR_NUM.NEXTVAL, 'ì¹œêµ¬ì§‘','ì´ë¯¼í˜¸',    '010-3333-3333', '34567', 'ì¸ì²œ ë‚¨ë™êµ¬ êµ¬ì›”ë™ 12-34',    3);
 
 /* REPORT */
 INSERT INTO REPORT(REP_NUM, TITLE, CONTENT, NAME, REPORT_TYPE, USER_NUM)
-VALUES (SEQ_REP_NUM.NEXTVAL, '½ºÆÔ ¸Þ½ÃÁö', '±¤°í¼º ¸Þ½ÃÁö ¼ö½Å',    'È«±æµ¿', 1, 1);
+VALUES (SEQ_REP_NUM.NEXTVAL, 'ìŠ¤íŒ¸ ë©”ì‹œì§€', 'ê´‘ê³ ì„± ë©”ì‹œì§€ ìˆ˜ì‹ ',    'í™ê¸¸ë™', 1, 1);
 INSERT INTO REPORT(REP_NUM, TITLE, CONTENT, NAME, REPORT_TYPE, USER_NUM)
-VALUES (SEQ_REP_NUM.NEXTVAL, 'ºÒ·® »óÇ°',   '»óÇ°ÀÌ ÆÄ¼ÕµÇ¾î µµÂø',   '±è¿µÈñ', 2, 2);
+VALUES (SEQ_REP_NUM.NEXTVAL, 'ë¶ˆëŸ‰ ìƒí’ˆ',   'ìƒí’ˆì´ íŒŒì†ë˜ì–´ ë„ì°©',   'ê¹€ì˜í¬', 2, 2);
 INSERT INTO REPORT(REP_NUM, TITLE, CONTENT, NAME, REPORT_TYPE, USER_NUM)
-VALUES (SEQ_REP_NUM.NEXTVAL, '¹è¼Û Áö¿¬',   '¹è¼ÛÀÌ ÀÏÁÖÀÏ Áö¿¬µÊ',   'ÀÌ¹ÎÈ£', 3, 3);
+VALUES (SEQ_REP_NUM.NEXTVAL, 'ë°°ì†¡ ì§€ì—°',   'ë°°ì†¡ì´ ì¼ì£¼ì¼ ì§€ì—°ë¨',   'ì´ë¯¼í˜¸', 3, 3);
 
 commit;

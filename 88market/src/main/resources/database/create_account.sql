@@ -1,4 +1,4 @@
-ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE; -- ╟Ха╓╦М C## ╬х╬╡╟М ╦╦╣И ╪Ж юж╟т го╢б ╟е, ╦╦╣Е╫ц╟М FALSE го╦И ╣к╢о╢ы
+ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE; -- ЙЁ└Л═∙К╙┘ C## Л∙┬Л⌠╟ЙЁ═ К╖▄К⌠╓ Л┬≤ Л·┬Й╡▄ М∙≤К┼■ Й╠╟, К╖▄К⌠°Л▀°ЙЁ═ FALSE М∙≤К╘╢ К░╘К▀┬К▀╓
 
 CREATE USER market IDENTIFIED BY tiger;
 
