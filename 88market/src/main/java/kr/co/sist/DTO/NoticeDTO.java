@@ -1,4 +1,4 @@
-package kr.co.sist.dto;
+package kr.co.sist.DTO;
 
 import java.sql.Date;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.sist.dto.NoticeDTO;
+import kr.co.sist.DTO.*;
 import kr.co.sist.user.DAO.NoticeDAO;
 
 @Service

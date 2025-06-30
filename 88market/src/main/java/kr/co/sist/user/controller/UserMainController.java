@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.sist.dto.FaqDTO;
-import kr.co.sist.dto.NoticeDTO;
+import kr.co.sist.DTO.FaqDTO;
+import kr.co.sist.DTO.NoticeDTO;
 import kr.co.sist.user.Service.FaqService;
 import kr.co.sist.user.Service.NoticeService;
 
