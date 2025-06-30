@@ -11,8 +11,8 @@
     function connect() {
       const socket = new SockJS('/ws-chat');
       stompClient = Stomp.over(socket);
+      stompClient.debug = function () {}; // 로그 비활성화
       stompClient.connect({}, function () {
-        console.log("Connected");
 
         document.querySelectorAll('.chat-item').forEach(item => {
           const roomId = item.getAttribute('data-room-id');

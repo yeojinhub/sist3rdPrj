@@ -1,0 +1,135 @@
+.fraud-main {
+  max-width: 720px;
+  margin: 40px auto 0 auto;
+  padding: 0 24px 40px 24px;
+  background: #fff;
+  font-family: 'Pretendard', 'Noto Sans KR', Arial, sans-serif;
+}
+
+.fraud-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  border-bottom: 2px solid #111;
+  padding-bottom: 18px;
+  letter-spacing: -1px;
+}
+
+.fraud-section {
+  margin-top: 32px;
+}
+
+.fraud-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.fraud-query {
+  font-size: 1.18rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.fraud-period {
+  color: #444;
+  font-size: 1rem;
+}
+
+.fraud-subtitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.fraud-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.fraud-table td {
+  padding: 18px 12px 12px 0;
+  vertical-align: top;
+  border-bottom: 1px solid #e1e1e1;
+  font-size: 1.03rem;
+}
+
+.fraud-label {
+  width: 120px;
+  font-weight: 500;
+  color: #222;
+}
+
+.fraud-status {
+  font-weight: 600;
+  font-size: 1.03rem;
+  margin-right: 8px;
+}
+
+.fraud-status-green {
+  color: #20b45b;
+}
+
+.fraud-desc {
+  display: block;
+  margin-top: 2px;
+  color: #888;
+  font-size: 0.97rem;
+  line-height: 1.5;
+}
+
+.fraud-danger {
+  color: #e94b3a;
+  font-weight: 500;
+}
+
+.fraud-link {
+  color: #3b82f6;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.fraud-warning {
+  color: #e94b3a;
+  font-weight: 500;
+}
+
+.fraud-btn-wrap {
+  margin: 32px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fraud-btn {
+  width: 100%;
+  border: 2px solid #111;
+  background: #fff;
+  color: #111;
+  font-size: 1.09rem;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 14px 0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.fraud-btn:hover {
+  background: #f5f5f5;
+}
+
+.fraud-footer-text {
+  margin-top: 40px;
+  font-size: 0.98rem;
+  color: #444;
+}
+
+.fraud-footer-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #3b82f6;
+  text-decoration: underline;
+  font-weight: 500;
+}

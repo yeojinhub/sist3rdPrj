@@ -1,51 +1,99 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>88마켓 - 사기조회</title>
-<!-- 공지사항 CSS -->
-<link rel="stylesheet" th:href="@{/css/user/anti_cheat.css}">
-<!-- 외부파일(jQuery, bootstrep 등 -->
-<th:block th:replace="~{components/user/external :: external}"></th:block>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>88마켓 - 사기조회</title>
+	<!-- 공지사항 CSS -->
+	<link rel="stylesheet" th:href="@{/css/user/anti_cheat.css}">
+	<!-- 외부파일(jQuery, bootstrep 등 -->
+	<th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
 <script>
 	$(document)
-			.ready(
-					function() {
-						$('.pattern-slides_cheat')
-								.slick(
-										{
-											dots : false,
-											infinite : true,
-											speed : 500,
-											slidesToShow : 1,
-											slidesToScroll : 1,
-											autoplay : true,
-											autoplaySpeed : 4000,
-											pauseOnHover : true,
-											prevArrow : '<button type="button" class="slick-prev"></button>',
-											nextArrow : '<button type="button" class="slick-next"></button>',
-											responsive : [ {
-												breakpoint : 768,
-												settings : {
-													arrows : true,
-													dots : false
-												}
-											} ]
-										});
+		.ready(
+			function () {
+				$('.pattern-slides_cheat')
+					.slick(
+						{
+							dots: false,
+							infinite: true,
+							speed: 500,
+							slidesToShow: 1,
+							slidesToScroll: 1,
+							autoplay: true,
+							autoplaySpeed: 4000,
+							pauseOnHover: true,
+							prevArrow: '<button type="button" class="slick-prev"></button>',
+							nextArrow: '<button type="button" class="slick-next"></button>',
+							responsive: [{
+								breakpoint: 768,
+								settings: {
+									arrows: true,
+									dots: false
+								}
+							}]
+						});
 
-						// 페이지네이션 업데이트
-						$('.pattern-slides_cheat').on(
-								'afterChange',
-								function(event, slick, currentSlide) {
-									var currentPage = currentSlide + 1;
-									var totalPages = slick.slideCount;
-									$('.pattern-pagination_cheat').text(
-											currentPage + '/' + totalPages);
-								});
+				// 페이지네이션 업데이트
+				$('.pattern-slides_cheat').on(
+					'afterChange',
+					function (event, slick, currentSlide) {
+						var currentPage = currentSlide + 1;
+						var totalPages = slick.slideCount;
+						$('.pattern-pagination_cheat').text(
+							currentPage + '/' + totalPages);
 					});
+
+				// 실시간 사기 모니터링 현황 조회
+				// 최초 1회 호출
+				getRealTimeMonitoring();
+
+				// 3초마다 무한 호출
+				function getRealTimeMonitoring() {
+					axios.get('/api/anticheat/real-time-monitoring')
+						.then(function (response) {
+							// 1. tbody 선택
+							var $tbody = $('.live-monitoring_cheat table tbody');
+							$tbody.empty(); // 기존 내용 비우기
+
+							// 2. 데이터가 배열이면 반복, 객체면 1건만 처리
+							var dataList = Array.isArray(response.data) ? response.data : [response.data];
+
+							dataList.forEach(function (item) {
+								var inputDate = item.inputDate || '';
+								var inputValue = item.inputValue || '';
+
+								// inputValue 마스킹
+								var maskedValue = maskValue(inputValue);
+
+								// tr 생성
+								var $tr = $('<tr>');
+								$tr.append($('<td>').text(inputDate));
+								$tr.append($('<td>').text(maskedValue));
+								$tbody.append($tr);
+							});
+						})
+						.catch(function (error) {
+							console.error(error);
+						})
+						.finally(function () {
+							setTimeout(getRealTimeMonitoring, 3000);
+						});
+				}
+			}); // ready
+
+	function maskValue(str) {
+		if (!str) return '';
+		if (str.length <= 3) {
+			return str; // 3자리 이하는 그대로 반환
+		}
+		// 첫 3자리 + 나머지는 *
+		return str.substring(0, 3) + '*'.repeat(str.length - 3);
+	}
 </script>
+
 <body>
 	<!-- 헤더 -->
 	<div th:insert="~{components/user/header :: header}"></div>
@@ -59,10 +107,12 @@
 		<section class="search-section_cheat">
 			<h2>통합 사기조회</h2>
 			<p>중고거래 플랫폼, 커뮤니티 어디에서 거래하든 사기 피해사례를 조회할 수 있어요.</p>
-			<div class="search-box_cheat">
-				<input type="text" placeholder="휴대전화번호, 계좌번호, 메신저 ID, 이메일 입력">
-				<button type="button">조회</button>
-			</div>
+			<form action="/anticheatResult" method="post">
+				<div class="search-box_cheat">
+					<input type="text" placeholder="휴대전화번호, 계좌번호, 이메일 입력" name="inputValue">
+					<button type="submit">조회</button>
+				</div>
+			</form>
 			<p class="search-notice_cheat">최근 3개월 내 중고나라, 사이버범죄 신고시스템에 등록된 사기
 				피해사례를 조회합니다.</p>
 		</section>
@@ -70,37 +120,34 @@
 		<section class="stats-section_cheat">
 			<div class="stat-item_cheat">
 				<div class="icon-container_cheat">
-					<img src="/images/anticheat/anticheat_icon1.png" alt="오늘 조회수 아이콘"
-						class="stat-icon_cheat">
+					<img src="/images/anticheat/anticheat_icon1.png" alt="오늘 조회수 아이콘" class="stat-icon_cheat">
 				</div>
 				<div>
 					<p>오늘 조회수</p>
-					<strong>14 <span class="unit_cheat">건</span></strong>
+					<strong th:text="|${todayLookUpScam}건|"></strong>
 				</div>
 			</div>
 			<div class="stat-item_cheat">
 				<div class="icon-container_cheat">
-					<img src="/images/anticheat/anticheat_icon2.png" alt="누적 조회수 아이콘"
-						class="stat-icon_cheat">
+					<img src="/images/anticheat/anticheat_icon2.png" alt="누적 조회수 아이콘" class="stat-icon_cheat">
 				</div>
 				<div>
 					<p>누적 조회수</p>
-					<strong>1,243<span class="unit_cheat">건</span></strong>
+					<strong th:text="|${totalLookUpScam}건|"></strong>
 				</div>
 			</div>
 			<div class="stat-item_cheat">
 				<div class="icon-container_cheat">
-					<img src="/images/anticheat/anticheat_icon3.png"
-						alt="누적 사기 예방 수 아이콘" class="stat-icon_cheat">
+					<img src="/images/anticheat/anticheat_icon3.png" alt="누적 사기 예방 수 아이콘" class="stat-icon_cheat">
 				</div>
 				<div>
 					<p>누적 사기 예방 수</p>
-					<strong>16<span class="unit_cheat">건</span></strong>
+					<strong th:text="|${totalprevention}건|"></strong>
 				</div>
 			</div>
 		</section>
 
-		<p class="stats-notice_cheat"># 오늘 조회수: 전일 오후 11:59 기준</p>
+		<p class="stats-notice_cheat"># 오늘은 정말 기분이 좋습니다.</p>
 
 		<div class="content-wrapper_cheat">
 			<section class="live-monitoring_cheat">
@@ -114,74 +161,6 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>2025-06-16 16:58:31</td>
-							<td>bl***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 16:46:35</td>
-							<td>62***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 16:34:20</td>
-							<td>lv***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 16:12:35</td>
-							<td>mo***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 16:11:34</td>
-							<td>01084******</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 16:09:22</td>
-							<td>rk***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 16:07:11</td>
-							<td>wj***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
-						<tr>
-							<td>2025-06-16 15:53:43</td>
-							<td>ju***********</td>
-						</tr>
 					</tbody>
 				</table>
 			</section>
@@ -193,8 +172,7 @@
 						<!-- 슬라이드 1 -->
 						<div class="pattern-slide_cheat">
 							<div class="pattern-image_cheat">
-								<img src="/images/anticheat/anticheat_img1.png"
-									alt="구매 게시글 접근 패턴">
+								<img src="/images/anticheat/anticheat_img1.png" alt="구매 게시글 접근 패턴">
 							</div>
 							<div class="pattern-content_cheat">
 								<p>구매(삽니다) 게시글에 판매자인 척 접근하여 잠적하는 사기 수법</p>
@@ -209,8 +187,7 @@
 						<!-- 슬라이드 2 -->
 						<div class="pattern-slide_cheat">
 							<div class="pattern-image_cheat">
-								<img src="/images/anticheat/anticheat_img2.png"
-									alt="무료나눔 개인정보 도용 패턴">
+								<img src="/images/anticheat/anticheat_img2.png" alt="무료나눔 개인정보 도용 패턴">
 							</div>
 							<div class="pattern-content_cheat">
 								<p>무료 나눔 이벤트를 가장하여 개인정보를 수집하는 사기 수법</p>
@@ -259,4 +236,5 @@
 	<!-- 푸터 -->
 	<div th:insert="~{components/user/footer :: footer}"></div>
 </body>
+
 </html>
