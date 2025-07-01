@@ -47,7 +47,7 @@
     font-size: 16px;
 }
 
-.search-box_cheat button {
+.search-box_cheat #search_btn {
     width: 80px;
     height: 48px;
     border: 1px solid #ccc;
