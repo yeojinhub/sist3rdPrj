@@ -31,16 +31,16 @@ public class LoginDAO {
 		return lDAO;
 	} //getInstance
 
-	public void selectProc(HashMap<String, Object> hashmap) throws PersistenceException {
-		SqlSession ss = LoginDAO.getInstance("kr/co/sist/dao/mybatis-config.xml")
-				.getMyBatisHandler(); // auto commit X
-		
-		// 2.쿼리를 실행
-		ss.selectOne("kr.co.sist.day0616.procedureSelect", hashmap);
-		
-		// 3. Transaction 처리
-		// 4. MyBatis Handler 닫기
-		ss.close();
-		
-	} //selectProc
+//	public void selectProc(HashMap<String, Object> hashmap) throws PersistenceException {
+//		SqlSession ss = LoginDAO.getInstance("kr/co/sist/dao/mybatis-config.xml")
+//				.getMyBatisHandler(); // auto commit X
+//		
+//		// 2.쿼리를 실행
+//		ss.selectOne("kr.co.sist.day0616.procedureSelect", hashmap);
+//		
+//		// 3. Transaction 처리
+//		// 4. MyBatis Handler 닫기
+//		ss.close();
+//		
+//	} //selectProc
 }
