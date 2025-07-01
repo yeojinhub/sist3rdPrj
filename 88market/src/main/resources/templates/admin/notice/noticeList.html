@@ -11,7 +11,9 @@
 </head>
 <script>
 	$(function() {
-
+		$('#checkbox').click(function() {
+			alert($(this).data('notice-num'));
+		})
 	});
 </script>
 <body>
@@ -24,9 +26,6 @@
 			<header class="main-header">
 				<div class="breadcrumbs">
 					<span>게시판 관리 &gt;</span> <span class="current-page">공지사항 관리</span>
-				</div>
-				<div class="user-menu">
-					<span><strong>김민경</strong> 관리자님</span> <a href="#">로그아웃</a>
 				</div>
 			</header>
 
@@ -55,14 +54,14 @@
 								<th>상태</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody th:each="item, i : ${noticeList}">
 							<tr>
-								<td><input type="checkbox" checked></td>
-								<td>1</td>
-								<td class="notice-title">팔팔마켓 이용 정책 (2023. 06. 29 개정)</td>
-								<td>이대웅</td>
-								<td>2024-01-15</td>
-								<td><span class="status-badge status-visible">보여짐</span></td>
+								<td><input type="checkbox" id="checkbox" data-notice-num="${item.notNum}"></td>
+								<td th:text="${i.count}"></td>
+								<td class="notice-title" th:text="${item.title}"></td>
+								<td th:text="${item.name}"></td>
+								<td th:text="${item.inputDate}"></td>
+								<td><span class="status-badge status-visible" th:text="${item.statusType}"></span></td>
 							</tr>
 						</tbody>
 					</table>
