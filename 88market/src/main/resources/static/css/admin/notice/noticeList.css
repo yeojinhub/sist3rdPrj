@@ -291,3 +291,7 @@ body, html {
     background-color: #7fd0f4;
     color: white;
 }
+
+.table-row:hover {
+    background-color: #f0f0f0;
+}

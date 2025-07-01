@@ -3,7 +3,7 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-88market/.settings/settings.json
+.settings/settings.json
 
 ### STS ###
 .apt_generated

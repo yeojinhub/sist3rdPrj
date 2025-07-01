@@ -4,6 +4,6 @@
 
 <mapper namespace="kr.co.sist.user.DAO.NoticeDAO">
     <select id="selectNoticeList" resultType="kr.co.sist.DTO.NoticeDTO">
-        SELECT * FROM NOTICE
+        SELECT * FROM NOTICE ORDER BY INPUT_DATE DESC
     </select>
 </mapper>
