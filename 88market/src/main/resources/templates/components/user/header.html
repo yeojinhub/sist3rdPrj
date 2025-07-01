@@ -67,6 +67,8 @@
 		</div>
 	</div>
 
+	<!-- 최근본상품 오버레이 -->
+	<th:block th:insert="~{components/user/recentProduct :: recentProduct}" th:if="@{/}"></th:block>
 	<!-- 채팅 오버레이 -->
 	<th:block th:insert="~{components/user/chatOverlay :: chatOverlay}"></th:block>
 	<!-- 찜목록 오버레이 -->
