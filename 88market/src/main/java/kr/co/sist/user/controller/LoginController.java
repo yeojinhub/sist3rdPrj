@@ -1,46 +1,27 @@
 package kr.co.sist.user.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
-import jakarta.servlet.http.HttpSession;
+import kr.co.sist.DTO.UserDTO;
+import kr.co.sist.user.Service.LoginService;
 
-@SessionAttributes({"name","age"})
 @Controller
 public class LoginController {
 	
-	@GetMapping("/session_getvalue")
-	public String sessionGetValue(HttpSession session) {
-		//세션 값 얻기
-		String name=(String)session.getAttribute("name");
-		Integer sessionAge=(Integer)session.getAttribute("age");
-		
-		int age=0;
-		if(sessionAge != null) {
-			age=sessionAge.intValue();
-		}
-		System.out.println("이름 " + name +" ,  나이 " + age);
-		
-		return "day0623/session_list";
-	}//sessionGetValue
+	@Autowired
+	private LoginService service;
 	
-	@GetMapping("/model_getvalue")
-	public String modelGetValue(Model model) {
-		//Spring 5.2 이상에서만 가능하다.
-		String name=(String)model.getAttribute("name");
-
-		Integer modelAge=(Integer)model.getAttribute("age");
+	@GetMapping("/account/login_email")
+	public String login(Model model) {
+		List<UserDTO> loginList = service.selectLoginList();
+		model.addAttribute("loginList", loginList);
 		
-		int age=0;
-		if(modelAge != null) {
-			age=modelAge.intValue();
-		}//end if
-		
-		System.out.println("Model 이름 " + name +" , Model  나이 " + age);
-		
-		return "day0623/session_list";
-	} //modelGetValue
+		return "user/account/login_email";
+	} //login
 
 } //class
