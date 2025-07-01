@@ -8,7 +8,7 @@ import kr.co.sist.DTO.*;
 
 @Mapper
 public interface FaqDAO {
-    public List<FaqDTO> selectFaqList();
-    public List<FaqDTO> selectFaqListByType(String type);
-    public List<FaqDTO> selectFaqListByKeyword(String keyword);
+	public List<FaqDTO> selectFaqList();
+	public List<FaqDTO> selectFaqListByType(String type);
+	public List<FaqDTO> selectFaqListByKeyword(String keyword);
 }

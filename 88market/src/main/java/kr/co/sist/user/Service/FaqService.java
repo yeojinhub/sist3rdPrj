@@ -10,18 +10,18 @@ import kr.co.sist.user.DAO.FaqDAO;
 
 @Service
 public class FaqService {
-    @Autowired
-    private FaqDAO faqDAO;
-
-    public List<FaqDTO> selectFaqList() {
-        return faqDAO.selectFaqList();
-    }
-
-    public List<FaqDTO> selectFaqListByType(String type) {
-        return faqDAO.selectFaqListByType(type);
-    }
-
-    public List<FaqDTO> selectFaqListByKeyword(String keyword) {
-        return faqDAO.selectFaqListByKeyword(keyword);
-    }
+	@Autowired
+	private FaqDAO faqDAO;
+	
+	public List<FaqDTO> selectFaqList() {
+		return faqDAO.selectFaqList();
+	}
+	
+	public List<FaqDTO> selectFaqListByType(String type) {
+		return faqDAO.selectFaqListByType(type);
+	}
+	
+	public List<FaqDTO> selectFaqListByKeyword(String keyword) {
+		return faqDAO.selectFaqListByKeyword(keyword);
+	}
 }

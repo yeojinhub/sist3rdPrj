@@ -15,35 +15,10 @@
 	});
 </script>
 <body>
+   <!-- 고정 사이드바 -->
+  <div th:replace="~{ fragments/admin/admin_sidebar :: sidebar}"></div>
+  
 	<div class="admin-wrapper">
-		<!-- 사이드 네비게이션 -->
-		<aside class="side-nav">
-			<div class="logo-section">
-				<img th:src="@{/images/logo.png}" alt="88마켓 로고">
-			</div>
-			<div class="site-shortcut">
-				<a th:href="@{/}">사이트 바로가기</a>
-			</div>
-			<nav class="menu">
-				<ul>
-					<li><a href="#">대시보드</a></li>
-					<li><a href="#">계정 관리</a></li>
-					<li><a href="#">상품관리</a></li>
-					<li><a href="#">기획전 관리</a></li>
-					<li><a href="#">카테고리 관리</a></li>
-					<li class="active"><a href="#">게시판 관리</a>
-						<ul class="sub-menu">
-							<li class="active-sub"><a href="#">ㄴ 공지사항 관리</a></li>
-							<li><a href="#">ㄴ FAQ 관리</a></li>
-							<li><a href="#">ㄴ 문의사항 관리</a></li>
-							<li><a href="#">ㄴ 이벤트 관리</a></li>
-						</ul></li>
-					<li><a href="#">채팅 관리</a></li>
-					<li><a href="#">신고 관리</a></li>
-				</ul>
-			</nav>
-		</aside>
-
 		<div class="main-content">
 			<!-- 헤더 -->
 			<header class="main-header">
@@ -60,8 +35,10 @@
 				<section class="search-section">
 					<div class="search-box">
 						<select class="search-filter">
-							<option value="제목">제목</option>
-						</select> <input type="text" class="search-input" placeholder="검색">
+							<option value="title">제목</option>
+							<option value="content">내용</option>
+						</select> 
+						<input type="text" class="search-input" placeholder="검색">
 						<button class="search-button">검색</button>
 					</div>
 				</section>
@@ -87,39 +64,6 @@
 								<td>2024-01-15</td>
 								<td><span class="status-badge status-visible">보여짐</span></td>
 							</tr>
-							<tr>
-								<td><input type="checkbox" checked></td>
-								<td>2</td>
-								<td class="notice-title">거래제한 상품 안내 (2025. 06. 10 개정)</td>
-								<td>강태일</td>
-								<td>2024-01-15</td>
-								<td><span class="status-badge status-hidden">숨겨짐</span></td>
-							</tr>
-							<!-- 나머지 데이터 행들... -->
-							<tr>
-								<td><input type="checkbox" checked></td>
-								<td>3</td>
-								<td class="notice-title">새로운 기능 안내</td>
-								<td>관리자</td>
-								<td>2024-01-15</td>
-								<td><span class="status-badge status-visible">보여짐</span></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" checked></td>
-								<td>4</td>
-								<td class="notice-title">새로운 기능 안내</td>
-								<td>관리자</td>
-								<td>2024-01-15</td>
-								<td><span class="status-badge status-visible">보여짐</span></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" checked></td>
-								<td>5</td>
-								<td class="notice-title">새로운 기능 안내</td>
-								<td>관리자</td>
-								<td>2024-01-15</td>
-								<td><span class="status-badge status-visible">보여짐</span></td>
-							</tr>
 						</tbody>
 					</table>
 
@@ -127,7 +71,7 @@
 						<div class="table-controls">
 							<button class="control-button">등록</button>
 							<button class="control-button">삭제</button>
-							<button class="control-button">Hide</button>
+							<button class="control-button">숨김</button>
 						</div>
 						<div class="pagination">
 							<a href="#">&lt;</a> <a href="#" class="active">1</a> <a href="#">2</a>
