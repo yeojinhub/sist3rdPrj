@@ -63,8 +63,8 @@ public class UserMainController {
 	@GetMapping("/serviceCenter")
 	public String serviceCenter(
 			Model model,
-			@RequestParam(value = "type", defaultValue = "") String type,
-			@RequestParam(value = "keyword", defaultValue = "") String keyword) {
+			@RequestParam(value="type", defaultValue="") String type,
+			@RequestParam(value="keyword", defaultValue="") String keyword) {
 		if (keyword.equals("")) {
 			List<FaqDTO> faqList = type.equals("") ? faqService.selectFaqList() : faqService.selectFaqListByType(type);
 			model.addAttribute("faqList", faqList);

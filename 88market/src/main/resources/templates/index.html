@@ -8,6 +8,9 @@
 <link rel="stylesheet" th:href="@{/css/user/main.css}">
 <!-- 외부파일(jQuery, Font Awesome 등) -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <script>
 $(function() {
@@ -548,6 +551,7 @@ $(function() {
 	</main>
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
-	
+	<!-- 최근본상품 오버레이 -->
+	<th:block th:insert="~{components/user/recentProduct :: recentProduct}"></th:block>
 </body>
 </html>
