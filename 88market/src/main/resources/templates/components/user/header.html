@@ -52,8 +52,20 @@
 	<div class="navigation">
 		<div class="nav-container">
 			<!-- 카테고리 버튼 -->
-			<div class="category-button">
+			<div class="category-button dropdown">
 				<span>카테고리</span>
+				<div class="dropdown-content">
+					<a th:href="@{/category/digital}">디지털기기</a>
+					<a th:href="@{/category/apliances}">생활가전</a>
+					<a th:href="@{/category/furniture}">가구/인테리어</a>
+					<a th:href="@{/category/kitchen}">생활/주방</a>
+					<a th:href="@{/category/child}">유아</a>
+					<a th:href="@{/category/clothing_goods}">의류/잡화</a>
+					<a th:href="@{/category/beauty}">뷰티/미용</a>
+					<a th:href="@{/category/sport}">스포츠/레저</a>
+					<a th:href="@{/category/book}">도서</a>
+					<a th:href="@{/category/ticket}">티켓/교환권</a>
+				</div>
 			</div>
 
 			<!-- 메뉴 항목들 -->

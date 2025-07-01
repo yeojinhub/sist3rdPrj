@@ -8,7 +8,7 @@
 <link rel="stylesheet" th:href="@{/css/user/main.css}">
 <!-- 외부파일(jQuery, Font Awesome 등) -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
-</head>
+
 <script>
 $(function() {
 	$('.autoplay').slick({
@@ -57,7 +57,7 @@ $(function() {
     });
   });
 </script>
-
+</head>
 <body>
 	<!-- 헤더 -->
 	<th:block th:insert="~{components/user/header :: header}"></th:block>
