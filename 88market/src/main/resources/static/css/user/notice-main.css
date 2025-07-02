@@ -63,6 +63,10 @@
     margin-top: 2px;
 }
 
+.notice-detail {
+	text-align: center;
+}
+
 /* 아코디언 아이콘 우측 고정 및 스타일 */
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
     position: absolute;

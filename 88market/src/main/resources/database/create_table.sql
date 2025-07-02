@@ -262,9 +262,7 @@ CREATE TABLE REPORT (
 CREATE TABLE SCAM (
   SCAM_NUM   	NUMBER(10)       NOT NULL, /* 사기조회번호 */
   INPUT_VALUE VARCHAR2(4000)   NOT NULL, /* 사용자입력값 */
-  INPUT_TYPE  VARCHAR2(255)    NOT NULL, /* 입력타입(핸드폰번호, 계좌번호, 이메일) */
-  INPUT_DATE  DATE             DEFAULT SYSDATE, /* 사기조회일 */
-  USER_NUM    VARCHAR2(255)    NULL /* 사용자번호 */
+  INPUT_DATE  DATE             DEFAULT SYSDATE /* 사기조회일 */
 );
 
 /* 채팅방 테이블 생성 */
@@ -293,7 +291,7 @@ CREATE TABLE CHATMESSAGE (
 CREATE TABLE NOTICE (
 	NOT_NUM			NUMBER(10)			NOT NULL, /* 공지사항번호 */
 	TITLE				VARCHAR2(500)		NOT NULL, /* 공지사항제목 */
-	CONTENT			VARCHAR2(4000)	NOT NULL, /* 공지사항내용 */
+	CONTENT			clob	NOT NULL, /* 공지사항내용 */
 	NAME				VARCHAR2(255)		NOT NULL, /* 공지사항작성자 */
 	INPUT_DATE	DATE						DEFAULT SYSDATE, /* 공지사항작성자 */
 	STATUS_TYPE	VARCHAR2(255)		DEFAULT '공지', /* 공지사항상태(공지,미공지) */
