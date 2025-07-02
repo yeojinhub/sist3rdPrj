@@ -33,9 +33,9 @@
           <form method="post" action="/login">
 			  <button type="submit" name="loginType" value="naver" class="btn btn-naver">네이버로 시작하기</button>
 			  <button type="submit" name="loginType" value="kakao" class="btn btn-kakao">카카오로 시작하기</button>
-			  <button type="submit" name="loginType" value="email" class="btn btn-email">이메일로 시작하기</button>
+			  <button type="button" class="btn btn-email" th:onclick="|location.href='@{/login_email}'|">이메일로 시작하기</button>
 			</form>
-          <button class="btn btn-signup"
+          <button type="button" class="btn btn-signup"
                   th:onclick="|location.href='@{/signup}'|">회원가입</button>
         </div>
       </div>
@@ -59,14 +59,7 @@
         sessionStorage.setItem("user", "user02");
         location.href = "/";
       });
-
-      // user03: 이메일
-      $('.btn-email').click(function () {
-        sessionStorage.setItem("user", "user03");
-        location.href = "/";
-      });
-    });
+});
   </script>
 </body>
 </html>
-

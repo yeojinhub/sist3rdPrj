@@ -4,6 +4,8 @@
 
 <mapper namespace="kr.co.sist.user.DAO.LoginDAO">
     <select id="selectLoginList" resultType="kr.co.sist.DTO.UserDTO" parameterType="String">
-        SELECT EMAIL,PASS FROM USERS WHERE EMAIL=#{type}
+        SELECT EMAIL,PASS
+        FROM USERS
+        WHERE EMAIL=#{eamil}
     </select>
 </mapper>

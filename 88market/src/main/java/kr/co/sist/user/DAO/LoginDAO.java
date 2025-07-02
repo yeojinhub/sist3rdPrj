@@ -1,11 +1,12 @@
 package kr.co.sist.user.DAO;
 
-import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.sist.DTO.UserDTO;
 
-public class LoginDAO {
+@Mapper
+public interface LoginDAO {
 	
-	public List<UserDTO> selectLoginList();
+	public UserDTO selectLoginList(String email);
 	
-} //class
+} //interface
