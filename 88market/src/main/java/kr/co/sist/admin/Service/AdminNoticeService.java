@@ -44,4 +44,12 @@ public class AdminNoticeService {
     public void deleteNotices(List<Integer> notNums) {
         adminNoticeDAO.deleteNotices(notNums);
     }
+    
+    public void modifyNoticeHideOn(List<Integer> notNums) {
+    	adminNoticeDAO.updateNoticeHideOn(notNums);
+    }
+    
+    public void modifyNoticeHideOff(List<Integer> notNums) {
+    	adminNoticeDAO.updateNoticeHideOff(notNums);
+    }
 }

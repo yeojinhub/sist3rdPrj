@@ -258,6 +258,13 @@ body, html {
     gap: 10px;
 }
 
+.table-controls-right {
+    grid-column: 3; /* 1에서 3으로 변경 */
+    display: flex;
+    gap: 10px;
+    justify-self: end; /* 추가: 그리드 셀 내에서 오른쪽 정렬 */
+}
+
 .control-button {
     padding: 12px 35px;
     background-color: #e5f6fd;

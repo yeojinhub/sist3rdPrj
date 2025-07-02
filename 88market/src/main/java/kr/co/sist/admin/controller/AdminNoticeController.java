@@ -89,4 +89,20 @@ public class AdminNoticeController {
         ans.insertNotice(noticeDTO);
         return "redirect:/admin/notice";
     }
+    
+    @PostMapping("/notice/hideon")
+    @ResponseBody
+    public ResponseEntity<String> modifyHideOn(@RequestBody Map<String, List<Integer>> request) {
+    	List<Integer> notNums = request.get("notNums");
+    	ans.modifyNoticeHideOn(notNums);
+    	return ResponseEntity.ok("수정 완료");
+    }
+    
+    @PostMapping("/notice/hideoff")
+    @ResponseBody
+    public ResponseEntity<String> modifyHideOff(@RequestBody Map<String, List<Integer>> request) {
+    	List<Integer> notNums = request.get("notNums");
+    	ans.modifyNoticeHideOff(notNums);
+    	return ResponseEntity.ok("수정 완료");
+    }
 }

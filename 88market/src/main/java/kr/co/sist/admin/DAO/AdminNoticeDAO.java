@@ -19,4 +19,6 @@ public interface AdminNoticeDAO {
     public NoticeDTO selectNoticeDetail(@Param("notNum") int notNum);
     public void updateNotice(NoticeDTO noticeDTO);
     public void deleteNotices(List<Integer> notNums);
+    public void updateNoticeHideOn(List<Integer> notNums);
+    public void updateNoticeHideOff(List<Integer> notNums);
 }

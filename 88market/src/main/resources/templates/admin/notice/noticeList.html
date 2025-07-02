@@ -110,6 +110,10 @@
 										  keyword=${param.keyword})}" class="next">&gt;</a>
 							<a th:unless="${pagination.pageNum < pagination.totalPages}" class="next disabled">&gt;</a>
 						</div>
+						<div class="table-controls-right">
+							<button class="control-button" id="hideOff">보이기</button>
+							<button class="control-button" id="hideOn">숨기기</button>
+						</div>
 					</div>
 				</section>
 			</main>
@@ -159,6 +163,54 @@
 							console.error(error);
 						});
 				}
+			});// click
+			
+			$('#hideOn').click(()=>{
+				var selectedNums = [];
+				
+				// 선택된 체크박스의 notNum 수집
+				$('.checkbox:checked').each(function () {
+					selectedNums.push($(this).data('notice-num'));
+				});
+
+				if (selectedNums.length === 0) {
+					alert('숨길 공지사항을 선택해주세요.');
+					return;
+				}
+				
+				axios.post('/admin/notice/hideon',{
+					notNums : selectedNums
+				}).then(res=>{
+					alert("수정 완료되었습니다.")
+					location.reload();
+				}).catch(err=>{
+					console.log(err);
+				});
+				
+			});// click
+			
+			$('#hideOff').click(()=>{
+				var selectedNums = [];
+				
+				// 선택된 체크박스의 notNum 수집
+				$('.checkbox:checked').each(function () {
+					selectedNums.push($(this).data('notice-num'));
+				});
+
+				if (selectedNums.length === 0) {
+					alert('보이게 할 공지사항을 선택해주세요.');
+					return;
+				}
+				
+				axios.post('/admin/notice/hideoff',{
+					notNums : selectedNums
+				}).then(res=>{
+					alert("수정 완료되었습니다.")
+					location.reload();
+				}).catch(err=>{
+					console.log(err);
+				});
+				
 			});// click
 
 		});

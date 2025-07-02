@@ -65,4 +65,21 @@
         #{notNum}
     </foreach>
 </delete>
+
+<!-- 공지 보이기 -->
+<select id="updateNoticeHideOff" parameterType="java.util.List">
+	UPDATE NOTICE SET STATUS_TYPE = '공지' WHERE NOT_NUM IN 
+	<foreach collection="list" item="notNum" open="(" separator="," close=")">
+		#{notNum}
+	</foreach>
+</select>
+
+<!-- 공지 숨기기 -->
+<select id="updateNoticeHideOn" parameterType="java.util.List">
+	UPDATE NOTICE SET STATUS_TYPE = '비공지' WHERE NOT_NUM IN 
+	<foreach collection="list" item="notNum" open="(" separator="," close=")">
+		#{notNum}
+	</foreach>
+</select>
+
 </mapper>
