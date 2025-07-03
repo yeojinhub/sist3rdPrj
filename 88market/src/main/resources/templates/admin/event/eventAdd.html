@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 이벤트</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/event/eventAdd.css}">
+<link rel="stylesheet" th:href="@{/css/admin/event/eventList.css}">
+
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+<script>
+	$(function() {
+		// Summernote 초기화
+		$('#content').summernote(
+				{
+					height : 350,
+					minHeight : 200,
+					maxHeight : 600,
+					lang : 'ko-KR',
+					toolbar : [ [ 'style', [ 'style' ] ],
+							[ 'font', [ 'bold', 'underline', 'clear' ] ],
+							[ 'fontname', [ 'fontname' ] ],
+							[ 'fontsize', [ 'fontsize' ] ],
+							[ 'color', [ 'color' ] ],
+							[ 'para', [ 'ul', 'ol', 'paragraph' ] ],
+							[ 'table', [ 'table' ] ],
+							[ 'insert', [ 'link', 'picture' ] ],
+							[ 'view', [ 'fullscreen', 'codeview' ] ] ],
+					callbacks : {
+						onInit : function() {
+							// DOM이 완전히 로드된 후 실행
+							setTimeout(function() {
+								$('.note-editable').css('text-align',
+										'center');
+							}, 100);
+						}
+					}
+				});
+	});// ready
+</script>
+</head>
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>게시판 관리 &gt;</span> <span class="current-page">이벤트 등록</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (공지사항 관리) -->
+			<main class="container">
+				<section class="event-form-section">
+					<form id="eventForm" th:action="@{/admin/event/add}" method="post"
+						enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="title" class="form-label">제목</label> <input
+								type="text" class="form-input" id="title" name="title"
+								placeholder="코드모바일 중고나라 특별 요금제" required>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group half-width">
+								<label for="category" class="form-label">구분</label> <select
+									class="form-select" id="category" name="category" required>
+									<option value="">선택하세요</option>
+									<option value="이벤트" selected>이벤트</option>
+									<option value="프로모션">프로모션</option>
+									<option value="공지">공지</option>
+								</select>
+							</div>
+							<div class="form-group half-width">
+								<label for="period" class="form-label">메인화면 표시 여부</label> <select
+									class="form-select" id="mainDisplay" name="mainDisplay"
+									required>
+									<option value="">선택하세요</option>
+									<option value="Y">표시</option>
+									<option value="N">숨김</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group half-width">
+								<label for="thumbnailImage" class="form-label">썸네일</label>
+								<div class="image-upload-area" id="thumbnailArea">
+									<div class="upload-placeholder">
+										<i class="fas fa-plus"></i>
+									</div>
+									<input type="file" id="thumbnailImage" name="thumbnailImage"
+										accept="image/*" style="display: none;">
+								</div>
+							</div>
+							<div class="form-group half-width">
+								<label for="mainImage" class="form-label">메인</label>
+								<div class="image-upload-area" id="mainArea">
+									<div class="upload-placeholder">
+										<i class="fas fa-plus"></i>
+									</div>
+									<input type="file" id="mainImage" name="mainImage"
+										accept="image/*" style="display: none;">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="content" class="form-label">내용</label>
+							<textarea id="content" name="content" class="summernote-editor"></textarea>
+						</div>
+
+						<div class="form-actions">
+							<button type="button" class="action-button cancel-btn"
+								onclick="history.back()">취소</button>
+							<button type="button" class="action-button submit-btn"
+								id="submitBtn">등록</button>
+						</div>
+					</form>
+				</section>
+			</main>
+
+		</div>
+	</div>
+
+</body>
+</html>

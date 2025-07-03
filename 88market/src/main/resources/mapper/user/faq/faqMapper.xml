@@ -4,7 +4,7 @@
 
 <mapper namespace="kr.co.sist.user.DAO.FaqDAO">
     <select id="selectFaqList" resultType="kr.co.sist.DTO.FaqDTO">
-        SELECT * FROM FAQ
+        SELECT * FROM FAQ ORDER BY INPUT_DATE DESC
     </select>
     <select id="selectFaqListByType" resultType="kr.co.sist.DTO.FaqDTO" parameterType="String">
         SELECT * FROM FAQ WHERE FAQ_TYPE = #{type}

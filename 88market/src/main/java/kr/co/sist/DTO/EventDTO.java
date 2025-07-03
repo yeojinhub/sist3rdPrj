@@ -22,11 +22,12 @@ public class EventDTO {
 	private String title; /* 이벤트제목 */
 	private String content; /* 이벤트내용 */
 	private String name; /* 이벤트작성자 */
-	private Date start_date; /* 이벤트시작일 */
-	private Date end_date; /* 이벤트종료일 */
-	private int evtType; /* 이벤트타입(1,2,3) */
-			
+	private Date startDate; /* 이벤트시작일 */
+	private Date endDate; /* 이벤트종료일 */
+	private int evtType; /* 이벤트타입 */
 	private String admNum; /* 관리자사번 */
+	private String mainType; /* 메인화면 표시 여부 */
 	private int imgNum; /* 이미지번호 */
+	private ImageDTO iDTO;
 	
 } //class
