@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.sist.DTO.FaqDTO;
-import kr.co.sist.DTO.NoticeDTO;
-import kr.co.sist.admin.DAO.AdminFaqDAO;
 import kr.co.sist.admin.Service.AdminFaqService;
 import kr.co.sist.admin.util.FaqSearchDTO;
 import kr.co.sist.admin.util.Pagination;

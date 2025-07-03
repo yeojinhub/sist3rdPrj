@@ -80,6 +80,7 @@ body, html {
     font-weight: normal;
     padding-left: 40px;
 }
+
 .sub-menu li.active-sub {
     background-color: #7fd0f4;
 }
@@ -88,7 +89,6 @@ body, html {
     color: #000000;
     font-weight: 800; /* Extra Bold */
 }
-
 
 /* 메인 컨텐츠 영역 */
 .main-content {
@@ -121,6 +121,7 @@ body, html {
 .user-menu {
     font-size: 1.1em;
 }
+
 .user-menu strong {
     font-weight: bold;
 }
@@ -131,7 +132,6 @@ body, html {
     text-decoration: none;
     font-weight: bold;
 }
-
 
 /* 컨테이너 (테이블 등) */
 .container {
@@ -175,10 +175,6 @@ body, html {
     flex-grow: 1;
     min-height: 20px; /* 최소 높이 */
     height: auto; /* height 고정값 제거 */
-}
-
-.search-input {
-    flex-grow: 1;
 }
 
 .search-button {
@@ -301,4 +297,110 @@ body, html {
 
 .table-row:hover {
     background-color: #f0f0f0;
+}
+
+/* 공지사항 폼 스타일 */
+.notice-form-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #4d4d4d;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #868b94;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #7fd0f4;
+    box-shadow: 0 0 0 2px rgba(127, 208, 244, 0.1);
+}
+
+.summernote-editor {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e6e6e6;
+}
+
+.action-button {
+    padding: 15px 40px;
+    border: 1px solid #dddddd;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.cancel-btn {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.cancel-btn:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.submit-btn {
+    background-color: #353535;
+    color: white;
+    border-color: #353535;
+}
+
+.submit-btn:hover {
+    background-color: #2c2c2c;
+    border-color: #2c2c2c;
+}
+
+/* Summernote 커스터마이징 */
+.note-editor {
+    border: 1px solid #868b94;
+    border-radius: 8px;
+}
+
+.note-toolbar {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.note-editable {
+    min-height: 300px;
+    padding: 20px;
+    line-height: 1.6;
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+}
+
+.note-editable:focus {
+    background-color: #fff;
 }
