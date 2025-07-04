@@ -19,20 +19,30 @@ $(function() {
 		dots: true
 	});
 
-	  $('.multiple-items').slick({
-	    infinite: true,
-	    slidesToShow: 5,
-	    slidesToScroll: 5
-	  });
-
 	  // 여기에 추가
-	  $('.card-list-wrapper-items').slick({
+ 	  $('.top-like-slider').slick({
 	    infinite: true,
 	    slidesToShow: 5,
 	    slidesToScroll: 5,
-	    dots: false,
+	    dots: true,
 	    arrows: true,
-	  });
+	  }); 
+	  
+ 	  $('.trend-slider').slick({
+ 		    infinite: true,
+ 		    slidesToShow: 5,
+ 		    slidesToScroll: 5,
+ 		    dots: true,
+ 		    arrows: true,
+ 		  });
+
+ 	  $('.view-slider').slick({
+		    infinite: true,
+		    slidesToShow: 5,
+		    slidesToScroll: 5,
+		    dots: true,
+		    arrows: true,
+		  });
 	});		
 </script>
 
@@ -102,144 +112,25 @@ $(function() {
 		</section>
 
 		<!-- 찜이 많은 상품 섹션 -->
-		<section class="card-section">
+ 		<section class="card-section">
 			<h2 class="section-title">찜이 많은 상품</h2>
-			<div class="card-list-wrapper-items multiple-items">
-			<div class="product-card">
-			  <a href="/detail?id=1">
+			<div class="card-list-wrapper-items top-like-slider">
+			<div class="product-card" th:each="item :${topLike}">
+			  <a href="@{/detail(id=${item.prdNum})}">
 			    <div class="product-image-container">
-			      <img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
+			     <!--  <img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀"> -->
 			    </div>
 			    <div class="product-info">
-			      <p class="product-name">닌텐도 스위치 타이틀 닌텐도 스위치 칩, sd메모리</p>
-			      <strong class="product-price">1,000원</strong>
+			      <p class="product-name" th:text="${item.title}"></p>
+			      <strong class="product-price" th:text="|${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}원|"></strong>
 			      <div class="product-meta-row">
-			        <p class="product-meta">글·사진 | 3시간 전</p>
+			       <p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
 			        <button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
 			      </div>
 			    </div>
 			  </a>
 			</div>
-				<div class="product-card">
-					<a href="/detail?id=2">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레고 스타워즈">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레고 스타워즈 75439 ucs 슬레이브</p>
-							<strong class="product-price">205,000원</strong>
-							<div class="product-meta-row">
-								<p class="product-meta">2시간 전</p>
-								<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      			</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=3">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="수월우 무결점">
-						</div>
-						<div class="product-info">
-							<p class="product-name">수월우 무결점</p>
-							<strong class="product-price">500,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">1시간 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=1">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
-						</div>
-						<div class="product-info">
-							<p class="product-name">닌텐도 스위치 타이틀 닌텐도 스위치 칩, sd메모리</p>
-							<strong class="product-price">1,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">글·사진 | 3시간 전</p>
-						<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=2">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레고 스타워즈">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레고 스타워즈 75439 ucs 슬레이브</p>
-							<strong class="product-price">205,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">2시간 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=3">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="수월우 무결점">
-						</div>
-						<div class="product-info">
-							<p class="product-name">수월우 무결점</p>
-							<strong class="product-price">500,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">1시간 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=1">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
-						</div>
-						<div class="product-info">
-							<p class="product-name">닌텐도 스위치 타이틀 닌텐도 스위치 칩, sd메모리</p>
-							<strong class="product-price">1,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">글·사진 | 3시간 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=2">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레고 스타워즈">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레고 스타워즈 75439 ucs 슬레이브</p>
-							<strong class="product-price">205,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">2시간 전</p>
-						<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=3">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="수월우 무결점">
-						</div>
-						<div class="product-info">
-							<p class="product-name">수월우 무결점</p>
-							<strong class="product-price">500,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">2시간 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
+
 			</div>
 		</section>
 
@@ -248,7 +139,7 @@ $(function() {
 			<h2 class="section-title">
 				다른 사람들은 이 키워드를 주목하고 있어요 <span class="text-highlight">댄스</span>
 			</h2>
-			<div class="card-list-wrapper-items multiple-items">
+			<div class="card-list-wrapper-items trend-slider">
 				<div class="product-card">
 					<a href="/detail?id=5">
 						<div class="product-image-container">
@@ -406,141 +297,22 @@ $(function() {
 		<!-- 많이 본 상품 섹션 -->
 		<section class="card-section">
 			<h2 class="section-title">많이 본 상품</h2>
-			<div class="card-list-wrapper-items multiple-items">
-				<div class="product-card">
-					<a href="/detail?id=1">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
-						</div>
-						<div class="product-info">
-							<p class="product-name">닌텐도 스위치 타이틀 닌텐도 스위치 칩, sd메모리</p>
-							<strong class="product-price">1,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=2">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레고 스타워즈">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레고 스타워즈 75439 ucs 슬레이브</p>
-							<strong class="product-price">205,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=3">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="수월우 무결점">
-						</div>
-						<div class="product-info">
-							<p class="product-name">수월우 무결점</p>
-							<strong class="product-price">500,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=1">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
-						</div>
-						<div class="product-info">
-							<p class="product-name">닌텐도 스위치 타이틀 닌텐도 스위치 칩, sd메모리</p>
-							<strong class="product-price">1,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=2">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레고 스타워즈">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레고 스타워즈 75439 ucs 슬레이브</p>
-							<strong class="product-price">205,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=3">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="수월우 무결점">
-						</div>
-						<div class="product-info">
-							<p class="product-name">수월우 무결점</p>
-							<strong class="product-price">500,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=1">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀">
-						</div>
-						<div class="product-info">
-							<p class="product-name">닌텐도 스위치 타이틀 닌텐도 스위치 칩, sd메모리</p>
-							<strong class="product-price">1,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=2">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레고 스타워즈">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레고 스타워즈 75439 ucs 슬레이브</p>
-							<strong class="product-price">205,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=3">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="수월우 무결점">
-						</div>
-						<div class="product-info">
-							<p class="product-name">수월우 무결점</p>
-							<strong class="product-price">500,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
+			<div class="card-list-wrapper-items view-slider">
+				<div class="product-card" th:each="item : ${topView}">
+			  <a href="@{/detail(id=${item.prdNum})}">
+			    <div class="product-image-container">
+			      <!-- <img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀"> -->
+			    </div>
+			    <div class="product-info">
+			      <p class="product-name" th:text="${item.title}"></p>
+			      <strong class="product-price" th:text="|${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}원|"></strong>
+			      <div class="product-meta-row">
+			        <p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
+<!-- 			        <p class="product-meta" th:text="|${item.location1}·${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}|"></p> -->
+			        <button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
+			      </div>
+			    </div>
+			  </a>
 				</div>
 			</div>
 		</section>

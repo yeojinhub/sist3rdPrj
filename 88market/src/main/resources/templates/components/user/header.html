@@ -55,25 +55,24 @@
 			<div class="category-button dropdown">
 				<span>카테고리</span>
 				<div class="dropdown-content">
-					<a th:href="@{/category/digital}">디지털기기</a>
-					<a th:href="@{/category/apliances}">생활가전</a>
-					<a th:href="@{/category/furniture}">가구/인테리어</a>
-					<a th:href="@{/category/kitchen}">생활/주방</a>
-					<a th:href="@{/category/child}">유아</a>
-					<a th:href="@{/category/clothing_goods}">의류/잡화</a>
-					<a th:href="@{/category/beauty}">뷰티/미용</a>
-					<a th:href="@{/category/sport}">스포츠/레저</a>
-					<a th:href="@{/category/book}">도서</a>
-					<a th:href="@{/category/ticket}">티켓/교환권</a>
+					<a th:href="@{/search(catNum=1)}">전자제품</a>
+					<a th:href="@{/search(catNum=2)}">도서</a>
+					<a th:href="@{/search(catNum=3)}">의류/잡화</a>
+					<a th:href="@{/search(catNum=4)}">생활/주방</a>
+					<a th:href="@{/search(catNum=5)}">유아</a>
+					<a th:href="@{/search(catNum=6)}">가구/인테리어</a>
+					<a th:href="@{/search(catNum=7)}">뷰티/미용</a>
+					<a th:href="@{/search(catNum=8)}">스포츠/레저</a>
+					<a th:href="@{/search(catNum=9)}">생활가전</a>
+					<a th:href="@{/search(catNum=10)}">티켓/교환권</a>
 				</div>
 			</div>
 
 			<!-- 메뉴 항목들 -->
 			<nav class="nav-menu">
 				<a href="/event" class="nav-link">이벤트</a> <a href="/planingsell"
-					class="nav-link active">기획관</a> <a href="#" class="nav-link">디지털
-					가전</a> <a href="#" class="nav-link">쿠폰</a> <a href="/anticheat" class="nav-link">사기조회</a>
-				<a href="#" class="nav-link">시세조회</a> <a href="/notice" class="nav-link">공지사항</a>
+					class="nav-link">기획관</a> <a href="/anticheat" class="nav-link">사기조회</a>
+					 <a href="/notice" class="nav-link">공지사항</a>
 				<span class="nav-link" id="wishlist">찜한 상품</span>
 			</nav>
 		</div>
