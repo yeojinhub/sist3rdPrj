@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>88마켓 - 공지사항</title>
+	<!-- 공지사항 CSS -->
+	<link rel="stylesheet" th:href="@{/css/user/notice-main.css}">
+	<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+	<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function () {
+		$("#accordion").accordion({
+			collapsible: true,
+			active: false,
+			heightStyle: "content",
+			icons: {
+				header: "ui-icon-triangle-1-e",
+				activeHeader: "ui-icon-triangle-1-s"
+			}
+		});
+	});
+</script>
+
+<body>
+	<!-- 헤더 -->
+	<div th:insert="~{components/user/header :: header}"></div>
+
+	<!-- 메인 콘텐츠 -->
+	<main class="main-content">
+		<div class="content-container">
+			<h1 class="page-title">공지사항</h1>
+			<div id="accordion" class="notice-list">
+				<th:block th:each="notice : ${noticeList}">
+					<h3>
+						<div class="notice-header-row">
+							<div class="notice-header-left">
+								<div class="notice-title" th:text="${notice.title}">공지 제목</div>
+								<div class="notice-date" th:text="${#dates.format(notice.inputDate, 'yyyy-MM-dd')}">
+									2025-06-29</div>
+							</div>
+						</div>
+					</h3>
+					<div>
+						<div class="notice-detail" th:utext="${notice.content}">공지 상세 내용이 들어갑니다.</div>
+					</div>
+				</th:block>
+			</div>
+		</div>
+	</main>
+
+	<!-- 푸터 -->
+	<div th:insert="~{components/user/footer :: footer}"></div>
+</body>
+
+</html>

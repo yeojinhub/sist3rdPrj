@@ -1,0 +1,215 @@
+.main-container_plan {
+    width: 100%;
+    max-width: 1344px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero-section_plan {
+    background-color: #f0f0f0;
+    width: 100%;
+    max-width: 1317px;
+    height: 298px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.hero-text-container_plan {
+    margin-bottom: 30px;
+}
+
+.hero-title_plan {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 45px;
+    color: #000000;
+    margin: 0 0 20px 0;
+}
+
+.hero-description_plan {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #000000;
+    line-height: 35px;
+    max-width: 1228px;
+    margin: 0 auto;
+}
+
+.brand-buttons_plan {
+    display: flex;
+    gap: 10px;
+}
+
+.brand-button_plan {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #c1c7cd;
+    background-color: #c1c7cd;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.brand-button_plan.active,
+.brand-button_plan:hover {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+/* 새로 추가된 상품 그리드 스타일 */
+.product-grid_plan {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+    width: 100%;
+    max-width: 1344px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.product-card_plan {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.product-card_plan:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-image_plan {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.product-image_plan img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card_plan:hover .product-image_plan img {
+    transform: scale(1.05);
+}
+
+.product-status_plan {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+}
+
+.product-info_plan {
+    padding: 16px;
+}
+
+.product-title_plan {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-price_plan {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 12px 0;
+}
+
+.product-meta_plan {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: #666666;
+}
+
+.product-location_plan,
+.product-time_plan {
+    font-weight: 400;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1200px) {
+    .product-grid_plan {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .product-grid_plan {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    
+    .hero-title_plan {
+        font-size: 36px;
+    }
+    
+    .hero-description_plan {
+        font-size: 14px;
+        line-height: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid_plan {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        padding: 0 16px;
+    }
+    
+    .brand-buttons_plan {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .hero-section_plan {
+        margin-top: 60px;
+        padding: 16px;
+    }
+    
+    .hero-title_plan {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 400px) {
+    .product-grid_plan {
+        grid-template-columns: 1fr;
+    }
+}

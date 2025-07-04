@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 이벤트</title>
+<!-- 이벤트 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/event.css}">
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+	rel="stylesheet">
+<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<!-- 메인 콘텐츠 (이벤트) -->
+	<main class="event-container">
+		<h1 class="event-title">이벤트</h1>
+		<nav class="event-tabs">
+			<a href="#" class="tab-item active">진행중</a> <a href="#"
+				class="tab-item">종료</a> <a href="#" class="tab-item">당첨자발표</a>
+		</nav>
+		<section class="event-list">
+			<article class="event-item">
+				<img th:src="@{/images/events/image1.png}" alt="이벤트 배너 이미지"
+					class="event-image">
+				<p class="event-date">2025-05-12 ~ 2025-06-30</p>
+			</article>
+			<article class="event-item">
+				<img th:src="@{/images/events/image2.png}" alt="이벤트 배너 이미지"
+					class="event-image">
+				<p class="event-date">2025-05-12 ~ 2025-06-30</p>
+			</article>
+			<article class="event-item">
+				<img th:src="@{/images/events/image3.png}" alt="이벤트 배너 이미지"
+					class="event-image">
+				<p class="event-date">2025-01-14 ~ 2025-12-31</p>
+			</article>
+			<article class="event-item">
+				<img th:src="@{/images/events/image4.png}" alt="이벤트 배너 이미지"
+					class="event-image">
+				<p class="event-date">2025-04-01 ~ 2025-06-30</p>
+			</article>
+			<article class="event-item">
+				<img th:src="@{/images/events/image5.png}" alt="이벤트 배너 이미지"
+					class="event-image">
+				<p class="event-date">2025-04-01 ~ 2025-06-30</p>
+			</article>
+			<article class="event-item">
+				<img th:src="@{/images/events/image6.png}" alt="이벤트 배너 이미지"
+					class="event-image">
+				<p class="event-date">2024-02-01 ~ 2025-12-31</p>
+			</article>
+		</section>
+	</main>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+</body>
+</html>

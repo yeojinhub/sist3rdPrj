@@ -1,0 +1,282 @@
+/* 1. html, body 기본값 (모달 열렸을 때 스크롤 방지) */
+html.modal-open_review, body.modal-open_review {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+html.modal-open_review::-webkit-scrollbar, 
+body.modal-open_review::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+}
+
+/* 2. 후기 오버레이 */
+.review-overlay_review {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: none;
+}
+
+/* 3. 후기 모달 */
+.review-modal_review {
+    position: fixed;
+    top: 0;
+    right: -500px;
+    width: 500px;
+    height: 100vh;
+    background: #fff;
+    z-index: 10000;
+    transition: right 0.3s;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.review-modal_review.show_review {
+    right: 0;
+}
+
+/* 4. 후기 컨테이너 */
+.review-container_review {
+    width: 100%;
+    height: 100vh;
+    background-color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 5. 헤더 */
+.review-header_review {
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.back-button_review {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px;
+    font-weight: 400;
+    color: #000000;
+    cursor: pointer;
+}
+
+.review-title_review {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+    letter-spacing: 0;
+}
+
+.close-button_review {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px;
+    font-weight: 400;
+    color: #000000;
+    cursor: pointer;
+}
+
+.back-button_review:hover,
+.close-button_review:hover {
+    opacity: 0.7;
+}
+
+/* 6. 후기 목록 */
+.review-list_review {
+    width: 100%;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.review-list_review::-webkit-scrollbar {
+    width: 6px;
+}
+
+.review-list_review::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.review-list_review::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.review-list_review::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 7. 후기 섹션 */
+.review-section_review {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    border-bottom: 8px solid #f5f5f5;
+}
+
+.review-section_review:last-child {
+    border-bottom: none;
+}
+
+.section-title_review {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 20px 0;
+    letter-spacing: 0;
+}
+
+.detailed-title_review {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-count-green_review {
+    color: #4CAF50;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* 8. 후기 아이템 */
+.review-item_review {
+    width: 100%;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.review-item_review:hover {
+    background-color: #f8f8f8;
+}
+
+.review-item_review:last-child {
+    border-bottom: none;
+}
+
+.review-content_review {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.review-text_review {
+    font-size: 16px;
+    font-weight: 400;
+    color: #000000;
+    flex: 1;
+}
+
+.review-count_review {
+    font-size: 14px;
+    font-weight: 400;
+    color: #999999;
+    margin-left: 10px;
+}
+
+/* 9. 상세 후기 */
+.detailed-review_review {
+    width: 100%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.detailed-review_review:last-child {
+    margin-bottom: 0;
+}
+
+.user-info_review {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.user-avatar_review {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #e0e0e0;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.user-details_review {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.username_review {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.user-type_review {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666666;
+}
+
+.review-date_review {
+    font-size: 12px;
+    font-weight: 400;
+    color: #999999;
+}
+
+.review-message_review {
+    font-size: 14px;
+    font-weight: 400;
+    color: #333333;
+    line-height: 1.4;
+}
+
+/* 10. 반응형 처리 */
+@media (max-width: 600px) {
+    .review-modal_review, .review-container_review { 
+        width: 100vw; 
+        min-width: unset; 
+    }
+    
+    .review-section_review {
+        padding: 16px;
+    }
+    
+    .detailed-review_review {
+        padding: 16px;
+    }
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 기획관</title>
+<!-- 메인 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/planingsell.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+	
+	function handleBrandClick(clickedBtn) {
+	    // 모든 버튼에서 active 제거
+	    document.querySelectorAll('.brand-button_plan').forEach(btn => {
+	        btn.classList.remove('active');
+	    });
+
+	    // 클릭된 버튼에 active 추가
+	    clickedBtn.classList.add('active');
+
+	    // 여기에 AJAX나 추가 로직도 가능함 (필요 시)
+	}
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<main class="main-container_plan">
+    <div class="hero-section_plan">
+        <div class="hero-text-container_plan">
+            <h1 class="hero-title_plan">관심 폭발! 사람들이 찜한 인기 상품</h1>
+            <p class="hero-description_plan">
+                좋은 퀄리티의 상품을 분편함 1도 없이 개인 간 거래 그 이상, 믿을 수 있는 셀러 상품을 만나보세요. "팔팔마켓의 인증셀러" 매달 열리는 "인증셀러 기획전" 당신의 삼품, 팔팔마켓 앱 메인에 띄어 드립니다.<br>
+                "팔팔마켓 셀러지원센터" 검색 후 인증셀러 신청하기
+            </p>
+        </div>
+        <div class="brand-buttons_plan">
+		    <th:block th:each="iDTO : ${listNames}">
+		        <form method="get" th:action="@{/planingsell}">
+		            <input type="hidden" name="comNum" th:value="${iDTO.comNum}" />
+		            <button type="submit"
+		                    class="brand-button_plan"
+		                    th:classappend="${iDTO.comNum == selectedComNum} ? ' active' : ''"
+		                    th:text="${iDTO.comName}">
+		            </button>
+		        </form>
+		    </th:block>
+		</div>
+    </div>
+    
+    <div class="product-grid_plan">
+    
+	    <th:block th:if="${#lists.isEmpty(products)}">
+	        <p>등록된 상품이 없습니다.</p>
+	    </th:block>
+	    
+        <th:block th:each="prd : ${products}">
+	        <div class="product-card_plan">
+	        	<a th:href="@{ /planingDetail?id=1 }">
+	            <div class="product-image_plan">
+	                <img th:src="@{/images/main/img1.png}" alt="상품 이미지">
+	                <div class="product-status_plan" th:text="${prd.sellType == 'Y' ? '판매중' : '판매완료'}"></div>
+	            </div>
+	            <div class="product-info_plan">
+	                <h3 class="product-title_plan" th:text="${prd.title}"></h3>
+	                <p class="product-price_plan" th:text="${#numbers.formatInteger(prd.price, 3, 'COMMA')} + '원'"></p>
+	                <div class="product-meta_plan">
+	                    <span class="product-location_plan" th:text="${prd.location1}"></span>
+	                    <span class="product-time_plan" th:text="${prd.inputDate}"></span>
+	                </div>
+	            </div>
+	            </a>
+	        </div>
+	    </th:block>
+
+    </div>
+</main>
+
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+	<!-- 최근본상품 오버레이 -->
+	<th:block th:insert="~{components/user/recentProduct :: recentProduct}"></th:block>
+</body>
+</html>

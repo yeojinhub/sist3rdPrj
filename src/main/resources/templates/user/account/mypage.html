@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 마이 페이지</title>
+<!-- 마이페이지 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/mypage.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+	
+	<!-- 메인 콘텐츠 -->
+	<main>
+		<div class="main-container">
+			<div class="main-content">
+				<aside class="left-sidebar">
+					<h2>마이 페이지</h2>
+					<nav>
+						<h3>거래 정보</h3>
+						<ul>
+							<li><a href="#">판매내역</a></li>
+							<li><a href="#">구매내역</a></li>
+							<li><a href="#">찜한 상품</a></li>
+						</ul>
+						<hr />
+						<h3>내 정보</h3>
+						<ul>
+							<li><a href="#">계좌 관리</a></li>
+							<li><a href="#">배송지 관리</a></li>
+							<li><a href="#">거래 후기</a></li>
+							<li><a href="#">탈퇴하기</a></li>
+						</ul>
+					</nav>
+				</aside>
+				<section class="center-content">
+					<div class="profile-section">
+						<div class="profile-info">
+							<div class="profile-image">
+								<img th:src="@{/images/default_profile.jpg}" alt="Profile Image" />
+							</div>
+							<span class="nickname">행복가득나무</span>
+						</div>
+						<div class="store-intro">
+							<p>가게 소개를 작성하고 신뢰도를 높여 보세요.</p>
+						</div>
+					</div>
+					<div class="seller-actions">
+						<div class="register-product">
+							<div>
+								<p class="action-title">지금 판매상품 등록하기</p>
+								<p class="action-description">
+									다양한 판매상품을 등록하여<br>신뢰지수를 올려보세요
+								</p>
+							</div>
+							<button class="register-button">등록하기</button>
+						</div>
+						<div class="seller-stats">
+							<div>
+								<p class="stat-title">안전거래</p>
+								<p class="stat-value">0</p>
+							</div>
+							<div>
+								<p class="stat-title">거래후기</p>
+								<p class="stat-value">0</p>
+							</div>
+							<div>
+								<p class="stat-title">단골</p>
+								<p class="stat-value">0</p>
+							</div>
+							<div>
+								<p class="stat-title">에코마일</p>
+								<p class="stat-value">0</p>
+							</div>
+						</div>
+					</div>
+					<div class="trust-score-section">
+						<span class="trust-score-label">신뢰지수 162</span>
+						<div class="progress-bar-background">
+							<div class="progress-bar-fill" style="width: 41.6%;"></div>
+						</div>
+					</div>
+					<div class="my-products-section">
+						<div class="products-header">
+							<h3>내 상품</h3>
+							<div class="product-filters">
+								<span>총 0개</span>
+								<div class="sort-options">
+									<a href="#">최신순</a> <a href="#">낮은가격순</a> <a href="#">높은가격순</a>
+								</div>
+							</div>
+						</div>
+						<div class="product-tabs">
+							<button class="tab-button active">전체</button>
+							<button class="tab-button">판매중</button>
+							<button class="tab-button">예약중</button>
+							<button class="tab-button">판매완료</button>
+						</div>
+						<div class="products-list-empty">
+							<p>선택한 조건에 해당하는 상품이 없습니다.</p>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</main>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+</body>
+</html>

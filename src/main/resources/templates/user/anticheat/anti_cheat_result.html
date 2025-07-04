@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>88마켓 - 사기조회 결과</title>
+	<!-- 사기조회 결과 CSS -->
+	<link rel="stylesheet" th:href="@{/css/user/anti_cheat_result.css}">
+	<!-- 외부파일(jQuery, bootstrep 등 -->
+	<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function () {
+
+	});// ready
+</script>
+
+<body>
+	<!-- 헤더 -->
+	<div th:insert="~{components/user/header :: header}"></div>
+
+	<main class="fraud-main">
+		<h1 class="fraud-title">팔팔마켓 통합 사기 조회</h1>
+
+		<section class="fraud-section">
+			<div class="fraud-row">
+				<span class="fraud-query" th:text="${inputValue}"></span>
+				<span class="fraud-period">검색 기간 : 최근 3개월</span>
+			</div>
+
+			<h2 class="fraud-subtitle">피해 사례 조회</h2>
+
+			<table class="fraud-table">
+				<tbody>
+					<tr>
+						<td class="fraud-label">팔팔마켓</td>
+						<td>
+							<span class="fraud-status fraud-status-green" th:text="|${#numbers.formatInteger(totalScamResult, 1, 'COMMA')}건|" th:if="${totalScamResult > 0}"></span>
+							<span class="fraud-status fraud-status-green" th:if="${totalScamResult == 0}">신고 건수 없음</span>
+							<span class="fraud-desc">
+								(신고 내역이 없는 경우에도 <span class="fraud-danger">안전한 거래</span>라는 것을 보장할 수 없습니다.)
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="fraud-btn-wrap">
+				<button type="button" class="fraud-btn" th:onclick="|location.href='/anticheat'|">다시조회하기</button>
+				<button type="button" class="fraud-btn">이의제기하기</button>
+			</div>
+		</section>
+
+		<div class="fraud-footer-text">
+			<p>
+				(주)팔팔마켓은 범죄 피해방지를 위해 해당 서비스를 운영하고 있습니다. 피해 사례 관련에 대해 팔팔마켓은 보증하지 않으며, 피해 사례에 대한 법적 책임은 당사자에게 있습니다.
+			</p>
+			<a href="#" class="fraud-footer-link">경찰청 사이버 수사과 바로가기 &gt;</a>
+		</div>
+	</main>
+
+	<!-- 푸터 -->
+	<div th:insert="~{components/user/footer :: footer}"></div>
+</body>
+
+</html>
