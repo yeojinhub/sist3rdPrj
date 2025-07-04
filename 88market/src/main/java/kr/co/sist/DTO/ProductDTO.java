@@ -2,6 +2,8 @@ package kr.co.sist.DTO;
 
 import java.sql.Date;
 
+import org.springframework.format.annotation.NumberFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,10 +34,22 @@ public class ProductDTO {
 	private String safeType;/*안전거래*/
 	private String meetType;/*직거래*/
 	private String deliveryType;/*택배거래*/
+	private int likeNum; /* 상품 찜수 */
 	
 	private String userNum; /* 사용자번호 */
 	private int catNum; /* 카테고리번호 */
 	private String comNum; /* 사업자등록번호 */
 	private int imgNum; /* 이미지번호 */
+
+    public String getShortLocation() {
+        if (location1 == null) return "";
+        String[] parts = location1.split(" ");
+        if (parts.length >= 2) {
+            return parts[0] + " " + parts[1];
+        }
+        return location1;  // 하나만 있으면 그대로
+    }
+	
+ 
 
 } //class

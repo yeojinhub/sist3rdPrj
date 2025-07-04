@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.SearchItemDAO">
+    
+    <!-- 찜(좋아요) 순으로 상위 15개 -->
+	<select id="selectTopLikeItems" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
+	SELECT *
+	FROM (
+			SELECT *
+			FROM PRODUCT
+			ORDER BY LIKE_NUM DESC
+			)
+	WHERE ROWNUM &lt;= #{limit}
+	</select>
+
+
+	<!-- 메인 - 조회수 많은 것  -->
+    <select id="selectTopViewItems" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
+    SELECT *
+		FROM (
+		SELECT *
+		FROM PRODUCT
+		ORDER BY ClICK_NUM DESC
+		)
+	WHERE ROWNUM &lt;= #{limit}
+	</select>
+    
+	<!-- 검색 - 키워드 -->
+	<select id="findByKeyword" parameterType="String" resultType="kr.co.sist.DTO.ProductDTO">
+		SELECT * 
+		FROM PRODUCT
+		<where>
+			<if test="keyword != null and keyword != ''">
+				TITLE LIKE '%' || #{keyword} || '%'
+			</if>
+		</where>
+	</select>
+	
+	<!-- 카테고리 번호로 검색 -->
+	<select id="findByCategory" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
+		SELECT *
+        FROM PRODUCT
+        WHERE CAT_NUM = #{catNum}
+	</select>
+    
+	<!-- 카테고리별 상품 개수 -->
+	<select id="countByCategory" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM PRODUCT
+		WHERE CAT_NUM = #{catNum}
+	</select>
+    
+    
+    
+</mapper>

@@ -15,7 +15,11 @@ public class CategoryService {
     private CategoryDAO categoryDAO;
 
     public List<CategoryDTO> getAllCategories() {
-        return categoryDAO.selectAllCategory();
+        return categoryDAO.selectAllCategories();
     }
+    
+    public String getCategoryName(int catNum) {
+        CategoryDTO ctgDTO = categoryDAO.selectCategoryById(catNum);
+        return ctgDTO != null ? ctgDTO.getName() : "";
+    }//getCategoryName
 }
-

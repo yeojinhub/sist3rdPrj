@@ -44,7 +44,7 @@
     margin: 0;
 }
 
-.count-number {
+.item-count-number {
     font-weight: 600;
     color: #333333;
 }
@@ -347,6 +347,38 @@
     .filter-row_search:last-child {
         border-bottom: none;
     }
+}
+
+
+/* 행동 버튼 */
+
+/* 상품 메타 + 찜 버튼 한 줄 정렬 */
+.product-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wish-btn img {
+  width: 25px;
+  height: 25px;
+}
+
+/* 기존 찜 버튼 스타일 유지 + 정렬 개선 */
+.wish-btn {
+    flex-shrink: 0;
+    margin-left: 8px;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    color: #FF4081;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.wish-btn.active {
+  color: #FF0000; /* 눌렀을 때 빨간색 */
 }
 
 @media (max-width: 768px) {

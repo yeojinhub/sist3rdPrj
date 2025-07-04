@@ -2,22 +2,13 @@ package kr.co.sist.user.DAO;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Param;
 
 import kr.co.sist.DTO.CategoryDTO;
 
-@Repository
-@Mapper
-public class CategoryDAO {
+public interface CategoryDAO {
 
-    @Autowired
-    private SqlSession sqlSession;
-
-    public List<CategoryDTO> selectAllCategory() {
-        return sqlSession.selectList("CategoryMapper.selectAllCategory");
-    }
+	List<CategoryDTO> selectAllCategories();
+	CategoryDTO selectCategoryById(@Param("catNum") int catNum);
+	
 }
-

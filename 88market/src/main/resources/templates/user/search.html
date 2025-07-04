@@ -8,26 +8,48 @@
 <link rel="stylesheet" th:href="@{/css/user/search.css}">
 <!-- 외부파일(jQuery, bootstrep 등 -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
-</head>
+
 <script>
 	$(function() {
 
 	});
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.wish-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (event) {
+        event.preventDefault();        // 링크 이동 막기
+        event.stopPropagation();      // 상위 <a> 클릭 이벤트 막기
+
+        // 하트 색 토글
+        btn.classList.toggle('active');
+
+        // btn 내부의 img 태그 찾기
+        const img = btn.querySelector('img');
+        if (btn.classList.contains('active')) {
+          img.src = '/images/productHeart/heart-on.png';   // 활성 하트 이미지
+        } else {
+          img.src = '/images/productHeart/heart-off.png';  // 비활성 하트 이미지
+        }
+      });
+    });
+  });
+</script>
+</head>
 <body>
 	<!-- 헤더 -->
 	<div th:insert="~{components/user/header :: header}"></div>
-
+	<!-- 메인 콘텐츠 -->
 	<main class="search-page-container_search">
 		<div class="search-header_search">
 			<div class="search-title_search">
-				<i class="fa fa-search" aria-hidden="true"></i>
+				<!-- <i class="fa fa-search" aria-hidden="true"></i> -->
 				<h1>
-					<span th:text="${keyword}"></span> 검색결과
+					<span th:text="${title}"></span> 검색결과
 				</h1>
 			</div>
 			<p class="results-count_search">
-				검색결과 <span class="count-number">15</span>개
+				검색결과 <span  class="item-count-number" th:text="|${count}개|"></span>
 			</p>
 		</div>
 
@@ -78,56 +100,33 @@
 
 		<!-- 상품 패널 (하단) -->
 		<section class="results-grid_search">
-			<div class="product-card_search">
+			<div class="product-card_search" th:each="item : ${results}">
 				<div class="product-image-wrapper">
-					<img th:src="@{images/main/img1.png}" alt="Product Image">
+					<!-- <img th:src="@{images/main/img1.png}" alt="Product Image"> -->
 				</div>
 				<div class="product-info_search">
-					<p class="product-name_search">루미녹스 랜드블랙 88000</p>
-					<p class="product-price_search">170,000원</p>
-					<p class="product-meta_search">분리동 · 13분전</p>
+					<p class="product-name_search" th:text="${item.title}">상품명</p>
+					<p class="product-price_search" th:text="|${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}원|">가격</p>
+					<p class="product-meta_search" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}">위치</p>
+					<div class="product-meta-row">
 					<div class="product-engagement_search">
-						<span class="likes_search"> <i class="fa fa-heart-o"></i> 2
-						</span> <span class="chats_search"> <i class="fa fa-comment-o"></i>
-							0
-						</span>
+						<i class="fa fa-eye"></i><span class="likes_search" th:text="${item.clickNum}"></span>
+						<i class="fa fa-comment"></i><span class="chats_search" th:text="${item.catNum}"></span>
+						<i class="fa fa-heart"></i><span class="chats_search" th:text="${item.likeNum}"></span>
 					</div>
-				</div>
-			</div>
-
-			<div class="product-card_search">
-				<div class="product-image-wrapper">
-					<img th:src="@{images/main/img2.png}" alt="Product Image">
-					<div class="ad-badge">광고</div>
-				</div>
-				<div class="product-info_search">
-					<p class="product-name_search">수입의류 셔성 롱 매쉬 원피스</p>
-					<p class="product-price_search">120,000원</p>
-					<p class="product-meta_search">니올마켓 · 광고</p>
-				</div>
-			</div>
-
-			<div class="product-card_search">
-				<div class="product-image-wrapper">
-					<img th:src="@{images/main/img3.png}" alt="Product Image">
-				</div>
-				<div class="product-info_search">
-					<p class="product-name_search">오메가 구씨마 300</p>
-					<p class="product-price_search highlight-price">3,100,000원</p>
-					<p class="product-meta_search">주안1동 · 13분전</p>
-					<div class="product-engagement_search">
-						<span class="likes_search"> <i class="fa fa-heart-o"></i> 5
-						</span> <span class="chats_search"> <i class="fa fa-comment-o"></i>
-							2
-						</span>
+						<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
 					</div>
 				</div>
 			</div>
 		</section>
+		  <!-- [디버그] 실제 넘어온 모델 값 확인 -->
+  <div style="border:1px dashed red; padding:8px; margin-bottom:16px;">
+    <p>catNum: <span th:text="${catNum}">null</span></p>
+    <p>keyword: <span th:text="${keyword}">빈값</span></p>
+    <p>title: <span th:text="${title}">빈값</span></p>
+    <p>count: <span th:text="${count}">0</span></p>
+  </div>
 	</main>
-
-
-
 	<!-- 푸터 -->
 	<div th:insert="~{components/user/footer :: footer}"></div>
 </body>
