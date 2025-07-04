@@ -61,18 +61,31 @@
   	<!-- 푸터 -->
   	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
 
-<!-- 하드코딩 로그인 스크립트 -->
-<script>
-$(function () {
-	$("#btn").click(function () {
-		var frm = $("#frm")[0];
-		var tempAction="loginProcess";
-		
-		frm.action=tempAction;
-		alert(frm.action);
-		frm.submit();
-	}); //click
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(function(){
+ $("#btn").click(function(){
+   const email = $("#email").val() + "@" + $("#email-domain").val();
+   const pass  = $("#pass").val();
+   
+   $.ajax({
+     url: "[[@{/loginProcess}]]",
+     type: "POST",
+     contentType: "application/json",
+     data: JSON.stringify({ email, pass }),
+     success: function(){
+       // 쿠키에 토큰이 담겼으니 바로 메인 페이지로 이동
+       window.location.href = "[[@{/}]]";
+     }, //success
+     error: function(){
+       alert("이메일 또는 비밀번호가 잘못되었습니다.");
+     } //error
+   }); //ajax
+   
+ }); //click
+ 
 }); //ready
+/*]]>*/
 </script>
 </body>
 </html>

@@ -6,6 +6,6 @@
     <select id="selectLoginList" resultType="kr.co.sist.DTO.UserDTO" parameterType="String">
         SELECT EMAIL,PASS
         FROM USERS
-        WHERE EMAIL=#{eamil}
+        WHERE EMAIL=#{email}
     </select>
 </mapper>

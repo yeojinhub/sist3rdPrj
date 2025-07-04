@@ -1,0 +1,88 @@
+package kr.co.sist.user.Service;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+@Service
+public class JwtServiceImpl implements JwtService {
+
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    // UserDetailsService 구현체 주입
+    private final UserDetailsService userDetailsService;
+
+    // 생성자 주입
+    public JwtServiceImpl(@Value("${jwt.secret}") String secretKey,
+                          UserDetailsService userDetailsService) {
+        this.secretKey = secretKey;
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Override
+    public String createToken(String email) {
+        return getToken("email", email, 1000 * 60 * 60);
+    }
+
+    @Override
+    public Authentication getAuthentication(String token) {
+        Claims claims = getClaims(token);
+        if (claims == null) {
+            return null;
+        }
+
+        // 인스턴스를 통해 호출
+        String username = claims.get("email", String.class);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        // import된 UsernamePasswordAuthenticationToken 사용
+        return new UsernamePasswordAuthenticationToken(
+            userDetails,
+            null,  // credentials (여기선 이미 인증된 상태이므로 null)
+            userDetails.getAuthorities()
+        );
+    }
+
+    @Override
+    public String getToken(String key, Object value, int expireTime) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(key, value);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
+                .compact();
+    }
+
+    @Override
+    public Claims getClaims(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey.getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException e) {
+            return null;
+        }
+    }
+
+    public boolean validateToken(String token) {
+        return getClaims(token) != null;
+    }
+}

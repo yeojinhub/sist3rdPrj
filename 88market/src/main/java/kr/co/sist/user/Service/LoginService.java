@@ -15,10 +15,10 @@ public class LoginService {
 	 * @param email 입력받은 이메일
 	 * @return null이 아닐 때 loginDTO 반환, null일 경우 그대로 반환
 	 */
-	public UserDTO selectLoginList(String email, String pass) {
+	public UserDTO selectLogin(String email, String pass) {
 		UserDTO loginDTO = loginDAO.selectLoginList(email);
 		
-		if( loginDTO != null ) {
+		if( loginDTO != null && loginDTO.getPass().equals(pass) ) {
 			if( pass == loginDTO.getPass() ) {
 				return loginDTO;
 			} //end if

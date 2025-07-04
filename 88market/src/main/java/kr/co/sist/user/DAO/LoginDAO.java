@@ -8,5 +8,6 @@ import kr.co.sist.DTO.UserDTO;
 public interface LoginDAO {
 	
 	public UserDTO selectLoginList(String email);
+	public UserDTO login(UserDTO loginDTO);
 	
 } //interface
