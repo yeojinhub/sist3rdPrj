@@ -178,6 +178,7 @@ CREATE TABLE CATEGORY (
 	NAME	VARCHAR2(255)	NULL /* 카테고리이름 */
 );
 
+
 /* 상품 테이블 생성 */
 CREATE TABLE PRODUCT (
 	PRD_NUM				VARCHAR2(255)		NOT NULL, /* 상품번호 */
@@ -191,10 +192,14 @@ CREATE TABLE PRODUCT (
 	SELL_TYPE			VARCHAR2(255)		DEFAULT 'N', /* 상품판매여부(Y,N) */
 	PRD_CNT				NUMBER(10)			DEFAULT 1, /* 상품재고 */
 	CLICK_NUM			NUMBER(10)			DEFAULT 0, /* 상품조회수 */
+	SAFE_TYPE			VARCHAR2(255)		DEFAULT 'N', /* 안전거래여부(Y,N) */
+	MEET_TYPE			VARCHAR2(255)		DEFAULT 'N', /* 직거래여부(Y,N) */
+	DELIVERY_TYPE	VARCHAR2(255)		DEFAULT 'N', /* 택배거래여부(Y,N) */
 	USER_NUM			VARCHAR2(255)		NOT NULL, /* 사용자번호 */
 	CAT_NUM				NUMBER(10)			NOT NULL, /* 카테고리번호 */
-	COM_NUM				VARCHAR2(255)		NOT NULL, /* 사업자등록번호 */
-	IMG_NUM				NUMBER(10)			NULL /* 이미지번호 */
+	COM_NUM				VARCHAR2(255)		NULL, /* 사업자등록번호 */
+	IMG_NUM				NUMBER(10)			NULL, /* 이미지번호 */
+	LIKE_NUM			NUMBER(10)			DEFAULT 0 /* 상품찜수 */
 );
 
 /* 이미지 테이블 생성 */
@@ -262,7 +267,7 @@ CREATE TABLE REPORT (
 CREATE TABLE SCAM (
   SCAM_NUM   	NUMBER(10)       NOT NULL, /* 사기조회번호 */
   INPUT_VALUE VARCHAR2(4000)   NOT NULL, /* 사용자입력값 */
-  INPUT_DATE  DATE             DEFAULT SYSDATE /* 사기조회일 */
+  INPUT_DATE  DATE             DEFAULT SYSDATE, /* 사기조회일 */
 );
 
 /* 채팅방 테이블 생성 */
@@ -288,22 +293,21 @@ CREATE TABLE CHATMESSAGE (
 );
 
 /* 공지사항 테이블 생성 */
-CREATE TABLE NOTICE (
+CREATE TABLE ` (
 	NOT_NUM			NUMBER(10)			NOT NULL, /* 공지사항번호 */
 	TITLE				VARCHAR2(500)		NOT NULL, /* 공지사항제목 */
-	CONTENT			clob	NOT NULL, /* 공지사항내용 */
+	CONTENT			CLOB						NOT NULL, /* 공지사항내용 */
 	NAME				VARCHAR2(255)		NOT NULL, /* 공지사항작성자 */
 	INPUT_DATE	DATE						DEFAULT SYSDATE, /* 공지사항작성자 */
 	STATUS_TYPE	VARCHAR2(255)		DEFAULT '공지', /* 공지사항상태(공지,미공지) */
-	ADM_NUM			VARCHAR2(255)		NOT NULL, /* 관리자사번 */
-	IMG_NUM			NUMBER(10)			NULL /* 이미지번호 */
+	ADM_NUM			VARCHAR2(255)		NOT NULL /* 관리자사번 */
 );
 
 /* FAQ 테이블 생성 */
 CREATE TABLE FAQ (
 	FAQ_NUM			NUMBER(10)			NOT NULL, /* FAQ번호 */
 	TITLE				VARCHAR2(500)		NOT NULL, /* FAQ제목 */
-	CONTENT			VARCHAR2(4000)	NOT NULL, /* FAQ내용 */
+	CONTENT			CLOB						NOT NULL, /* FAQ내용 */
 	NAME				VARCHAR2(255)		NOT NULL, /* FAQ작성자 */
 	INPUT_DATE	DATE						DEFAULT SYSDATE, /* FAQ작성일 */
 	FAQ_TYPE		VARCHAR2(255)		NULL, /* FAQ타입(거래문의,이용문의,회원/계정,운영정책,기타) */
@@ -336,13 +340,14 @@ CREATE TABLE ANSWER (
 CREATE TABLE EVENT (
 	EVT_NUM			NUMBER(10)			NOT NULL, /* 이벤트번호 */
 	TITLE				VARCHAR2(500)		NULL, /* 이벤트제목 */
-	CONTENT			VARCHAR2(4000)	NOT NULL, /* 이벤트내용 */
+	CONTENT			CLOB						NOT NULL, /* 이벤트내용 */
 	NAME				VARCHAR2(255)		NOT NULL, /* 이벤트작성자 */
 	START_DATE	DATE						NULL, /* 이벤트시작일 */
 	END_DATE		DATE						NULL, /* 이벤트종료일 */
 	EVT_TYPE		NUMBER(10)			DEFAULT 1, /* 이벤트게시Type(1,2,3)*/
 	ADM_NUM			VARCHAR2(255)		NOT NULL, /* 관리자사번 */
-  IMG_NUM     NUMBER(10)			NULL /* 이미지번호 */
+	IMG_NUM			NUMBER(10)			NULL, /* 이미지번호 */
+	MAIN_TYPE		VARCHAR2(255)		DEFAULT 'N' /* 메인페이지표시여부(Y,N) */
 );
 
 /* 시퀀스 생성 */

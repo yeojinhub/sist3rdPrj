@@ -2,6 +2,8 @@ package kr.co.sist.user.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +17,12 @@ public class UserMainController {
 	
     @Autowired
     private SearchItemService service;
-
+	
 	@GetMapping("/")
-	public String main(Model model) {
+	public String main(Model model, Authentication auth) {
+		
+		String email = auth.getName();  // 토큰의 sub 값
+        model.addAttribute("userEmail", email);
 		
 		/* 메인 - 찜 많은 것 */
 	    List<ProductDTO> topLike = service.getTopLikeItems(15);

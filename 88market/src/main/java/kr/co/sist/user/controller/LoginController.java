@@ -1,81 +1,60 @@
 package kr.co.sist.user.controller;
 
+import java.time.Duration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
+import kr.co.sist.DTO.UserDTO;
+import kr.co.sist.user.Service.JwtService;
+import kr.co.sist.user.Service.LoginService;
 
-@SessionAttributes({"name","age"})
 @Controller
 public class LoginController {
 	
-	@GetMapping("/session_getvalue")
-	public String sessionGetValue(HttpSession session) {
-		//세션 값 얻기
-		String name=(String)session.getAttribute("name");
-		Integer sessionAge=(Integer)session.getAttribute("age");
-		
-		int age=0;
-		if(sessionAge != null) {
-			age=sessionAge.intValue();
-		}
-		System.out.println("이름 " + name +" ,  나이 " + age);
-		
-		return "day0623/session_list";
-	}//sessionGetValue
+	@Autowired
+	private LoginService service;
+	@Autowired
+	private JwtService jwtService;
 	
-	@GetMapping("/model_getvalue")
-	public String modelGetValue(Model model) {
-		//Spring 5.2 이상에서만 가능하다.
-		String name=(String)model.getAttribute("name");
-
-		Integer modelAge=(Integer)model.getAttribute("age");
-		
-		int age=0;
-		if(modelAge != null) {
-			age=modelAge.intValue();
-		}//end if
-		
-		System.out.println("Model 이름 " + name +" , Model  나이 " + age);
-		
-		return "day0623/session_list";
-	} //modelGetValue
+	@GetMapping("/login_email")
+	public String loginEmailPage() {
+		return "user/account/login_email";
+	} //loginEmailPage
 	
-	@GetMapping("/login")
-	public String login() {
-		return "user/account/login";
-	}
-
-	@PostMapping("/login")
-	public String doLogin(@RequestParam("loginType") String loginType, HttpSession session) {
-		// 하드코딩된 유저 식별자 저장
-		switch (loginType) {
-			case "naver":
-				session.setAttribute("user", "user01");
-				break;
-			case "kakao":
-				session.setAttribute("user", "user02");
-				break;
-			case "email":
-				session.setAttribute("user", "user03");
-				break;
-		}
-		return "redirect:/"; // 로그인 후 메인페이지로 이동
-	}
-
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate(); // 세션 완전 초기화 (로그아웃)
-		return "redirect:/"; // 홈으로 이동
-	}
-
-	@GetMapping("/signup")
-	public String signup() {
-		return "user/account/signup";
-	}
+	//@GetMapping("/loginProcess")
+	@RequestMapping(value="/loginProcess", method= { RequestMethod.POST } )
+	public ResponseEntity<Void> loginProcess(@RequestBody UserDTO loginDTO, HttpServletResponse response) {
+		UserDTO user = service.selectLogin(loginDTO.getEmail(), loginDTO.getPass());
+		
+		if( user == null ) {
+//			session.setAttribute("loginDTO", loginDTO);
+//			System.out.println("로그인 되었습니다.");
+//			return "redirect:/";
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		} 
+		
+        // 1) 토큰 생성
+        String token = jwtService.createToken(user.getEmail());
+        // 2) HttpOnly 쿠키에 담아서 응답 헤더에 추가
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+            .httpOnly(true)
+            .path("/")
+            .maxAge(Duration.ofHours(1))
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        // 3) 바디는 비워두고 200 OK
+        return ResponseEntity.ok().build();
+		
+	} //loginProcess
 
 } //class
