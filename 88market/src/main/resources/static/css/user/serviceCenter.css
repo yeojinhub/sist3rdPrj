@@ -1,0 +1,202 @@
+/* 메인 콘텐츠 & 컨테이너 */
+.faq-content {
+    background-color: #fff;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 0;
+    text-align: center;
+}
+.faq-content h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.faq-content hr {
+    border: 1px solid #000;
+    margin-bottom: 30px;
+}
+.faq-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: left;
+}
+.faq-search {
+    display: flex;
+    align-items: center;
+    background-color: #f3f3f3;
+    border-radius: 12px;
+    padding: 5px 15px;
+    margin-bottom: 30px;
+}
+.faq-search span {
+    font-size: 20px;
+    margin-right: 10px;
+}
+.faq-search input {
+    flex-grow: 1;
+    border: none;
+    background: none;
+    height: 36px;
+    font-size: 15px;
+}
+.faq-search input:focus {
+    outline: none;
+}
+.faq-categories {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: none;
+}
+.faq-categories button {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 13px 28px;
+    border: 1.5px solid #e3e7ed;
+    background: #fff;
+    color: #222;
+    border-radius: 22px;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    box-shadow: none;
+    margin-bottom: 0;
+    position: relative;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+.faq-categories button.active,
+.faq-categories button:focus {
+    background: #7fd0f4;
+    color: #fff;
+    border: 1.5px solid #7fd0f4;
+}
+.faq-categories button:hover {
+    border: 1.5px solid #7fd0f4;
+}
+.faq-list {
+    width: 100%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* 아코디언 헤더 (질문/카테고리/아이콘) */
+.ui-accordion .ui-accordion-header {
+    position: relative;
+    background: #fff;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: #222;
+    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+    min-height: 54px;
+    transition: none;
+}
+.faq-header-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 54px;
+    padding: 0 12px;
+}
+.faq-header-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 12px 0;
+}
+.faq-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    line-height: 1.3;
+}
+.faq-category {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+}
+/* 아코디언 아이콘 우측 고정 및 스타일 */
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 20px;
+    transition: transform 0.3s;
+    margin: 0;
+    left: auto;
+}
+/* 호버 효과 제거 및 활성화 스타일 고정 */
+.ui-accordion .ui-accordion-header:hover,
+.ui-accordion .ui-accordion-header.ui-state-active {
+    background: #fff;
+    color: #222;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+}
+/* 아코디언 내용(FAQ 상세) */
+.ui-accordion .ui-accordion-content {
+    background: #fff;
+    border: none;
+    padding: 18px 12px 24px 12px;
+    font-size: 15px;
+    color: #333;
+    white-space: pre-line;
+    margin: 0;
+    line-height: 1.7;
+}
+.inquiry-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    gap: 20px;
+}
+.inquiry-buttons button {
+    flex: 1;
+    height: 46px;
+    border-radius: 15px;
+    background-color: rgba(127, 208, 244, 0.27);
+    border: 1px solid #9e9e9e;
+    font-size: 20px;
+    font-weight: 700;
+}
+/* 아이콘 색상 강제 (회색) */
+.ui-icon {
+    background-image: url("https://code.jquery.com/ui/1.13.2/themes/base/images/ui-icons_555555_256x240.png") !important;
+}
+/* 반응형 */
+@media (max-width: 600px) {
+    .faq-content {
+        padding: 20px 0;
+    }
+    .faq-header-row {
+        min-height: 38px;
+        padding: 0 4px;
+    }
+    .faq-title {
+        font-size: 14px;
+    }
+    .faq-category {
+        font-size: 12px;
+    }
+    .ui-accordion .ui-accordion-content {
+        font-size: 14px;
+        padding: 12px 4px 16px 4px;
+    }
+    .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+        right: 8px;
+        font-size: 18px;
+    }
+}

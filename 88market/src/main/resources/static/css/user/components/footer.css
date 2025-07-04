@@ -1,0 +1,50 @@
+/* 푸터 */
+.footer {
+    background-color: #eeeeee;
+    padding: 50px 0;
+    margin-top: 60px;
+}
+.footer-container {
+    max-width: 1408px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.footer-top{
+    display: flex;
+    justify-content: space-between; /* 좌우 공간 분배 */
+    align-items: flex-start;
+    gap: 20px; /* 아이템 간 적당한 간격 */
+    margin-bottom: 30px; /* 아래 요소와 간격 */
+}
+
+.sns-icons {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0; /* 크기 줄어들지 않게 */
+  align-items: center;
+}
+
+.sns-icons img{
+	width: 28px;
+}
+.sns-icons img.naver{
+	width: 38px;
+}
+
+.company-info h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.company-info p, .footer-links p, .copyright p {
+    font-size: 15px;
+    color: #5b5b5b;
+    line-height: 1.5;
+}
+
+.disclaimer {
+  font-size: 12px;
+  color: #777;
+  margin-top: 10px;
+}
+.copyright p { text-align: right; }

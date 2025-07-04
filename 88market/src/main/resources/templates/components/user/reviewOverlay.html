@@ -1,0 +1,159 @@
+<th:block th:fragment="reviewOverlay">
+<link rel="stylesheet" th:href="@{/css/user/components/review.css}">
+<script>
+$(function() {
+    // 후기 버튼 클릭 이벤트
+    $('#review').click(function() {
+        $('.review-overlay_review').fadeIn(300);
+        $('.review-modal_review').addClass('show_review');
+        $('html, body').addClass('modal-open_review');
+    });
+
+    // 오버레이 클릭 시 모달 닫기
+    $('.review-overlay_review').click(function() {
+        $('.review-modal_review').removeClass('show_review');
+        setTimeout(function() {
+            $('.review-overlay_review').fadeOut(300);
+            $('html, body').removeClass('modal-open_review');
+        }, 300);
+    });
+
+    // X 버튼 클릭 시 모달 닫기
+    $('.close-button_review').click(function() {
+        $('.review-modal_review').removeClass('show_review');
+        setTimeout(function() {
+            $('.review-overlay_review').fadeOut(300);
+            $('html, body').removeClass('modal-open_review');
+        }, 300);
+    });
+
+    // 모달 내부 클릭 시 이벤트 전파 막기
+    $('.review-modal_review').click(function(e) {
+        e.stopPropagation();
+    });
+
+    // 후기 아이템 클릭 이벤트
+    $('.review-item_review').click(function() {
+        // 후기 상세 페이지로 이동하는 로직 추가
+        console.log('후기 상세 보기');
+    });
+});
+</script>
+
+<!-- 후기 모달 오버레이 -->
+<div class="review-overlay_review"></div>
+
+<!-- 후기 모달 -->
+<div class="review-modal_review">
+    <div class="review-container_review">
+        <!-- 헤더 부분 -->
+        <div class="review-header_review">
+            <button class="back-button_review">‹</button>
+            <h1 class="review-title_review">후기</h1>
+            <button class="close-button_review">×</button>
+        </div>
+
+        <!-- 후기 목록 -->
+        <div class="review-list_review">
+            <!-- 좋았어요 섹션 -->
+            <div class="review-section_review">
+                <h2 class="section-title_review">이런점이 좋았어요</h2>
+                
+                <div class="review-item_review">
+                    <div class="review-content_review">
+                        <span class="review-text_review">친절/매너가 좋아요.</span>
+                        <span class="review-count_review">👤 139</span>
+                    </div>
+                </div>
+
+                <div class="review-item_review">
+                    <div class="review-content_review">
+                        <span class="review-text_review">응답이 빨라요.</span>
+                        <span class="review-count_review">👤 135</span>
+                    </div>
+                </div>
+
+                <div class="review-item_review">
+                    <div class="review-content_review">
+                        <span class="review-text_review">상품 상태가 좋아요.</span>
+                        <span class="review-count_review">👤 92</span>
+                    </div>
+                </div>
+
+                <div class="review-item_review">
+                    <div class="review-content_review">
+                        <span class="review-text_review">택배 거래가 수월했어요.(포장, 컵조각)</span>
+                        <span class="review-count_review">👤 17</span>
+                    </div>
+                </div>
+
+                <div class="review-item_review">
+                    <div class="review-content_review">
+                        <span class="review-text_review">거래 시간을 잘 지켜요.</span>
+                        <span class="review-count_review">👤 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 아쉬웠어요 섹션 -->
+            <div class="review-section_review">
+                <h2 class="section-title_review">이런점이 아쉬웠어요</h2>
+                
+                <div class="review-item_review">
+                    <div class="review-content_review">
+                        <span class="review-text_review">상품 상태가 아쉬웠어요.</span>
+                        <span class="review-count_review">👤 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 상세한 후기 섹션 -->
+            <div class="review-section_review">
+                <h2 class="section-title_review detailed-title_review">상세한 후기도 있어요 <span class="review-count-green_review">26</span></h2>
+                
+                <div class="detailed-review_review">
+                    <div class="user-info_review">
+                        <div class="user-avatar_review"></div>
+                        <div class="user-details_review">
+                            <span class="username_review">홍이네용</span>
+                            <span class="user-type_review">구매자</span>
+                            <span class="review-date_review">2025-06-10</span>
+                        </div>
+                    </div>
+                    <div class="review-message_review">
+                        나름 고가라 걱정된 기대반이었는데 상태가 좋네요ㅎ 포장이랑도 잘해주시고 받송도 빨리 해주셔서 이요!
+                    </div>
+                </div>
+
+                <div class="detailed-review_review">
+                    <div class="user-info_review">
+                        <div class="user-avatar_review"></div>
+                        <div class="user-details_review">
+                            <span class="username_review">명석한별오름길과류</span>
+                            <span class="user-type_review">구매자</span>
+                            <span class="review-date_review">2025-06-08</span>
+                        </div>
+                    </div>
+                    <div class="review-message_review">
+                        너무기대해고 질살게요
+                    </div>
+                </div>
+
+                <div class="detailed-review_review">
+                    <div class="user-info_review">
+                        <div class="user-avatar_review"></div>
+                        <div class="user-details_review">
+                            <span class="username_review">중고나라#8418954</span>
+                            <span class="user-type_review">구매자</span>
+                            <span class="review-date_review">2025-05-27</span>
+                        </div>
+                    </div>
+                    <div class="review-message_review">
+                        포장도 꼼꼼하게 해주시고 상품도 너무 만족스럽습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</th:block>

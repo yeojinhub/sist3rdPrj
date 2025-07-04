@@ -1,0 +1,76 @@
+<header class="header" th:fragment="header">
+	<link rel="stylesheet" th:href="@{/css/user/components/header.css}">
+	<script>
+		$(function () {
+			$('.search-input').keyup((e)=>{
+				var keyword = $('.search-input').val();
+				
+				if(e.which == 13) {
+					location.href = '/search?keyword=' + keyword;
+				}
+			})
+		})
+	</script>
+	<div class="header-background">
+		<div class="header-container">
+			<!-- 로고 -->
+			<div class="logo">
+				<img th:src="@{images/logo.png}" class="logo-image"
+					th:onclick="|location.href='@{/}'|" style="cursor: pointer;" />
+			</div>
+
+			<!-- 검색창 -->
+			<div class="search-box">
+				<input type="text" placeholder="검색어를 입력하세요" class="search-input">
+			</div>
+
+			<!-- 사용자 메뉴 -->
+			<div class="user-menu">
+				<div class="menu-item" th:onclick="|location.href='@{/sell}'|">
+					<i class="fa-solid fa-cart-shopping"></i> <span>판매하기</span>
+				</div>
+				<div class="menu-item">
+					<i class="fa-solid fa-comments"></i> <span id="chat">채팅하기</span>
+				</div>
+				<!-- 로그인 안 된 경우: 마이 → 로그인 -->
+				<div class="menu-item" th:unless="${session.user != null}" th:onclick="|location.href='@{/login}'|">
+				  <i class="fa-solid fa-user"></i> <span>마이</span>
+				</div>
+				<!-- 로그인된 경우: 마이 → 드롭다운 메뉴 -->
+				<div class="menu-item dropdown" th:if="${session.user != null}">
+				  <i class="fa-solid fa-user"></i> <span>마이</span>
+				  <div class="dropdown-content">
+				    <a th:href="@{/mypage}">마이페이지</a>
+				    <a th:href="@{/logout}">로그아웃</a>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 네비게이션 메뉴 -->
+	<div class="navigation">
+		<div class="nav-container">
+			<!-- 카테고리 버튼 -->
+			<div class="category-button">
+				<span>카테고리</span>
+			</div>
+
+			<!-- 메뉴 항목들 -->
+			<nav class="nav-menu">
+				<a href="/event" class="nav-link">이벤트</a> <a href="/planingsell"
+					class="nav-link active">기획관</a> <a href="#" class="nav-link">디지털
+					가전</a> <a href="#" class="nav-link">쿠폰</a> <a href="/anticheat" class="nav-link">사기조회</a>
+				<a href="#" class="nav-link">시세조회</a> <a href="/notice" class="nav-link">공지사항</a>
+				<span class="nav-link" id="wishlist">찜한 상품</span>
+			</nav>
+		</div>
+	</div>
+
+	<!-- 최근본상품 오버레이 -->
+	<th:block th:insert="~{components/user/recentProduct :: recentProduct}" th:if="@{/}"></th:block>
+	<!-- 채팅 오버레이 -->
+	<th:block th:insert="~{components/user/chatOverlay :: chatOverlay}"></th:block>
+	<!-- 찜목록 오버레이 -->
+	<th:block th:insert="~{components/user/wishlistOverlay :: wishlistOverlay}"></th:block>
+</header>
