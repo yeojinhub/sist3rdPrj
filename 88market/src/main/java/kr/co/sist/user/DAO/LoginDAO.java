@@ -9,5 +9,5 @@ public interface LoginDAO {
 	
 	public UserDTO selectLoginList(String email);
 	public UserDTO login(UserDTO loginDTO);
-	
+	 
 } //interface
