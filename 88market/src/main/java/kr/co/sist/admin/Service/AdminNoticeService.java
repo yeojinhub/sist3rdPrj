@@ -52,4 +52,5 @@ public class AdminNoticeService {
     public void modifyNoticeHideOff(List<Integer> notNums) {
     	adminNoticeDAO.updateNoticeHideOff(notNums);
     }
+
 }

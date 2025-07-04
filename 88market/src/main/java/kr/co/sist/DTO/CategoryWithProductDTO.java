@@ -9,14 +9,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 상품 테이블의 정보를 저장하는 DTO
+ * 카테고리 테이블의 정보를 저장하는 DTO
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class ProductDTO {
+public class CategoryWithProductDTO {
+	
+	private String name; /* 카테고리이름 */
 	
 	private String prdNum; /* 상품번호 */
 	private String title; /* 상품제목 */
@@ -29,9 +31,6 @@ public class ProductDTO {
 	private String sellType; /* 상품판매여부(Y,N) */
 	private int prdCnt; /* 상품재고 */
 	private int clickNum; /* 상품조회수 */
-	private String safeType;/*안전거래*/
-	private String meetType;/*직거래*/
-	private String deliveryType;/*택배거래*/
 	
 	private String userNum; /* 사용자번호 */
 	private int catNum; /* 카테고리번호 */

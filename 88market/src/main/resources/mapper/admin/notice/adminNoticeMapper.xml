@@ -81,5 +81,4 @@
 		#{notNum}
 	</foreach>
 </select>
-
 </mapper>
