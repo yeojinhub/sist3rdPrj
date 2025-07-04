@@ -2,6 +2,8 @@ package kr.co.sist.DTO;
 
 import java.sql.Date;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +31,9 @@ public class ProductDTO {
 	private String sellType; /* 상품판매여부(Y,N) */
 	private int prdCnt; /* 상품재고 */
 	private int clickNum; /* 상품조회수 */
+	private String safeType;/*안전거래*/
+	private String meetType;/*직거래*/
+	private String deliveryType;/*택배거래*/
 	
 	private String userNum; /* 사용자번호 */
 	private int catNum; /* 카테고리번호 */
