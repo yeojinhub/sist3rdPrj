@@ -1,5 +1,7 @@
 package kr.co.sist.DTO;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

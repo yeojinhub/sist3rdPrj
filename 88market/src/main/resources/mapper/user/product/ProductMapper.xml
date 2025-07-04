@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="ProductMapper">
+
+    <!-- 상품 등록 -->
+    <insert id="insertProduct" parameterType="kr.co.sist.DTO.ProductDTO">
+        INSERT INTO PRODUCT (
+            PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1,
+            INPUT_DATE, APPOINT_TYPE, HIDDEN_TYPE, SELL_TYPE,
+            PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE, DELIVERY_TYPE,
+            USER_NUM, CAT_NUM, COM_NUM, IMG_NUM
+        ) VALUES (
+            #{prdNum}, #{title}, #{content}, #{price}, #{location1},
+            SYSDATE, #{appointType}, #{hiddenType}, #{sellType},
+            #{prdCnt}, #{clickNum}, #{safeType}, #{meetType}, #{deliveryType},
+            #{userNum}, #{catNum}, #{comNum}, #{imgNum}
+        )
+    </insert>
+
+    <!-- 상품 시퀀스 -->
+    <select id="getNextProductSeq" resultType="int">
+        SELECT SEQ_PRD_NUM.NEXTVAL FROM DUAL
+    </select>
+
+</mapper>
+
+  

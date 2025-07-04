@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CategoryMapper">
+    <select id="selectAllCategory" resultType="kr.co.sist.DTO.CategoryDTO">
+        SELECT cat_num, name FROM category ORDER BY cat_num
+    </select>
+</mapper>
