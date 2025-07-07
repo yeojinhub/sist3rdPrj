@@ -9,15 +9,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import jakarta.servlet.http.HttpServletResponse;
-import kr.co.sist.filter.JwtFliter;
+import kr.co.sist.filter.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtFliter jwtFilter;
+    private final JwtFilter jwtFilter;
 
-    public SecurityConfig(JwtFliter jwtFilter) {
+    public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
 

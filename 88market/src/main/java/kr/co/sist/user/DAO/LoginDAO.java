@@ -9,6 +9,6 @@ import kr.co.sist.DTO.UserDTO;
 public interface LoginDAO {
 	
 	public UserDTO selectLoginList(@Param("email") String email);
-	public UserDTO login(UserDTO loginDTO);
+//	public UserDTO login(UserDTO loginDTO);
 	 
 } //interface

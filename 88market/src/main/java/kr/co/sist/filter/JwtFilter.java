@@ -16,11 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import kr.co.sist.user.Service.JwtService;
 
 @Component
-public class JwtFliter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
 	
-	public JwtFliter(JwtService jwtService) {
+	public JwtFilter(JwtService jwtService) {
 		this.jwtService = jwtService;
 	} //JwtFilter
 	
