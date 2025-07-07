@@ -37,7 +37,7 @@ public class JwtFliter extends OncePerRequestFilter {
 			} //end for
 		} //end if
 		
-        if (token != null && jwtService.validateToken(token)) {
+        if (token != null && !token.isEmpty() && jwtService.validateToken(token)) {
             Authentication auth = jwtService.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         } //end if

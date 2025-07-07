@@ -1,6 +1,7 @@
 package kr.co.sist.user.controller;
 
 import java.time.Duration;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.sist.DTO.UserDTO;
@@ -26,15 +28,23 @@ public class LoginController {
 	@Autowired
 	private JwtService jwtService;
 	
+	@GetMapping("/login")
+	public String loginPage() {
+		return "user/account/login";
+	} //loginPage
+	
 	@GetMapping("/login_email")
 	public String loginEmailPage() {
 		return "user/account/login_email";
 	} //loginEmailPage
 	
 	//@GetMapping("/loginProcess")
+	@ResponseBody
 	@RequestMapping(value="/loginProcess", method= { RequestMethod.POST } )
-	public ResponseEntity<Void> loginProcess(@RequestBody UserDTO loginDTO, HttpServletResponse response) {
+	public ResponseEntity<Map<String, String>> loginProcess(@RequestBody UserDTO loginDTO, HttpServletResponse response) {
+		System.out.println("LoginController : "+loginDTO.getEmail()+loginDTO.getPass());
 		UserDTO user = service.selectLogin(loginDTO.getEmail(), loginDTO.getPass());
+		System.out.println("LoginController : "+user);
 		
 		if( user == null ) {
 //			session.setAttribute("loginDTO", loginDTO);
@@ -53,7 +63,7 @@ public class LoginController {
             .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         // 3) 바디는 비워두고 200 OK
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Map.of("token",token));
 		
 	} //loginProcess
 

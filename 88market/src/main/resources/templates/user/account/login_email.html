@@ -60,24 +60,30 @@
 
   	<!-- 푸터 -->
   	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
-
 <script th:inline="javascript">
+var loginURL = "/loginProcess";
+var mainURL = "/";
+</script>
+<script>
 /*<![CDATA[*/
 $(function(){
  $("#btn").click(function(){
    const email = $("#email").val() + "@" + $("#email-domain").val();
    const pass  = $("#pass").val();
+   alert("버튼 클릭"+email+pass);
    
    $.ajax({
-     url: "[[@{/loginProcess}]]",
+     url: loginURL,
      type: "POST",
-     contentType: "application/json",
+     contentType: "application/json; charset=UTF-8",
+     dataType: "json",
      data: JSON.stringify({ email, pass }),
-     success: function(){
+     success: function(response){
        // 쿠키에 토큰이 담겼으니 바로 메인 페이지로 이동
-       window.location.href = "[[@{/}]]";
+       window.location.href = mainURL;
      }, //success
-     error: function(){
+     error: function(xhr, status, error){
+    console.error("Login error:", status, error, xhr.responseText);
        alert("이메일 또는 비밀번호가 잘못되었습니다.");
      } //error
    }); //ajax

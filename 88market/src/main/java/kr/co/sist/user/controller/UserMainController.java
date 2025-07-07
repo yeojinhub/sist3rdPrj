@@ -21,8 +21,8 @@ public class UserMainController {
 	@GetMapping("/")
 	public String main(Model model, Authentication auth) {
 		
-		String email = auth.getName();  // 토큰의 sub 값
-        model.addAttribute("userEmail", email);
+		//String email = auth.getName();  // 토큰의 sub 값
+        //model.addAttribute("userEmail", email);
 		
 		/* 메인 - 찜 많은 것 */
 	    List<ProductDTO> topLike = service.getTopLikeItems(15);

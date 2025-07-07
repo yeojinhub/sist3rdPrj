@@ -16,12 +16,13 @@ public class LoginService {
 	 * @return null이 아닐 때 loginDTO 반환, null일 경우 그대로 반환
 	 */
 	public UserDTO selectLogin(String email, String pass) {
+		System.out.println("LoginService "+email+pass);
 		UserDTO loginDTO = loginDAO.selectLoginList(email);
+		System.out.println("LoginService "+loginDTO);
 		
 		if( loginDTO != null && loginDTO.getPass().equals(pass) ) {
-			if( pass == loginDTO.getPass() ) {
-				return loginDTO;
-			} //end if
+			System.out.println("LoginService "+loginDTO+loginDTO.getPass());
+			return loginDTO;
 		} //end if
 		
 		return null;
