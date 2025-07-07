@@ -25,7 +25,7 @@ public class EventDTO {
 	private Date startDate; /* 이벤트시작일 */
 	private Date endDate; /* 이벤트종료일 */
 	private int evtType; /* 이벤트타입 */
-	private String admNum; /* 관리자사번 */
+	private int admNum; /* 관리자사번 */
 	private String mainType; /* 메인화면 표시 여부 */
 	private int imgNum; /* 이미지번호 */
 	private ImageDTO iDTO;

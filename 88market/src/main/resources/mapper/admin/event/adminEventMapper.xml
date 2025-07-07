@@ -5,10 +5,35 @@
 <mapper namespace="kr.co.sist.admin.DAO.AdminEventDAO">
 	<!-- 모든 이벤트 -->
 	<select id="selectAllEvent" resultType="kr.co.sist.DTO.EventDTO">
-		SELECT * FROM EVENT ORDER BY INPUT_DATE DESC		
+		SELECT * FROM EVENT ORDER BY EVT_NUM DESC		
 	</select>
 	<!-- 모든 이미지 -->
 	<select id="selectAllImage" resultType="kr.co.sist.DTO.ImageDTO">
 		SELECT * FROM IMAGE
 	</select>
+	
+	<!-- 1. 이벤트 등록 후 생성된 evtNum 리턴 -->
+	<insert id="insertEvent" parameterType="kr.co.sist.DTO.EventDTO">
+		<selectKey keyProperty="evtNum" resultType="int" order="BEFORE">
+			SELECT SEQ_EVT_NUM.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO EVENT (EVT_NUM, TITLE, CONTENT, NAME, START_DATE, END_DATE, EVT_TYPE, ADM_NUM, MAIN_TYPE)
+		VALUES (#{evtNum}, #{title}, #{content}, #{name}, #{startDate}, #{endDate}, #{evtType}, #{admNum}, #{mainType})
+	</insert>
+	
+	<!-- 2. 이미지 정보 등록 (썸네일은 메인이미지에, 메인이미지는 SUB_IMAGE1에) -->
+	<insert id="insertImage" parameterType="map" useGeneratedKeys="true" keyProperty="imgNum">
+		<selectKey keyProperty="imgNum" resultType="int" order="BEFORE">
+			SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO IMAGE (IMG_NUM, MAIN_IMAGE, SUB_IMAGE1, IMAGE_TYPE)
+		VALUES (#{imgNum}, #{thumbnailPath}, #{mainImagePath}, #{imageType})
+	</insert>
+	
+	<!-- 3. 이벤트 테이블의 imgNum 업데이트 -->
+	<update id="updateEventImgNum" parameterType="map">
+		UPDATE EVENT 
+		SET IMG_NUM = #{imgNum}
+		WHERE EVT_NUM = #{evtNum}
+	</update>
 </mapper>

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtServiceImpl implements JwtService {
@@ -28,7 +31,7 @@ public class JwtServiceImpl implements JwtService {
 
     // 생성자 주입
     public JwtServiceImpl(@Value("${jwt.secret}") String secretKey,
-                          UserDetailsService userDetailsService) {
+            UserDetailsService userDetailsService) {
         this.secretKey = secretKey;
         this.userDetailsService = userDetailsService;
     }
@@ -51,10 +54,9 @@ public class JwtServiceImpl implements JwtService {
 
         // import된 UsernamePasswordAuthenticationToken 사용
         return new UsernamePasswordAuthenticationToken(
-            userDetails,
-            null,  // credentials (여기선 이미 인증된 상태이므로 null)
-            userDetails.getAuthorities()
-        );
+                userDetails,
+                null, // credentials (여기선 이미 인증된 상태이므로 null)
+                userDetails.getAuthorities());
     }
 
     @Override
@@ -73,10 +75,12 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Claims getClaims(String token) {
         try {
+            SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
             return Jwts.parser()
-                    .setSigningKey(secretKey.getBytes())
+                    .verifyWith(key) // setSigningKey 대신
+                    .build()
                     .parseClaimsJws(token)
-                    .getBody();
+                    .getPayload(); // getBody() 대신
         } catch (JwtException e) {
             return null;
         }

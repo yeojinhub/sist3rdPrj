@@ -550,6 +550,33 @@ body, html {
     background-color: rgba(0, 0, 0, 0.9);
 }
 
+/* 날짜 입력 필드 스타일 */
+.form-input[type="date"] {
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-input[type="date"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* 날짜 필드 달력 아이콘 스타일 */
+.form-input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.form-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
 /* 반응형 처리 */
 @media (max-width: 768px) {
     .title-input-group {
