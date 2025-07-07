@@ -96,6 +96,25 @@
 			    reader.readAsDataURL(input.files[0]);
 			  }
 		});//change
+		
+		$('#submitBtn').click(()=>{
+			// 유효성 검사
+			// 1. 제목 공란
+			
+			// 2. 썸네일 이미지 추가 안함
+			if ($('#thumbnailImage').val().length <= 0) {
+				alert('썸네일 이미지를 선택해주세요.');
+				return;
+			}// end if
+
+			// 3. 메인 이미지 추가 안함
+			if ($('#mainImage').val().length <= 0) {
+				alert('메인 이미지를 선택해주세요.');
+				return;
+			}// end if
+			
+			
+		});//click
 	});// ready
 	
 	// 이미지 확장자 유효성 검사
