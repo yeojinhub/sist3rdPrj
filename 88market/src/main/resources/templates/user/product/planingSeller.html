@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 판매등록</title>
+<!-- 메인 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/seller.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function() {
+
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<main class="seller-profile-container_seller">
+		<div class="profile-main_seller">
+			<section class="profile-header_seller">
+				<div class="profile-avatar_seller">
+					<img th:src="@{images/default_profile.jpg}" alt="판매자 아바타">
+				</div>
+				<div class="profile-info_seller">
+					<h1 class="seller-name_seller" th:text="${Product[0].comName}">송민철엉</h1>
+				</div>
+				<div class="chat-prompt_seller">
+					<img th:src="@{images/chatlogo.png}" alt="채팅 아이콘">
+					<div class="chat-text_seller">
+						<p>
+							<strong>송민철엉</strong>님과 채팅하기
+						</p>
+						<span>상품에 대한 자세한 정보를 알고 싶다면?</span>
+					</div>
+					<button class="chat-button_seller">채팅하기</button>
+				</div>
+				<div class="seller-stats_seller">
+					<div id="review">
+						<p>거래후기</p>
+						<strong th:text="${ Product[0].reviewCount }">후기 갯수</strong>
+					</div>
+				</div>
+			</section>
+
+			<section class="products-section_seller">
+				<h2 class="section-title_seller">판매상품</h2>
+				<nav class="product-filter-nav_seller">
+					<a href="#" class="active_seller">전체</a>
+					 <a href="#">판매중</a>
+					  <a href="#">판매완료</a>
+				</nav>
+				<div class="products-header_seller">
+					<span class="total-products_seller" th:text="|총 ${ ProductAllCnt }개|">상품총 갯수</span>
+					<div class="sort-options_seller">
+						<a href="#">최신순</a> | <a href="#">낮은가격순</a> | <a href="#">높은가격순</a>
+					</div>
+				</div>
+				<div class="product-grid_seller">
+					<!-- 상품 카드 예시 -->
+					<div class="product-card_seller">
+						<img th:src="@{images/main/img1.png}" alt="루미녹스 랜드블랙 88000">
+						<div class="product-info_seller">
+							<p class="product-name_seller">루미녹스 랜드블랙 88000</p>
+							<p class="product-price_seller">170,000원</p>
+							<p class="product-meta_seller">분리동 | 13분전</p>
+							<div class="product-tags_seller">
+								<span class="tag_seller safe-deal_seller">안전거래</span>
+							</div>
+						</div>
+					</div>
+					<div class="product-card_seller sold-out_seller">
+						<img th:src="@{images/main/img2.png}" alt="루미녹스 랜드블랙 88000">
+						<div class="overlay_seller">
+							<p>판매완료</p>
+						</div>
+						<div class="product-info_seller">
+							<p class="product-name_seller">리모와트렁크플러스 티타늄골드</p>
+							<p class="product-price_seller">2,800,000원</p>
+							<p class="product-meta_seller">영종동 | 4분전</p>
+						</div>
+					</div>
+					<!-- ... 다른 상품 카드들 ... -->
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+	<!-- 후기 오버레이 -->
+	<th:block th:insert="~{components/user/reviewOverlay :: reviewOverlay}"></th:block>
+</body>
+</html>

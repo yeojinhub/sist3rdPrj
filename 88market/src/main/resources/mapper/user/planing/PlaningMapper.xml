@@ -14,5 +14,70 @@
 	    AND SELL_TYPE = 'Y'
 	</select>
 	
+	<select id="onePlaningList" resultType="kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithReviewWithImageDTO">
+       SELECT 
+		    P.prd_num, P.title, P.content, P.price, P.location1, 
+		    P.input_date AS prdInputDate,
+		    P.hidden_type, P.sell_type, P.prd_cnt, P.click_num, 
+		    P.delivery_type, P.user_num, P.cat_num, P.com_num, 
+		    P.img_num, P.like_num,
+		    Ca.name AS coName, 
+		    Co.com_name, Co.ceo_name, Co.tel, Co.zipcode, Co.address,
+		    R.rev_Num AS revNum,
+		    R.content AS reContent,
+		    R.name AS re_name,
+		    R.input_date AS reInputDate,
+		    (SELECT COUNT(*) FROM REVIEW WHERE prd_num = P.prd_num) AS reviewCount,
+		    I.main_image, I.sub_image1, I.sub_image2, I.sub_image3, I.sub_image4, I.image_type
+		
+		FROM PRODUCT P
+		JOIN CATEGORY Ca ON P.cat_num = Ca.cat_num
+		JOIN COMPANY Co ON P.com_num = Co.com_num
+		LEFT JOIN REVIEW R ON P.prd_num = R.prd_num
+		LEFT JOIN IMAGE I ON I.img_num = P.img_num
+		WHERE P.PRD_NUM = #{prdNum}
+    </select>
+    
+    <select id="selectRandomProductsByComNum" resultType="kr.co.sist.DTO.ProductDTO">
+	    SELECT *
+	    FROM (
+	        SELECT * FROM PRODUCT
+	        WHERE COM_NUM = #{comNum}
+	          AND PRD_NUM != #{productId}
+	          AND SELL_TYPE = 'Y'
+	        ORDER BY DBMS_RANDOM.VALUE
+	    )
+	</select>
 	
+	<select id="CompanyProductsAllCount" resultType="int" parameterType="String">
+	    SELECT COUNT(*) AS product_count
+		FROM PRODUCT
+		WHERE COM_NUM = #{comNum}
+	</select>
+	
+	<select id="CompanyProductsSellCount" resultType="int" parameterType="String">
+	    SELECT COUNT(*) AS product_count
+		FROM PRODUCT
+		WHERE COM_NUM = #{comNum}
+		  AND SELL_TYPE = 'Y'
+	</select>
+	
+	<select id="CompanyProductsSoldOutCount" resultType="int" parameterType="String">
+	    SELECT COUNT(*) AS product_count
+		FROM PRODUCT
+		WHERE COM_NUM = #{comNum}
+		  AND SELL_TYPE = 'N'
+	</select>
+	
+	<select id="ProductsByCompanyAndSellType" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT 
+	  WHERE COM_NUM = #{comNum} 
+	  AND SELL_TYPE = #{sellType}
+	</select>
+	
+	<select id="AllProductsByCompany" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT
+	   WHERE COM_NUM = #{comNum}
+	</select>
+
 </mapper>

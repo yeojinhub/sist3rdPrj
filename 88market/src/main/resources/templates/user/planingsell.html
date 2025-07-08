@@ -58,14 +58,14 @@
 	        <p>등록된 상품이 없습니다.</p>
 	    </th:block>
 	    
-        <th:block th:each="prd : ${products}">
+        <th:block th:each="prd : ${products}" >
 	        <div class="product-card_plan">
-	        	<a th:href="@{ /planingDetail?id=1 }">
-	            <div class="product-image_plan">
+	        	<a th:href="@{ /planingDetail?(id=${prd.prdNum}, comNum=${prd.comNum})}" style="text-decoration: none;">
+	            <div class="product-image_plan" >
 	                <img th:src="@{/images/main/img1.png}" alt="상품 이미지">
 	                <div class="product-status_plan" th:text="${prd.sellType == 'Y' ? '판매중' : '판매완료'}"></div>
 	            </div>
-	            <div class="product-info_plan">
+	            <div class="product-info_plan" >
 	                <h3 class="product-title_plan" th:text="${prd.title}"></h3>
 	                <p class="product-price_plan" th:text="${#numbers.formatInteger(prd.price, 3, 'COMMA')} + '원'"></p>
 	                <div class="product-meta_plan">
