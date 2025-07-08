@@ -20,37 +20,51 @@ import kr.co.sist.user.Service.SearchItemService;
 public class SearchController {
 
 	@Autowired
-	private SearchItemService service;
+	private SearchItemService serchService;
 	
-    // 새로 추가
     @Autowired
     private CategoryService categoryService;
 	
 	@GetMapping
 	public String search(Model model, @RequestParam(name="keyword", required=false, defaultValue="") String keyword,
-			@RequestParam(name="catNum",  required=false) Integer catNum) {
-      //  List<ProductDTO> results = service.findByKeyword(keyword);
-        List<ProductDTO> results;
+			@RequestParam(name="catNum",  required=false) Integer catNum,
+			@RequestParam(name="minPrice", required=false) Integer minPrice,
+			@RequestParam(name="maxPrice", required=false) Integer maxPrice,
+			@RequestParam(name="tradeOption",required=false, defaultValue="전체") String tradeOption,
+			@RequestParam(name="sortOption", required=false, defaultValue="추천순") String sortOption) {
+		//  @PathVariable annotation  - 맨마지막의 값을 얻어서 사용함 (day0708)
+		//  parameter에 정의하면 특정 부분의 값을 얻을 수 있다. - 로그인한 아이디값이 필요함, 회원/ 상품에 사용하는게 좋을듯
+		
+		//  List<ProductDTO> results = service.findByKeyword(keyword);
+		//  List<ProductDTO> results;
         String title="";
+	    List<ProductDTO> results = serchService.findByKeywordAndFilters(
+	            keyword, catNum, minPrice, maxPrice, tradeOption, sortOption
+	        );
+        
         if (catNum != null) {
             // catNum이 넘어오면 카테고리 검색
-            results = service.findByCategory(catNum);
+            // results = serchService.findByCategory(catNum);
             
-            String categoryName = service.getCategoryName(catNum);
-            model.addAttribute("categoryName", categoryName);
-            title = categoryName;
+            title = serchService.getCategoryName(catNum);
         } else {
-            // keyword로 기존 검색
-            results = service.findByKeyword(keyword);
+            // keyword로 기존 검색 - 이렇게 하지 않으면 null 생김(서비스에서도 사용하기)
             title = (keyword.isBlank() ? "전체" : keyword);
         }
         
         model.addAttribute("results", results);
         model.addAttribute("count",   results.size());
-      //  model.addAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword); 
         model.addAttribute("catNum", catNum);
         model.addAttribute("title", title);
+        // 정렬 옵션
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("tradeOption", tradeOption);
+        model.addAttribute("sortOption", sortOption);
+        
       return "user/search";
+
    }//search
 	
    

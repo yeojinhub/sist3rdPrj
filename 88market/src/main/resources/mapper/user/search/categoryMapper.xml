@@ -6,18 +6,20 @@
 
 	<!-- selectAllCategories : 모든 카테고리의 번호와 이름을 순서대로 조회  -->
 	<select id="selectAllCategories" resultType="kr.co.sist.DTO.CategoryDTO">
-	SELECT CAT_NUM as cat_num, NAME as name
-	FROM CATEGORY
-	ORDER BY CAT_NUM
+		SELECT CAT_NUM AS catNum, NAME as name
+		FROM CATEGORY
+		ORDER BY CAT_NUM
 	</select>
 
 
-	<!-- 추가: selectCategoryById : 카테고리 번호에 해당하는 것  -->
+
+	<!-- selectCategoryById : 카테고리 번호에 해당하는 것  -->
 	<select id="selectCategoryById" parameterType="int" resultType="kr.co.sist.DTO.CategoryDTO">
-	SELECT CAT_NUM as cat_num,NAME as name
-	FROM CATEGORY
-	WHERE CAT_NUM = #{catNum}
+		SELECT  CAT_NUM AS catNum,NAME as name
+		FROM CATEGORY
+		WHERE CAT_NUM = #{catNum}
 	</select>
     
     
 </mapper>
+

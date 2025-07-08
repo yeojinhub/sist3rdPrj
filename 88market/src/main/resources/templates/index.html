@@ -130,167 +130,29 @@ $(function() {
 			    </div>
 			  </a>
 			</div>
-
 			</div>
 		</section>
-
 		<!-- 다른 사람들은 이 키워드를 주목하고 있어요 -->
 		<section class="card-section">
 			<h2 class="section-title">
-				다른 사람들은 이 키워드를 주목하고 있어요 <span class="text-highlight">댄스</span>
+				다른 사람들은 이 키워드를 주목하고 있어요 <span class="text-highlight"  th:text="${trendCategory}"></span>
 			</h2>
 			<div class="card-list-wrapper-items trend-slider">
-				<div class="product-card">
-					<a href="/detail?id=5">
+				<div class="product-card" th:each="item : ${trendItems}">
+					<a th:href="@{/detail(id=${item.prdNum})}">
 						<div class="product-image-container">
-							<img th:src="@{/images/main/img1.png}" alt="댄스 노란모자">
+							<!-- <img th:src="@{/images/main/img1.png}" alt="댄스 노란모자"> -->
 						</div>
 						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
+							<p class="product-name" th:text="${item.title}"></p>
+							<strong class="product-price" th:text="|${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}원|"></strong>
 						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
+							<p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
 							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
 			      		</div>
 						</div>
 					</a>
 				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img2.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img5.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img6.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img1.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img2.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="/detail?id=5">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="댄스 노란모자">
-						</div>
-						<div class="product-info">
-							<p class="product-name">댄스 노란모자 토들러</p>
-							<strong class="product-price">50,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				
 			</div>
 		</section>
 

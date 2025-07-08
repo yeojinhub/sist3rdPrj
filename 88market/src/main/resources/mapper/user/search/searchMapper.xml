@@ -6,26 +6,40 @@
     
     <!-- 찜(좋아요) 순으로 상위 15개 -->
 	<select id="selectTopLikeItems" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
-	SELECT *
-	FROM (
+		SELECT *
+		FROM (
+				SELECT *
+				FROM PRODUCT
+				ORDER BY LIKE_NUM DESC
+				)
+		WHERE ROWNUM &lt;= #{limit}
+	</select>
+
+
+	<!-- 카테고리 랜덤 15개 -->
+	<select id="selectRandomCategory" parameterType="map" resultType="kr.co.sist.DTO.ProductDTO">
+		SELECT *
+		FROM (
+				SELECT *
+				FROM PRODUCT
+				WHERE CAT_NUM = #{catNum}
+				ORDER BY DBMS_RANDOM.VALUE
+				)
+		WHERE ROWNUM &lt;= #{limit}
+	</select>
+
+
+	<!-- 메인 - 조회수 많은 것 상위 15개  -->
+    <select id="selectTopViewItems" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
+	    SELECT *
+		FROM (
 			SELECT *
 			FROM PRODUCT
-			ORDER BY LIKE_NUM DESC
+			ORDER BY ClICK_NUM DESC
 			)
-	WHERE ROWNUM &lt;= #{limit}
+		WHERE ROWNUM &lt;= #{limit}
 	</select>
-
-
-	<!-- 메인 - 조회수 많은 것  -->
-    <select id="selectTopViewItems" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
-    SELECT *
-		FROM (
-		SELECT *
-		FROM PRODUCT
-		ORDER BY ClICK_NUM DESC
-		)
-	WHERE ROWNUM &lt;= #{limit}
-	</select>
+    
     
 	<!-- 검색 - 키워드 -->
 	<select id="findByKeyword" parameterType="String" resultType="kr.co.sist.DTO.ProductDTO">
@@ -38,7 +52,8 @@
 		</where>
 	</select>
 	
-	<!-- 카테고리 번호로 검색 -->
+	
+	<!-- 검색 - 카테고리 -->
 	<select id="findByCategory" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
 		SELECT *
         FROM PRODUCT
@@ -53,5 +68,54 @@
 	</select>
     
     
+    <!-- 필터를 이용한 정렬 -->
+    <select id="findByKeywordAndFilters" parameterType="map" resultType="kr.co.sist.DTO.ProductDTO">
+    	SELECT *
+    	FROM PRODUCT
+    	<where>
+    	<!-- 키워드 -->
+    	<if test="keyword != null and keyword != ''">
+    	AND TITLE LIKE '%' || #{keyword} || '%'
+    	</if>
+    	
+    	<!-- 카테고리 -->
+	    <if test="catNum != null">
+	    AND CAT_NUM = #{catNum}
+	    </if>
+	    
+	    <!-- 가격 범위 -->
+	    <!-- 최소 -->
+    	<if test="minPrice != null">
+    	AND PRICE &gt;= #{minPrice}
+    	</if>
+	    <!-- 최대 -->
+    	<if test="maxPrice != null">
+    	AND PRICE &lt;= #{maxPrice}
+    	</if>
+    	
+    	<!-- 거래가능만 보기 -->
+    	<if test="tradeOption == '거래가능'">
+    	AND SELL_TYPE = 'Y'
+    	</if>
+    	</where>
+    	
+    	<!-- 정렬 옵션 -->
+    	<choose>
+    	<when test="sortOption == '최신순'">
+    	ORDER BY INPUT_DATE DESC
+    	</when>
+    	<when test="sortOption == '낮은가격순'">
+    	ORDER BY PRICE ASC
+    	</when>
+    	<when test="sortOption == '높은가격순'">
+    	ORDER BY PRICE DESC
+    	</when>
+    	
+    	<!-- 추천순: 찜수 -->
+    	<otherwise>
+    	ORDER BY LIKE_NUM DESC
+    	</otherwise>
+    	</choose>
+    	</select>
     
 </mapper>

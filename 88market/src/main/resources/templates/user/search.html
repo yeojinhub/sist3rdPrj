@@ -35,6 +35,8 @@
     });
   });
 </script>
+
+
 </head>
 <body>
 	<!-- 헤더 -->
@@ -54,49 +56,52 @@
 		</div>
 
 		<!-- 검색 설정 패널 (상단) -->
-		<div class="filter-panel_search">
+		<form th:action="@{/search}" method="get" class="filter-panel_search">
+		<input type="hidden" name="keyword" id="keyword" th:value="${keyword}" />
+		<input type="hidden" name="catNum" id="catNum" th:value="${catNum}" />
 			<div class="filter-section_search">
 				<div class="filter-row_search price-filter_search">
 					<label>가격</label>
 					<div class="price-inputs_search">
-						<input type="text" placeholder="최소 금액"> <span
-							class="price-separator">-</span> <input type="text"
-							placeholder="최대 금액">
+						<input type="text" name="minPrice" id="minPrice" th:value="${minPrice}" placeholder="최소 금액">
+						<span class="price-separator">-</span>
+						<input type="text" name="maxPrice" id="maxPrice" th:value="${maxPrice}"placeholder="최대 금액">
 					</div>
 				</div>
 				<div class="filter-row_search">
 					<label>거래옵션</label>
 					<div class="options_search">
-						<label class="radio-option"> <input type="radio"
-							name="trade-option" checked> <span class="checkmark"></span>
-							전체
-						</label> <label class="radio-option"> <input type="radio"
-							name="trade-option"> <span class="checkmark"></span> 거래
-							가능만 보기
-						</label>
+						<label class="radio-option"> <input type="radio" name="tradeOption" id="tradeOption" th:value="'전체'" th:checked="${tradeOption=='전체'}"> <span class="checkmark"></span>전체</label>
+						<label class="radio-option"> <input type="radio" name="tradeOption" id="tradeOption" th:value="'거래가능'" th:checked="${tradeOption=='거래가능'}"> <span class="checkmark"></span> 거래가능만 보기</label>
 					</div>
 				</div>
 				<div class="filter-row_search">
 					<label>정렬옵션</label>
 					<div class="options_search sort-options">
-						<label class="radio-option"> <input type="radio"
-							name="sort-option" checked> <span class="checkmark"></span>
-							추천순
-						</label> <label class="radio-option"> <input type="radio"
-							name="sort-option"> <span class="checkmark"></span> 최신순
-						</label> <label class="radio-option"> <input type="radio"
-							name="sort-option"> <span class="checkmark"></span> 낮은가격순
-						</label> <label class="radio-option"> <input type="radio"
-							name="sort-option"> <span class="checkmark"></span> 높은가격순
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'추천순'" th:checked="${sortOption=='추천순'}">
+						<span class="checkmark"></span>추천순
+						</label>
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'최신순'"  th:checked="${sortOption=='최신순'}">
+						<span class="checkmark"></span> 최신순
+						</label>
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'낮은가격순'" th:checked="${sortOption=='낮은가격순'}">
+						<span class="checkmark"></span> 낮은가격순
+						</label>
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'높은가격순'" th:checked="${sortOption=='높은가격순'}">
+						<span class="checkmark"></span> 높은가격순
 						</label>
 					</div>
 				</div>
 			</div>
 			<div class="filter-actions_search">
-				<button class="reset-btn_search">초기화</button>
-				<button class="apply-btn_search">적용</button>
+				<a th:href="@{/search(keyword=${keyword},catNum=${catNum})}" class="reset-btn_search">초기화</a>
+				<button type="submit" class="apply-btn_search" >적용</button>
 			</div>
-		</div>
+		</form>
 
 		<!-- 상품 패널 (하단) -->
 		<section class="results-grid_search">
@@ -119,13 +124,6 @@
 				</div>
 			</div>
 		</section>
-		  <!-- [디버그] 실제 넘어온 모델 값 확인 -->
-  <div style="border:1px dashed red; padding:8px; margin-bottom:16px;">
-    <p>catNum: <span th:text="${catNum}">null</span></p>
-    <p>keyword: <span th:text="${keyword}">빈값</span></p>
-    <p>title: <span th:text="${title}">빈값</span></p>
-    <p>count: <span th:text="${count}">0</span></p>
-  </div>
 	</main>
 	<!-- 푸터 -->
 	<div th:insert="~{components/user/footer :: footer}"></div>
