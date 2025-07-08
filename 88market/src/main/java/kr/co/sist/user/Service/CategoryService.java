@@ -1,6 +1,7 @@
 package kr.co.sist.user.Service;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,22 @@ public class CategoryService {
     private CategoryDAO categoryDAO;
 
     public List<CategoryDTO> getAllCategories() {
-    	return categoryDAO.selectAllCategories();
-    }
+        return categoryDAO.selectAllCategories();
+    }//getAllCategories
     
     public String getCategoryName(int catNum) {
         CategoryDTO ctgDTO = categoryDAO.selectCategoryById(catNum);
         return ctgDTO != null ? ctgDTO.getName() : "";
     }//getCategoryName
+    
+    
+    public CategoryDTO getRandomCategory() {
+        List<CategoryDTO> list = categoryDAO.selectAllCategories();
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        int idx = new Random().nextInt(list.size());
+        return list.get(idx);
+    }//getRandomCategory
+    
 }
