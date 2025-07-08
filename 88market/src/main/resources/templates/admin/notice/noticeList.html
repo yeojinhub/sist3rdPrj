@@ -70,7 +70,7 @@
 									th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.count - 1)}">
 								</td>
 								<td class="notice-title" th:text="${item.title}"
-									style="cursor: pointer;"
+									style="cursor: pointer; text-align: center;"
 									th:onclick="|location.href='@{/admin/notice/detail(notNum=${item.notNum})}'|"></td>
 								<td th:text="${item.name}"></td>
 								<td th:text="${item.inputDate}"></td>

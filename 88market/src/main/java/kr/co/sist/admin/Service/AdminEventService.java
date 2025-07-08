@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.sist.admin.DAO.AdminEventDAO;
+import kr.co.sist.admin.util.Pagination;
+import kr.co.sist.admin.util.SearchDTO;
 import kr.co.sist.DTO.EventDTO;
 import kr.co.sist.DTO.ImageDTO;
 
@@ -21,12 +23,16 @@ public class AdminEventService {
     @Autowired
     private AdminEventDAO adminEventDAO;
     
-    public List<EventDTO> getAllEvent() {
-        return adminEventDAO.selectAllEvent();
-    }
-    
-    public List<ImageDTO> getAllImage() {
-        return adminEventDAO.selectAllImage();
+    public List<EventDTO> getAllEvent(Pagination pagination, SearchDTO esDTO) {
+    	int totalCount = adminEventDAO.selectTotalCount(esDTO);
+    	pagination.setTotalCount(totalCount);
+    	List<EventDTO> list = adminEventDAO.selectAllEvent(pagination, esDTO); 
+    	
+    	for (EventDTO eDTO : list) {
+    		eDTO.setIDTO(adminEventDAO.selectAllImage(eDTO.getImgNum()));
+    	}
+    	
+        return list;
     }
     
     @Transactional

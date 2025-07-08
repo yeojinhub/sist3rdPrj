@@ -189,14 +189,14 @@ body, html {
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
 
-.faq-section {
+.event-section {
     background-color: #ffffff;
     padding: 20px;
     border: 1px solid #e6e6e6;
     border-radius: 8px;
 }
 
-.faq-table {
+.event-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -204,37 +204,37 @@ body, html {
 }
 
 /* 테이블 컬럼 너비 설정 */
-.faq-table th:nth-child(1), 
-.faq-table td:nth-child(1) {
+.event-table th:nth-child(1), 
+.event-table td:nth-child(1) {
     width: 5%; /* 체크박스 */
 }
 
-.faq-table th:nth-child(2), 
-.faq-table td:nth-child(2) {
+.event-table th:nth-child(2), 
+.event-table td:nth-child(2) {
     width: 7%; /* 번호 */
 }
 
-.faq-table th:nth-child(3), 
-.faq-table td:nth-child(3) {
+.event-table th:nth-child(3), 
+.event-table td:nth-child(3) {
     width: 47%; /* 제목 */
 }
 
-.faq-table th:nth-child(4), 
-.faq-table td:nth-child(4) {
+.event-table th:nth-child(4), 
+.event-table td:nth-child(4) {
     width: 13%; /* 작성자 */
 }
 
-.faq-table th:nth-child(5), 
-.faq-table td:nth-child(5) {
+.event-table th:nth-child(5), 
+.event-table td:nth-child(5) {
     width: 13%; /* 구분 */
 }
 
-.faq-table th:nth-child(6), 
-.faq-table td:nth-child(6) {
+.event-table th:nth-child(6), 
+.event-table td:nth-child(6) {
     width: 15%; /* 작성일 */
 }
 
-.faq-table th, .faq-table td {
+.event-table th, .event-table td {
     padding: 15px;
     text-align: center;
     border-bottom: 1px solid #e6e6e6;
@@ -244,16 +244,16 @@ body, html {
     white-space: nowrap;
 }
 
-.faq-table thead {
+.event-table thead {
     background-color: #f7f7f7;
 }
 
-.faq-table th {
+.event-table th {
     font-weight: 600;
     color: #4d4d4d;
 }
 
-.faq-table .faq-title {
+.event-table .event-title {
     text-align: left;
     color: #212121;
 }
@@ -327,8 +327,8 @@ body, html {
     background-color: #f0f0f0;
 }
 
-/* FAQ 폼 스타일 */
-.faq-form-section {
+/* 이벤트 폼 스타일 */
+.event-form-section {
     background-color: #ffffff;
     padding: 30px;
     border: 1px solid #e6e6e6;
@@ -440,7 +440,7 @@ body, html {
     align-items: center;
 }
 
-/* 폼 셀렉트 - 세 번째 CSS 버전 적용 */
+/* 폼 셀렉트 */
 .form-select {
     width: 100%;
     padding: 15px 20px;
@@ -461,16 +461,6 @@ body, html {
 
 .title-input {
     flex: 1;
-}
-
-/* 이벤트 폼 스타일 */
-.event-form-section {
-    background-color: #ffffff;
-    padding: 30px;
-    border: 1px solid #e6e6e6;
-    border-radius: 8px;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
 .form-row {

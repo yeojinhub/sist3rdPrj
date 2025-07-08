@@ -4,9 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 - FAQ</title>
+<title>관리자 - 이벤트</title>
 <!-- 관리자 공지사항 CSS -->
-<link rel="stylesheet" th:href="@{/css/admin/faq/faq.css}">
+<link rel="stylesheet" th:href="@{/css/admin/event/event.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
@@ -20,7 +20,7 @@
 			<!-- 헤더 -->
 			<header class="main-header">
 				<div class="breadcrumbs">
-					<span>게시판 관리 &gt;</span> <span class="current-page">FAQ 관리</span>
+					<span>게시판 관리 &gt;</span> <span class="current-page">이벤트 관리</span>
 				</div>
 			</header>
 
@@ -28,7 +28,7 @@
 			<main class="container">
 				<section class="search-section">
 					<!-- 검색 폼 추가 (method="get") -->
-					<form id="searchForm" th:action="@{/admin/faq}" method="get">
+					<form id="searchForm" th:action="@{/admin/event}" method="get">
 						<div class="search-box">
 							<select class="search-filter" name="searchType">
 								<option value="title"
@@ -49,8 +49,8 @@
 					</form>
 				</section>
 
-				<section class="faq-section">
-					<table class="faq-table">
+				<section class="event-section">
+					<table class="event-table">
 						<thead>
 							<tr>
 								<th><input type="checkbox" class="all-checkbox"></th>
@@ -62,22 +62,21 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="item, i : ${faqList}" class="table-row">
+							<tr th:each="item, i : ${eventList}" class="table-row">
 								<td><input type="checkbox" class="checkbox"
 									th:id="'checkbox' + ${i.count}"
-									th:data-faq-num="${item.faqNum}"></td>
+									th:data-event-num="${item.evtNum}"></td>
 								<td
 									th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.count - 1)}">
 								</td>
-								<td class="faq-title" th:text="${item.title}"
+								<td class="event-title" th:text="${item.title}"
 									style="cursor: pointer; text-align: center;"
-									th:onclick="|location.href='@{/admin/faq/detail(faqNum=${item.faqNum})}'|"></td>
+									th:onclick="|location.href='@{/admin/event/detail(eventNum=${item.evtNum})}'|"></td>
 								<td th:text="${item.name}"></td>
-								<td th:text="${item.faqType}"></td>
-								<td th:text="${item.inputDate}"></td>
+								<td th:text="${item.evtType}" colspan="2"></td>
 							</tr>
-							<tr th:if="${#lists.isEmpty(faqList)}">
-								<td colspan="6" style="text-align: center;">등록된 공지사항이 없습니다.</td>
+							<tr th:if="${#lists.isEmpty(eventList)}">
+								<td colspan="6" style="text-align: center;">등록된 이벤트가 없습니다.</td>
 							</tr>
 						</tbody>
 					</table>
@@ -85,7 +84,7 @@
 					<div class="table-footer">
 						<div class="table-controls">
 							<button class="control-button"
-								th:onclick="|location.href='@{/admin/faq/add}'|">등록</button>
+								th:onclick="|location.href='@{/admin/event/add}'|">등록</button>
 							<button class="control-button" id="deleteBtn">삭제</button>
 						</div>
 						<!-- 페이지네이션 -->
@@ -93,25 +92,25 @@
 							<div class="pagination">
 								<!-- 이전 페이지 -->
 								<a th:if="${pagination.pageNum > 1}"
-									th:href="@{/admin/faq(page=${pagination.pageNum - 1},
-searchType=${param.searchType},
-keyword=${param.keyword})}"
+									th:href="@{/admin/event(page=${pagination.pageNum - 1}, 
+                              searchType=${param.searchType}, 
+                              keyword=${param.keyword})}"
 									class="prev">&lt;</a> <a th:unless="${pagination.pageNum > 1}"
 									class="prev disabled">&lt;</a>
 
 								<!-- 페이지 번호 -->
 								<a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
-									th:href="@{/admin/faq(page=${i},
-searchType=${param.searchType},
-keyword=${param.keyword})}"
+									th:href="@{/admin/event(page=${i}, 
+                              searchType=${param.searchType}, 
+                              keyword=${param.keyword})}"
 									th:text="${i}"
 									th:classappend="${i == pagination.pageNum} ? 'active' : ''"></a>
 
 								<!-- 다음 페이지 -->
 								<a th:if="${pagination.pageNum < pagination.totalPages}"
-									th:href="@{/admin/faq(page=${pagination.pageNum + 1},
-searchType=${param.searchType},
-keyword=${param.keyword})}"
+									th:href="@{/admin/event(page=${pagination.pageNum + 1}, 
+                              searchType=${param.searchType}, 
+                              keyword=${param.keyword})}"
 									class="next">&gt;</a> <a
 									th:unless="${pagination.pageNum < pagination.totalPages}"
 									class="next disabled">&gt;</a>

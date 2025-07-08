@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.sist.DTO.FaqDTO;
 import kr.co.sist.admin.Service.AdminFaqService;
-import kr.co.sist.admin.util.FaqSearchDTO;
+import kr.co.sist.admin.util.SearchDTO;
 import kr.co.sist.admin.util.Pagination;
 
 @Controller
@@ -37,7 +37,7 @@ public class AdminFaqController {
         pagination.setPageNum(page);
 
         // 검색 조건 객체 생성
-        FaqSearchDTO fsDTO = new FaqSearchDTO();
+        SearchDTO fsDTO = new SearchDTO();
         fsDTO.setSearchType(searchType);
         fsDTO.setKeyword(keyword);
 

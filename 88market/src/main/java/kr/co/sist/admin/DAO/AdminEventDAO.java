@@ -4,23 +4,30 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.co.sist.DTO.EventDTO;
 import kr.co.sist.DTO.ImageDTO;
+import kr.co.sist.admin.util.Pagination;
+import kr.co.sist.admin.util.SearchDTO;
 
 @Mapper
 public interface AdminEventDAO {
     
     // 기존 메소드들
-    List<EventDTO> selectAllEvent();
-    List<ImageDTO> selectAllImage();
+	public int selectTotalCount(@Param("esDTO") SearchDTO esDTO);
+    public List<EventDTO> selectAllEvent(
+    		@Param("pagination") Pagination pagination, 
+            @Param("esDTO") SearchDTO esDTO
+    		);
+    public ImageDTO selectAllImage(int imgNum);
     
     // 1. 이벤트 등록 후 생성된 evtNum 리턴
-    int insertEvent(EventDTO eventDTO);
+    public int insertEvent(EventDTO eventDTO);
     
     // 2. 이미지 정보 등록 후 imgNum 리턴
-    int insertImage(Map<String, Object> params);
+    public int insertImage(Map<String, Object> params);
     
     // 3. 이벤트 테이블의 imgNum 업데이트
-    int updateEventImgNum(Map<String, Object> params);
+    public int updateEventImgNum(Map<String, Object> params);
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.sist.DTO.NoticeDTO;
 import kr.co.sist.admin.Service.AdminNoticeService;
-import kr.co.sist.admin.util.NoticeSearchDTO;
+import kr.co.sist.admin.util.SearchDTO;
 import kr.co.sist.admin.util.Pagination;
 
 @Controller
@@ -36,7 +36,7 @@ public class AdminNoticeController {
         pagination.setPageNum(page);
 
         // 검색 조건 객체 생성
-        NoticeSearchDTO nsDTO = new NoticeSearchDTO();
+        SearchDTO nsDTO = new SearchDTO();
         nsDTO.setSearchType(searchType);
         nsDTO.setKeyword(keyword);
 

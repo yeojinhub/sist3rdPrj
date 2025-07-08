@@ -3,13 +3,51 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.sist.admin.DAO.AdminEventDAO">
-	<!-- 모든 이벤트 -->
-	<select id="selectAllEvent" resultType="kr.co.sist.DTO.EventDTO">
-		SELECT * FROM EVENT ORDER BY EVT_NUM DESC		
+	<!-- 두 개의 파라미터를 전달하기 위해 Map 사용 -->
+	<select id="selectAllEvent" resultType="kr.co.sist.DTO.EventDTO" parameterType="map">
+	    SELECT *
+	    FROM (
+	        SELECT ROWNUM rn, A.*
+	        FROM (
+	            SELECT * 
+	            FROM EVENT 
+	           <where>
+	              <if test="esDTO.searchType == 'title' and esDTO.keyword != null and esDTO.keyword != ''">
+	                AND title LIKE '%' || #{esDTO.keyword} || '%'
+	              </if>
+	              <if test="esDTO.searchType == 'content' and esDTO.keyword != null and esDTO.keyword != ''">
+	                AND content LIKE '%' || #{esDTO.keyword} || '%'
+	              </if>
+	              <if test="esDTO.searchType == 'name' and esDTO.keyword != null and esDTO.keyword != ''">
+	                AND name LIKE '%' || #{esDTO.keyword} || '%'
+	              </if>
+	            </where>
+	            ORDER BY evt_num DESC
+	        ) A
+	        WHERE ROWNUM &lt;= #{pagination.endRow}
+	    )
+	    WHERE rn &gt; #{pagination.startRow}
 	</select>
+
 	<!-- 모든 이미지 -->
-	<select id="selectAllImage" resultType="kr.co.sist.DTO.ImageDTO">
-		SELECT * FROM IMAGE
+	<select id="selectAllImage" resultType="kr.co.sist.DTO.ImageDTO" parameterType="int">
+		SELECT * FROM IMAGE WHERE IMG_NUM = #{imgNum}
+	</select>
+	
+	<!-- 전체 개수 조회 쿼리 -->
+	<select id="selectTotalCount" resultType="int" parameterType="map">
+	    SELECT COUNT(*) FROM EVENT
+	    <where>
+	        <if test="esDTO.searchType == 'title' and esDTO.keyword != null and esDTO.keyword != ''">
+	            AND title LIKE '%' || #{esDTO.keyword} || '%'
+	        </if>
+	        <if test="esDTO.searchType == 'content' and esDTO.keyword != null and esDTO.keyword != ''">
+	            AND content LIKE '%' || #{esDTO.keyword} || '%'
+	        </if>
+	        <if test="esDTO.searchType == 'name' and esDTO.keyword != null and esDTO.keyword != ''">
+	            AND name LIKE '%' || #{esDTO.keyword} || '%'
+	        </if>
+	    </where>
 	</select>
 	
 	<!-- 1. 이벤트 등록 후 생성된 evtNum 리턴 -->
