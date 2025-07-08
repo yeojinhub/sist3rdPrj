@@ -40,8 +40,11 @@ public class AdminEventService {
             
             // 2. 디렉터리 생성 및 파일 업로드
             String uploadDir = createUploadDir(eventDTO.getEvtNum());
-            String thumbnailPath = uploadFile(thumbnailImage, uploadDir);
-            String mainImagePath = uploadFile(mainImage, uploadDir);
+            String thumbnailPath = uploadFile(thumbnailImage, uploadDir, "thumbnail");
+            String mainImagePath = uploadFile(mainImage, uploadDir, "main");
+            
+            thumbnailPath = thumbnailPath.substring(thumbnailPath.indexOf("static") + 6);
+            mainImagePath = mainImagePath.substring(mainImagePath.indexOf("static") + 6);
             
             // 3. 이미지 정보 등록
             Map<String, Object> imageParams = new HashMap<>();
@@ -68,7 +71,7 @@ public class AdminEventService {
     
     private String createUploadDir(int evtNum) {
         String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String uploadDir = "images/event/upload/" + evtNum + "_" + dateStr;
+        String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images/events/upload/" + evtNum + "_" + dateStr;
         
         File dir = new File(uploadDir);
         if (!dir.exists()) {
@@ -78,9 +81,11 @@ public class AdminEventService {
         return uploadDir;
     }
     
-    private String uploadFile(MultipartFile file, String uploadDir) throws Exception {
-        String fileName = file.getOriginalFilename();
-        String filePath = uploadDir + "/" + fileName;
+    private String uploadFile(MultipartFile file, String uploadDir, String name) throws Exception {
+    	String fileName = file.getOriginalFilename();
+    	String extension = fileName.substring(fileName.lastIndexOf("."));
+    	String newFileName = name + extension;
+        String filePath = uploadDir + "/" + newFileName;
         
         File uploadFile = new File(filePath);
         file.transferTo(uploadFile);
