@@ -8,5 +8,5 @@ import kr.co.sist.DTO.*;
 
 @Mapper
 public interface NoticeDAO {
-	List<NoticeDTO> selectNoticeList();
+	public List<NoticeDTO> selectNoticeList();
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,16 +26,9 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secret}")
     private String secretKey;
-
-    // UserDetailsService 구현체 주입
-    private final UserDetailsService userDetailsService;
-
-    // 생성자 주입
-    public JwtServiceImpl(@Value("${jwt.secret}") String secretKey,
-            UserDetailsService userDetailsService) {
-        this.secretKey = secretKey;
-        this.userDetailsService = userDetailsService;
-    }
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     public String createToken(String email) {

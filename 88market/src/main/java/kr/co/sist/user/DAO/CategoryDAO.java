@@ -10,7 +10,7 @@ import kr.co.sist.DTO.CategoryDTO;
 @Mapper
 public interface CategoryDAO {
 
-	List<CategoryDTO> selectAllCategories();
-	CategoryDTO selectCategoryById(@Param("catNum") int catNum);
+	public List<CategoryDTO> selectAllCategories();
+	public CategoryDTO selectCategoryById(@Param("catNum") int catNum);
 	
 }

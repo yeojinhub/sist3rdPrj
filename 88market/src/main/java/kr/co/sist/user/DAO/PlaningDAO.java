@@ -11,7 +11,7 @@ import kr.co.sist.DTO.ProductDTO;
 @Mapper
 public interface PlaningDAO {
 
-	List<CompanyWithProductDTO> selectPlaningList();
-	List<ProductDTO> selectProductsByComNum(@Param("comNum") String comNum);
+	public List<CompanyWithProductDTO> selectPlaningList();
+	public List<ProductDTO> selectProductsByComNum(@Param("comNum") String comNum);
 	
 }

@@ -18,11 +18,8 @@ import kr.co.sist.user.Service.JwtService;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-	private final JwtService jwtService;
-	
-	public JwtFilter(JwtService jwtService) {
-		this.jwtService = jwtService;
-	} //JwtFilter
+	@Autowired
+	private JwtService jwtService;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
