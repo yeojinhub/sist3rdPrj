@@ -27,9 +27,5 @@ public class ProductController {
 		return "user/product/seller";
 	}
 	
-//	@GetMapping("/planingsell")
-//	public String planingsell() {
-//		return "user/planingsell";
-//	}
 	
 }
