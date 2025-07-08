@@ -68,7 +68,7 @@ public class AdminEventService {
     
     private String createUploadDir(int evtNum) {
         String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String uploadDir = "static/images/event/upload/" + evtNum + "_" + dateStr;
+        String uploadDir = "images/event/upload/" + evtNum + "_" + dateStr;
         
         File dir = new File(uploadDir);
         if (!dir.exists()) {
