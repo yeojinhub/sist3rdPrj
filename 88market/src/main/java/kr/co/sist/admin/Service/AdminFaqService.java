@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.sist.DTO.FaqDTO;
-import kr.co.sist.DTO.NoticeDTO;
 import kr.co.sist.admin.DAO.AdminFaqDAO;
 import kr.co.sist.admin.util.Pagination;
 import kr.co.sist.admin.util.SearchDTO;

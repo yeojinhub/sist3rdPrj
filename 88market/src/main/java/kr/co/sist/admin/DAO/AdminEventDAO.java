@@ -21,7 +21,13 @@ public interface AdminEventDAO {
             @Param("esDTO") SearchDTO esDTO
     		);
     public ImageDTO selectAllImage(int imgNum);
-    
+    public void deleteEvents(List<Integer> evtNums);
+    public int selectEventImageNum(int evtNum);
+    public void deleteEventImage(int imgNum);
+    public EventDTO selectEventDetail(@Param("evtNum") int evtNum);
+    public void updateEvent(EventDTO eventDTO);
+    public void updateEventImage(Map<String, Object> params);
+
     // 1. 이벤트 등록 후 생성된 evtNum 리턴
     public int insertEvent(EventDTO eventDTO);
     

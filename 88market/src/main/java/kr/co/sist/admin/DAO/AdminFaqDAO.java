@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import kr.co.sist.DTO.FaqDTO;
-import kr.co.sist.DTO.NoticeDTO;
 import kr.co.sist.admin.util.Pagination;
 import kr.co.sist.admin.util.SearchDTO;
 

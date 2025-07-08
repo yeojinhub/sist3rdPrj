@@ -130,13 +130,13 @@
 			}// end if
 
 			// 5. 썸네일 이미지 추가 안함
-			if ($('#thumbnailImage').val().length <= 0) {
+			if ($('#thumbnailImage').val().length <= 0 && $('#thumbnailArea img').length === 0) {
 				alert('썸네일 이미지를 선택해주세요.');
 				return;
 			}// end if
 
 			// 6. 메인 이미지 추가 안함
-			if ($('#mainImage').val().length <= 0) {
+			if ($('#mainImage').val().length <= 0 && $('#mainArea img').length === 0) {
 				alert('메인 이미지를 선택해주세요.');
 				return;
 			}// end if
@@ -170,19 +170,21 @@
 			<!-- 헤더 -->
 			<header class="main-header">
 				<div class="breadcrumbs">
-					<span>게시판 관리 &gt;</span> <span class="current-page">이벤트 등록</span>
+					<span>게시판 관리 &gt;</span> <span class="current-page">이벤트 상세정보</span>
 				</div>
 			</header>
 
 			<!-- 메인 컨텐츠 (공지사항 관리) -->
 			<main class="container">
 				<section class="event-form-section">
-					<form id="eventForm" th:action="@{/admin/event/add}" method="post"
+					<form id="eventForm" th:action="@{/admin/event/modify}" method="post"
 						enctype="multipart/form-data">
+						<input type="hidden" name="evtNum" th:value="${eventDTO.evtNum}">
+						<input type="hidden" name="imgNum" th:value="${eventDTO.imgNum}">
 						<div class="form-group">
 							<label for="title" class="form-label">제목</label> <input
 								type="text" class="form-input" id="title" name="title"
-								placeholder="제목을 입력해주세요." required>
+								placeholder="제목을 입력해주세요." required th:value="${eventDTO.title}">
 						</div>
 
 						<div class="form-row">
@@ -190,17 +192,16 @@
 								<label for="evtType" class="form-label">구분</label> <select
 									class="form-select" id="evtType" name="evtType" required>
 									<option value="">선택하세요</option>
-									<option value="1">이벤트</option>
-									<option value="2">당첨자</option>
+									<option value="1" th:selected="${eventDTO.evtType == 1}">이벤트</option>
+									<option value="2" th:selected="${eventDTO.evtType == 2}">당첨자</option>
 								</select>
 							</div>
 							<div class="form-group half-width">
 								<label for="mainType" class="form-label">메인화면 표시 여부</label> <select
-									class="form-select" id="mainType" name="mainType"
-									required>
+									class="form-select" id="mainType" name="mainType" required>
 									<option value="">선택하세요</option>
-									<option value="Y">표시</option>
-									<option value="N">숨김</option>
+									<option value="Y" th:selected="${eventDTO.mainType == 'Y'}">표시</option>
+									<option value="N" th:selected="${eventDTO.mainType == 'N'}">숨김</option>
 								</select>
 							</div>
 						</div>
@@ -208,11 +209,11 @@
 						<div class="form-row">
 							<div class="form-group half-width">
 								<label for="startDate" class="form-label">시작일</label>
-								<input type="date" class="form-input" id="startDate" name="startDate">
+								<input type="date" class="form-input" id="startDate" name="startDate" th:value="${eventDTO.startDate}">
 							</div>
 							<div class="form-group half-width">
 								<label for="endDate" class="form-label">종료일</label>
-								<input type="date" class="form-input" id="endDate" name="endDate">
+								<input type="date" class="form-input" id="endDate" name="endDate" th:value="${eventDTO.endDate}">
 							</div>
 						</div>
 
@@ -220,9 +221,7 @@
 							<div class="form-group half-width">
 								<label for="thumbnailImage" class="form-label">썸네일</label>
 								<div class="image-upload-area" id="thumbnailArea">
-									<div class="upload-placeholder">
-										<i class="fas fa-plus"></i>
-									</div>
+									<img th:src="@{${eventDTO.IDTO.mainImage}}" alt="썸네일" style="width: 200px; height: 100px;">
 								</div>
 									<input type="file" id="thumbnailImage" name="thumbnailImage"
 										accept="image/*" style="display: none;">
@@ -230,9 +229,7 @@
 							<div class="form-group half-width">
 								<label for="mainImage" class="form-label">메인</label>
 								<div class="image-upload-area" id="mainArea">
-									<div class="upload-placeholder">
-										<i class="fas fa-plus"></i>
-									</div>
+									<img th:src="@{${eventDTO.IDTO.subImage1}}" alt="메인" style="width: 200px; height: 100px;">
 								</div>
 									<input type="file" id="mainImage" name="mainImage"
 										accept="image/*" style="display: none;">
@@ -241,14 +238,14 @@
 
 						<div class="form-group">
 							<label for="content" class="form-label">내용</label>
-							<textarea id="content" name="content" class="summernote-editor"></textarea>
+							<textarea id="content" name="content" class="summernote-editor" th:text="${eventDTO.content}"></textarea>
 						</div>
 
 						<div class="form-actions">
 							<button type="button" class="action-button cancel-btn"
 								onclick="history.back()">취소</button>
 							<button type="button" class="action-button submit-btn"
-								id="submitBtn">등록</button>
+								id="submitBtn">수정</button>
 						</div>
 					</form>
 				</section>

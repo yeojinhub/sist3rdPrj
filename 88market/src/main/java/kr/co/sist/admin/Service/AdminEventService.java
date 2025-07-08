@@ -15,7 +15,6 @@ import kr.co.sist.admin.DAO.AdminEventDAO;
 import kr.co.sist.admin.util.Pagination;
 import kr.co.sist.admin.util.SearchDTO;
 import kr.co.sist.DTO.EventDTO;
-import kr.co.sist.DTO.ImageDTO;
 
 @Service
 public class AdminEventService {
@@ -33,6 +32,48 @@ public class AdminEventService {
     	}
     	
         return list;
+    }
+
+    public void deleteEvents(List<Integer> evtNums) {
+        adminEventDAO.deleteEvents(evtNums);
+
+        for (int evtNum : evtNums) {
+            int imgNum = adminEventDAO.selectEventImageNum(evtNum);
+            adminEventDAO.deleteEventImage(imgNum);
+        }
+    }
+
+    public EventDTO getEventDetail(int evtNum) {
+        EventDTO eventDTO = adminEventDAO.selectEventDetail(evtNum);
+        eventDTO.setIDTO(adminEventDAO.selectAllImage(eventDTO.getImgNum()));
+        return eventDTO;
+    }
+
+    public void updateEvent(EventDTO eventDTO, MultipartFile thumbnailImage, MultipartFile mainImage) {
+        adminEventDAO.updateEvent(eventDTO);
+
+        if (thumbnailImage.isEmpty() && mainImage.isEmpty()) {
+            return;
+        }
+
+        String uploadDir = createUploadDir(eventDTO.getEvtNum());
+        try {
+            String thumbnailPath = uploadFile(thumbnailImage, uploadDir, "thumbnail");
+            String mainImagePath = uploadFile(mainImage, uploadDir, "main");
+
+            thumbnailPath = thumbnailPath.substring(thumbnailPath.indexOf("static") + 6);
+            mainImagePath = mainImagePath.substring(mainImagePath.indexOf("static") + 6);
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("imgNum", eventDTO.getImgNum());
+            params.put("thumbnailPath", thumbnailPath);
+            params.put("mainImagePath", mainImagePath);
+
+            adminEventDAO.updateEventImage(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
     
     @Transactional
@@ -76,9 +117,7 @@ public class AdminEventService {
     }
     
     private String createUploadDir(int evtNum) {
-        String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images/events/upload/" + evtNum + "_" + dateStr;
-        
+        String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images/events/upload/" + evtNum;
         File dir = new File(uploadDir);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -89,7 +128,7 @@ public class AdminEventService {
     
     private String uploadFile(MultipartFile file, String uploadDir, String name) throws Exception {
     	String fileName = file.getOriginalFilename();
-    	String extension = fileName.substring(fileName.lastIndexOf("."));
+    	String extension = fileName != null ? fileName.substring(fileName.lastIndexOf(".")) : "";
     	String newFileName = name + extension;
         String filePath = uploadDir + "/" + newFileName;
         

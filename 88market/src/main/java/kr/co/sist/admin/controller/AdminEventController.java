@@ -1,12 +1,19 @@
 package kr.co.sist.admin.controller;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,6 +32,41 @@ public class AdminEventController {
     @GetMapping("/event/add")
     public String eventAdd() {
         return "admin/event/eventAdd";
+    }
+
+    @PostMapping("/event/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteEvents(@RequestBody Map<String, List<Integer>> request) {
+        try {
+            List<Integer> evtNums = request.get("evtNums");
+            adminEventService.deleteEvents(evtNums);
+            return ResponseEntity.ok("삭제 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("삭제 실패");
+        }
+    }
+
+    @GetMapping("/event/detail")
+    public String eventDetail(
+            @RequestParam("evtNum") int evtNum,
+            Model model) {
+        EventDTO eventDTO = adminEventService.getEventDetail(evtNum);
+        model.addAttribute("eventDTO", eventDTO);
+        model.addAttribute("evtNum", evtNum);
+        return "admin/event/eventDetail";
+    }
+
+    @PostMapping("/event/modify")
+    public String eventModify(EventDTO eventDTO,
+    @RequestParam(value = "thumbnailImage", required = false) MultipartFile thumbnailImage,
+    @RequestParam(value = "mainImage", required = false) MultipartFile mainImage,
+    RedirectAttributes redirectAttributes) {
+        try {
+            // adminEventService.updateEvent(eventDTO, thumbnailImage, mainImage);
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return "redirect:/admin/event";
     }
     
     @PostMapping("/event/add")

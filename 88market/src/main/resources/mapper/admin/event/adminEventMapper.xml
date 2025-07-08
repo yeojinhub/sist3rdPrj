@@ -29,6 +29,35 @@
 	    WHERE rn &gt; #{pagination.startRow}
 	</select>
 
+	<delete id="deleteEvents" parameterType="list">
+		DELETE FROM EVENT WHERE EVT_NUM IN
+		<foreach collection="evtNums" item="evtNum" open="(" separator="," close=")">
+			#{evtNum}
+		</foreach>
+	</delete>
+
+	<select id="selectEventImageNum" resultType="int" parameterType="int">
+		SELECT IMG_NUM FROM EVENT WHERE EVT_NUM = #{evtNum}
+	</select>
+
+	<delete id="deleteEventImage" parameterType="int">
+		DELETE FROM IMAGE WHERE IMG_NUM = #{imgNum}
+	</delete>
+
+	<!-- 이벤트 상세정보 보기 -->
+	<select id="selectEventDetail" resultType="kr.co.sist.DTO.EventDTO" parameterType="int">
+		SELECT * FROM EVENT WHERE evt_num = #{evtNum}
+	</select>
+
+	<!-- 이벤트 수정 -->
+	<update id="updateEvent" parameterType="kr.co.sist.DTO.EventDTO">
+		UPDATE EVENT SET title = #{title}, content = #{content}, start_date = #{startDate}, end_date = #{endDate}, evt_type = #{evtType}, main_type = #{mainType} WHERE evt_num = #{evtNum}
+	</update>
+
+	<update id="updateEventImage" parameterType="map">
+		UPDATE IMAGE SET MAIN_IMAGE = #{mainImagePath}, SUB_IMAGE1 = #{thumbnailPath} WHERE IMG_NUM = #{imgNum}
+	</update>
+
 	<!-- 모든 이미지 -->
 	<select id="selectAllImage" resultType="kr.co.sist.DTO.ImageDTO" parameterType="int">
 		SELECT * FROM IMAGE WHERE IMG_NUM = #{imgNum}

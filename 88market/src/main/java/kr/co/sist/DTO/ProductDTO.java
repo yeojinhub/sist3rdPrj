@@ -2,8 +2,6 @@ package kr.co.sist.DTO;
 
 import java.sql.Date;
 
-import org.springframework.format.annotation.NumberFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

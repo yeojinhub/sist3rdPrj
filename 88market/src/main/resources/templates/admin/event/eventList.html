@@ -58,7 +58,8 @@
 								<th>제목</th>
 								<th>작성자</th>
 								<th>구분</th>
-								<th>작성일</th>
+								<th>시작일</th>
+								<th>종료일</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -71,9 +72,14 @@
 								</td>
 								<td class="event-title" th:text="${item.title}"
 									style="cursor: pointer; text-align: center;"
-									th:onclick="|location.href='@{/admin/event/detail(eventNum=${item.evtNum})}'|"></td>
+									th:onclick="|location.href='@{/admin/event/detail(evtNum=${item.evtNum})}'|"></td>
 								<td th:text="${item.name}"></td>
-								<td th:text="${item.evtType}" colspan="2"></td>
+								<td th:switch="${item.evtType}">
+									<span th:case="'1'">이벤트</span>
+									<span th:case="'2'">당첨자</span>
+								</td>
+								<td th:text="${item.startDate}"></td>
+								<td th:text="${item.endDate}"></td>
 							</tr>
 							<tr th:if="${#lists.isEmpty(eventList)}">
 								<td colspan="6" style="text-align: center;">등록된 이벤트가 없습니다.</td>
@@ -145,7 +151,7 @@
 
 				// 선택된 체크박스의 notNum 수집
 				$('.checkbox:checked').each(function () {
-					selectedNums.push($(this).data('faq-num'));
+					selectedNums.push($(this).data('event-num'));
 				});
 
 				if (selectedNums.length === 0) {
@@ -154,8 +160,8 @@
 				}
 
 				if (confirm('선택한 [ ' + selectedNums.length + ' ]개 항목을 정말 삭제하시겠습니까?')) {
-					axios.post('/admin/faq/delete', {
-						faqNums: selectedNums
+					axios.post('/admin/event/delete', {
+						evtNums: selectedNums
 					})
 						.then(function (response) {
 							alert('삭제되었습니다.');
