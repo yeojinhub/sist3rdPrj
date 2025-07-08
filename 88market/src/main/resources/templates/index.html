@@ -116,7 +116,7 @@ $(function() {
 			<h2 class="section-title">찜이 많은 상품</h2>
 			<div class="card-list-wrapper-items top-like-slider">
 			<div class="product-card" th:each="item :${topLike}">
-			  <a href="@{/detail(id=${item.prdNum})}">
+			  <a th:href="@{/detail(id=${item.prdNum})}">
 			    <div class="product-image-container">
 			     <!--  <img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀"> -->
 			    </div>
@@ -161,7 +161,7 @@ $(function() {
 			<h2 class="section-title">많이 본 상품</h2>
 			<div class="card-list-wrapper-items view-slider">
 				<div class="product-card" th:each="item : ${topView}">
-			  <a href="@{/detail(id=${item.prdNum})}">
+			  <a th:href="@{/detail(id=${item.prdNum})}">
 			    <div class="product-image-container">
 			      <!-- <img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀"> -->
 			    </div>
