@@ -17,7 +17,8 @@ public class ImageService {
     }
 
     public void insertImage(ImageDTO imageDTO) {
-        imageDAO.insertImage(imageDTO);
+        imageDAO.insert(imageDTO);
     }
 }
+
 

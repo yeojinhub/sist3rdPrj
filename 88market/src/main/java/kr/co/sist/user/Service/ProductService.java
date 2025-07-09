@@ -17,7 +17,8 @@ public class ProductService {
     }
 
     public void insertProduct(ProductDTO productDTO) {
-        productDAO.insertProduct(productDTO);
+        productDAO.insert(productDTO);
     }
 }
+
 

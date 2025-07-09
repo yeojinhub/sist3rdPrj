@@ -163,6 +163,44 @@
   margin-right: 10px;
 }
 
+.add-region-button {
+  background-color: #7fd0f4;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-region-button:hover {
+  background-color: #5bbbe3;
+}
+
+.selected-region-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.region-tag {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  position: relative;
+}
+
+.region-tag button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
 .agreement-section {
   display: flex;
   align-items: center;
@@ -187,6 +225,10 @@
   cursor: pointer;
   display: block;
   margin: 40px auto 0;
+}
+
+.submit-button:hover{
+  background-color: #5bbbe3;
 }
 
 

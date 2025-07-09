@@ -24,57 +24,76 @@
       </div>
 
       <div class="form-section">
+        <!-- 상품명 -->
         <div class="input-group">
-          <input type="text" id="product-name" name="prd_name" placeholder="상품명을 입력해주세요." required />
+          <input type="text" id="product-name" name="title" placeholder="상품명을 입력해주세요." required />
         </div>
 
         <!-- 카테고리 선택 -->
         <div class="input-group">
           <p style="margin: 0 0 5px;">카테고리</p>
           <ul class="category-list" id="categoryList">
-			  <th:block th:each="cat : ${categoryList}">
-			    <li class="category-item" th:data-cat-num="${cat.cat_num}" th:text="${cat.name}"></li>
-			  </th:block>
-			</ul>
+            <th:block th:each="cat : ${categoryList}">
+              <li class="category-item" th:data-cat-num="${cat.cat_num}" th:text="${cat.name}"></li>
+            </th:block>
+          </ul>
           <input type="hidden" name="catNum" id="catNum" required />
           <p id="category-error" class="error-msg" style="display: none;">카테고리를 선택해주세요.</p>
         </div>
 
+        <!-- 가격 -->
         <div class="input-group">
-          <input type="text" id="price" name="prd_price" placeholder="판매가격을 입력해주세요." required />
+          <input type="text" id="price" name="price" placeholder="판매가격을 입력해주세요." required />
           <div class="safe-trade-option">
-            <input type="checkbox" id="safe-trade" name="prd_safe" />
+            <input type="checkbox" id="safe-trade" name="safeType" value="Y" />
             <label for="safe-trade">안전거래</label>
           </div>
         </div>
 
+        <!-- 상품 설명 -->
         <div class="input-group">
-          <textarea id="product-description" name="prd_detail" placeholder="상품 설명을 입력해주세요." required></textarea>
+          <textarea id="product-description" name="content" placeholder="상품 설명을 입력해주세요." required></textarea>
         </div>
 
+        <!-- 거래 방식 -->
         <div class="trade-method-section">
           <p>거래방법</p>
           <div class="trade-option">
-            <input type="checkbox" id="delivery" name="prd_delivery" />
+            <input type="checkbox" id="delivery" name="deliveryType" value="Y" />
             <label for="delivery">택배거래</label>
           </div>
           <div class="trade-option">
-            <input type="checkbox" id="direct-deal" name="prd_direct" />
+            <input type="checkbox" id="direct-deal" name="meetType" value="Y" />
             <label for="direct-deal">직거래</label>
           </div>
           <p id="trade-method-error" class="error-msg" style="display: none;">거래방법을 하나 이상 선택해주세요.</p>
         </div>
+
+        <!-- 희망 지역 -->
+        <div id="direct-region-box" style="display: none; margin-top: 10px;">
+          <p style="margin: 0 0 5px;">희망 지역</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button type="button" class="add-region-button">+ 추가하기</button>
+            <div class="selected-region-container"></div>
+          </div>
+        </div>
+
+        <!-- 희망 지역 전송용 hidden input -->
+        <input type="hidden" name="location1" id="location1" />
       </div>
 
+      <!-- 동의 -->
       <div class="agreement-section">
         <input type="checkbox" id="info-agreement" required />
         <label for="info-agreement">판매 정보가 실제 상품과 다를 경우, 책임은 판매자에게 있음을 동의합니다.</label>
       </div>
+
       <button type="submit" class="submit-button">판매하기</button>
     </form>
   </main>
 
   <th:block th:insert="~{components/user/footer :: footer}"></th:block>
+  <th:block th:insert="~{components/user/locationOverlay :: locationOverlay}"></th:block>
 
   <script>
     $(function () {
@@ -125,13 +144,13 @@
 
       // 카테고리 선택
       $(document).on("click", ".category-item", function () {
-		  $(".category-item").removeClass("active");
-		  $(this).addClass("active");
-		  $("#catNum").val($(this).data("cat-num"));
-		  $("#category-error").hide();
-		});
+        $(".category-item").removeClass("active");
+        $(this).addClass("active");
+        $("#catNum").val($(this).data("cat-num"));
+        $("#category-error").hide();
+      });
 
-      // 거래방식 + 카테고리 검증
+      // 거래방식 검증
       $("form").on("submit", function (e) {
         const isDeliveryChecked = $("#delivery").is(":checked");
         const isDirectChecked = $("#direct-deal").is(":checked");
@@ -158,12 +177,48 @@
 
         if (!valid) {
           e.preventDefault();
-          return false;
         }
       });
+
+      // 직거래 체크 시 희망 지역 노출
+      $("#direct-deal").on("change", function () {
+        if ($(this).is(":checked")) {
+          $("#direct-region-box").css("display", "block");
+        } else {
+          $("#direct-region-box").css("display", "none");
+        }
+      });
+
+      // 희망 지역 hidden input 업데이트
+      function updateLocationHiddenInput() {
+        const locations = $(".region-tag").map(function () {
+          return $(this).clone().children().remove().end().text().trim(); // '×' 제거
+        }).get();
+        $("#location1").val(locations.join(","));
+      }
+
+      // 오버레이에서 호출될 때 태그 추가와 함께 hidden input 갱신
+      window.addWishRegion = function (name) {
+        const $container = $(".selected-region-container");
+
+        const exists = $container.find(".region-tag").filter(function () {
+          return $(this).text().includes(name);
+        }).length > 0;
+        if (exists) return;
+
+        const $tag = $("<span>").addClass("region-tag").text(name);
+        const $remove = $("<button>").text("×").on("click", function () {
+          $tag.remove();
+          updateLocationHiddenInput();
+        });
+        $tag.append($remove);
+        $container.append($tag);
+        updateLocationHiddenInput();
+      };
     });
   </script>
 </body>
 </html>
+
 
 
