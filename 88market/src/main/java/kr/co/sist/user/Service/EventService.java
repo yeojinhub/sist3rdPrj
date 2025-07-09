@@ -34,7 +34,7 @@ public class EventService {
 		Date now = new Date();
 		for (EventDTO item : eventList) {
 			
-			if (item.getStartDate().before(now) && item.getEndDate().after(now)) {
+			if (item.getEndDate().after(now)) {
 				ingEvent.add(item);
 			} else if (item.getEndDate().before(now)) {
 				endEvent.add(item);

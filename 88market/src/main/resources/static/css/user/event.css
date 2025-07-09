@@ -70,9 +70,30 @@
 }
 
 .event-date {
-    font-size: 18px;
+    margin: 0;
+    font-size: 16px;
+    color: #666;
     font-weight: 400;
-    color: #000;
+}
+
+.event-date-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.d-day {
+    margin: 0;
+    font-size: 16px;
+    color: #28a745; /* 연한 초록색 */
+    font-weight: 400; /* 날짜랑 똑같은 weight */
+}
+
+/* 종료된 이벤트면 회색으로 */
+.d-day.ended {
+    color: #666;
+    font-weight: 500;
 }
 
 /* 반응형 */

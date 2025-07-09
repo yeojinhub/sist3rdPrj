@@ -26,7 +26,7 @@ public class EventController {
 		model.addAttribute("ingEventList",map.get("ing"));
 		model.addAttribute("endEventList",map.get("end"));
 		model.addAttribute("winnerEventList",map.get("winner"));
-		
+
 		return "user/event";
 	}
 	

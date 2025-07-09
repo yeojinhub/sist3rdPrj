@@ -61,7 +61,6 @@ public class AdminEventController {
     public String eventModify(EventDTO eventDTO,
     @RequestParam(value = "thumbnailImage", required = false) MultipartFile thumbnailImage,
     @RequestParam(value = "mainImage", required = false) MultipartFile mainImage,
-    @RequestParam(value = "files", required = false) MultipartFile[] files,
     RedirectAttributes redirectAttributes) {
         try {
              adminEventService.updateEvent(eventDTO, thumbnailImage, mainImage);

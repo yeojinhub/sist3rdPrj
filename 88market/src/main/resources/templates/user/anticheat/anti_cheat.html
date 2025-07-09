@@ -82,17 +82,17 @@
 							setTimeout(getRealTimeMonitoring, 3000);
 						});
 				}
-				
-				$('#search_btn').click(()=>{
+
+				$('#search_btn').click(() => {
 					var value = $('#inputValue').val();
-					
+
 					if (value.length <= 3) {
 						$('#err_output').html(`
 								<p style="color:red;">최대 4자 이상 작성해야 합니다.</p>
 								`);
 						return;
 					};
-					
+
 					$('#search_frm').submit();
 				});// click
 			}); // ready
@@ -126,7 +126,7 @@
 					<button id="search_btn" type="button">조회</button>
 				</div>
 			</form>
-			<p class="search-notice_cheat">최근 3개월 내 중고나라, 사이버범죄 신고시스템에 등록된 사기
+			<p class="search-notice_cheat">최근 3개월 내 팔팔마켓, 사이버범죄 신고시스템에 등록된 사기
 				피해사례를 조회합니다.</p>
 			<div id="err_output"></div>
 		</section>
@@ -189,10 +189,9 @@
 								<img src="/images/anticheat/anticheat_img1.png" alt="구매 게시글 접근 패턴">
 							</div>
 							<div class="pattern-content_cheat">
-								<p>구매(삽니다) 게시글에 판매자인 척 접근하여 잠적하는 사기 수법</p>
+								<p>가짜 결제 사이트의 경우 보안서버(https)를<br>사용하지 않고 http로 시작되니 주의하세요!</p>
 								<ul>
-									<li>사기꾼이 사용하는 물품 사진은 <span class="highlight_cheat">도용된
-											사진</span>일 확률이 높아요!
+									<li><span class="highlight_cheat">주소창에 자물쇠 표시</span>가 없으면 가짜 사이트일 확률이 높아요!
 									</li>
 								</ul>
 							</div>
@@ -218,7 +217,7 @@
 								<img src="/images/anticheat/anticheat_img3.png" alt="사기 패턴 3">
 							</div>
 							<div class="pattern-content_cheat">
-								<p>택배비를 먼저 요구하거나 가짜 택배 정보를 제공하는 사기 수법</p>
+								<p>택배비를 먼저 요구하거나<br>가짜 택배 정보를 제공하는 사기 수법</p>
 								<ul>
 									<li><span class="highlight_cheat">선입금 요구</span>는 대부분
 										사기입니다!</li>
