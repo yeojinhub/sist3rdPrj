@@ -147,6 +147,7 @@
 				return;
 			}// end if
 
+			$('input[name="files"]').remove();
 			$('#eventForm').submit();
 			
 		});//click
@@ -177,8 +178,8 @@
 			<!-- 메인 컨텐츠 (공지사항 관리) -->
 			<main class="container">
 				<section class="event-form-section">
-					<form id="eventForm" th:action="@{/admin/event/modify}" method="post"
-						enctype="multipart/form-data">
+					<form id="eventForm" th:action="@{/admin/event/modify}"
+						method="post" enctype="multipart/form-data">
 						<input type="hidden" name="evtNum" th:value="${eventDTO.evtNum}">
 						<input type="hidden" name="imgNum" th:value="${eventDTO.imgNum}">
 						<div class="form-group">
@@ -208,12 +209,14 @@
 
 						<div class="form-row">
 							<div class="form-group half-width">
-								<label for="startDate" class="form-label">시작일</label>
-								<input type="date" class="form-input" id="startDate" name="startDate" th:value="${eventDTO.startDate}">
+								<label for="startDate" class="form-label">시작일</label> <input
+									type="date" class="form-input" id="startDate" name="startDate"
+									th:value="${eventDTO.startDate}">
 							</div>
 							<div class="form-group half-width">
-								<label for="endDate" class="form-label">종료일</label>
-								<input type="date" class="form-input" id="endDate" name="endDate" th:value="${eventDTO.endDate}">
+								<label for="endDate" class="form-label">종료일</label> <input
+									type="date" class="form-input" id="endDate" name="endDate"
+									th:value="${eventDTO.endDate}">
 							</div>
 						</div>
 
@@ -221,24 +224,27 @@
 							<div class="form-group half-width">
 								<label for="thumbnailImage" class="form-label">썸네일</label>
 								<div class="image-upload-area" id="thumbnailArea">
-									<img th:src="@{${eventDTO.IDTO.mainImage}}" alt="썸네일" style="width: 200px; height: 100px;">
+									<img th:src="@{${eventDTO.IDTO.subImage1}}" alt="썸네일"
+										style="width: 200px; height: 100px;">
 								</div>
-									<input type="file" id="thumbnailImage" name="thumbnailImage"
-										accept="image/*" style="display: none;">
+								<input type="file" id="thumbnailImage" name="thumbnailImage"
+									accept="image/*" style="display: none;">
 							</div>
 							<div class="form-group half-width">
 								<label for="mainImage" class="form-label">메인</label>
 								<div class="image-upload-area" id="mainArea">
-									<img th:src="@{${eventDTO.IDTO.subImage1}}" alt="메인" style="width: 200px; height: 100px;">
+									<img th:src="@{${eventDTO.IDTO.mainImage}}" alt="메인"
+										style="width: 200px; height: 100px;">
 								</div>
-									<input type="file" id="mainImage" name="mainImage"
-										accept="image/*" style="display: none;">
+								<input type="file" id="mainImage" name="mainImage"
+									accept="image/*" style="display: none;">
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label for="content" class="form-label">내용</label>
-							<textarea id="content" name="content" class="summernote-editor" th:text="${eventDTO.content}"></textarea>
+							<textarea id="content" name="content" class="summernote-editor"
+								th:text="${eventDTO.content}"></textarea>
 						</div>
 
 						<div class="form-actions">

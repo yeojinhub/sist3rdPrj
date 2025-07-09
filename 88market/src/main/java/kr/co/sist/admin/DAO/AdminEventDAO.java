@@ -22,7 +22,7 @@ public interface AdminEventDAO {
     		);
     public ImageDTO selectAllImage(int imgNum);
     public void deleteEvents(List<Integer> evtNums);
-    public int selectEventImageNum(int evtNum);
+    public Integer selectEventImageNum(Integer evtNum);
     public void deleteEventImage(int imgNum);
     public EventDTO selectEventDetail(@Param("evtNum") int evtNum);
     public void updateEvent(EventDTO eventDTO);

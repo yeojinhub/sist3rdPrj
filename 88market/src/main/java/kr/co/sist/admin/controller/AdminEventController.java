@@ -38,10 +38,11 @@ public class AdminEventController {
     @ResponseBody
     public ResponseEntity<String> deleteEvents(@RequestBody Map<String, List<Integer>> request) {
         try {
-            List<Integer> evtNums = request.get("evtNums");
+        	List<Integer> evtNums = request.get("evtNums");
             adminEventService.deleteEvents(evtNums);
             return ResponseEntity.ok("삭제 완료");
         } catch (Exception e) {
+        	e.printStackTrace();
             return ResponseEntity.status(500).body("삭제 실패");
         }
     }
@@ -60,9 +61,10 @@ public class AdminEventController {
     public String eventModify(EventDTO eventDTO,
     @RequestParam(value = "thumbnailImage", required = false) MultipartFile thumbnailImage,
     @RequestParam(value = "mainImage", required = false) MultipartFile mainImage,
+    @RequestParam(value = "files", required = false) MultipartFile[] files,
     RedirectAttributes redirectAttributes) {
         try {
-            // adminEventService.updateEvent(eventDTO, thumbnailImage, mainImage);
+             adminEventService.updateEvent(eventDTO, thumbnailImage, mainImage);
         } catch (Exception e) {
             e.getMessage();
         }
