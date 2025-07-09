@@ -17,8 +17,20 @@
 </head>
 <script>
 	$(function() {
+		$('.tab-item').click(function(e) {
+			e.preventDefault();
 
-	});
+			// 모든 탭에서 active 클래스 제거하고 클릭된 탭에만 추가
+			$('.tab-item').removeClass('active');
+			$(this).addClass('active');
+
+			// 클릭된 탭의 순서에 따라 해당 섹션만 보이게 처리
+			var index = $('.tab-item').index(this);
+			$('.event-list').hide();
+			$('.event-list').eq(index).show();
+		});// click
+
+	});// ready
 </script>
 <body>
 	<!-- 헤더 -->
@@ -31,36 +43,29 @@
 			<a href="#" class="tab-item active">진행중</a> <a href="#"
 				class="tab-item">종료</a> <a href="#" class="tab-item">당첨자발표</a>
 		</nav>
-		<section class="event-list">
-			<article class="event-item">
-				<img th:src="@{/images/events/image1.png}" alt="이벤트 배너 이미지"
-					class="event-image">
-				<p class="event-date">2025-05-12 ~ 2025-06-30</p>
+		<section class="event-list" id="event-ing">
+			<article class="event-item" th:each="ingEvent : ${ingEventList}">
+				<img th:src="${ingEvent.iDTO.subImage1}"
+					alt="이벤트 배너 이미지" class="event-image" th:onclick="|alert('${ingEvent.evtNum}')|">
+				<p class="event-date"
+					th:text="${ingEvent.startDate} + ' ~ ' + ${ingEvent.endDate}"></p>
 			</article>
-			<article class="event-item">
-				<img th:src="@{/images/events/image2.png}" alt="이벤트 배너 이미지"
-					class="event-image">
-				<p class="event-date">2025-05-12 ~ 2025-06-30</p>
+		</section>
+		<section class="event-list" id="event-end" style="display: none;">
+			<article class="event-item" th:each="endEvent : ${endEventList}">
+				<img th:src="${endEvent.iDTO.subImage1}"
+					alt="이벤트 배너 이미지" class="event-image" th:onclick="|alert('${endEvent.evtNum}')|">
+				<p class="event-date"
+					th:text="${endEvent.startDate} + ' ~ ' + ${endEvent.endDate}"></p>
 			</article>
-			<article class="event-item">
-				<img th:src="@{/images/events/image3.png}" alt="이벤트 배너 이미지"
-					class="event-image">
-				<p class="event-date">2025-01-14 ~ 2025-12-31</p>
-			</article>
-			<article class="event-item">
-				<img th:src="@{/images/events/image4.png}" alt="이벤트 배너 이미지"
-					class="event-image">
-				<p class="event-date">2025-04-01 ~ 2025-06-30</p>
-			</article>
-			<article class="event-item">
-				<img th:src="@{/images/events/image5.png}" alt="이벤트 배너 이미지"
-					class="event-image">
-				<p class="event-date">2025-04-01 ~ 2025-06-30</p>
-			</article>
-			<article class="event-item">
-				<img th:src="@{/images/events/image6.png}" alt="이벤트 배너 이미지"
-					class="event-image">
-				<p class="event-date">2024-02-01 ~ 2025-12-31</p>
+		</section>
+		<section class="event-list" id="event-winner" style="display: none;">
+			<article class="event-item"
+				th:each="winnerEvent : ${winnerEventList}">
+				<img th:src="${winnerEvent.iDTO.subImage1}"
+					alt="이벤트 배너 이미지" class="event-image" th:onclick="|alert('${winnerEvent.evtNum}')|">
+				<p class="event-date"
+					th:text="${winnerEvent.startDate} + ' ~ ' + ${winnerEvent.endDate}"></p>
 			</article>
 		</section>
 	</main>

@@ -23,9 +23,4 @@ public class NoticeController {
 		return "user/notice";
 	}
 	
-	@GetMapping("/event")
-	public String event() {
-		return "user/event";
-	}
-	
 }
