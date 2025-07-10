@@ -1,0 +1,85 @@
+<th:block th:fragment="inquiryOverlay">
+	<link rel="stylesheet" th:href="@{/css/user/components/inquiry.css}">
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<script>
+		$(function () {
+
+			// 열기
+			$('#inquiryBtn').click(() => {
+				axios.get('/inquiry')
+					.then(res => {
+						$('.inquiry-overlay').fadeIn(300);
+						$('.inquiry-modal').addClass('show');
+						$('body').addClass('modal-open');
+					})
+					.catch(err => {
+						if (err.response?.status === 401) {
+							alert('로그인이 필요합니다.');
+							location.href = '/login';
+						}
+					});
+			});
+
+			// 닫기 (오버레이, X 버튼)
+			$('.inquiry-overlay, .inquiry-back-icon').click(() => {
+				$('.inquiry-modal').removeClass('show');
+				setTimeout(() => {
+					$('.inquiry-overlay').fadeOut(300);
+					$('body').removeClass('modal-open');
+				}, 300);
+			});
+
+			// 모달 내부 클릭 막기
+			$('.inquiry-modal').click(e => e.stopPropagation());
+		});
+	</script>
+
+	<!-- 오버레이 -->
+	<div class="inquiry-overlay"></div>
+
+	<!-- 모달 -->
+	<div class="inquiry-modal">
+		<div class="inquiry-container">
+			<!-- 헤더 -->
+			<div class="inquiry-header">
+				<h1 class="main-title">1:1 문의</h1>
+				<button class="inquiry-back-icon">X</button>
+			</div>
+
+			<!-- 안내 -->
+			<p class="inquiry-alert">
+				<i class="fa-solid fa-bell" style="color: #FF7F50;"></i> 현재 문의량이
+				급증하여 답변이 지연되고 있습니다. 순차적으로 답변드리고 있으니 회원 여러분의 양해를 부탁드립니다.
+			</p>
+
+			<!-- 문의 유형 -->
+			<select class="inquiry-select" required>
+				<option value="" disabled selected>문의 유형을 선택해주세요.</option>
+				<option value="order">주문/결제</option>
+				<option value="delivery">배송</option>
+				<option value="refund">환불</option>
+				<option value="etc">기타</option>
+			</select>
+
+			<!-- 상세 내용 -->
+			<textarea class="inquiry-textarea" rows="8" placeholder="정확한 답변을 위해 문의 내용을 자세히 작성해 주세요."
+				required></textarea>
+
+			<!-- 첨부 -->
+			<div class="inquiry-upload">
+				<label class="inquiry-upload-label"> <input type="file"
+					multiple accept="image/*" hidden>
+					<div class="inquiry-upload-thumb">
+						<i class="fa-solid fa-camera"></i> <span class="thumb-count">0/5</span>
+					</div>
+				</label>
+				<div class="inquiry-upload-list"></div>
+			</div>
+
+
+			<!-- 등록 -->
+			<button class="inquiry-submit-btn">등록</button>
+		</div>
+	</div>
+</th:block>
