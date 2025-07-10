@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.SignUpDAO">
+    <select id="addUser" resultType="kr.co.sist.DTO.UserDTO" parameterType="String">
+        INSERT INTO USERS
+        (USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE,ADDRESS)
+        VALUES(SEQ_USER_NUM.NEXTVAL, NAME=#{name}, NICKNAME=#{nickname}, EMAIL=#{email},
+        PASS=#{pass}, ZIPCODE=#{zipcode}, ADDRESS=#{address})
+    </select>
+</mapper>
