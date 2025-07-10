@@ -100,6 +100,7 @@ body.modal-open {
 
 /* 7. 입력 요소 */
 .inquiry-select,
+.inquiry-title-input,
 .inquiry-textarea {
 	width: calc(100% - 30px);
 	margin: 0 15px 15px;
@@ -118,41 +119,78 @@ body.modal-open {
 /* 8. 첨부 업로드 */
 .inquiry-upload {
 	display: flex;
-	align-items: center;
 	gap: 10px;
-	margin: 0 15px 24px;
+	margin-bottom: 20px;
+	margin-left: 15px;
 }
 
 .inquiry-upload-label {
-	width: 60px;
-	height: 60px;
-	background: #fafafa;
-	border: 1px dashed #ccc;
-	border-radius: 6px;
 	cursor: pointer;
+	width: 80px;
+	height: 80px;
+	display: block;
+}
+
+.inquiry-upload-thumb {
+	width: 100%;
+	height: 100%;
+	border: 1px dashed #ccc;
+	border-radius: 8px;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	color: #999;
-	font-size: 12px;
+	color: #888;
+}
+
+.inquiry-upload-thumb .fa-camera {
+	font-size: 24px;
+	margin-bottom: 5px;
 }
 
 .inquiry-upload-list {
 	display: flex;
-	gap: 8px;
-	overflow-x: auto;
+	gap: 10px;
+	flex-wrap: wrap; /* 이미지가 많아지면 다음 줄로 넘어가도록 설정 */
 }
 
-.inquiry-upload-list img {
-	width: 60px;
-	height: 60px;
+.inquiry-preview-item {
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+
+.inquiry-preview-item img {
+	width: 100%;
+	height: 100%;
 	object-fit: cover;
-	border-radius: 6px;
+	border-radius: 8px;
+}
+
+.preview-delete-btn {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 16px;
+	height: 16px;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 10px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.preview-delete-btn:hover {
+	background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* 9. 등록 버튼 */
 .inquiry-submit-btn {
-	width: calc(100% - 30px);
+	width: 100%;
 	margin: auto 15px 25px;
 	padding: 12px 0;
 	background: #7fd0f4;
