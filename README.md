@@ -23,19 +23,24 @@ sist 쌍용교육센터 3차 프로젝트
 
 ## 🧑‍🤝‍🧑 멤버구성
 > ### 이여진(조장)[@yeojinhub](https://github.com/yeojinhub)
->
+> 로그인, 회원가입
+> 
 > ### 강태일(부조장)[@tgncosist2](https://github.com/tgncosist2)
+> 사용자 게시판(이벤트, 공지사항, FAQ, 문의사항), 사기조회 기능구현
+> 관리자 게시판(이벤트, 공지사항, FAQ, 문의사항) 기능구현
 > 
 > ### 김민경[@min-7343](https://github.com/min-7343)
->
-> ### 장태규[@taegu825](https://github.com/taegu825)
+> 사용자 메인페이지, 카테고리, 찜, 상품 광고, 키워드 검색 기능구현
 > 
+> ### 장태규[@taegu825](https://github.com/taegu825)
 >
+> 
 > ### 유명규[@RyuMG](https://github.com/RyuMG)
->
+> 기획관 메인페이지, 기업 상품등록, 기획관 상세페이지, 결제 기능구현
 > 
 > ### 이대웅[@bkj0517](https://github.com/bkj0517)
->
+> 사용자 상품등록, 상품 상세페이지, 안전결제, 채팅 기능구현
+> 
 
 ## ⚙️ Stacks
 > ### Front-End
@@ -56,7 +61,6 @@ sist 쌍용교육센터 3차 프로젝트
 > ### DataBase
 > 
 > ![Oracle DataBase 19c](https://img.shields.io/badge/Oracle%20DataBase%2019c-F80000?style=for-the-badge&logo=oracle&logoColor=white)
-> ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 >
 > ### Environment
 > 
