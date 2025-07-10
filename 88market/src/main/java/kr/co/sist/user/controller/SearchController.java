@@ -42,15 +42,21 @@ public class SearchController {
 	            keyword, catNum, minPrice, maxPrice, tradeOption, sortOption
 	        );
         
-        if (catNum != null) {
+	    ProductDTO adDTO=serchService.getTopAdminScoreItem(catNum);
+        if (adDTO != null) {
             // catNum이 넘어오면 카테고리 검색
             // results = serchService.findByCategory(catNum);
+            results.add(0,adDTO);
             
-            title = serchService.getCategoryName(catNum);
         } else {
             // keyword로 기존 검색 - 이렇게 하지 않으면 null 생김(서비스에서도 사용하기)
             title = (keyword.isBlank() ? "전체" : keyword);
         }
+        
+        
+         title = (catNum == null
+                ? (keyword.isBlank() ? "전체" : keyword)
+                : serchService.getCategoryName(catNum));
         
         model.addAttribute("results", results);
         model.addAttribute("count",   results.size());
