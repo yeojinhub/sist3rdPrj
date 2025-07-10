@@ -66,5 +66,10 @@ public class LoginController {
         return ResponseEntity.ok(Map.of("token",token));
 		
 	} //loginProcess
+	
+	@GetMapping("/signup")
+	public String signUppage() {
+		return "user/account/signup";
+	} //signUppage
 
 } //class
