@@ -125,7 +125,7 @@ $(function() {
 			      <strong class="product-price" th:text="|${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}원|"></strong>
 			      <div class="product-meta-row">
 			       <p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
-			        <button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
+			        <button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon"/></button>
 			      </div>
 			    </div>
 			  </a>
@@ -148,7 +148,7 @@ $(function() {
 							<strong class="product-price" th:text="|${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}원|"></strong>
 						<div class="product-meta-row">
 							<p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
+							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon"/></button>
 			      		</div>
 						</div>
 					</a>
