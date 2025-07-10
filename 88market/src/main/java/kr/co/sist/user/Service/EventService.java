@@ -54,4 +54,8 @@ public class EventService {
 		return eventMap;
 	}// searchAllEvent
 	
+	public EventDTO searchOneEvent(int evtNum) {
+		return eDAO.selectOneEvent(evtNum);
+	}// end searchOneEvent
+	
 }// class

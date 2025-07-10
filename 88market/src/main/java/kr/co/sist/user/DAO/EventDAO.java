@@ -12,5 +12,6 @@ public interface EventDAO {
 
 	public List<EventDTO> selectAllEvent();
 	public ImageDTO selectImageWithImgNum(int ImgNum);
+	public EventDTO selectOneEvent(int evtNum);
 	
 }

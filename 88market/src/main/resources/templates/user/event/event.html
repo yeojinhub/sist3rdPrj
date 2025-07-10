@@ -46,7 +46,7 @@
 		<section class="event-list" id="event-ing">
 			<article class="event-item" th:each="ingEvent : ${ingEventList}">
 				<img th:src="${ingEvent.iDTO.subImage1}" alt="이벤트 배너 이미지" class="event-image"
-					th:onclick="|alert('${ingEvent.evtNum}')|">
+					th:onclick="|location.href='/event/${ingEvent.evtNum}'|">
 				<div class="event-date-container">
 					<p class="event-date" th:text="${ingEvent.startDate} + ' ~ ' + ${ingEvent.endDate}"></p>
 					<span class="d-day" th:if="${ingEvent.endDate != null}" th:with="today=${T(java.time.LocalDate).now()},
@@ -61,7 +61,7 @@
 		<section class="event-list" id="event-end" style="display: none;">
 			<article class="event-item" th:each="endEvent : ${endEventList}">
 				<img th:src="${endEvent.iDTO.subImage1}" alt="이벤트 배너 이미지" class="event-image"
-					th:onclick="|alert('${endEvent.evtNum}')|">
+					th:onclick="|location.href='/event/${endEvent.evtNum}'|">
 				<div class="event-date-container">
 					<p class="event-date" th:text="${endEvent.startDate} + ' ~ ' + ${endEvent.endDate}"></p>
 					<span class="d-day" th:if="${endEvent.endDate != null}" th:with="today=${T(java.time.LocalDate).now()},
@@ -76,7 +76,7 @@
 		<section class="event-list" id="event-winner" style="display: none;">
 			<article class="event-item" th:each="winnerEvent : ${winnerEventList}">
 				<img th:src="${winnerEvent.iDTO.subImage1}" alt="이벤트 배너 이미지" class="event-image"
-					th:onclick="|alert('${winnerEvent.evtNum}')|">
+					th:onclick="|location.href='/event/${winnerEvent.evtNum}'|">
 				<div class="event-date-container">
 					<p class="event-date" th:text="${winnerEvent.startDate} + ' ~ ' + ${winnerEvent.endDate}"></p>
 					<span class="d-day" th:if="${winnerEvent.endDate != null}" th:with="today=${T(java.time.LocalDate).now()},

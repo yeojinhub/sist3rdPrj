@@ -10,4 +10,8 @@
 	<select id="selectImageWithImgNum" resultType="kr.co.sist.DTO.ImageDTO" parameterType="int">
 		SELECT * FROM IMAGE WHERE IMG_NUM = #{imgNum}
 	</select>
+	
+	<select id="selectOneEvent" resultType="kr.co.sist.DTO.EventDTO" parameterType="int">
+		SELECT * FROM EVENT WHERE EVT_NUM = #{evtNum}
+	</select>
 </mapper>
