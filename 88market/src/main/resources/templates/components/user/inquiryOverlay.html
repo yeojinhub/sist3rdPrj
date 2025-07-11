@@ -56,10 +56,10 @@
 			<!-- 문의 유형 -->
 			<select class="inquiry-select" required>
 				<option value="" disabled selected>문의 유형을 선택해주세요.</option>
-				<option value="order">주문/결제</option>
-				<option value="delivery">배송</option>
-				<option value="refund">환불</option>
-				<option value="etc">기타</option>
+				<option value="주문/결제">주문/결제</option>
+				<option value="배송">배송</option>
+				<option value="환불">환불</option>
+				<option value="기타">기타</option>
 			</select>
 
 			<!-- 제목 -->
@@ -149,7 +149,7 @@
 			// 등록
 			$('.inquiry-submit-btn').click(() => {
 				const formData = new FormData();
-				formData.append('statusType', $('.inquiry-select').val());
+				formData.append('inquiryType', $('.inquiry-select').val());
 				formData.append('title', $('.inquiry-title-input').val());
 				formData.append('content', $('.inquiry-textarea').val());
 				

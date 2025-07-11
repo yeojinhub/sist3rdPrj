@@ -24,6 +24,7 @@ public class InquiryDTO {
 	private String name; /* 문의사항작성자 */
 	private Date inputDate; /* 문의사항작성일 */
 	private String statusType; /* 문의사항상태(대기,답변완료) */
+	private String inquiryType; /* 문의유형 */
 	
 	private int userNum; /* 사용자번호 */
 	private String admNum; /* 관리자사번 */
