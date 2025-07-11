@@ -11,13 +11,13 @@
   <th:block th:insert="~{components/user/header :: header}"></th:block>
 
   <main class="product-registration-container">
-    <form method="post" th:action="@{/product/sell}" enctype="multipart/form-data">
+    <form id="product-form" enctype="multipart/form-data" onsubmit="return false;">
       <div class="image-upload-section">
         <div class="upload-box">
           <label for="image-upload-input" class="upload-label">
             <img src="/images/upload.png" alt="이미지 업로드" />
           </label>
-          <input type="file" name="images" id="image-upload-input" accept="image/*" multiple style="display: none;" />
+          <input type="file" id="image-upload-input" accept="image/*" multiple style="display: none;" />
           <div class="image-count-box"><span id="image-count">0/5</span></div>
         </div>
         <div id="image-preview-box" class="image-preview-box"></div>
@@ -25,141 +25,171 @@
 
       <div class="form-section">
         <div class="input-group">
-          <input type="text" id="product-name" name="prd_name" placeholder="상품명을 입력해주세요." required />
+          <input type="text" id="product-name" placeholder="상품명을 입력해주세요." required />
         </div>
 
-        <!-- 카테고리 선택 -->
         <div class="input-group">
           <p style="margin: 0 0 5px;">카테고리</p>
           <ul class="category-list" id="categoryList">
-			  <th:block th:each="cat : ${categoryList}">
-			    <li class="category-item" th:data-cat-num="${cat.cat_num}" th:text="${cat.name}"></li>
-			  </th:block>
-			</ul>
-          <input type="hidden" name="catNum" id="catNum" required />
+            <th:block th:each="cat : ${categoryList}">
+              <li class="category-item" th:data-cat-num="${cat.catNum}" th:text="${cat.name}"></li>
+            </th:block>
+          </ul>
+          <input type="hidden" id="catNum" required />
           <p id="category-error" class="error-msg" style="display: none;">카테고리를 선택해주세요.</p>
         </div>
 
         <div class="input-group">
-          <input type="text" id="price" name="prd_price" placeholder="판매가격을 입력해주세요." required />
+          <input type="text" id="price" placeholder="판매가격을 입력해주세요." required />
           <div class="safe-trade-option">
-            <input type="checkbox" id="safe-trade" name="prd_safe" />
+            <input type="checkbox" id="safe-trade" />
             <label for="safe-trade">안전거래</label>
           </div>
         </div>
 
         <div class="input-group">
-          <textarea id="product-description" name="prd_detail" placeholder="상품 설명을 입력해주세요." required></textarea>
+          <textarea id="product-description" placeholder="상품 설명을 입력해주세요." required></textarea>
         </div>
 
         <div class="trade-method-section">
           <p>거래방법</p>
           <div class="trade-option">
-            <input type="checkbox" id="delivery" name="prd_delivery" />
+            <input type="checkbox" id="delivery" />
             <label for="delivery">택배거래</label>
           </div>
           <div class="trade-option">
-            <input type="checkbox" id="direct-deal" name="prd_direct" />
+            <input type="checkbox" id="direct-deal" />
             <label for="direct-deal">직거래</label>
           </div>
           <p id="trade-method-error" class="error-msg" style="display: none;">거래방법을 하나 이상 선택해주세요.</p>
         </div>
+
+        <div id="direct-region-box" style="display: none; margin-top: 10px;">
+          <p style="margin: 0 0 5px;">희망 지역</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button type="button" class="add-region-button">+ 추가하기</button>
+            <div class="selected-region-container"></div>
+          </div>
+        </div>
+
+        <input type="hidden" id="location1" />
       </div>
 
       <div class="agreement-section">
         <input type="checkbox" id="info-agreement" required />
         <label for="info-agreement">판매 정보가 실제 상품과 다를 경우, 책임은 판매자에게 있음을 동의합니다.</label>
       </div>
-      <button type="submit" class="submit-button">판매하기</button>
+
+      <button type="submit" class="submit-button" id="submit-btn">판매하기</button>
     </form>
   </main>
 
   <th:block th:insert="~{components/user/footer :: footer}"></th:block>
+  <th:block th:insert="~{components/user/locationOverlay :: locationOverlay}"></th:block>
 
   <script>
     $(function () {
       let imageFiles = [];
 
-      // 이미지 업로드
-      $("#image-upload-input").on("change", function (e) {
-        const newFiles = Array.from(e.target.files);
-        if (imageFiles.length + newFiles.length > 5) {
-          alert("최대 5장까지 등록할 수 있습니다.");
+      // 이미지 미리보기 로직
+      $('#image-upload-input').on('change', function (e) {
+        const files = Array.from(e.target.files);
+        if (imageFiles.length + files.length > 5) {
+          alert('최대 5장까지 업로드 가능합니다.');
           return;
         }
-        imageFiles = imageFiles.concat(newFiles);
-        updatePreview();
-      });
-
-      $(document).on("click", ".delete-image", function () {
-        const idx = $(this).data("index");
-        imageFiles.splice(idx, 1);
+        imageFiles = imageFiles.concat(files);
         updatePreview();
       });
 
       function updatePreview() {
-        const previewBox = $("#image-preview-box").empty();
-        $("#image-count").text(`${imageFiles.length}/5`);
-
-        const fileReaders = imageFiles.map((file, i) => {
-          return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              resolve({ index: i, src: e.target.result });
-            };
-            reader.readAsDataURL(file);
-          });
-        });
-
-        Promise.all(fileReaders).then((results) => {
-          results.forEach((res, i) => {
-            const wrapper = $("<div>").addClass("image-wrapper");
-            const img = $("<img>").addClass("preview-image").attr("src", res.src);
-            const x = $("<div>").addClass("delete-image").text("×").attr("data-index", res.index);
-            if (i === 0) wrapper.css("border", "2px solid #7fd0f4");
-            wrapper.append(img).append(x);
+        const previewBox = $('#image-preview-box').empty();
+        $('#image-count').text(`${imageFiles.length}/5`);
+        imageFiles.forEach((file, i) => {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const wrapper = $('<div>').addClass('image-wrapper');
+            const img = $('<img>').addClass('preview-image').attr('src', e.target.result);
+            const del = $('<div>').addClass('delete-image').text('×').attr('data-index', i);
+            wrapper.append(img).append(del);
             previewBox.append(wrapper);
-          });
+          };
+          reader.readAsDataURL(file);
         });
       }
 
-      // 카테고리 선택
+      $(document).on('click', '.delete-image', function () {
+        const index = $(this).data('index');
+        imageFiles.splice(index, 1);
+        updatePreview();
+      });
+
       $(document).on("click", ".category-item", function () {
-		  $(".category-item").removeClass("active");
-		  $(this).addClass("active");
-		  $("#catNum").val($(this).data("cat-num"));
-		  $("#category-error").hide();
-		});
+        $(".category-item").removeClass("active");
+        $(this).addClass("active");
+        const catNum = $(this).attr("data-cat-num");
+        $("#catNum").val(catNum);
+        $("#category-error").hide();
+      });
 
-      // 거래방식 + 카테고리 검증
-      $("form").on("submit", function (e) {
-        const isDeliveryChecked = $("#delivery").is(":checked");
-        const isDirectChecked = $("#direct-deal").is(":checked");
-        const catNumVal = $("#catNum").val();
-
-        const $tradeError = $("#trade-method-error");
-        const $catError = $("#category-error");
-
-        let valid = true;
-
-        if (!isDeliveryChecked && !isDirectChecked) {
-          $tradeError.show();
-          valid = false;
+      $("#direct-deal").on("change", function () {
+        if ($(this).is(":checked")) {
+          $("#direct-region-box").show();
         } else {
-          $tradeError.hide();
+          $("#direct-region-box").hide();
         }
+      });
 
-        if (!catNumVal) {
-          $catError.show();
-          valid = false;
-        } else {
-          $catError.hide();
-        }
+      function updateLocationHiddenInput() {
+        const locations = $(".region-tag").map(function () {
+          return $(this).clone().children().remove().end().text().trim();
+        }).get();
+        $("#location1").val(locations.join(","));
+      }
 
-        if (!valid) {
-          e.preventDefault();
-          return false;
-        }
+      window.addWishRegion = function (name) {
+        const $container = $(".selected-region-container");
+        if ($container.find(".region-tag").filter((_, el) => $(el).text().includes(name)).length > 0) return;
+        const $tag = $("<span>").addClass("region-tag").text(name);
+        const $remove = $("<button>").text("×").on("click", function () {
+          $tag.remove();
+          updateLocationHiddenInput();
+        });
+        $tag.append($remove);
+        $container.append($tag);
+        updateLocationHiddenInput();
+      };
+
+      $('#submit-btn').on('click', function () {
+        const product = {
+          title: $('#product-name').val(),
+          content: $('#product-description').val(),
+          price: $('#price').val(),
+          location1: $('#location1').val(),
+          catNum: $('#catNum').val(),
+          safeType: $('#safe-trade').is(':checked') ? 'Y' : null,
+          deliveryType: $('#delivery').is(':checked') ? 'Y' : null,
+          meetType: $('#direct-deal').is(':checked') ? 'Y' : null
+        };
+
+        const formData = new FormData();
+        formData.append("product", new Blob([JSON.stringify(product)], { type: "application/json" }));
+        imageFiles.forEach(file => formData.append("images", file));
+
+        $.ajax({
+          url: "/product/sell",
+          method: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+            window.location.href = "/success";
+          },
+          error: function (xhr) {
+            alert("등록 실패");
+            console.log(xhr);
+          }
+        });
       });
     });
   </script>

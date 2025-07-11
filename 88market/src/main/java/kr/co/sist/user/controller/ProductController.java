@@ -1,20 +1,20 @@
 package kr.co.sist.user.controller;
 
 import java.io.File;
-import java.util.UUID;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.ProductDTO;
 import kr.co.sist.user.Service.CategoryService;
-import kr.co.sist.user.Service.ImageService;
 import kr.co.sist.user.Service.ProductService;
 
 @Controller
@@ -24,15 +24,7 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    private ImageService imageService;
-
-    @Autowired
     private CategoryService categoryService;
-
-    @GetMapping("/detail")
-    public String productDetail(@RequestParam("id") int productId) {
-        return "user/product/detail";
-    }
 
     @GetMapping("/sell")
     public String sell(Model model) {
@@ -40,83 +32,94 @@ public class ProductController {
         return "user/product/sell";
     }
 
+    @GetMapping("/success")
+    public String successPage() {
+        return "user/product/success";
+    }
+
+    @ResponseBody
+    @PostMapping("/product/sell")
+    public ResponseEntity<?> registerProduct(
+            @RequestPart("product") String productJson,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            ProductDTO product = mapper.readValue(productJson, ProductDTO.class);
+
+            // 상품번호 및 이미지번호 생성
+            int prdSeq = productService.getNextProductSeq();
+            int imgSeq = productService.getNextImageSeq();
+            String prdNum = String.format("P_%04d", prdSeq);
+
+            // 이미지 저장 처리
+            String basePath = new File("src/main/resources/static/images/product/upload").getAbsolutePath();
+            File uploadFolder = new File(basePath, prdNum);
+            if (!uploadFolder.exists()) uploadFolder.mkdirs();
+
+            ImageDTO image = new ImageDTO();
+            image.setImgNum(imgSeq);
+            image.setImageType("1");
+
+            if (images != null) {
+                for (int i = 0; i < images.size(); i++) {
+                    String savedPath = saveFileWithFixedName(images.get(i), uploadFolder, prdNum, i);
+                    switch (i) {
+                        case 0 -> image.setMainImage(savedPath);
+                        case 1 -> image.setSubImage1(savedPath);
+                        case 2 -> image.setSubImage2(savedPath);
+                        case 3 -> image.setSubImage3(savedPath);
+                        case 4 -> image.setSubImage4(savedPath);
+                    }
+                }
+                product.setImgNum(imgSeq);
+            }
+
+            // 상품 DTO 설정
+            product.setPrdNum(prdNum);
+            product.setUserNum("1"); // 임시 유저
+            product.setClickNum(0);
+            product.setPrdCnt(1);
+            product.setSellType("N");
+            product.setHiddenType("N");
+            product.setAppointType("N");
+
+            // 트랜잭션으로 이미지 + 상품 등록
+            productService.insertProductWithImages(product, image);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("등록 실패: " + e.getMessage());
+        }
+    }
+
+    private String saveFileWithFixedName(MultipartFile file, File folder, String prdNum, int index) throws Exception {
+        if (file == null || file.isEmpty()) return null;
+
+        String ext = getFileExtension(file.getOriginalFilename());
+        String fileName = switch (index) {
+            case 0 -> "main" + ext;
+            case 1 -> "sub1" + ext;
+            case 2 -> "sub2" + ext;
+            case 3 -> "sub3" + ext;
+            case 4 -> "sub4" + ext;
+            default -> throw new IllegalArgumentException("이미지는 최대 5장까지만 허용됩니다.");
+        };
+
+        File dest = new File(folder, fileName);
+        file.transferTo(dest);
+        return "/images/product/upload/" + prdNum + "/" + fileName;
+    }
+
+    private String getFileExtension(String originalFilename) {
+        int dotIndex = originalFilename.lastIndexOf(".");
+        return (dotIndex >= 0) ? originalFilename.substring(dotIndex) : "";
+    }
+
     @GetMapping("/buy")
     public String buy() {
         return "user/product/buy";
-    }
-
-    @PostMapping("/product/register")
-    public String registerProduct(
-            @RequestParam("title") String title,
-            @RequestParam("content") String content,
-            @RequestParam("price") int price,
-            @RequestParam("location1") String location1,
-            @RequestParam("userNum") String userNum,
-            @RequestParam("catNum") int catNum,
-            @RequestParam("comNum") String comNum,
-            @RequestParam(value = "prd_safe", required = false) String prdSafe, 
-            @RequestParam(value = "prd_delivery", required = false) String prdDelivery,
-            @RequestParam(value = "prd_direct", required = false) String prdDirect,
-            @RequestParam("images") MultipartFile[] images
-    ) throws Exception {
-
-        // 상품 번호 생성
-        int prdSeq = productService.getNextProductSeq();
-        String prdNum = String.format("P_%04d", prdSeq);
-
-        // 이미지 저장 폴더
-        String staticPath = new File("src/main/resources/static/images/upload/product").getAbsolutePath();
-        File productFolder = new File(staticPath, prdNum);
-        if (!productFolder.exists()) productFolder.mkdirs();
-
-        // 이미지 저장
-        ImageDTO image = new ImageDTO();
-        image.setImgNum(imageService.getNextImageSeq());
-        image.setImageType("1");
-
-        for (int i = 0; i < images.length; i++) {
-            String savedPath = saveFile(images[i], productFolder, prdNum);
-            if (i == 0) image.setMainImage(savedPath);
-            else if (i == 1) image.setSubImage1(savedPath);
-            else if (i == 2) image.setSubImage2(savedPath);
-            else if (i == 3) image.setSubImage3(savedPath);
-            else if (i == 4) image.setSubImage4(savedPath);
-        }
-
-        imageService.insertImage(image);
-
-        // 상품 등록
-        ProductDTO product = new ProductDTO();
-        product.setPrdNum(prdNum);
-        product.setTitle(title);
-        product.setContent(content);
-        product.setPrice(price);
-        product.setLocation1(location1);
-        product.setUserNum(userNum);
-        product.setCatNum(catNum);
-        product.setComNum(comNum);
-        product.setImgNum(image.getImgNum());
-        product.setClickNum(0);
-        product.setPrdCnt(1);
-        product.setSellType("N");
-        product.setHiddenType("N");
-        product.setAppointType("N");
-        product.setSafeType(prdSafe != null ? "Y" : "N"); 
-        product.setDeliveryType(prdDelivery != null ? "Y" : "N"); 
-        product.setMeetType(prdDirect != null ? "Y" : "N");       
-
-        productService.insertProduct(product);
-        return "redirect:/product/success";
-    }
-
-    private String saveFile(MultipartFile file, File productFolder, String prdNum) throws Exception {
-        if (file != null && !file.isEmpty()) {
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            File dest = new File(productFolder, fileName);
-            file.transferTo(dest);
-            return "/images/upload/product/" + prdNum + "/" + fileName;
-        }
-        return null;
     }
 
     @GetMapping("/seller")
