@@ -21,46 +21,47 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    	http
-    	.csrf(csrf -> csrf.disable())
-    	.sessionManagement(sm -> sm
-    			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    			)
-    	// 요청 권한 설정
-    	.authorizeHttpRequests(auth -> auth
-    			// 나머지는 인증 필요
-    			.requestMatchers(
-    					"/chat",
-    					"/buy",
-    					"/sell",
-    					"/product/**",
-    					"/inquiry"
-    					).authenticated()
-    			// 로그인 페이지·API와 정적 리소스는 누구나
-    			.anyRequest().permitAll()
-    			)
-    	.exceptionHandling(ex -> ex
-    			// 인증이 안 된 경우(토큰이 없거나 잘못된 경우) → 401
-    			.authenticationEntryPoint((request, response, authException) -> {
-    				String acceptHeader = request.getHeader("Accept");
-    		        
-    		        // 비동기 요청 (JSON 응답 원하는 경우)
-    		        if (acceptHeader != null && acceptHeader.contains("application/json")) {
-    		            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    		            response.setContentType("application/json");
-    		            response.getWriter().write("{\"error\":\"인증이 필요합니다\"}");
-    		        } else {
-    		            // 일반 브라우저 요청
-    		            response.sendRedirect("http://localhost:8080/login");
-    		        }
-    			})
-    			// 인증은 됐지만 권한이 없는 경우 → 403
-    			.accessDeniedHandler((request, response, accessDeniedException) ->
-    			response.sendRedirect("http://localhost:8080/login"))
-    			)
-    	.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
+        http
+            // CSRF 비활성화 및 세션 상태를 Stateless로 설정
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(sm -> sm
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            // 요청 권한 설정
+            .authorizeHttpRequests(auth -> auth
+                // 인증이 필요한 경로
+                .requestMatchers(
+                    "/chat",
+                    "/buy",
+                    "/sell",
+                    "/product/**",
+                    "/inquiry"
+                ).authenticated()
+                // 그 외(메인, 로그인, 회원가입, 정적 리소스 등)는 모두 허용
+                .anyRequest().permitAll()
+            )
+            // 예외 처리
+            .exceptionHandling(ex -> ex
+                // 인증이 안 된 경우(토큰 없거나 잘못된 경우) → 401 또는 로그인 페이지로 리다이렉트
+                .authenticationEntryPoint((request, response, authException) -> {
+                    String acceptHeader = request.getHeader("Accept");
+                    if (acceptHeader != null && acceptHeader.contains("application/json")) {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\":\"인증이 필요합니다\"}");
+                    } else {
+                        response.sendRedirect("http://localhost:8080/login");
+                    }
+                })
+                // 인증은 됐지만 권한이 없는 경우 → 로그인 페이지로 리다이렉트
+                .accessDeniedHandler((request, response, accessDeniedException) ->
+                    response.sendRedirect("http://localhost:8080/login")
+                )
+            )
+            // JwtFilter를 UsernamePasswordAuthenticationFilter 전에 등록
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 }
+

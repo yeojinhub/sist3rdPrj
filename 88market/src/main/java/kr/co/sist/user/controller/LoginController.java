@@ -20,6 +20,9 @@ import kr.co.sist.DTO.UserDTO;
 import kr.co.sist.user.Service.JwtService;
 import kr.co.sist.user.Service.LoginService;
 
+/**
+ * 사용자 로그인 요청을 처리하는 컨트롤러 클래스
+ */
 @Controller
 public class LoginController {
 	
@@ -28,45 +31,61 @@ public class LoginController {
 	@Autowired
 	private JwtService jwtService;
 	
+	/**
+	 * 일반 로그인 페이지로 이동
+	 * @return "user/account/login"
+	 */
 	@GetMapping("/login")
 	public String loginPage() {
 		return "user/account/login";
 	} //loginPage
 	
+	/**
+	 * 이메일 로그인 페이지로 이동
+	 * @return "user/account/login_email"
+	 */
 	@GetMapping("/login_email")
 	public String loginEmailPage() {
 		return "user/account/login_email";
 	} //loginEmailPage
 	
 	//@GetMapping("/loginProcess")
+	/**
+	 * 로그인 처리 요청 프로세스
+	 * @param loginDTO
+	 * @param response
+	 * @return 로그인 성공시 메인페이지, 실패 시 로그인 페이지로 리다이렉트
+	 */
 	@ResponseBody
 	@RequestMapping(value="/loginProcess", method= { RequestMethod.POST } )
 	public ResponseEntity<Map<String, String>> loginProcess(@RequestBody UserDTO loginDTO, HttpServletResponse response) {
-		System.out.println("LoginController : "+loginDTO.getEmail()+loginDTO.getPass());
+		// 사용자가 입력한 이메일로 사용자 정보 조회
 		UserDTO user = service.selectLogin(loginDTO.getEmail(), loginDTO.getPass());
-		System.out.println("LoginController : "+user);
 		
 		if( user == null ) {
-//			session.setAttribute("loginDTO", loginDTO);
-//			System.out.println("로그인 되었습니다.");
-//			return "redirect:/";
+			// 로그인 실패
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		} 
+		} //end if
 		
-        // 1) 토큰 생성
-        String token = jwtService.createToken(user.getEmail());
-        // 2) HttpOnly 쿠키에 담아서 응답 헤더에 추가
+		// 로그인 생성
+		// JWT 토큰 생성
+        String token = jwtService.createToken(user.getUserNum());
+        // 생성된 토큰을 HttpOnly 쿠키에 담아 응답 헤더에 추가
         ResponseCookie cookie = ResponseCookie.from("token", token)
             .httpOnly(true)
-            .path("/")
-            .maxAge(Duration.ofHours(1))
+            .path("/")						// 전체 경로에서 유효
+            .maxAge(Duration.ofHours(1))	// 1시간 유효
             .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-        // 3) 바디는 비워두고 200 OK
+        // token을 바디에서 포함해서 응답
         return ResponseEntity.ok(Map.of("token",token));
 		
 	} //loginProcess
 	
+	/**
+	 * 회원가입 페이지로 이동
+	 * @return "user/account/signup"
+	 */
 	@GetMapping("/signup")
 	public String signUppage() {
 		return "user/account/signup";

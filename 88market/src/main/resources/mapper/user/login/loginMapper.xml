@@ -4,7 +4,7 @@
 
 <mapper namespace="kr.co.sist.user.DAO.LoginDAO">
     <select id="selectLoginList" resultType="kr.co.sist.DTO.UserDTO" parameterType="String">
-        SELECT EMAIL,PASS
+        SELECT USER_NUM,EMAIL,PASS
         FROM USERS
         WHERE EMAIL=#{email}
     </select>

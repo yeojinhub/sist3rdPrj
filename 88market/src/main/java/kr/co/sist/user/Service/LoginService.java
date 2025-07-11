@@ -6,25 +6,31 @@ import org.springframework.stereotype.Service;
 import kr.co.sist.DTO.UserDTO;
 import kr.co.sist.user.DAO.LoginDAO;
 
+/**
+ * 로그인 관련 비즈니스 로직을 담당하는 서비스 클래스
+ */
 @Service
 public class LoginService {
+	
 	@Autowired
 	private LoginDAO loginDAO;
 	
 	/**
 	 * @param email 입력받은 이메일
-	 * @return null이 아닐 때 loginDTO 반환, null일 경우 그대로 반환
+	 * @param pass 입력받은 비밀번호
+	 * @return 로그인 성공시 UserDTO 반환, 실패 시 null
 	 */
 	public UserDTO selectLogin(String email, String pass) {
-		System.out.println("LoginService "+email+pass);
+		// 사용자에게 입력받은 이메일로 사용자 정보 조회
 		UserDTO loginDTO = loginDAO.selectLoginList(email);
-		System.out.println("LoginService "+loginDTO);
 		
+		// 사용자 정보가 존재하고 비밀번호 일치 시
 		if( loginDTO != null && loginDTO.getPass().equals(pass) ) {
-			System.out.println("LoginService "+loginDTO+loginDTO.getPass());
+		// 로그인 성공
 			return loginDTO;
 		} //end if
 		
+		// 로그인 실패
 		return null;
 	} //selectLoginList
 	
