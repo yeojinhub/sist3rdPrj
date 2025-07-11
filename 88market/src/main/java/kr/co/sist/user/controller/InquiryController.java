@@ -30,7 +30,7 @@ public class InquiryController {
 			System.out.println(inquiryDTO);
 			for (MultipartFile file : files) {
 				System.out.println(file.getOriginalFilename());
-			}
+			}// end for
 
 		return ResponseEntity.ok("문의 등록 완료");
 	}// inquiryAdd
