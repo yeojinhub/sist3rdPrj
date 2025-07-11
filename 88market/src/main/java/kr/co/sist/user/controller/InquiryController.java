@@ -1,5 +1,6 @@
 package kr.co.sist.user.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,10 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.DTO.InquiryDTO;
+import kr.co.sist.user.Service.InquiryService;
 
 @Controller
 public class InquiryController {
 
+	@Autowired
+	private InquiryService is;
+	
 	@GetMapping("/inquiry")
 	@ResponseBody
 	public ResponseEntity<String> inquiry(HttpServletRequest request) {
@@ -27,10 +32,12 @@ public class InquiryController {
 		InquiryDTO inquiryDTO
 		) {
 
-			System.out.println(inquiryDTO);
-			for (MultipartFile file : files) {
-				System.out.println(file.getOriginalFilename());
-			}// end for
+		try {
+			is.addInquiry(inquiryDTO, files);
+			return ResponseEntity.ok("문의 등록 완료");
+		} catch (Exception e) {
+			ResponseEntity.status(HttpStatus.BAD_REQUEST).body("문의 등록 실패");
+		}// end try-catch
 
 		return ResponseEntity.ok("문의 등록 완료");
 	}// inquiryAdd
