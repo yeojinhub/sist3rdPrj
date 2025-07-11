@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import kr.co.sist.filter.CustomUserDetailsService;
 
 /**
  * JwtService 인터페이스의 구현 클래스
@@ -33,7 +33,7 @@ public class JwtServiceImpl implements JwtService {
     private String secretKey;
     
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     /**
      * 사용자 번호로 기본 JWT 토큰 생성
@@ -60,8 +60,6 @@ public class JwtServiceImpl implements JwtService {
         
         // 해당 사용자에 대한 인증 정보 로드
         UserDetails userDetails = userDetailsService.loadUserByUsername(usernum);
-
-        System.out.println("getAuthentication: "+userDetails);
 
         // 인증 객체 생성
         return new UsernamePasswordAuthenticationToken(
