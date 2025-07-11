@@ -7,15 +7,15 @@
   <!-- 상품 등록 -->
   <insert id="insertProduct" parameterType="kr.co.sist.DTO.ProductDTO">
     INSERT INTO PRODUCT (
-      PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1,
-      INPUT_DATE, APPOINT_TYPE, HIDDEN_TYPE, SELL_TYPE,
-      PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE, DELIVERY_TYPE,
-      USER_NUM, CAT_NUM, IMG_NUM
+        PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1,
+        INPUT_DATE, APPOINT_TYPE, HIDDEN_TYPE, SELL_TYPE,
+        PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE, DELIVERY_TYPE,
+        USER_NUM, CAT_NUM, IMG_NUM
     ) VALUES (
-      #{prdNum}, #{title}, #{content}, #{price}, #{location1},
-      SYSDATE, #{appointType}, #{hiddenType}, #{sellType},
-      #{prdCnt}, #{clickNum}, #{safeType}, #{meetType}, #{deliveryType},
-      #{userNum}, #{catNum}, #{imgNum}
+        #{prdNum}, #{title}, #{content}, #{price}, #{location1},
+        SYSDATE, #{appointType, jdbcType=VARCHAR}, #{hiddenType, jdbcType=VARCHAR}, #{sellType, jdbcType=VARCHAR},
+        #{prdCnt}, #{clickNum}, #{safeType, jdbcType=VARCHAR}, #{meetType, jdbcType=VARCHAR}, #{deliveryType, jdbcType=VARCHAR},
+        #{userNum}, #{catNum}, #{imgNum}
     )
   </insert>
 

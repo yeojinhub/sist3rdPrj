@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 public class CategoryDTO {
 	
-	private int cat_num; /* 카테고리번호 */
+	private int catNum; /* 카테고리번호 */
 	private String name; /* 카테고리이름 */
 
 } //class
