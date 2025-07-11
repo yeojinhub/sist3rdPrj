@@ -49,8 +49,6 @@ public class SearchItemService {
     	return siDAO.findByKeywordAndFilters(Keyword,catNum,minPrice,maxPrice,tradeOption,sortOption);
     }
     
-
-	
     /** 카테고리번호→카테고리명, Null 우회하기 */
     public String getCategoryName(Integer catNum) {
     	
@@ -59,6 +57,12 @@ public class SearchItemService {
     	}
         CategoryDTO dto = categoryDAO.selectCategoryById(catNum);
         return dto != null ? dto.getName() : "전체";
+    }//getCategoryName
+    
+    
+    public ProductDTO getTopAdminScoreItem(Integer catNum) {
+        if (catNum == null) return null;
+        return siDAO.selectAdvertisementItem(catNum);
     }
 	
 }//class

@@ -117,7 +117,7 @@ $(function() {
 			<div class="card-list-wrapper-items top-like-slider">
 			<div class="product-card" th:each="item :${topLike}">
 			  <a th:href="@{/detail(id=${item.prdNum})}">
-			    <div class="product-image-container">
+			    <div class="product-image-container" style="border: #FF0000 solid 1px">
 			     <!--  <img th:src="@{/images/main/img5.png}" alt="닌텐도 스위치 타이틀"> -->
 			    </div>
 			    <div class="product-info">

@@ -49,6 +49,7 @@
 			<if test="keyword != null and keyword != ''">
 				TITLE LIKE '%' || #{keyword} || '%'
 			</if>
+		AND COM_NUM IS NULL
 		</where>
 	</select>
 	
@@ -57,14 +58,14 @@
 	<select id="findByCategory" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
 		SELECT *
         FROM PRODUCT
-        WHERE CAT_NUM = #{catNum}
+        WHERE CAT_NUM = #{catNum} AND COM_NUM IS NULL
 	</select>
     
 	<!-- 카테고리별 상품 개수 -->
 	<select id="countByCategory" parameterType="int" resultType="int">
 		SELECT COUNT(*)
 		FROM PRODUCT
-		WHERE CAT_NUM = #{catNum}
+		WHERE CAT_NUM = #{catNum} AND COM_NUM IS NULL
 	</select>
     
     
@@ -97,6 +98,7 @@
     	<if test="tradeOption == '거래가능'">
     	AND SELL_TYPE = 'Y'
     	</if>
+    	AND COM_NUM IS NULL
     	</where>
     	
     	<!-- 정렬 옵션 -->
@@ -116,6 +118,19 @@
     	ORDER BY LIKE_NUM DESC
     	</otherwise>
     	</choose>
-    	</select>
+    </select>
+    
+    <!-- 광고 -  -->
+	<select id="selectAdvertisementItem" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
+		SELECT *
+		FROM (
+		SELECT *
+		FROM PRODUCT
+		WHERE CAT_NUM = #{catNum}
+		AND COM_NUM IS NOT NULL
+		ORDER BY (ADMIN_SCORE + LIKE_NUM) DESC
+		)
+		WHERE ROWNUM = 1
+	</select>
     
 </mapper>
