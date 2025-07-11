@@ -56,10 +56,12 @@ public class JwtServiceImpl implements JwtService {
         } //end if
         
         // 토큰에서 사용자 번호 추출
-        String usernum = claims.get("usernum", String.class);
+        String usernum = claims.get("userNum", String.class);
         
         // 해당 사용자에 대한 인증 정보 로드
         UserDetails userDetails = userDetailsService.loadUserByUsername(usernum);
+
+        System.out.println("getAuthentication: "+userDetails);
 
         // 인증 객체 생성
         return new UsernamePasswordAuthenticationToken(

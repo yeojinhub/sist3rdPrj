@@ -1,12 +1,15 @@
 package kr.co.sist.user.Service;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.InquiryDTO;
 import kr.co.sist.user.DAO.InquiryDAO;
 
@@ -33,11 +36,37 @@ public class InquiryService {
 			iDAO.insertInquiry(iDTO);
 			
 			// 2. 파일 업로드
+			// 2-1. 업로드 디렉토리 생성 및 변수 저장
 			String uploadDir = createUploadDir(iDTO.getInqNum());
-			for (MultipartFile file : files) {
-				
+
+			// 2-2. 이미지DTO 생성 및 기본 값 설정
+			ImageDTO imgDTO = new ImageDTO();
+			imgDTO.setImageType("INQUIRY");
+			for (int i = 0; i < files.length; i++) {
+				String filePath = uploadFile(files[i], uploadDir, String.valueOf(i));
+				switch (i) {
+					case 0: 
+						imgDTO.setMainImage(filePath);
+						break;
+					case 1:
+						imgDTO.setSubImage1(filePath);
+						break;
+					case 2:
+						imgDTO.setSubImage2(filePath);
+						break;
+				}// end switch-case
 			}// end for
 
+			// 3. 이미지DTO 데이터 넣어보자.
+			iDAO.insertImage(imgDTO);
+
+			// 4. 문의에 IMG_NUM을 업데이트 해주자.
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			map.put("imgNum", imgDTO.getImgNum());
+			map.put("inqNum", iDTO.getInqNum());
+			iDAO.updateInqNum(map);
+			
+			// 5. 완료 true 반환!
 			return true;
 		} catch (Exception e) {
 			return false;

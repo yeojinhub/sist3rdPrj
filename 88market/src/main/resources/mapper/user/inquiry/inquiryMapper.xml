@@ -10,4 +10,11 @@
 		INSERT INTO INQUIRY (INQ_NUM, TITLE, CONTENT, NAME, USER_NUM, INQUIRY_TYPE)
 		VALUES (#{inqNum}, #{title}, #{content}, #{name}, #{userNum}, #{inquiryType})
 	</insert>
+	<insert id="insertImage" parameterType="kr.co.sist.DTO.ImageDTO">
+		INSERT INTO IMAGE (IMG_NUM, IMAGE_TYPE, MAIN_IMAGE, SUB_IMAGE1, SUB_IMAGE2, INQ_NUM)
+		VALUES (SEQ_IMG_NUM.NEXTVAL, #{imageType}, #{mainImage}, #{subImage1}, #{subImage2})
+	</insert>
+	<update id="updateInqNum" parameterType="Map">
+		UPDATE INQUIRY SET IMG_NUM = #{imgNum} WHERE INQ_NUM = #{inqNum}
+	</update>
 </mapper>

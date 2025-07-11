@@ -61,6 +61,8 @@ public class LoginController {
 	public ResponseEntity<Map<String, String>> loginProcess(@RequestBody UserDTO loginDTO, HttpServletResponse response) {
 		// 사용자가 입력한 이메일로 사용자 정보 조회
 		UserDTO user = service.selectLogin(loginDTO.getEmail(), loginDTO.getPass());
+
+		System.out.println(user);
 		
 		if( user == null ) {
 			// 로그인 실패
