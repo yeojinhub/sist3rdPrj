@@ -30,4 +30,6 @@ public class InquiryDTO {
 	private String admNum; /* 관리자사번 */
 	private int imgNum; /* 이미지번호 */
 
+	private AnswerDTO answerDTO; /* 답변 */
+
 } //class

@@ -8,8 +8,8 @@ html, body {
 /* 모달 열렸을 때 배경 스크롤 막기 */
 body.modal-open {
 	overflow: hidden;
-	position: fixed;
-	width: 100%;
+	/* position: fixed;
+	width: 100%; */
 }
 
 /* 2. 찜하기 오버레이 */

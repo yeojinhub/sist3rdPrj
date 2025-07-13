@@ -2,6 +2,7 @@ package kr.co.sist.user.Service;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,12 @@ public class InquiryService {
 			
 			// 1. 문의 등록
 			iDAO.insertInquiry(iDTO);
+
+
+			// 1-1. 첨부이미지 없이 문의 등록 시 업로드 처리 안함
+			if (files == null || files.length == 0) {
+				return true;
+			}// end if
 	
 			// 2. 파일 업로드 및 경로 처리
 			String uploadDir = createUploadDir(iDTO.getInqNum());
@@ -83,7 +90,35 @@ public class InquiryService {
 			e.printStackTrace(); // 전체 스택트레이스 출력
 			return false;
 		}
-	}
+	}// addInquiry
+
+	/**
+	 * 문의 리스트 조회
+	 * @param user
+	 * @return
+	 */
+	public List<InquiryDTO> inquiryList(UserDetails user) {
+
+		// UserDetails에서 유저넘버 추출
+		int userNum = Integer.parseInt(user.getUsername());
+
+		return iDAO.inquiryList(userNum);
+	}// inquiryList
+
+	/**
+	 * 문의 상세 조회
+	 * @param inqNum
+	 * @return
+	 */
+	public InquiryDTO inquiryDetail(int inqNum) {
+		InquiryDTO iDTO = iDAO.inquiryDetail(inqNum);
+
+		if (!iDTO.getStatusType().equals("대기")) {
+			iDTO.setAnswerDTO(iDAO.inquiryAnswer(inqNum));
+		}
+
+		return iDTO;
+	}// inquiryDetail
 	
 	/**
 	 * 업로드 디렉터리 생성
@@ -100,6 +135,13 @@ public class InquiryService {
 		return uploadDir;
 	}// createUploadDir
 	
+	/**
+	 * 파일 업로드
+	 * @param file 업로드할 파일
+	 * @param uploadDir 업로드 디렉터리
+	 * @param name 파일 이름
+	 * @return 파일 업로드 경로를 반환합니다.
+	 */
 	private String uploadFile(MultipartFile file, String uploadDir, int name) throws Exception {
 		String fileName = file.getOriginalFilename();
 		String extension = fileName != null ? fileName.substring(fileName.lastIndexOf(".")) : "";

@@ -1,0 +1,173 @@
+<th:block th:fragment="inquiryListOverlay">
+    <link rel="stylesheet" th:href="@{/css/user/components/inquiry.css}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- 리스트 오버레이 -->
+    <div class="inquiry-list-overlay"></div>
+
+    <!-- 통합 모달 -->
+    <div class="inquiry-list-modal">
+        <div class="inquiry-list-container">
+            <!-- 리스트 뷰 -->
+            <div class="inquiry-list-view">
+                <!-- 헤더 -->
+                <div class="inquiry-list-header">
+                    <h1 class="inquiry-list-title">문의내역</h1>
+                    <button class="inquiry-list-close-icon">×</button>
+                </div>
+
+                <!-- 문의 리스트 -->
+                <div class="inquiry-list-content">
+
+                </div>
+            </div>
+
+            <!-- 상세 뷰 -->
+            <div class="inquiry-detail-view" style="display: none;">
+                <!-- 헤더 -->
+                <div class="inquiry-detail-header">
+                    <button class="inquiry-detail-back">&lt;</button>
+                    <h1 class="inquiry-detail-title">문의내역</h1>
+                    <button class="inquiry-detail-close">×</button>
+                </div>
+
+                <!-- 상세 내용 -->
+                <div class="inquiry-detail-output">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            // 문의 리스트 열기
+            $('#inquiryListBtn').click(() => {
+                axios.get('/inquiry')
+                    .then(res => {
+                        $('.inquiry-list-overlay').fadeIn(300);
+                        $('.inquiry-list-modal').addClass('show');
+                        $('body').addClass('inquiry-list-modal-open');
+                        loadInquiryList();
+                        showListView();
+                    })
+                    .catch(err => {
+                        console.log(err.response.status);
+                        if (err.response?.status === 401) {
+                            alert('로그인이 필요합니다.');
+                            location.href = '/login';
+                        }
+                    });
+
+            });
+
+            // 문의 리스트 닫기
+            $('.inquiry-list-overlay, .inquiry-list-close-icon, .inquiry-detail-close').click(() => {
+                $('.inquiry-list-modal').removeClass('show');
+                setTimeout(() => {
+                    $('.inquiry-list-overlay').fadeOut(300);
+                    $('body').removeClass('inquiry-list-modal-open');
+                }, 300);
+            });
+
+            // 문의 상세 열기 (내용만 바뀜)
+            $('.inquiry-list-content').on('click', '.inquiry-item', function () {
+                const inquiryId = $(this).data('id');
+                showDetailView();
+                loadInquiryDetail(inquiryId);
+            });
+
+            // 뒤로가기 (리스트로 돌아감)
+            $('.inquiry-detail-back').click(() => {
+                showListView();
+            });
+
+            // 리스트 뷰 보여주기
+            function showListView() {
+                $('.inquiry-list-view').show();
+                $('.inquiry-detail-view').hide();
+            }
+
+            // 상세 뷰 보여주기
+            function showDetailView() {
+                $('.inquiry-list-view').hide();
+                $('.inquiry-detail-view').show();
+            }
+
+            // 문의 리스트 로드
+            function loadInquiryList() {
+                axios.get('/inquiry/list')
+                    .then(res => {
+                        $('.inquiry-list-content').empty();
+                        res.data.forEach(item => {
+                            $('.inquiry-list-content').append(`
+                                <div class="inquiry-item" data-id="${item.inqNum}">
+                                    <div class="inquiry-item-header">
+                                        <span class="inquiry-badge ${item.statusType === '답변완료' ? 'answered' : ''}">${item.statusType === '대기' ? '미답변' : item.statusType}</span>
+                                        <span class="inquiry-type">${item.inquiryType}</span>
+                                        <span class="inquiry-date">${item.inputDate}</span>
+                                    </div>
+                                    <div class="inquiry-item-title">${item.title}</div>
+                                </div>
+                            `)
+                        })
+
+                    })
+                    .catch(err => {
+                        console.log('문의 리스트 로드 실패', err);
+                    });
+            }
+
+            // 문의 상세 로드
+            function loadInquiryDetail(inquiryId) {
+                // 먼저 로딩 화면 표시
+                $('.inquiry-detail-output').html('<div class="loading-spinner">로딩중...</div>');
+                showDetailView();
+
+                axios.get(`/inquiry/${inquiryId}`)
+                    .then(res => {
+
+                        $('.inquiry-detail-output').empty();
+
+                        const htmlContent = `
+                <div class="inquiry-detail-content">
+                    <div class="inquiry-detail-info">
+                        <div class="detail-meta">
+                            <span class="detail-type">${res.data.inquiryType}</span>
+                            <span class="detail-date">${res.data.inputDate}</span>
+                        </div>
+                        <h2 class="detail-title">${res.data.title}</h2>
+                    </div>
+
+                    <div class="inquiry-qa-section">
+                        <div class="qa-item question">
+                            <div class="qa-label">Q.</div>
+                            <div class="qa-content">
+                                <div class="qa-text">문의 내용:</div>
+                                <div class="qa-answer">${res.data.content}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="qa-divider"></div>
+                        
+                        <div class="qa-item answer">
+                            <div class="qa-label">A.</div>
+                            <div class="qa-content">
+                                <div class="qa-text">답변 내용:</div>
+                                <div class="qa-answer">${res.data.answerDTO?.content || '답변 대기 상태입니다.'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                        $('.inquiry-detail-output').append(htmlContent);
+                    })
+                    .catch(err => {
+                        console.log('문의 상세 로드 실패', err);
+                    });
+            }
+        });
+    </script>
+</th:block>

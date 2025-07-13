@@ -11,7 +11,7 @@
 					.then(res => {
 						$('.inquiry-overlay').fadeIn(300);
 						$('.inquiry-modal').addClass('show');
-						$('body').addClass('modal-open');
+						$('body').addClass('inquiry-modal-open');
 					})
 					.catch(err => {
 						console.log(err.response.status);
@@ -56,7 +56,7 @@
 
 			<!-- 문의 유형 -->
 			<select class="inquiry-select" required>
-				<option value="" disabled selected>문의 유형을 선택해주세요.</option>
+				<option value="none" disabled selected>문의 유형을 선택해주세요.</option>
 				<option value="주문/결제">주문/결제</option>
 				<option value="배송">배송</option>
 				<option value="환불">환불</option>
@@ -88,46 +88,53 @@
 
 	<script>
 		$(function () {
-			const fileInput = $('.inquiry-file-input');
 			const uploadList = $('.inquiry-upload-list');
 			const thumbCount = $('.thumb-count');
 			const maxFiles = 3;
 			let uploadedFiles = [];
 
-			// 파일 변경 감지
-			fileInput.on('change', function (e) {
-				const newFiles = Array.from(e.target.files);
+			// 파일 input 이벤트 설정 함수
+			function setupFileInputEvents() {
+				const fileInput = $('.inquiry-file-input');
+				
+				// 기존 이벤트 제거 후 새로 연결
+				fileInput.off('change').on('change', function (e) {
+					const newFiles = Array.from(e.target.files);
 
-				if (uploadedFiles.length + newFiles.length > maxFiles) {
-					alert(`최대 ${maxFiles}개의 이미지만 업로드할 수 있습니다.`);
-					// 초과된 파일 입력은 초기화
+					if (uploadedFiles.length + newFiles.length > maxFiles) {
+						alert(`최대 ${maxFiles}개의 이미지만 업로드할 수 있습니다.`);
+						// 초과된 파일 입력은 초기화
+						$(this).val('');
+						return;
+					}
+
+					newFiles.forEach(file => {
+						// FileReader를 사용하여 이미지 미리보기 생성
+						const reader = new FileReader();
+						reader.onload = function (event) {
+							const previewItem = `
+								<div class="inquiry-preview-item">
+									<img src="${event.target.result}" alt="preview">
+									<i class="fa-solid fa-xmark preview-delete-btn"></i>
+								</div>`;
+							uploadList.append(previewItem);
+							
+							// 마지막으로 추가된 미리보기 아이템에 파일 객체 저장
+	                        const lastPreviewItem = uploadList.children().last();
+	                        lastPreviewItem.data('file', file);
+	                        uploadedFiles.push(file);
+							updateCount();
+						};
+						reader.readAsDataURL(file);
+					});
+
+					// 파일 선택 후 input 초기화 (동일 파일 재선택 가능)
 					$(this).val('');
-					return;
-				}
-
-				newFiles.forEach(file => {
-					// FileReader를 사용하여 이미지 미리보기 생성
-					const reader = new FileReader();
-					reader.onload = function (event) {
-						const previewItem = `
-							<div class="inquiry-preview-item">
-								<img src="${event.target.result}" alt="preview">
-								<i class="fa-solid fa-xmark preview-delete-btn"></i>
-							</div>`;
-						uploadList.append(previewItem);
-						
-						// 마지막으로 추가된 미리보기 아이템에 파일 객체 저장
-                        const lastPreviewItem = uploadList.children().last();
-                        lastPreviewItem.data('file', file);
-                        uploadedFiles.push(file);
-						updateCount();
-					};
-					reader.readAsDataURL(file);
 				});
+			}
 
-				// 파일 선택 후 input 초기화 (동일 파일 재선택 가능)
-				$(this).val('');
-			});
+			// 초기 이벤트 설정
+			setupFileInputEvents();
 
 			// 미리보기 삭제
 			uploadList.on('click', '.preview-delete-btn', function () {
@@ -149,6 +156,20 @@
 
 			// 등록
 			$('.inquiry-submit-btn').click(() => {
+				// 유효성 검사
+				if (!$('.inquiry-select').val() || $('.inquiry-select').val() === 'none' || $('.inquiry-select').val() === 'none') {
+					alert('문의 유형을 선택해주세요.');
+					return;
+				}
+				if ($('.inquiry-title-input').val() === '') {
+					alert('제목을 입력해주세요.');
+					return;
+				}
+				if ($('.inquiry-textarea').val() === '') {
+					alert('내용을 입력해주세요.');
+					return;
+				}
+
 				const formData = new FormData();
 				formData.append('inquiryType', $('.inquiry-select').val());
 				formData.append('title', $('.inquiry-title-input').val());
@@ -165,13 +186,7 @@
 					})
 					.then(res => {
 						alert('문의 등록 완료');
-						console.log(res.data);
-						// 성공 시 모달 닫기
-						$('.inquiry-modal').removeClass('show');
-						setTimeout(() => {
-							$('.inquiry-overlay').fadeOut(300);
-							$('body').removeClass('modal-open');
-						}, 300);
+						location.reload();
 					})
 					.catch(err => {
 						console.log(err.response.status);
