@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-<mapper namespace="kr.co.sist.user.DAO.ImageDAO">
 
-    <insert id="insertImage" parameterType="kr.co.sist.DTO.ImageDTO">
-        INSERT INTO IMAGE (
-            IMG_NUM, MAIN_IMAGE, SUB_IMAGE1, SUB_IMAGE2, SUB_IMAGE3, SUB_IMAGE4, IMAGE_TYPE
-        ) VALUES (
-            #{imgNum}, #{mainImage}, #{subImage1}, #{subImage2}, #{subImage3}, #{subImage4}, #{imageType}
-        )
-    </insert>
+<mapper namespace="ImageMapper">
 
-    <select id="getNextImageSeq" resultType="int">
-        SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
-    </select>
+  <!-- 이미지 등록 -->
+  <insert id="insertImage" parameterType="kr.co.sist.DTO.ImageDTO">
+    INSERT INTO IMAGE (
+        IMG_NUM, MAIN_IMAGE, SUB_IMAGE1, SUB_IMAGE2, SUB_IMAGE3, SUB_IMAGE4, IMAGE_TYPE
+    ) VALUES (
+        #{imgNum}, 
+        #{mainImage, jdbcType=VARCHAR}, 
+        #{subImage1, jdbcType=VARCHAR}, 
+        #{subImage2, jdbcType=VARCHAR}, 
+        #{subImage3, jdbcType=VARCHAR}, 
+        #{subImage4, jdbcType=VARCHAR}, 
+        #{imageType, jdbcType=VARCHAR}
+    )
+	</insert>
+
+  <!-- 이미지 번호 시퀀스 -->
+  <select id="getNextImageSeq" resultType="int">
+    SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
+  </select>
 
 </mapper>
+
   

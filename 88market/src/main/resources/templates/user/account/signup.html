@@ -10,6 +10,61 @@
 <!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
 
+<script th:inline="javascript">
+const signUpUrl="/signUpProcess";
+const mainURL = "/";
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+const btn = document.getElementById("btn");
+if (!btn) return;
+
+btn.addEventListener("click", function () {
+	const name = document.getElementById("name").value;
+    const nickname = document.getElementById("nickname").value;
+    const email = document.getElementById("email-id").value + "@" + document.getElementById("email-domain").value;
+    const pass = document.getElementById("pass-id").value;
+    const tel = document.getElementById("tel").value;
+    const zipcode = document.getElementById("zipcode").value;
+    const address =
+      document.getElementById("road_address").value +
+      document.getElementById("detail-address").value +
+      document.getElementById("extra-address").value;
+
+    const jsonParam = {
+      name,
+      nickname,
+      email,
+      pass,
+      tel,
+      zipcode,
+      address,
+    };
+
+    fetch(signUpUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(jsonParam),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("회원가입 실패");
+        return res.json();
+      })
+      .then((data) => {
+        alert("회원가입이 완료되었습니다.");
+        window.location.href = mainURL;
+      })
+      .catch((err) => {
+        console.error("회원가입 오류:", err);
+        alert("이메일 또는 비밀번호가 잘못되었습니다.");
+      });
+  }); //addEventListener
+}); //addEventListener
+</script>
+
 <script th:src="@{/js/user/signup.js}" defer></script>
 </head>
 
@@ -64,8 +119,8 @@
 				</div>
 
 				<div class="form-group">
-					<label for="phone">휴대폰 번호</label>
-					<input type="tel" id="phone" name="phone" class="input-error" placeholder="-없이 숫자만 입력" /><p class="error-message">휴대폰 번호를 입력해주세요</p>
+					<label for="tel">휴대폰 번호</label>
+					<input type="tel" id="tel" name="tel" class="input-error" placeholder="-없이 숫자만 입력" /><p class="error-message">휴대폰 번호를 입력해주세요</p>
 				</div>
 
 				<div class="form-group">
@@ -77,11 +132,11 @@
 						</div>
 						<input type="text" id="road-address" name="road-address" placeholder="도로명 주소" readonly>
 						<input type="text" id="detail-address" name="detail-address" placeholder="상세주소"><p class="error-message">상세주소를 입력해주세요</p>
-						<input type="text" id="sample6_extraAddress" placeholder="참고항목">
+						<input type="text" id="extra-address" placeholder="참고항목">
 					</div>
 				</div>
 
-				<button type="submit" class="submit-btn">제출하기</button>
+				<button type="button" id="btn" class="submit-btn">제출하기</button>
 			</form>
 		</div>
 	</main>

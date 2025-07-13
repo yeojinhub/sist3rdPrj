@@ -1,0 +1,180 @@
+<th:block th:fragment="inquiryOverlay">
+	<link rel="stylesheet" th:href="@{/css/user/components/inquiry.css}">
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<script>
+		$(function () {
+
+			// 열기
+			$('#inquiryBtn').click(() => {
+				axios.get('/inquiry')
+					.then(res => {
+						$('.inquiry-overlay').fadeIn(300);
+						$('.inquiry-modal').addClass('show');
+						$('body').addClass('modal-open');
+					})
+					.catch(err => {
+						if (err.response?.status === 401) {
+							alert('로그인이 필요합니다.');
+							location.href = '/login';
+						}
+					});
+			});
+
+			// 닫기 (오버레이, X 버튼)
+			$('.inquiry-overlay, .inquiry-back-icon').click(() => {
+				$('.inquiry-modal').removeClass('show');
+				setTimeout(() => {
+					$('.inquiry-overlay').fadeOut(300);
+					$('body').removeClass('modal-open');
+				}, 300);
+			});
+
+			// 모달 내부 클릭 막기
+			$('.inquiry-modal').click(e => e.stopPropagation());
+		});
+	</script>
+
+	<!-- 오버레이 -->
+	<div class="inquiry-overlay"></div>
+
+	<!-- 모달 -->
+	<div class="inquiry-modal">
+		<div class="inquiry-container">
+			<!-- 헤더 -->
+			<div class="inquiry-header">
+				<h1 class="main-title">1:1 문의</h1>
+				<button class="inquiry-back-icon">X</button>
+			</div>
+
+			<!-- 안내 -->
+			<p class="inquiry-alert">
+				<i class="fa-solid fa-bell" style="color: #FF7F50;"></i> 현재 문의량이
+				급증하여 답변이 지연되고 있습니다. 순차적으로 답변드리고 있으니 회원 여러분의 양해를 부탁드립니다.
+			</p>
+
+			<!-- 문의 유형 -->
+			<select class="inquiry-select" required>
+				<option value="" disabled selected>문의 유형을 선택해주세요.</option>
+				<option value="order">주문/결제</option>
+				<option value="delivery">배송</option>
+				<option value="refund">환불</option>
+				<option value="etc">기타</option>
+			</select>
+
+			<!-- 제목 -->
+			<input type="text" class="inquiry-title-input" placeholder="제목을 입력해주세요." required>
+
+			<!-- 상세 내용 -->
+			<textarea class="inquiry-textarea" rows="8" placeholder="정확한 답변을 위해 문의 내용을 자세히 작성해 주세요."
+				required></textarea>
+
+			<!-- 첨부 -->
+			<div class="inquiry-upload">
+				<label class="inquiry-upload-label"> 
+					<input class="inquiry-file-input" type="file" multiple accept="image/*" hidden>
+					<div class="inquiry-upload-thumb">
+						<i class="fa-solid fa-camera"></i> <span class="thumb-count">0/3</span>
+					</div>
+				</label>
+				<div class="inquiry-upload-list"></div>
+			</div>
+
+			<!-- 등록 -->
+			<button class="inquiry-submit-btn">등록</button>
+		</div>
+	</div>
+
+	<script>
+		$(function () {
+			const fileInput = $('.inquiry-file-input');
+			const uploadList = $('.inquiry-upload-list');
+			const thumbCount = $('.thumb-count');
+			const maxFiles = 3;
+			let uploadedFiles = [];
+
+			// 파일 변경 감지
+			fileInput.on('change', function (e) {
+				const newFiles = Array.from(e.target.files);
+
+				if (uploadedFiles.length + newFiles.length > maxFiles) {
+					alert(`최대 ${maxFiles}개의 이미지만 업로드할 수 있습니다.`);
+					// 초과된 파일 입력은 초기화
+					$(this).val('');
+					return;
+				}
+
+				newFiles.forEach(file => {
+					// FileReader를 사용하여 이미지 미리보기 생성
+					const reader = new FileReader();
+					reader.onload = function (event) {
+						const previewItem = `
+							<div class="inquiry-preview-item">
+								<img src="${event.target.result}" alt="preview">
+								<i class="fa-solid fa-xmark preview-delete-btn"></i>
+							</div>`;
+						uploadList.append(previewItem);
+						
+						// 마지막으로 추가된 미리보기 아이템에 파일 객체 저장
+                        const lastPreviewItem = uploadList.children().last();
+                        lastPreviewItem.data('file', file);
+                        uploadedFiles.push(file);
+						updateCount();
+					};
+					reader.readAsDataURL(file);
+				});
+
+				// 파일 선택 후 input 초기화 (동일 파일 재선택 가능)
+				$(this).val('');
+			});
+
+			// 미리보기 삭제
+			uploadList.on('click', '.preview-delete-btn', function () {
+				const previewItem = $(this).closest('.inquiry-preview-item');
+                const fileToRemove = previewItem.data('file');
+                
+                // 배열에서 파일 제거
+                uploadedFiles = uploadedFiles.filter(f => f !== fileToRemove);
+
+				previewItem.remove();
+				updateCount();
+			});
+			
+			// 업로드된 파일 개수 업데이트
+			function updateCount() {
+				const currentFiles = uploadedFiles.length;
+				thumbCount.text(`${currentFiles}/${maxFiles}`);
+			}
+
+			// 등록
+			$('.inquiry-submit-btn').click(() => {
+				const formData = new FormData();
+				formData.append('statusType', $('.inquiry-select').val());
+				formData.append('title', $('.inquiry-title-input').val());
+				formData.append('content', $('.inquiry-textarea').val());
+				
+				uploadedFiles.forEach(file => {
+					formData.append('files', file);
+				});
+
+				axios.post('/inquiry/add', formData, {
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					})
+					.then(res => {
+						alert('문의 등록 완료');
+						// 성공 시 모달 닫기
+						$('.inquiry-modal').removeClass('show');
+						setTimeout(() => {
+							$('.inquiry-overlay').fadeOut(300);
+							$('body').removeClass('modal-open');
+						}, 300);
+					})
+					.catch(err => {
+						alert('문의 등록 실패');
+					});
+			});
+		});
+	</script>
+</th:block>

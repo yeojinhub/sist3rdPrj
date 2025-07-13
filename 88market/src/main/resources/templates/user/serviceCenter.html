@@ -37,8 +37,8 @@
                 header: "ui-icon-triangle-1-e",
                 activeHeader: "ui-icon-triangle-1-s"
             }
-        });
-    });
+        });// click
+    });// ready
 
     function faqType(type) {
         location.href = '/serviceCenter?type=' + type;
@@ -89,10 +89,13 @@
             </th:block>
         </div>
         <div class="inquiry-buttons">
-            <button class="inquiry-btn">1:1 문의</button>
-            <button class="inquiry-history-btn">문의내역</button>
+            <button class="inquiry-btn" id="inquiryBtn">1:1 문의</button>
+            <button class="inquiry-history-btn" id="inquiryListBtn">문의내역</button>
         </div>
     </main>
+
+	<!-- 1:1문의하기 오버레이 -->
+	<th:block th:insert="~{components/user/inquiryOverlay :: inquiryOverlay}"></th:block>
 
     <!-- 푸터 -->
     <th:block th:insert="~{components/user/footer :: footer}"></th:block>

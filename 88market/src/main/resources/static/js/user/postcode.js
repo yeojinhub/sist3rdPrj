@@ -25,17 +25,17 @@ function sample6_execDaumPostcode() {
                 if (extraAddr !== '') {
                     extraAddr = ' (' + extraAddr + ')';
                 }
-                document.getElementById("sample6_extraAddress").value = extraAddr;
+                document.getElementById("extra-address").value = extraAddr;
             } else {
-                document.getElementById("sample6_extraAddress").value = '';
+                document.getElementById("extra-address").value = '';
             }
 
             // ▶▶ 주소 필드에 자동 입력
-            document.getElementById('zipcode').value = data.zonecode;
+            document.getElementById('zipcode').value = data.zonecsode;
             document.getElementById("road-address").value = addr;
 
             // ▶▶ [추가된 부분] 자동으로 입력된 필드에 스타일 적용
-            ['zipcode', 'road-address', 'sample6_extraAddress'].forEach(id => {
+            ['zipcode', 'road-address', 'extra-address'].forEach(id => {
                 const el = document.getElementById(id);
                 el.style.color = 'blue';                  // 글자색
                 el.style.backgroundColor = '#e0f7fa';      // 배경색

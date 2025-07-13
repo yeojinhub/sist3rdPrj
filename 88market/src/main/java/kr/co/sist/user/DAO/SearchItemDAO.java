@@ -28,5 +28,6 @@ public interface SearchItemDAO {
 	public List<ProductDTO> findByKeywordAndFilters(@Param("keyword")String keyword, @Param("catNum") Integer catNum, @Param("minPrice") Integer minPrice,@Param("maxPrice") Integer maxPrice,
 			@Param("tradeOption")String tradeOption, @Param("sortOption")String sortOption);
 	
-
+	// 광고 - admin_score + like_num 해서 점수 높은 상품
+	public ProductDTO selectAdvertisementItem(@Param("catNum") Integer catNum);
 }
