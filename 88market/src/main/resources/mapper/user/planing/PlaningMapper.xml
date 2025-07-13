@@ -14,7 +14,7 @@
 	    AND SELL_TYPE = 'Y'
 	</select>
 	
-	<select id="onePlaningList" resultType="kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithReviewWithImageDTO">
+	<select id="onePlaningList" resultType="kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO">
        SELECT 
 		    P.prd_num, P.title, P.content, P.price, P.location1, 
 		    P.input_date AS prdInputDate,
@@ -37,6 +37,17 @@
 		LEFT JOIN IMAGE I ON I.img_num = P.img_num
 		WHERE P.PRD_NUM = #{prdNum}
     </select>
+    
+    <select id="selectReview" resultType="kr.co.sist.DTO.ReviewDTO">
+       SELECT *
+		FROM  REVIEW 
+		WHERE PRD_NUM = #{prdNum}
+    </select>
+    
+    <select id="selectReviewCount" resultType="int">
+	    SELECT COUNT(*) FROM REVIEW 
+	    WHERE PRD_NUM = #{prdNum}
+	</select>
     
     <select id="selectRandomProductsByComNum" resultType="kr.co.sist.DTO.ProductDTO">
 	    SELECT *
@@ -78,6 +89,39 @@
 	<select id="AllProductsByCompany" resultType="kr.co.sist.DTO.ProductDTO">
 	  SELECT * FROM PRODUCT
 	   WHERE COM_NUM = #{comNum}
+	   
+	</select>
+	<select id="ProductsByCompanyAndSellTypeSort" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT 
+	  WHERE COM_NUM = #{comNum} 
+	  AND SELL_TYPE = #{sellType}
+	  <choose>
+	    <when test="sort == 'low'">
+	      ORDER BY PRICE ASC
+	    </when>
+	    <when test="sort == 'high'">
+	      ORDER BY PRICE DESC
+	    </when>
+	    <otherwise>
+	      ORDER BY INPUT_DATE DESC
+	    </otherwise>
+	  </choose>
+	</select>
+	
+	<select id="AllProductsByCompanySort" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT
+	   WHERE COM_NUM = #{comNum}
+	   <choose>
+	    <when test="sort == 'low'">
+	      ORDER BY PRICE ASC
+	    </when>
+	    <when test="sort == 'high'">
+	      ORDER BY PRICE DESC
+	    </when>
+	    <otherwise>
+	      ORDER BY INPUT_DATE DESC
+	    </otherwise>
+  </choose>
 	</select>
 
 </mapper>
