@@ -22,6 +22,7 @@ public class AnswerDTO {
 	private String title; /* 문의답변제목 */
 	private String content; /* 문의답변내용 */
 	private String name; /* 문의답변작성자 */
+	private int admNum;
 	
 	private Date inputType; /* 문의답변작성일*/
 

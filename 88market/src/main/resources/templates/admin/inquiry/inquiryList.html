@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>관리자 - 문의사항</title>
+	<!-- 관리자 문의사항 CSS -->
+	<link rel="stylesheet" th:href="@{/css/admin/inquiry/inquiry.css}">
+	<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+	<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>문의 관리 &gt;</span> <span class="current-page">문의 목록</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (문의관리) -->
+			<main class="container">
+				<section class="search-section">
+					<!-- 검색 폼 추가 (method="get") -->
+					<form id="searchForm" th:action="@{/admin/inquiry}" method="get">
+						<div class="search-box">
+							<select class="search-filter" name="searchType">
+								<option value="title"
+									th:selected="${param.searchType != null and param.searchType[0] == 'title'}">제목
+								</option>
+								<option value="content"
+									th:selected="${param.searchType != null and param.searchType[0] == 'content'}">내용
+								</option>
+								<option value="name"
+									th:selected="${param.searchType != null and param.searchType[0] == 'name'}">작성자
+								</option>
+							</select>
+							<input type="text" class="search-input" name="keyword" th:value="${param.keyword}"
+								placeholder="검색">
+							<button type="submit" class="search-button">검색</button>
+							<!-- 검색 초기화 버튼 추가 -->
+							<button type="button" class="search-button" id="resetSearch" th:onclick="location.href='/admin/inquiry'">초기화</button>
+						</div>
+					</form>
+				</section>
+
+				<section class="inquiry-section">
+					<table class="inquiry-table">
+						<thead>
+							<tr>
+								<th>번호</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>문의유형</th>
+								<th>상태</th>
+								<th>등록일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item, i : ${inquiryList}" class="table-row">
+								<td th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.count - 1)}"></td>
+								<td class="inquiry-title" th:text="${item.title}"
+									style="cursor: pointer; text-align: center;"
+									th:onclick="|location.href='@{/admin/inquiry/answer/{id}(id=${item.inqNum})}'|"
+								</td>
+								<td th:text="${item.name}"></td>
+								<td th:text="${item.inquiryType}"></td>
+								<td>
+									<span th:classappend="${item.statusType == '대기' ? 'inquiry-badge' : 'inquiry-badge answered'}" th:text="${item.statusType == '대기' ? '미답변' : item.statusType}"></span>
+								</td>
+								<td th:text="${item.inputDate}"></td>
+							</tr>
+							<tr th:if="${#lists.isEmpty(inquiryList)}">
+								<td colspan="6" style="text-align: center;">등록된 문의가 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="table-footer">
+						<div class="table-controls">
+							
+						</div>
+						<!-- 페이지네이션 -->
+						<div class="pagination" th:if="${pagination.totalPages > 0}">
+							<div class="pagination">
+								<!-- 이전 페이지 -->
+								<a th:if="${pagination.pageNum > 1}" th:href="@{/admin/inquiry(page=${pagination.pageNum - 1}, 
+                              searchType=${param.searchType}, 
+                              keyword=${param.keyword})}" class="prev">&lt;</a>
+								<a th:unless="${pagination.pageNum > 1}" class="prev disabled">&lt;</a>
+
+								<!-- 페이지 번호 -->
+								<a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}" th:href="@{/admin/inquiry(page=${i}, 
+                              searchType=${param.searchType}, 
+                              keyword=${param.keyword})}" th:text="${i}"
+									th:classappend="${i == pagination.pageNum} ? 'active' : ''"></a>
+
+								<!-- 다음 페이지 -->
+								<a th:if="${pagination.pageNum < pagination.totalPages}" th:href="@{/admin/inquiry(page=${pagination.pageNum + 1}, 
+                              searchType=${param.searchType}, 
+                              keyword=${param.keyword})}" class="next">&gt;</a>
+								<a th:unless="${pagination.pageNum < pagination.totalPages}"
+									class="next disabled">&gt;</a>
+							</div>
+						</div>
+					</div>
+				</section>
+			</main>
+
+		</div>
+	</div>
+
+	<script>
+		$(function () {
+
+		});
+	</script>
+</body>
+
+</html>

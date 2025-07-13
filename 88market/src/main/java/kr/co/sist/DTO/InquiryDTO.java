@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 public class InquiryDTO {
 
-	private int inqNum; /* 문의사항번호 */
+	private Integer inqNum; /* 문의사항번호 */
 	private String title; /* 문의사항제목 */
 	private String content; /* 문의사항내용 */
 	private String name; /* 문의사항작성자 */
@@ -28,8 +28,9 @@ public class InquiryDTO {
 	
 	private int userNum; /* 사용자번호 */
 	private String admNum; /* 관리자사번 */
-	private int imgNum; /* 이미지번호 */
+	private Integer imgNum; /* 이미지번호 */
 
+	private ImageDTO imageDTO; /* 이미지 */
 	private AnswerDTO answerDTO; /* 답변 */
 
 } //class
