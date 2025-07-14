@@ -43,18 +43,24 @@ public class ProductController {
             @RequestPart("product") String productJson,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
+        String prdNum = null;
+        File uploadFolder = null;
+
         try {
             ObjectMapper mapper = new ObjectMapper();
             ProductDTO product = mapper.readValue(productJson, ProductDTO.class);
 
-            // 상품번호 및 이미지번호 생성
+            if (product.getDeliveryType() == null) product.setDeliveryType("N");
+            if (product.getMeetType() == null) product.setMeetType("N");
+            if (product.getSafeType() == null) product.setSafeType("N");
+
             int prdSeq = productService.getNextProductSeq();
             int imgSeq = productService.getNextImageSeq();
-            String prdNum = String.format("P_%04d", prdSeq);
+            prdNum = String.format("P_%08d", prdSeq);
 
-            // 이미지 저장 처리
+            // 이미지 저장 경로 준비
             String basePath = new File("src/main/resources/static/images/product/upload").getAbsolutePath();
-            File uploadFolder = new File(basePath, prdNum);
+            uploadFolder = new File(basePath, prdNum);
             if (!uploadFolder.exists()) uploadFolder.mkdirs();
 
             ImageDTO image = new ImageDTO();
@@ -75,23 +81,34 @@ public class ProductController {
                 product.setImgNum(imgSeq);
             }
 
-            // 상품 DTO 설정
             product.setPrdNum(prdNum);
-            product.setUserNum("1"); // 임시 유저
-            product.setClickNum(0);
-            product.setPrdCnt(1);
-            product.setSellType("N");
-            product.setHiddenType("N");
-            product.setAppointType("N");
+            product.setUserNum("1");
 
-            // 트랜잭션으로 이미지 + 상품 등록
+            // 트랜잭션 처리
             productService.insertProductWithImages(product, image);
 
             return ResponseEntity.ok().build();
+
         } catch (Exception e) {
             e.printStackTrace();
+
+            // 폴더 및 내부 파일 삭제
+            if (uploadFolder != null && uploadFolder.exists()) {
+                deleteFolder(uploadFolder);
+            }
+
             return ResponseEntity.badRequest().body("등록 실패: " + e.getMessage());
         }
+    }
+    
+    private void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
+        folder.delete();
     }
 
     private String saveFileWithFixedName(MultipartFile file, File folder, String prdNum, int index) throws Exception {
@@ -126,5 +143,22 @@ public class ProductController {
     public String seller(@RequestParam("id") int sellerId) {
         return "user/product/seller";
     }
+    
+    @GetMapping("/detail")
+    public String detail(@RequestParam("id") String prdNum, Model model) {
+        ProductDTO product = productService.selectProductByNum(prdNum);
+        model.addAttribute("product", product);
+
+        ImageDTO image = null;
+
+        // ✅ Null-safe 처리: getImgNum()이 null일 경우 처리 피하기
+        if (product != null && product.getImgNum() != null) {
+            image = productService.selectImageByNum(product.getImgNum());
+        }
+
+        model.addAttribute("image", image);
+        return "user/product/detail";
+    }
+
 
 }

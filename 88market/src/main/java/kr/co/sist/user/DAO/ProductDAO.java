@@ -19,5 +19,9 @@ public class ProductDAO {
     public void insert(ProductDTO product) {
         sqlSession.insert("ProductMapper.insertProduct", product);
     }
+    
+    public ProductDTO selectProductByNum(String prdNum) {
+    	return sqlSession.selectOne("ProductMapper.selectProductByNum",prdNum);
+    }
 }
 

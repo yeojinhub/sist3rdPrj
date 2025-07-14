@@ -52,11 +52,22 @@
 			<!-- 왼쪽 영역: 상품 이미지 및 상세 설명 -->
 			<section class="product-gallery-section">
 				<!-- 메인 이미지 캐러셀 -->
-				<div class="main-image-carousel fade">
-				  <div><img th:src="@{/images/main/img1.png}" alt="이미지1"></div>
-				  <div><img th:src="@{/images/main/img2.png}" alt="이미지2"></div>
-				  <div><img th:src="@{/images/main/img3.png}" alt="이미지3"></div>
-				  <div><img th:src="@{/images/main/img4.png}" alt="이미지4"></div>
+				<div class="main-image-carousel fade" th:if="${image != null}">
+				  <div th:if="${image.mainImage != null}">
+				    <img th:src="@{${image.mainImage}}" alt="메인이미지">
+				  </div>
+				  <div th:if="${image.subImage1 != null}">
+				    <img th:src="@{${image.subImage1}}" alt="서브1">
+				  </div>
+				  <div th:if="${image.subImage2 != null}">
+				    <img th:src="@{${image.subImage2}}" alt="서브2">
+				  </div>
+				  <div th:if="${image.subImage3 != null}">
+				    <img th:src="@{${image.subImage3}}" alt="서브3">
+				  </div>
+				  <div th:if="${image.subImage4 != null}">
+				    <img th:src="@{${image.subImage4}}" alt="서브4">
+				  </div>
 				</div>
 
 				<!-- 상품 정보 -->
@@ -73,10 +84,10 @@
 				<div class="product-summary">
 					<span class="product-category">디지털기기</span>
 					<div class="product-title-wrapper">
-					  <h1>레이저 키요 프로 웹캠 풀박</h1>
+					  <h1><p th:text="${product.title}"></p></h1>
 					</div>
 					<div class="price-wrapper">
-						<strong class="product-price">100,000원</strong> 
+						<strong class="product-price" th:text="${product.price}">100,000원</strong> 
 						<span class="badge safety-badge">안전거래</span>
 					</div>
 					<div class="product-meta">16분 전 · 조회 62회 · 채팅 3 · 찜 1</div>
@@ -85,16 +96,8 @@
 				<!-- 상품 거래 조건 -->
 				<div class="transaction-specs">
 					<div class="spec-item">
-						<span class="spec-title">제품상태</span> 
-						<span class="spec-value">중고</span>
-					</div>
-					<div class="spec-item">
 						<span class="spec-title">거래방식</span> 
 						<span class="spec-value">직거래, 택배</span>
-					</div>
-					<div class="spec-item">
-						<span class="spec-title">배송비</span> 
-						<span class="spec-value">포함</span>
 					</div>
 					<div class="spec-item">
 						<span class="spec-title">안전결제</span> 

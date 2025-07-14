@@ -11,11 +11,11 @@ import lombok.ToString;
 /**
  * 상품 테이블의 정보를 저장하는 DTO
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
 	
 	private String prdNum; /* 상품번호 */
@@ -37,7 +37,7 @@ public class ProductDTO {
 	private String userNum; /* 사용자번호 */
 	private int catNum; /* 카테고리번호 */
 	private String comNum; /* 사업자등록번호 */
-	private int imgNum; /* 이미지번호 */
+	private Integer imgNum; /* 이미지번호 */
 	private String comName;  /* 광고 - 상호명 */
 
     public String getShortLocation() {

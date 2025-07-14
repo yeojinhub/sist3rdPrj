@@ -23,6 +23,26 @@
   <select id="getNextImageSeq" resultType="int">
     SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
   </select>
+  
+  <update id="updateImage" parameterType="kr.co.sist.DTO.ImageDTO">
+	  UPDATE IMAGE
+	  SET
+	    MAIN_IMAGE = #{mainImage, jdbcType=VARCHAR},
+	    SUB_IMAGE1 = #{subImage1, jdbcType=VARCHAR},
+	    SUB_IMAGE2 = #{subImage2, jdbcType=VARCHAR},
+	    SUB_IMAGE3 = #{subImage3, jdbcType=VARCHAR},
+	    SUB_IMAGE4 = #{subImage4, jdbcType=VARCHAR}
+	  WHERE IMG_NUM = #{imgNum}
+	</update>
+	<!-- resources/mapper/ProductMapper.xml -->
+	<select id="selectImageByNum" parameterType="int" resultType="kr.co.sist.DTO.ImageDTO">
+	    SELECT 
+	        img_num, image_type, main_image, sub_image1, sub_image2, sub_image3, sub_image4
+	    FROM 
+	        image
+	    WHERE 
+	        img_num = #{imgNum}
+	</select>
 
 </mapper>
 

@@ -31,6 +31,14 @@ public class ProductService {
     	imageDAO.insert(imageDTO);
         productDAO.insert(productDTO);
     }
+    
+    public ProductDTO selectProductByNum(String prdNum) {
+        return productDAO.selectProductByNum(prdNum);
+    }
+    
+    public ImageDTO selectImageByNum(int imgNum) {
+    	return imageDAO.selectImageByNum(imgNum);
+    }
 }
 
 
