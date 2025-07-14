@@ -40,19 +40,20 @@ public class AdminEventService {
 		for (Integer evtNum : evtNums) {
 			// 이벤트와 조인되어있는 이미지 테이블 행 삭제
 			Integer imgNum = adminEventDAO.selectEventImageNum(evtNum);
-			adminEventDAO.deleteEventImage(imgNum);
-
-			// 업로드 이미지 디렉터리 삭제.
-			String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images/events/upload/"
-					+ evtNum;
-			deleteDirectoryRecursively(new File(uploadDir));
+			if (imgNum != null) {
+				adminEventDAO.deleteEventImage(imgNum);
+				// 업로드 이미지 디렉터리 삭제.
+				String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images/events/upload/"
+						+ evtNum;
+				deleteDirectoryRecursively(new File(uploadDir));
+			}
 
 		}
 
 		adminEventDAO.deleteEvents(evtNums);
 
 	}
-	
+
 	// 디렉토리 내부 이미지파일 삭제 메소드
 	private void deleteDirectoryRecursively(File dir) {
 		try {

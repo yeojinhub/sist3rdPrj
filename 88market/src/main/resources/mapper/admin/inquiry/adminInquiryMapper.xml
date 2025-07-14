@@ -60,15 +60,10 @@
 	    SELECT * FROM IMAGE WHERE img_num = #{imgNum}
 	</select>
 
-	<!-- 관리자 이름 조회 -->
-	<select id="selectAdmNameByAdmNum" resultType="String" parameterType="int">
-	    SELECT name FROM ADMIN WHERE adm_num = #{admNum}
-	</select>
-
 	<!-- 답변 등록 -->
 	<insert id="insertAnswer" parameterType="kr.co.sist.DTO.AnswerDTO">
-	    INSERT INTO ANSWER (inq_num, adm_num, content, name)
-	    VALUES (#{inqNum}, #{admNum}, #{content}, #{name})
+	    INSERT INTO ANSWER (inq_num, adm_num, content)
+	    VALUES (#{inqNum}, #{admNum}, #{content})
 	</insert>
 
 	<!-- 문의 상태 변경 -->

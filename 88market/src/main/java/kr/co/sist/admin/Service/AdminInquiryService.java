@@ -46,13 +46,10 @@ public class AdminInquiryService {
 	@Transactional
 	public void addAnswer(AnswerDTO answerDTO) {
 
-		// 1. 관리자 이름 조회
-		answerDTO.setName(adminInquiryDAO.selectAdmNameByAdmNum(answerDTO.getAdmNum()));
-
-		// 2. 답변 등록
+		// 1. 답변 등록
 		adminInquiryDAO.insertAnswer(answerDTO);
 
-		// 3. 문의 상태 변경
+		// 2. 문의 상태 변경
 		Map<String, Object> map = new HashMap<>();
 		map.put("inqNum", answerDTO.getInqNum());
 		map.put("statusType", "답변완료");

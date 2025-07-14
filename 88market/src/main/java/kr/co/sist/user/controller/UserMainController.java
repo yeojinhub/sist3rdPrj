@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import kr.co.sist.DTO.CategoryDTO;
+import kr.co.sist.DTO.EventDTO;
 import kr.co.sist.DTO.ProductDTO;
 import kr.co.sist.user.Service.CategoryService;
+import kr.co.sist.user.Service.EventService;
 import kr.co.sist.user.Service.SearchItemService;
 
 @Controller
@@ -23,9 +25,18 @@ public class UserMainController {
     @Autowired
     private CategoryService categoryService;
 
+	@Autowired
+	private EventService eventService;
+
 	@GetMapping("/")
 	public String main(Model model, Authentication auth) {
-		
+
+		// 이벤트 이미지 가져오기
+		List<EventDTO> eventList = eventService.searchMainEvent();
+		model.addAttribute("eventList", eventList);
+
+		System.out.println(eventList);
+
 		//String email = auth.getName();  // 토큰의 sub 값
         //model.addAttribute("userEmail", email);
 		

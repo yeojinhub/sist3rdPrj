@@ -78,34 +78,9 @@ $(function() {
 		<!-- 이벤트 배너 섹션 -->
 		<section class="card-section event-section" >
 			<div class="card-list-wrapper autoplay" style="height: 500px;">
-				<div class="event-card">
-					<a href="#"> <img th:src="@{/images/main/event1.png}"
-						alt="혜택! 최대 27만원 드립니다">
-					</a>
-				</div>
-				<div class="event-card">
-					<a href="#"> <img th:src="@{/images/main/event2.png}"
-						alt="단 한번의 터치, 의심없이 깨끗하게">
-					</a>
-				</div>
-				<div class="event-card">
-					<a href="#"> <img th:src="@{/images/main/event3.png}"
-						alt="월 평균 168만원 지금 입금되는 부업">
-					</a>
-				</div>
-				<div class="event-card">
-					<a href="#"> <img th:src="@{/images/main/event1.png}"
-						alt="혜택! 최대 27만원 드립니다">
-					</a>
-				</div>
-				<div class="event-card">
-					<a href="#"> <img th:src="@{/images/main/event2.png}"
-						alt="단 한번의 터치, 의심없이 깨끗하게">
-					</a>
-				</div>
-				<div class="event-card">
-					<a href="#"> <img th:src="@{/images/main/event3.png}"
-						alt="월 평균 168만원 지금 입금되는 부업">
+				<div class="event-card" th:each="item : ${eventList}">
+					<a th:href="@{/event/{evtNum}(evtNum=${item.evtNum})}"> <img th:src="${item.iDTO.subImage1}"
+						alt="이벤트 배너 이미지">
 					</a>
 				</div>
 			</div>

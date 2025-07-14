@@ -22,7 +22,6 @@ public interface AdminInquiryDAO {
     public InquiryDTO selectInquiryByInqNum(@Param("inqNum") int inqNum);
     public AnswerDTO selectAnswerByInqNum(@Param("inqNum") int inqNum);
     public ImageDTO selectImageByImgNum(@Param("imgNum") int imgNum);
-    public String selectAdmNameByAdmNum(@Param("admNum") int admNum);
     public void insertAnswer(AnswerDTO answerDTO);
     public void updateInquiryStatus(@Param("map") Map<String, Object> map);
     public void updateAnswer(AnswerDTO answerDTO);
