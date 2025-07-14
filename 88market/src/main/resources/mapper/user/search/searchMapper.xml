@@ -96,7 +96,7 @@
     	
     	<!-- 거래가능만 보기 -->
     	<if test="tradeOption == '거래가능'">
-    	AND SELL_TYPE = 'Y'
+    	AND SELL_TYPE = 'N'
     	</if>
     	AND COM_NUM IS NULL
     	</where>
@@ -124,11 +124,14 @@
 	<select id="selectAdvertisementItem" parameterType="int" resultType="kr.co.sist.DTO.ProductDTO">
 		SELECT *
 		FROM (
-		SELECT *
-		FROM PRODUCT
-		WHERE CAT_NUM = #{catNum}
-		AND COM_NUM IS NOT NULL
-		ORDER BY (ADMIN_SCORE + LIKE_NUM) DESC
+		SELECT	P.*, C.COM_NAME
+		FROM PRODUCT P
+		JOIN COMPANY C
+		ON P.COM_NUM = C.COM_NUM
+		WHERE P.CAT_NUM = #{catNum}
+		AND P.COM_NUM IS NOT NULL
+		AND P.SELL_TYPE='N'
+		ORDER BY (P.ADMIN_SCORE + P.LIKE_NUM) DESC
 		)
 		WHERE ROWNUM = 1
 	</select>

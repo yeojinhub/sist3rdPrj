@@ -38,6 +38,7 @@ public class ProductDTO {
 	private int catNum; /* 카테고리번호 */
 	private String comNum; /* 사업자등록번호 */
 	private int imgNum; /* 이미지번호 */
+	private String comName;  /* 광고 - 상호명 */
 
     public String getShortLocation() {
         if (location1 == null) return "";
