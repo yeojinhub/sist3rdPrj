@@ -8,11 +8,30 @@
 <link rel="stylesheet" th:href="@{/css/user/buy.css}">
 <!-- 외부파일(jQuery, Font Awesome 등) -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script> <!-- ✅ 최신 버전 -->
 </head>
 <script>
-	$(function() {
+function requestPay() {
+    IMP.init("imp14397622"); // 가맹점 식별코드
 
-	});
+    IMP.request_pay({
+       channelKey: "channel-key-bf43e218-5567-4875-96da-3270e1fba054",
+       pay_method: "card",
+       merchant_uid: "order_" + new Date().getTime(),
+
+       // 임시 가데이터 (name : 물건명 , amount : 가격)
+       name: "test",
+       amount: 100,
+
+     }, function (rsp) {
+       if (rsp) {
+			console.log(rsp);
+    	   // → 서버에 결제 검증 요청 or 예약 완료 페이지 이동
+       } else {
+         alert("결제에 실패했습니다: " + rsp.error_msg);
+       }// end if-else
+    });// requestPay()
+  }
 </script>
 <body>
 	<!-- 헤더 -->
@@ -101,7 +120,7 @@
 					<p class="disclaimer_buy">“팔팔마켓” 상점의 판매상품을 제외한 모든 상품들에 대하여,
 						(주)팔켓마켓은 통신판매중개자로서 거래 당사자가 아니며 판매 회원과 구매 회원 간의 상품거래 정보 및 거래에 관여하지
 						않고, 어떠한 의무와 책임도 부담하지 않습니다.</p>
-					<button class="order-button_buy">주문하기</button>
+					<button class="order-button_buy" onclick="requestPay()">주문하기</button>
 				</div>
 			</aside>
 		</div>
