@@ -11,6 +11,8 @@
         <img th:src="@{/images/logo.png}" alt="로고" class="logo" style="width: 100%;">
       </div>
 
+		
+
       <div class="admin-side-info">
         <span class="admin-label"><img th:src="@{/images/inside.png}" class="admin-label" style="width:30px; height:30px; vertical-align:middle"></span>
         <!-- 로그인한 관리자의 이름은 세션이나 Model 속성에서 가져올 수 있습니다 -->
@@ -70,10 +72,10 @@
             <i class="fas fa-chevron-down arrow"></i>
           </a>
           <ul class="submenu">
-            <li><a th:href="@{/admin/area/details}">ㄴ 공지사항 관리</a></li>
-            <li><a th:href="@{/admin/area/foods}">ㄴ FAQ 관리</a></li>
-            <li><a th:href="@{/admin/area/petrol}">ㄴ 문의사항 관리</a></li>
-            <li><a th:href="@{/admin/area/petrol}">ㄴ 이벤트 관리</a></li>
+            <li><a th:href="@{/admin/notice}">ㄴ 공지사항 관리</a></li>
+            <li><a th:href="@{/admin/faq}">ㄴ FAQ 관리</a></li>
+            <li><a th:href="@{/admin/inquiry}">ㄴ 문의사항 관리</a></li>
+            <li><a th:href="@{/admin/event}">ㄴ 이벤트 관리</a></li>
           </ul>
         </li>
         <li class="menu-item">

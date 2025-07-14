@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>관리자 - 문의사항</title>
-	<!-- 관리자 문의사항 CSS -->
-	<link rel="stylesheet" th:href="@{/css/admin/inquiry/inquiry.css}">
-	<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
-	<th:block th:replace="~{components/admin/external :: external}"></th:block>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 문의사항</title>
+<!-- 관리자 문의사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/inquiry/inquiry.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
 
 <body>
@@ -40,12 +40,12 @@
 								<option value="name"
 									th:selected="${param.searchType != null and param.searchType[0] == 'name'}">작성자
 								</option>
-							</select>
-							<input type="text" class="search-input" name="keyword" th:value="${param.keyword}"
-								placeholder="검색">
+							</select> <input type="text" class="search-input" name="keyword"
+								th:value="${param.keyword}" placeholder="검색">
 							<button type="submit" class="search-button">검색</button>
 							<!-- 검색 초기화 버튼 추가 -->
-							<button type="button" class="search-button" id="resetSearch" th:onclick="location.href='/admin/inquiry'">초기화</button>
+							<button type="button" class="search-button" id="resetSearch"
+								th:onclick="location.href='/admin/inquiry'">초기화</button>
 						</div>
 					</form>
 				</section>
@@ -64,15 +64,16 @@
 						</thead>
 						<tbody>
 							<tr th:each="item, i : ${inquiryList}" class="table-row">
-								<td th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.count - 1)}"></td>
+								<td
+									th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.count - 1)}"></td>
 								<td class="inquiry-title" th:text="${item.title}"
 									style="cursor: pointer; text-align: center;"
-									th:onclick="|location.href='@{/admin/inquiry/answer/{id}(id=${item.inqNum})}'|"
-								</td>
+									th:onclick="|location.href='@{/admin/inquiry/answer/{id}(id=${item.inqNum})}'|"</td>
 								<td th:text="${item.name}"></td>
 								<td th:text="${item.inquiryType}"></td>
-								<td>
-									<span th:classappend="${item.statusType == '대기' ? 'inquiry-badge' : 'inquiry-badge answered'}" th:text="${item.statusType == '대기' ? '미답변' : item.statusType}"></span>
+								<td><span
+									th:classappend="${item.statusType == '대기' ? 'inquiry-badge' : 'inquiry-badge answered'}"
+									th:text="${item.statusType == '대기' ? '미답변' : item.statusType}"></span>
 								</td>
 								<td th:text="${item.inputDate}"></td>
 							</tr>
@@ -83,41 +84,46 @@
 					</table>
 
 					<div class="table-footer">
-						<div class="table-controls">
-							
-						</div>
+						<div class="table-controls"></div>
 						<!-- 페이지네이션 -->
 						<div class="pagination" th:if="${pagination.totalPages > 0}">
 							<div class="pagination">
 								<!-- 이전 페이지 -->
-								<a th:if="${pagination.pageNum > 1}" th:href="@{/admin/inquiry(page=${pagination.pageNum - 1}, 
+								<a th:if="${pagination.pageNum > 1}"
+									th:href="@{/admin/inquiry(page=${pagination.pageNum - 1}, 
                               searchType=${param.searchType}, 
-                              keyword=${param.keyword})}" class="prev">&lt;</a>
-								<a th:unless="${pagination.pageNum > 1}" class="prev disabled">&lt;</a>
+                              keyword=${param.keyword})}"
+									class="prev">&lt;</a> <a th:unless="${pagination.pageNum > 1}"
+									class="prev disabled">&lt;</a>
 
 								<!-- 페이지 번호 -->
-								<a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}" th:href="@{/admin/inquiry(page=${i}, 
+								<a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
+									th:href="@{/admin/inquiry(page=${i}, 
                               searchType=${param.searchType}, 
-                              keyword=${param.keyword})}" th:text="${i}"
+                              keyword=${param.keyword})}"
+									th:text="${i}"
 									th:classappend="${i == pagination.pageNum} ? 'active' : ''"></a>
 
 								<!-- 다음 페이지 -->
-								<a th:if="${pagination.pageNum < pagination.totalPages}" th:href="@{/admin/inquiry(page=${pagination.pageNum + 1}, 
+								<a th:if="${pagination.pageNum < pagination.totalPages}"
+									th:href="@{/admin/inquiry(page=${pagination.pageNum + 1}, 
                               searchType=${param.searchType}, 
-                              keyword=${param.keyword})}" class="next">&gt;</a>
-								<a th:unless="${pagination.pageNum < pagination.totalPages}"
+                              keyword=${param.keyword})}"
+									class="next">&gt;</a> <a
+									th:unless="${pagination.pageNum < pagination.totalPages}"
 									class="next disabled">&gt;</a>
 							</div>
 						</div>
 					</div>
 				</section>
 			</main>
-
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
 		</div>
 	</div>
 
 	<script>
-		$(function () {
+		$(function() {
 
 		});
 	</script>

@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin")
 public class AdminMainController {
-	
-    @GetMapping( {"", "/"} )
-    public String adminIndex() {
-        return "admin/admin_index";
-    }
 
+	@GetMapping({"/",""})
+	public String adminIndex() {
+		return "admin/admin_index";
+	}
+	
     // 예: 회원 목록 페이지
     /*
     @GetMapping("/account/users")
