@@ -199,7 +199,8 @@ CREATE TABLE PRODUCT (
 	CAT_NUM				NUMBER(10)			NOT NULL, /* 카테고리번호 */
 	COM_NUM				VARCHAR2(255)		NULL, /* 사업자등록번호 */
 	IMG_NUM				NUMBER(10)			NULL, /* 이미지번호 */
-	LIKE_NUM			NUMBER(10)			DEFAULT 0 /* 상품찜수 */
+	LIKE_NUM			NUMBER(10)			DEFAULT 0, /* 상품찜수 */
+	ADMIN_SCORE		NUMBER(10)			DEFAULT 0 /* 관리자 점수 */
 );
 
 /* 이미지 테이블 생성 */
@@ -322,18 +323,18 @@ CREATE TABLE INQUIRY (
 	NAME				VARCHAR2(255)		NOT NULL, /* 문의사항작성자 */
 	INPUT_DATE	DATE	DEFAULT 	SYSDATE, /* 문의사항작성일 */
 	STATUS_TYPE	VARCHAR2(255)		DEFAULT '대기', /* 문의사항상태(대기,답변완료) */
+	INQUIRY_TYPE VARCHAR2(500)	NULL, /* 문의사항유형(주문/결제, 배송, 환불, 기타) */
 	USER_NUM		NUMBER(10)			NOT NULL, /* 사용자번호 */
-	ADM_NUM			VARCHAR2(255)		NOT NULL, /* 관리자사번 */
+	ADM_NUM			VARCHAR2(255)		NULL, /* 관리자사번 */
 	IMG_NUM			NUMBER(10)			NULL /* 이미지번호 */
 );
 
 /* 문의답변 테이블 생성 */
 CREATE TABLE ANSWER (
 	INQ_NUM			NUMBER(10)			NOT NULL, /* 문의사항번호 */
-	TITLE				VARCHAR2(4000)	NOT NULL, /* 문의답변제목 */
 	CONTENT			VARCHAR2(4000)	NOT NULL, /* 문의답변내용 */
-	NAME				VARCHAR2(255)		NOT NULL, /* 문의답변작성자 */
-	INPUT_TYPE	DATE						DEFAULT SYSDATE /* 문의답변작성일*/
+	INPUT_TYPE	DATE						DEFAULT SYSDATE, /* 문의답변작성일*/
+	ADM_NUM			VARCHAR2(255)		NOT NULL /* 문의답변작성자 */
 );
 
 /* 이벤트 테이블 생성 */

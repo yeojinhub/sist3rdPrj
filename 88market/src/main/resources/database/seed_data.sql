@@ -28,7 +28,21 @@ VALUES (SEQ_CAT_NUM.NEXTVAL, '전자제품');
 INSERT INTO CATEGORY(CAT_NUM, NAME)
 VALUES (SEQ_CAT_NUM.NEXTVAL, '도서');
 INSERT INTO CATEGORY(CAT_NUM, NAME)
-VALUES (SEQ_CAT_NUM.NEXTVAL, '의류');
+VALUES (SEQ_CAT_NUM.NEXTVAL, '의류/잡화');
+INSERT INTO CATEGORY(CAT_NUM, NAME)
+VALUES (SEQ_CAT_NUM.NEXTVAL, '생활/주방');
+INSERT INTO CATEGORY(CAT_NUM, NAME)
+VALUES (SEQ_CAT_NUM.NEXTVAL, '유아');
+INSERT INTO CATEGORY(CAT_NUM, NAME)
+VALUES (SEQ_CAT_NUM.NEXTVAL, '가구/인테리어');
+INSERT INTO CATEGORY(CAT_NUM, NAME)
+VALUES (SEQ_CAT_NUM.NEXTVAL, '뷰티/미용');
+INSERT INTO CATEGORY(CAT_NUM, NAME)
+VALUES (SEQ_CAT_NUM.NEXTVAL, '스포츠/레저');
+INSERT INTO CATEGORY(CAT_NUM, NAME)
+VALUES (SEQ_CAT_NUM.NEXTVAL, '생활가전');
+INSERT INTO CATEGORY(CAT_NUM, NAME)
+VALUES (SEQ_CAT_NUM.NEXTVAL, '티켓/교환권');
 
 /* COMPANY */
 INSERT INTO COMPANY(COM_NUM, COM_NAME, CEO_NAME, NAME, ID, PASS, TEL, ZIPCODE, ADDRESS)
@@ -38,7 +52,6 @@ VALUES (SEQ_COM_NUM.NEXTVAL, 'XYZ Ltd',     '이대표', '김영희', 'xyz123', 
 INSERT INTO COMPANY(COM_NUM, COM_NAME, CEO_NAME, NAME, ID, PASS, TEL, ZIPCODE, ADDRESS)
 VALUES (SEQ_COM_NUM.NEXTVAL, '테크노베이션','박대표', '이민호', 'tech123','compPass3', '042-555-6666', '78901', '대전 서구 둔산로 99');
 
-/* PRODUCT */
 /* PRODUCT */
 INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM)
 VALUES (SEQ_PRD_NUM.NEXTVAL, '삼성 갤럭시 S21 중고', '상태 양호, 기본 구성품 포함', 350000, '서울시 강남구 역삼동', '1', 1);
@@ -100,6 +113,67 @@ VALUES (SEQ_PRD_NUM.NEXTVAL, 'LG 그램 14인치', 'i5, SSD 256GB, 배터리 양
 INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM)
 VALUES (SEQ_PRD_NUM.NEXTVAL, 'Python 데이터 분석', '판다스·넘파이 실습 예제', 29000, '서울시 강남구 개포동', '2', 2);
 
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '삼성 갤럭시 S21 중고',      '상태 양호, 기본 구성품 포함',    350000, '서울시 강남구 역삼동',    '1', 1, 1);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '자바 프로그래밍 입문',      '초보자를 위한 자바 기초서',      28000,  '서울시 강남구 논현동',    '2', 2, 2);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '남성 가죽 자켓',          'L 사이즈, 거의 새것',            120000, '서울시 강남구 신사동',    '3', 3, 3);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, 'LG 울트라와이드 모니터',  '34인치, HDMI 케이블 포함',       280000, '서울시 강남구 삼성동',    '1', 1, 1);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '스티븐 킹 대표 소설',      '왕좌의 게임, 샤이닝 외',         32000,  '서울시 강남구 청담동',    '2', 2, 2);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '여성 코튼 원피스',        '프리 사이즈, 화이트',            45000,  '서울시 강남구 대치동',    '3', 3, 3);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '닌텐도 스위치 본체',      '조이콘 2개, 충전독 포함',        320000, '서울시 강남구 도곡동',    '1', 1, 1);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '혼자 공부하는 딥러닝',    '실습 예제 다수 포함',            35000,  '서울시 강남구 개포동',    '2', 2, 2);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '스포츠 반팔 티셔츠',      'M 사이즈, 그레이',               15000,  '서울시 강남구 자곡동',    '3', 3, 3);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '맥북 프로 2019 15인치',   'SSD 512GB, RAM 16GB',           1250000,'서울시 강남구 세곡동',    '1', 1, 1);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '알고리즘 문제 해결 전략', '코딩 테스트 대비',               30000,  '서울시 강남구 수서동',    '2', 2, 2);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '청바지 슬림핏',          '32 사이즈, 다크 블루',           40000,  '서울시 강남구 일원동',    '3', 3, 3);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '소니 WH-1000XM4 헤드폰','노이즈캔슬링 완벽 작동',          200000, '서울시 강남구 역삼동',    '1', 1, 1);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '웹 디자인 노하우',        'HTML/CSS 기초부터 고급까지',     27000,  '서울시 강남구 논현동',    '2', 2, 2);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '패딩 점퍼',              'L 사이즈, 블랙',                85000,  '서울시 강남구 신사동',    '3', 3, 3);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '다이슨 V11 무선청소기',  '배터리 새것, 필터 교체 완료',    450000, '서울시 강남구 삼성동',    '1', 1, 1);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '책 읽어주는 AI',        '음성 합성 기술 해설',            33000,  '서울시 강남구 청담동',    '2', 2, 2);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, '데님 재킷',              'M 사이즈, 연청 컬러',            55000,  '서울시 강남구 대치동',    '3', 3, 3);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, 'LG 그램 14인치',         'i5, SSD 256GB, 배터리 양호',     780000, '서울시 강남구 도곡동',    '1', 1, 1);
+
+INSERT INTO PRODUCT(PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, USER_NUM, CAT_NUM, COM_NUM)
+VALUES (SEQ_PRD_NUM.NEXTVAL, 'Python 데이터 분석',     '판다스·넘파이 실습 예제',       29000,  '서울시 강남구 개포동',    '2', 2, 2);
+
+
 /* NOTICE */
 INSERT INTO NOTICE(NOT_NUM, ADM_NUM, TITLE, CONTENT, NAME)
 VALUES (SEQ_NOT_NUM.NEXTVAL, 1, '시스템 점검 안내',
@@ -113,7 +187,7 @@ INSERT INTO NOTICE(NOT_NUM, ADM_NUM, TITLE, CONTENT, NAME)
 VALUES (SEQ_NOT_NUM.NEXTVAL, 3, '신규 기능 출시',
 				TO_CLOB('상품 추천 알고리즘이 업데이트 되었습니다.'),
 				(select name from admin where adm_num=3));
-				
+
 /* BANK */
 INSERT INTO BANK(USER_NUM, NAME, BANK_NAME, BANK_NUM)
 VALUES ((select user_num from users where user_num=1), '홍길동',    '국민은행', '123-456-7890');
@@ -215,12 +289,12 @@ INSERT INTO INQUIRY(INQ_NUM, TITLE, CONTENT, NAME, USER_NUM, ADM_NUM)
 VALUES (SEQ_INQ_NUM.NEXTVAL, '교환 문의',     '사이즈 교환 가능한가요?',       '이민호', 3, 3);
 
 /* ANSWER */
-INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, NAME)
-VALUES (1, 'Re: 상품 문의', '네, 색상 옵션 기능 곧 추가됩니다.', (select name from admin where adm_num=1));
-INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, NAME)
-VALUES (2, 'Re: 취소 요청', '마이페이지 > 주문내역에서 가능합니다.', (select name from admin where adm_num=2));
-INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, NAME)
-VALUES (3, 'Re: 교환 문의', '사이즈 교환 신청서 작성 부탁드립니다.', (select name from admin where adm_num=3));
+INSERT INTO ANSWER(INQ_NUM, CONTENT, ADM_NUM)
+VALUES (1, '네, 색상 옵션 기능 곧 추가됩니다.', 1);
+INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, ADM_NUM)
+VALUES (2, '마이페이지 > 주문내역에서 가능합니다.', 2);
+INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, ADM_NUM)
+VALUES (3, '사이즈 교환 신청서 작성 부탁드립니다.', 3);
 
 /* IMAGE */
 INSERT INTO IMAGE(IMG_NUM, SUB_IMAGE1, SUB_IMAGE2, SUB_IMAGE3, SUB_IMAGE4, IMAGE_TYPE)
