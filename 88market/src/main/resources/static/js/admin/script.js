@@ -7,10 +7,19 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault()
 
       // Get the parent li element
-      const menuItem = this.parentElement
+      const menuItem = button.closest(".has-submenu")
+	  if(!menuItem) return
 
       // Toggle the 'open' class on the parent li
-      menuItem.classList.toggle("open")
+	  document.querySelectorAll(".has-submenu.open").forEach(openItem=>{
+		if(openItem !== menuItem){
+			openItem.classList.remove("open");
+			const openSub=openItem.querySelector(".submenu");
+			if(openSub) openSub.classList.remove("open");
+		}
+	  });
+	  
+	  menuItem.classList.toggle("open")
 
       // Find the submenu within this menu item
       const submenu = menuItem.querySelector(".submenu")

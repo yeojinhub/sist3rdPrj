@@ -7,7 +7,7 @@
   height: 100vh;
   background: #353535;
   color: #ecf0f1;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 .logo-container {
@@ -31,7 +31,7 @@
   color: #4eb7a8;
 }
 
-.admin-info {
+.admin-side-info {
   padding: 30px 20px;
   border-bottom: 1px solid #FFFFFF;
   display: flex;
@@ -105,13 +105,13 @@
 
 .menu-item.active > a {
   background-color: #7FD0F4;
-  color: #4eb7a8;
+  color: #000000;
   font-weight: bold;
 }
 
 .arrow {
   margin-left: auto;
-  transition: transform 0.3s;
+/*   transition: transform 0.3s; */
 }
 
 /* Submenu Styles */
@@ -120,18 +120,13 @@
   padding-left: 30px;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-out;
+/*   transition: max-height 0.3s ease-out; */
 }
 
 .submenu.open {
   max-height: 500px;
 }
 
-.submenu li.active > a {
-  background-color: #7FD0F4;
-  color: #4eb7a8;
-  font-weight: bold;
-}
 
 .has-submenu.open .arrow {
   transform: rotate(180deg);
@@ -142,3 +137,41 @@
   padding: 20px;
 }
 /* submenu 토글, active 스타일 등은 admin.js에서 제어 */
+
+
+/* admin-header */
+
+.admin-header{
+	display:flex;
+	flex-direction:column;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+	height: 100px;
+	margin-left: 250px;
+}
+.admin-info{
+	width:100%;
+	text-align: right;
+	/* padding-right: 50px; */
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+.admin-header .category-menu{
+	display:flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap:20px;
+	margin-top: 10px;
+}
+
+.admin-header .category-main{
+	font-size: 25px;
+	font-weight: bold;
+}
+.admin-header .category-sub{
+	font-size: 20px;
+	font-weight: bold;
+	color : #666;
+}
