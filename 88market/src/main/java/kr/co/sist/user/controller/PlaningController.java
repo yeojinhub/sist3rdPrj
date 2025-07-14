@@ -1,6 +1,9 @@
 package kr.co.sist.user.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.ibatis.annotations.Param;
@@ -8,11 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
-import kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithReviewWithImageDTO;
+import kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO;
 import kr.co.sist.DTO.CompanyWithProductDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.ReviewDTO;
 import kr.co.sist.user.Service.PlaningService;
 
 @Controller
@@ -48,7 +57,7 @@ public class PlaningController {
 			@RequestParam("comNum") String comNum, Model model) {
 		
 		// 1. 기업 리스트 조회
-		List<CategoryWithProductWithFavoriteWithCompanyWithReviewWithImageDTO> companieProduct = planingService.getCompanyProduct(productId);
+		List<CategoryWithProductWithFavoriteWithCompanyWithImageDTO> companieProduct = planingService.getCompanyProduct(productId);
 		model.addAttribute("Product",companieProduct);
 		
 //		// 3. 해당 기업의 상품 리스트 조회
@@ -69,6 +78,12 @@ public class PlaningController {
 	    List<ProductDTO> relatedProducts =
 	            planingService.getRandomProductsByComNum(comNum, productId);
 	    model.addAttribute("relatedProducts", relatedProducts);
+	    
+	    List<ReviewDTO> reviewList = planingService.getReviewList(comNum);
+		int reviewCount = planingService.getReviewCount(comNum);
+
+        model.addAttribute("reviewList", reviewList);
+        model.addAttribute("reviewCount", reviewCount);
         
 		
 		return "user/product/planingDetail";
@@ -80,7 +95,7 @@ public class PlaningController {
 			@Param("sellType") String sellType,
 			Model model) {
 		// 기업 리스트 조회
-		List<CategoryWithProductWithFavoriteWithCompanyWithReviewWithImageDTO> companieProduct = planingService.getCompanyProduct(sellerId);
+		List<CategoryWithProductWithFavoriteWithCompanyWithImageDTO> companieProduct = planingService.getCompanyProduct(sellerId);
 		model.addAttribute("Product",companieProduct);
 		
 		// 해당 기업의 상품 리스트 조회
@@ -107,8 +122,48 @@ public class PlaningController {
 		List<ProductDTO> ProductsSellType = planingService.ProductsByCompanyAndSellType(comNum, sellType);
 		model.addAttribute("ProductsSellType",ProductsSellType);
 		
+		List<ReviewDTO> reviewList = planingService.getReviewList(comNum);
+		int reviewCount = planingService.getReviewCount(comNum);
+
+        model.addAttribute("reviewList", reviewList);
+        model.addAttribute("reviewCount", reviewCount);
+		
 		return "user/product/planingSeller";
 	}
 	
-	
+	// 2. Ajax 요청 처리: 상품 목록을 JSON으로 반환
+	@PostMapping("/planingSeller/products/json")
+	@ResponseBody
+	public Map<String, Object> getProductsJson(@RequestBody Map<String, String> req) {
+	    String comNum = req.get("comNum");
+	    String sellType = req.get("sellType");
+	    String sort = req.get("sort");
+	    
+	    List<ProductDTO> products;
+
+	    if ("all".equals(sellType)) {
+	        products = planingService.AllProductsByCompanySort(comNum, sort);
+	    } else {
+	        String sellTypeCode = "Y".equals(sellType) ? "Y" : "N";
+	        products = planingService.ProductsByCompanyAndSellTypeSort(comNum, sellTypeCode, sort);
+	    }
+
+	    List<Map<String, Object>> productList = new ArrayList<>();
+	    for (ProductDTO p : products) {
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("prdNum", p.getPrdNum());
+	        map.put("title", p.getTitle());
+	        map.put("price", p.getPrice());
+	        map.put("location1", p.getLocation1());
+	        map.put("inputDate", p.getInputDate().toString()); // LocalDate → 문자열
+	        map.put("sellType", p.getSellType());
+	        
+	        productList.add(map);
+	    }
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("products", productList);
+	    return result;
+	}
+		
 }

@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CategoryWithProductWithFavoriteWithCompanyWithReviewWithImageDTO {
+public class CategoryWithProductWithFavoriteWithCompanyWithImageDTO {
 	
 	private String coName; /* 카테고리이름 */
 	
@@ -55,15 +55,6 @@ public class CategoryWithProductWithFavoriteWithCompanyWithReviewWithImageDTO {
 	private Date drawDate; /* 기업탈퇴일 */
 	
 	private String withdraw; /* 기업탈퇴여부(Y,N) */
-	
-	private int revNum; /* 후기번호 */
-	private String reContent; /* 후기내용 */
-	private String reName; /* 후기작성자 */
-	private Date reInputDate; /* 후기작성일 */
-	private int reportCnt; /* 누적신고수 */
-	private String reHiddenType; /* 후기숨김여부(Y,N) */
-	private String keyword; /* 후기선택키워드 */
-	private int reviewCount; /* 리뷰수 */
 	
 	private String mainImage; /* 메인이미지 */
 	private String subImage1; /* 추가이미지1 */
