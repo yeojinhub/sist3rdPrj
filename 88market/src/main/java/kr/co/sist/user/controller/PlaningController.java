@@ -78,6 +78,12 @@ public class PlaningController {
 	    List<ProductDTO> relatedProducts =
 	            planingService.getRandomProductsByComNum(comNum, productId);
 	    model.addAttribute("relatedProducts", relatedProducts);
+	    
+	    List<ReviewDTO> reviewList = planingService.getReviewList(comNum);
+		int reviewCount = planingService.getReviewCount(comNum);
+
+        model.addAttribute("reviewList", reviewList);
+        model.addAttribute("reviewCount", reviewCount);
         
 		
 		return "user/product/planingDetail";
@@ -116,8 +122,8 @@ public class PlaningController {
 		List<ProductDTO> ProductsSellType = planingService.ProductsByCompanyAndSellType(comNum, sellType);
 		model.addAttribute("ProductsSellType",ProductsSellType);
 		
-		List<ReviewDTO> reviewList = planingService.getReviewList(sellerId);
-		int reviewCount = planingService.getReviewCount(sellerId);
+		List<ReviewDTO> reviewList = planingService.getReviewList(comNum);
+		int reviewCount = planingService.getReviewCount(comNum);
 
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("reviewCount", reviewCount);
