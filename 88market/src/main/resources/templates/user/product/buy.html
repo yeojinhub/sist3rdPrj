@@ -26,16 +26,16 @@
 				<div class="section-card mb-4">
 					<h4 class="section-title">상품 정보</h4>
 					<div class="product-info d-flex">
-						<img th:src="@{/images/main/img3.png}" alt="상품 이미지" class="product-image">
+						<img th:src="${image.mainImage}" alt="상품 이미지" class="product-image">
 						<div class="product-details ms-3">
-							<h5 class="product-name">레이저 키요 프로 웹캠 풀박</h5>
-							<p class="product-price"><strong>100,000원</strong></p>
+							<h5 class="product-name" th:text="${product.title}">레이저 키요 프로 웹캠 풀박</h5>
+							<p class="product-price"><strong th:text="${#numbers.formatInteger(product.price,3,'COMMA')}+'원'">100,000원</strong></p>
 						</div>
 					</div>
 				</div>
 
 				<!-- 두번째 섹션: 배송지 정보 (display: none) -->
-				<div class="section-card mb-4">
+				<div class="section-card mb-4" th:if="${product.deliveryType == 'Y'}">
 					<div class="section-header">
 						<h4 class="section-title">배송지 정보</h4>
 						<button type="button" class="btn address-select-btn" onclick="openAddressModal()">
@@ -78,13 +78,13 @@
 							<i class="fas fa-credit-card"></i>
 							<span>카드결제</span>
 						</div>
+						<div class="payment-option" data-method="bank">
+							<i class="fas fa-n"></i>
+							<span>무통장입금</span>
+						</div>
 						<div class="payment-option" data-method="kakao">
 							<i class="fas fa-comment"></i>
 							<span>카카오페이</span>
-						</div>
-						<div class="payment-option" data-method="naver">
-							<i class="fas fa-n"></i>
-							<span>네이버페이</span>
 						</div>
 						<div class="payment-option" data-method="toss">
 							<i class="fas fa-mobile-alt"></i>
@@ -93,27 +93,55 @@
 					</div>
 				</div>
 
-				<!-- 네번째 섹션: 팔팔페이 포인트 -->
+				<!-- 네번째 섹션: 이용약관 동의 -->
 				<div class="section-card mb-4">
-					<h4 class="section-title">팔팔페이</h4>
-					<div class="point-section">
-						<div class="current-point mb-3">
-							<span>보유 포인트: </span>
-							<strong>30,000원</strong>
+					<div class="terms-header">
+						<div class="d-flex align-items-center">
+							<div class="form-check me-3">
+								<input class="form-check-input terms-main-checkbox" type="checkbox" id="agreeAll">
+							</div>
+							<h4 class="section-title mb-0">상품정보 및 결제 대행 서비스 이용약관 동의</h4>
 						</div>
-						<div class="point-usage">
-							<div class="form-check mb-3">
-								<input class="form-check-input" type="checkbox" id="usePoint">
-								<label class="form-check-label" for="usePoint">
-									포인트 사용
+					</div>
+					
+					<div class="terms-section">
+						<!-- 필수 약관들 -->
+						<div class="terms-item mb-3">
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" id="termsPersonal" required>
+								<label class="form-check-label terms-label" for="termsPersonal">
+									<i class="fas fa-shield-alt me-2 text-primary"></i>
+									<strong>개인정보 수집 및 이용 동의 (필수)</strong>
 								</label>
 							</div>
-							<div class="input-group">
-								<input type="number" class="form-control" id="pointAmount" placeholder="사용할 포인트"
-									disabled>
-								<span class="input-group-text">원</span>
-								<button class="btn btn-outline-secondary" type="button" id="useAllPoint"
-									disabled>전액사용</button>
+							<div class="terms-content">
+								개인정보보호법에 따라 88마켓에 회원가입 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용목적, 개인정보의 보유 및 이용기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내 드리오니 자세히 읽은 후 동의하여 주시기 바랍니다.
+							</div>
+						</div>
+
+						<div class="terms-item mb-3">
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" id="termsPayment" required>
+								<label class="form-check-label terms-label" for="termsPayment">
+									<i class="fas fa-credit-card me-2 text-success"></i>
+									<strong>결제대행 서비스 이용약관 동의 (필수)</strong>
+								</label>
+							</div>
+							<div class="terms-content">
+								전자상거래 등에서의 소비자보호에 관한 법률, 전자금융거래법, 통신판매업에 관한 법률, 정보통신망 이용촉진 및 정보보호 등에 관한 법률에 따라 결제대행 서비스 이용약관에 동의하셔야 합니다.
+							</div>
+						</div>
+
+						<div class="terms-item mb-3">
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" id="termsPurchase" required>
+								<label class="form-check-label terms-label" for="termsPurchase">
+									<i class="fas fa-shopping-cart me-2 text-warning"></i>
+									<strong>구매조건 확인 및 결제진행 동의 (필수)</strong>
+								</label>
+							</div>
+							<div class="terms-content">
+								주문할 상품의 상품명, 상품가격, 배송정보를 확인하였으며, 구매에 동의하시겠습니까? (전자상거래법 제8조 제2항)
 							</div>
 						</div>
 					</div>
@@ -128,15 +156,11 @@
 						<div class="price-breakdown">
 							<div class="price-item">
 								<span>상품 금액</span>
-								<span>100,000원</span>
+								<span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}+'원'">100,000원</span>
 							</div>
 							<div class="price-item">
 								<span>안전거래 수수료(1%)</span>
 								<span>1,000원</span>
-							</div>
-							<div class="price-item point-discount">
-								<span>포인트 사용</span>
-								<span class="text-danger">-0원</span>
 							</div>
 						</div>
 						<hr>
@@ -144,9 +168,13 @@
 							<span><strong>총 결제 금액</strong></span>
 							<span class="final-price"><strong>100,000원</strong></span>
 						</div>
-						<button class="btn btn-primary w-100 mt-3 order-btn" onclick="requestPay()">
+						<button class="btn btn-primary w-100 mt-3 order-btn" id="orderBtn" onclick="requestPay()" disabled>
 							<i class="fas fa-credit-card me-2"></i>주문하기
 						</button>
+						<div class="terms-warning mt-2" id="termsWarning">
+							<i class="fas fa-exclamation-triangle me-1"></i>
+							약관의 동의 해주세요.
+						</div>
 					</div>
 				</div>
 			</div>
@@ -160,7 +188,11 @@
 	<script>
 		$(function () {
 			$('.recent-products-aside').hide();
+			
+			// 페이지 로드 시 주문하기 버튼 상태 초기화
+			updateOrderButtonState();
 		})
+		
 		// 결제방법 선택
 		document.querySelectorAll('.payment-option').forEach(option => {
 			option.addEventListener('click', function () {
@@ -169,42 +201,106 @@
 			});
 		});
 
-		// 포인트 사용 체크박스
-		document.getElementById('usePoint').addEventListener('change', function () {
-			const pointInput = document.getElementById('pointAmount');
-			const useAllBtn = document.getElementById('useAllPoint');
+		// 전체동의 체크박스 기능
+		document.getElementById('agreeAll').addEventListener('change', function () {
+			const checkboxes = document.querySelectorAll('#termsPersonal, #termsPayment, #termsPurchase');
+			checkboxes.forEach(checkbox => {
+				checkbox.checked = this.checked;
+			});
+			updateOrderButtonState();
+		});
 
-			if (this.checked) {
-				pointInput.disabled = false;
-				useAllBtn.disabled = false;
-				pointInput.style.backgroundColor = '#fff';
+		// 개별 체크박스들 상태 변경 시 전체동의 체크박스 상태 업데이트
+		document.querySelectorAll('#termsPersonal, #termsPayment, #termsPurchase').forEach(checkbox => {
+			checkbox.addEventListener('change', function () {
+				const allCheckboxes = document.querySelectorAll('#termsPersonal, #termsPayment, #termsPurchase');
+				const checkedCount = document.querySelectorAll('#termsPersonal:checked, #termsPayment:checked, #termsPurchase:checked').length;
+				
+				document.getElementById('agreeAll').checked = checkedCount === allCheckboxes.length;
+				updateOrderButtonState();
+			});
+		});
+
+		// 주문하기 버튼 활성화/비활성화 상태 업데이트 함수
+		function updateOrderButtonState() {
+			const requiredTerms = ['termsPersonal', 'termsPayment', 'termsPurchase'];
+			const orderBtn = document.getElementById('orderBtn');
+			
+			const allRequiredChecked = requiredTerms.every(termId => 
+				document.getElementById(termId).checked
+			);
+			
+			if (allRequiredChecked) {
+				orderBtn.disabled = false;
+				orderBtn.classList.remove('btn-disabled');
+				orderBtn.classList.add('btn-primary');
+				document.getElementById('termsWarning').style.display = 'none';
 			} else {
-				pointInput.disabled = true;
-				useAllBtn.disabled = true;
-				pointInput.style.backgroundColor = '#f8f9fa';
-				pointInput.value = '';
+				orderBtn.disabled = true;
+				orderBtn.classList.remove('btn-primary');
+				orderBtn.classList.add('btn-disabled');
+				document.getElementById('termsWarning').style.display = 'block';
 			}
-		});
+		}
 
-		// 전액사용 버튼
-		document.getElementById('useAllPoint').addEventListener('click', function () {
-			document.getElementById('pointAmount').value = '30000';
-		});
+		// 필수 약관 체크 확인 함수
+		function validateRequiredTerms() {
+			const requiredTerms = ['termsPersonal', 'termsPayment', 'termsPurchase'];
+			const uncheckedTerms = [];
+			
+			requiredTerms.forEach(termId => {
+				if (!document.getElementById(termId).checked) {
+					uncheckedTerms.push(termId);
+				}
+			});
+			
+			if (uncheckedTerms.length > 0) {
+				alert('필수 약관에 모두 동의해주세요.');
+				return false;
+			}
+			return true;
+		}
 
 		function requestPay() {
+			// 필수 약관 체크 확인
+			if (!validateRequiredTerms()) {
+				return;
+			}
+
+			// 결제 방법 선택 확인
+			const selectedPayment = document.querySelector('.payment-option.selected');
+			if (!selectedPayment) {
+				alert('결제 방법을 선택해주세요.');
+				return;
+			}
+
+			var channelKey = "";
+			var pay_method = "";
+			var $selectedPaymentOption = $('.payment-option.selected');
+			if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'kakao') {
+				channelKey = "channel-key-01764171-b249-4c16-9d18-e9174fa8e611"; // 카카오페이
+				pay_method = "card";
+				
+			} else if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'toss') {
+				channelKey = "channel-key-01aab9b9-828b-4913-9395-52f922e578f6"; // 토스페이
+				pay_method = "card";
+			} else if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'card') {
+				channelKey = "channel-key-bf43e218-5567-4875-96da-3270e1fba054"; // 카드
+			} else if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'bank') {
+				channelKey = "channel-key-001cc830-159d-45af-a551-fa834c07f6b9"; // 무통장입금
+				pay_method = "vbank";
+			}// end if-else
+
+
 			IMP.init("imp14397622");
 			IMP.request_pay({
-				channelKey: "channel-key-bf43e218-5567-4875-96da-3270e1fba054",
-				pay_method: "card",
+				channelKey: channelKey,
+				pay_method: pay_method,
 				merchant_uid: "order_" + new Date().getTime(),
 				name: "test",
-				amount: 100,
+				amount: 1000000,
 			}, function (rsp) {
-				if (rsp.success) {
-					console.log(rsp);
-				} else {
-					alert("결제에 실패했습니다: " + rsp.error_msg);
-				}
+				console.log(rsp);
 			});
 		}
 	</script>

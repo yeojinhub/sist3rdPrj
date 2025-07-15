@@ -91,20 +91,95 @@
     font-weight: 500;
 }
 
-/* 포인트 섹션 */
-.point-section {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
+/* 약관 동의 섹션 */
+.terms-header {
+    padding: 4px 0;
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 0;
 }
 
-.current-point {
-    font-size: 16px;
+.terms-header .section-title {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
     color: #333;
+    font-size: 18px;
+    font-weight: 600;
 }
 
-.current-point strong {
-    color: #47bbec;
+.terms-main-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 50% !important;
+    background-color: #fff !important;
+    border: 2px solid #6c757d !important;
+    margin-right: 0;
+}
+
+.terms-main-checkbox:checked {
+    background-color: #47bbec !important;
+    border-color: #47bbec !important;
+}
+
+.terms-main-checkbox:focus {
+    border-color: #7fd0f4 !important;
+    box-shadow: 0 0 0 0.2rem rgba(71, 187, 236, 0.25);
+}
+
+.terms-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 0;
+    margin-top: 16px;
+}
+
+.terms-item {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+.terms-item:hover {
+    border-color: #7fd0f4;
+    box-shadow: 0 2px 4px rgba(127, 208, 244, 0.1);
+}
+
+.terms-label {
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.terms-label i {
+    font-size: 14px;
+}
+
+.terms-content {
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.5;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 8px;
+    border-left: 3px solid #dee2e6;
+}
+
+
+
+.form-check-input:checked {
+    background-color: #47bbec;
+    border-color: #47bbec;
+}
+
+.form-check-input:focus {
+    border-color: #7fd0f4;
+    box-shadow: 0 0 0 0.2rem rgba(71, 187, 236, 0.25);
 }
 
 .section-header {
@@ -215,9 +290,43 @@
     background: #6dc9f0;
 }
 
-/* 포인트 할인 표시 */
-.point-discount span.text-danger {
-    color: #dc3545 !important;
+.order-btn.btn-disabled {
+    background: #6c757d !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+.order-btn.btn-disabled:hover {
+    background: #6c757d !important;
+    transform: none;
+}
+
+/* 약관 동의 경고 텍스트 */
+.terms-warning {
+    color: #dc3545;
+    font-size: 14px;
+    text-align: center;
+    opacity: 0.8;
+    font-weight: 500;
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.terms-warning i {
+    font-size: 13px;
+    margin-right: 4px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 0.8;
+        transform: translateY(0);
+    }
 }
 
 /* 반응형 */
