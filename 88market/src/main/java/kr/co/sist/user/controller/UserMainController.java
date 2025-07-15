@@ -35,8 +35,6 @@ public class UserMainController {
 		List<EventDTO> eventList = eventService.searchMainEvent();
 		model.addAttribute("eventList", eventList);
 
-		System.out.println(eventList);
-
 		//String email = auth.getName();  // 토큰의 sub 값
         //model.addAttribute("userEmail", email);
 		
