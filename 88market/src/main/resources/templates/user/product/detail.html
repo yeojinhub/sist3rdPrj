@@ -111,7 +111,7 @@
 						<img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
 					</button>
 					<button class="btn-chat">채팅하기</button>
-					<button class="btn-buy" th:onclick="|location.href='@{/buy}'|">구매하기</button>
+					<button class="btn-buy" th:onclick="|location.href='@{/buy/{prdNum}(prdNum=${product.prdNum})}'|">구매하기</button>
 				</div>
 				</div>
 
