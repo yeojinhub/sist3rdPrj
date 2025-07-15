@@ -35,6 +35,7 @@
 				</div>
 
 				<!-- 두번째 섹션: 배송지 정보 (display: none) -->
+				 <input type="hidden" th:value="${product.deliveryType}" id="deliveryType">
 				<div class="section-card mb-4" th:if="${product.deliveryType == 'Y'}">
 					<div class="section-header">
 						<h4 class="section-title">배송지 정보</h4>
@@ -45,28 +46,28 @@
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<label class="form-label">받는 사람 성함</label>
-							<input type="text" class="form-control" placeholder="성함을 입력하세요">
+							<input type="text" class="form-control" placeholder="성함을 입력하세요" id="receiverName">
 						</div>
 						<div class="col-md-6">
 							<label class="form-label">받는 사람 전화번호</label>
-							<input type="tel" class="form-control" placeholder="전화번호를 입력하세요">
+							<input type="tel" class="form-control" placeholder="전화번호를 입력하세요" id="receiverPhone">
 						</div>
 					</div>
 					<div class="row mb-3">
 						<div class="col-md-4">
 							<label class="form-label">우편번호</label>
 							<div class="input-group">
-								<input type="text" class="form-control" placeholder="우편번호">
+								<input type="text" class="form-control" placeholder="우편번호" id="zipcode">
 							</div>
 						</div>
 					</div>
 					<div class="mb-3">
 						<label class="form-label">주소</label>
-						<input type="text" class="form-control" placeholder="주소를 입력하세요">
+						<input type="text" class="form-control" placeholder="주소를 입력하세요" id="address">
 					</div>
 					<div class="mb-3">
 						<label class="form-label">상세주소</label>
-						<input type="text" class="form-control" placeholder="상세주소를 입력하세요">
+						<input type="text" class="form-control" placeholder="상세주소를 입력하세요" id="detailAddress">
 					</div>
 				</div>
 
@@ -262,17 +263,33 @@
 		}
 
 		function requestPay() {
-			// 필수 약관 체크 확인
-			if (!validateRequiredTerms()) {
-				return;
-			}
+			// 유효성 체크
+			// 1. 배송지 정보 체크 (DeliveryType == 'Y' 일 경우)
+			if ($("#deliveryType").val() == 'Y') {
+				// jQuery를 사용하여 배송지 정보 값을 가져옴
+				var receiverName = $('#receiverName').val();
+				var receiverPhone = $('#receiverPhone').val();
+				var zipcode = $('#zipcode').val();
+				var address = $('#address').val();
+				var detailAddress = $('#detailAddress').val();
 
-			// 결제 방법 선택 확인
+				if (!receiverName || !receiverPhone || !zipcode || !address || !detailAddress) {
+					alert('배송지 정보를 입력해주세요.');
+					return;
+				}// end if
+			}// end if
+
+			// 2. 결제 방법 선택 확인
 			const selectedPayment = document.querySelector('.payment-option.selected');
 			if (!selectedPayment) {
 				alert('결제 방법을 선택해주세요.');
 				return;
-			}
+			}// end if
+
+			// 3. 필수 약관 체크 확인
+			if (!validateRequiredTerms()) {
+				return;
+			}// end if
 
 			var channelKey = "";
 			var pay_method = "";
