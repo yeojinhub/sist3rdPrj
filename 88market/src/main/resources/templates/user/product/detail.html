@@ -17,30 +17,6 @@
 <!-- Slick JS -->
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 </head>
-<script>
-	$(function() {
-		  $('.fade').slick({
-			    dots: true,
-			    infinite: true,
-			    speed: 500,
-			    fade: true,
-			    cssEase: 'linear',
-			    arrows: true,
-			    prevArrow: '<button class="carousel-nav prev-btn">&lt;</button>',
-			    nextArrow: '<button class="carousel-nav next-btn">&gt;</button>'
-			  });
-		 // 여기에 추가
-		$('.card-list-wrapper-items').slick({
-			infinite: true,
-			slidesToShow: 5,
-			slidesToScroll: 5,
-			dots: false,
-			arrows: true,
-		});
-});
-</script>
-
-
 
 <body>
 	<!-- 헤더 -->
@@ -127,8 +103,10 @@
 
 				<!-- 행동 버튼 -->
 				<div class="action-buttons">
-					<button class="wish-btn-border">
-						<img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
+					<button class="wish-btn-border" id="wishBtn" 
+					        th:classappend="${isLiked} ? 'active' : ''">
+					    <img th:src="@{${isLiked} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}" 
+					         alt="찜하기" class="heart-icon" />
 					</button>
 					<button class="btn-chat">채팅하기</button>
 					<button class="btn-buy" th:onclick="|location.href='@{/buy}'|">구매하기</button>
@@ -200,25 +178,58 @@
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
 </body>
+<script th:inline="javascript">
+	const prdNum = [[${product.prdNum}]];
+</script>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.wish-btn, .wish-btn-border').forEach(function (btn) {
-      btn.addEventListener('click', function (event) {
-        event.preventDefault();        // 링크 이동 막기
-        event.stopPropagation();      // 상위 <a> 클릭 이벤트 막기
+$(function() {
 
-        // 하트 색 토글
-        btn.classList.toggle('active');
+	  $('.fade').slick({
+		    dots: true,
+		    infinite: true,
+		    speed: 500,
+		    fade: true,
+		    cssEase: 'linear',
+		    arrows: true,
+		    prevArrow: '<button class="carousel-nav prev-btn">&lt;</button>',
+		    nextArrow: '<button class="carousel-nav next-btn">&gt;</button>'
+		  });
+	 // 여기에 추가
+	$('.card-list-wrapper-items').slick({
+		infinite: true,
+		slidesToShow: 5,
+		slidesToScroll: 5,
+		dots: false,
+		arrows: true,
+	});
+	 
+	$('#wishBtn').click(() => {
+		axios.get('/product/wish', {
+		      params: { prdNum: prdNum }
+		    })
+			.then(res => {
+				const status = res.data;
+			    const img = $('#wishBtn img');
 
-        // btn 내부의 img 태그 찾기
-        const img = btn.querySelector('img');
-        if (btn.classList.contains('active')) {
-          img.src = '/images/productHeart/heart-on.png';   // 활성 하트 이미지
-        } else {
-          img.src = '/images/productHeart/heart-off.png';  // 비활성 하트 이미지
-        }
-      });
-    });
-  });
+			    if (status === 'liked') {
+			      $('#wishBtn').addClass('active');
+			      img.attr('src', '/images/productHeart/heart-on.png');
+			      alert("찜 등록 되었습니다");
+			    } else if (status === 'unliked') {
+			      $('#wishBtn').removeClass('active');
+			      img.attr('src', '/images/productHeart/heart-off.png');
+			      alert("찜 해제 되었습니다");
+			    }
+			})
+			.catch(err => {
+				console.log(err.response.status);
+				if (err.response?.status === 401) {
+					alert('로그인이 필요합니다.');
+					location.href = '/login';
+				}
+			});
+	});
+});
 </script>
 </html>

@@ -63,5 +63,13 @@ public class ProductDAO {
         params.put("prdNum", prdNum);
         return sqlSession.selectList("ProductMapper.selectRelatedProducts", params);
     }
+    
+    public void increaseLikeNum(String prdNum) {
+    	sqlSession.update("ProductMapper.increaseLikeNum",prdNum);
+    }
+    
+    public void decreaseLikeNum(String prdNum) {
+    	sqlSession.update("ProductMapper.decreaseLikeNum",prdNum);
+    }
 }
 

@@ -143,6 +143,16 @@
 	  )
 	  WHERE ROWNUM &lt;= 15
 	</select>
+	<!-- 상품 테이블의 좋아요 수 증가 -->
+	<update id="increaseLikeNum" parameterType="String">
+	    UPDATE PRODUCT SET LIKE_NUM = NVL(LIKE_NUM,0) + 1
+	    WHERE PRD_NUM = #{prdNum}
+	</update>
+	
+	<update id="decreaseLikeNum" parameterType="String">
+    UPDATE product SET like_num = like_num - 1 WHERE prd_num = #{prdNum}
+	</update>
+	
 </mapper>
 
 

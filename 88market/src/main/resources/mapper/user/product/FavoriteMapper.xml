@@ -5,10 +5,8 @@
 <mapper namespace="FavoriteMapper">
 
 <!-- 좋아요 중복 체크 -->
-<select id="checkFavorite" parameterType="map" resultType="boolean">
-    SELECT COUNT(*) > 0
-    FROM FAVORITE
-    WHERE USER_NUM = #{userNum} AND PRD_NUM = #{prdNum}
+<select id="checkFavorite" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM FAVORITE WHERE USER_NUM = #{userNum} AND PRD_NUM = #{prdNum}
 </select>
 
 <!-- 찜 테이블에 추가 -->
@@ -17,11 +15,7 @@
     VALUES (SEQ_FAV_NUM.NEXTVAL, SYSDATE, #{prdNum}, #{userNum})
 </insert>
 
-<!-- 상품 테이블의 좋아요 수 증가 -->
-<update id="increaseLikeNum" parameterType="String">
-    UPDATE PRODUCT SET LIKE_NUM = NVL(LIKE_NUM,0) + 1
-    WHERE PRD_NUM = #{prdNum}
-</update>
-
-
+<delete id="deleteFavorite" parameterType="map">
+    DELETE FROM favorite WHERE user_num = #{userNum} AND prd_num = #{prdNum}
+</delete>
 </mapper>

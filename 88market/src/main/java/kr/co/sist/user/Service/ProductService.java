@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.sist.user.DAO.FavoriteDAO;
 import kr.co.sist.user.DAO.ImageDAO;
 import kr.co.sist.user.DAO.ProductDAO;
 import kr.co.sist.DTO.ImageDTO;
@@ -21,6 +22,9 @@ public class ProductService {
     
     @Autowired
     private ImageDAO imageDAO;
+    
+    @Autowired
+    private FavoriteDAO favoriteDAO;
     
     public int getNextProductSeq() {
         return productDAO.getNextProductSeq();
@@ -70,6 +74,24 @@ public class ProductService {
     
     public List<ProductDTO> getRelatedProducts(int catNum, String prdNum) {
         return productDAO.selectRelatedProducts(catNum, prdNum);
+    }
+    
+    public boolean checkFavorite(String userNum, String prdNum) {
+    	boolean liked = favoriteDAO.checkFavorite(userNum, prdNum);
+    	if(liked) return true;
+    	return false;
+    }
+    
+    public void likeProduct(String userNum, String prdNum) {
+    	favoriteDAO.insertFavorite(userNum, prdNum);
+    	productDAO.increaseLikeNum(prdNum);
+    	
+    }
+    
+    @Transactional
+    public void unlikeProduct(String userNum, String prdNum) {
+        favoriteDAO.deleteFavorite(userNum, prdNum);
+        productDAO.decreaseLikeNum(prdNum);
     }
 }
 

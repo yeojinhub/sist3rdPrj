@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +46,26 @@ public class ProductController {
         return "user/product/success";
     }
 
+    @GetMapping("/product/wish")
+    public ResponseEntity<String> toggleWish(@RequestParam("prdNum") String prdNum,
+                                             @AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String userNum = user.getUsername();
+        boolean alreadyLiked = productService.checkFavorite(userNum, prdNum);
+
+        if (alreadyLiked) {
+            productService.unlikeProduct(userNum, prdNum); // 찜 해제
+            return ResponseEntity.ok("unliked");
+        } else {
+            productService.likeProduct(userNum, prdNum); // 찜 등록
+            return ResponseEntity.ok("liked");
+        }
+    }
+
+    
     @ResponseBody
     @PostMapping("/product/sell")
     public ResponseEntity<?> registerProduct(
@@ -151,7 +174,8 @@ public class ProductController {
     }
     
     @GetMapping("/detail")
-    public String detail(@RequestParam("id") String prdNum, Model model, HttpSession session) {
+    public String detail(@RequestParam("id") String prdNum, Model model, HttpSession session,
+    		@AuthenticationPrincipal UserDetails currentUser) {
     	// ✅ 세션에서 조회 기록된 상품 확인
         String viewedKey = "viewed_product_" + prdNum;
         if (session.getAttribute(viewedKey) == null) {
@@ -209,6 +233,9 @@ public class ProductController {
         //시간차 계산
         String timeAgo = TimeAgoUtil.format(product.getInputDate());
         
+        //찜
+        String currentUserNum = currentUser.getUsername(); 
+        boolean isLiked = productService.checkFavorite(currentUserNum, prdNum);
         
         model.addAttribute("product", product);
         model.addAttribute("image", image);
@@ -222,6 +249,7 @@ public class ProductController {
         model.addAttribute("excludeProduct",excludeProduct);
         model.addAttribute("relatedProducts", relatedProducts);
         model.addAttribute("relatedImages",relatedImages);
+        model.addAttribute("isLiked",isLiked);
         
         return "user/product/detail";
     }

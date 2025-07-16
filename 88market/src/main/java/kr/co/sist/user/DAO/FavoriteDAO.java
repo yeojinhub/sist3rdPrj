@@ -3,7 +3,6 @@ package kr.co.sist.user.DAO;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,8 @@ public class FavoriteDAO {
 		Map<String, String> param = new HashMap<>();
     	param.put("userNum", userNum);
     	param.put("prdNum", prdNum);
-    	return sqlSession.selectOne("FavoriteMapper.checkFavorite",param);
+    	Integer result = sqlSession.selectOne("FavoriteMapper.checkFavorite",param);
+    	return result != null && result > 0;
 	}
 	
 	public void insertFavorite(String userNum, String prdNum) {
@@ -28,7 +28,10 @@ public class FavoriteDAO {
 		sqlSession.insert("FavoriteMapper.insertFavorite",param);
 	}
 	
-	public void increaseLikeNum(String prdNum) {
-		sqlSession.update("FavoriteMapper.increaseLikeNum",prdNum);
+	public void deleteFavorite(String userNum, String prdNum) {
+		Map<String, String> param = new HashMap<>();
+    	param.put("userNum", userNum);
+    	param.put("prdNum", prdNum);
+		sqlSession.delete("FavoriteMapper.deleteFavorite",param);
 	}
 }
