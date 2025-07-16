@@ -17,30 +17,6 @@
 <!-- Slick JS -->
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 </head>
-<script>
-	$(function() {
-		  $('.fade').slick({
-			    dots: true,
-			    infinite: true,
-			    speed: 500,
-			    fade: true,
-			    cssEase: 'linear',
-			    arrows: true,
-			    prevArrow: '<button class="carousel-nav prev-btn">&lt;</button>',
-			    nextArrow: '<button class="carousel-nav next-btn">&gt;</button>'
-			  });
-		 // 여기에 추가
-		$('.card-list-wrapper-items').slick({
-			infinite: true,
-			slidesToShow: 5,
-			slidesToScroll: 5,
-			dots: false,
-			arrows: true,
-		});
-});
-</script>
-
-
 
 <body>
 	<!-- 헤더 -->
@@ -73,7 +49,7 @@
 				<!-- 상품 정보 -->
 				<div class="product-description">
 					<h3>상품정보</h3>
-					<p>불량 체크만 마친 미사용 개봉품입니다--- 궁금하신 점 문의 주세요---</p>
+					<p th:text="${product.content}"></p>
 				</div>
 			</section>
 
@@ -82,33 +58,55 @@
 			<div class="purchase-core">
 				<!-- 상품 기본 정보 -->
 				<div class="product-summary">
-					<span class="product-category">디지털기기</span>
+					<span class="product-category" th:text="${categoryName}">카테고리명</span>
 					<div class="product-title-wrapper">
 					  <h1><p th:text="${product.title}"></p></h1>
 					</div>
 					<div class="price-wrapper">
-						<strong class="product-price" th:text="${product.price}">100,000원</strong> 
+						<strong class="product-price" th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></strong>
 						<span class="badge safety-badge">안전거래</span>
 					</div>
-					<div class="product-meta">16분 전 · 조회 62회 · 채팅 3 · 찜 1</div>
+					<div class="product-meta" 
+					     th:text="${timeAgo + ' · 조회 ' + product.clickNum + '회 · 채팅 ' + chatCount + ' · 찜 ' + product.likeNum}">
+					    16분 전 · 조회 62회 · 채팅 3 · 찜 1
+					</div>
 				</div>
 
 				<!-- 상품 거래 조건 -->
 				<div class="transaction-specs">
 					<div class="spec-item">
-						<span class="spec-title">거래방식</span> 
-						<span class="spec-value">직거래, 택배</span>
+					  <span class="spec-title">거래방식</span>
+					
+					  <span class="spec-value"
+					        th:if="${'Y'.equals(product.meetType) and 'Y'.equals(product.deliveryType)}">
+					    직거래, 택배
+					  </span>
+					
+					  <span class="spec-value"
+					        th:if="${'Y'.equals(product.meetType) and not 'Y'.equals(product.deliveryType)}">
+					    직거래
+					  </span>
+					
+					  <span class="spec-value"
+					        th:if="${not 'Y'.equals(product.meetType) and 'Y'.equals(product.deliveryType)}">
+					    택배
+					  </span>
 					</div>
 					<div class="spec-item">
 						<span class="spec-title">안전결제</span> 
-						<span class="spec-value">사용</span>
+						<span class="spec-value"
+						 th:if="${'Y'.equals(product.safeType)}">사용</span>
+						 <span class="spec-value"
+						 th:unless="${'Y'.equals(product.safeType)}">미사용</span>
 					</div>
 				</div>
 
 				<!-- 행동 버튼 -->
 				<div class="action-buttons">
-					<button class="wish-btn-border">
-						<img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
+					<button class="wish-btn-border" id="wishBtn" 
+					        th:classappend="${isLiked} ? 'active' : ''">
+					    <img th:src="@{${isLiked} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}" 
+					         alt="찜하기" class="heart-icon" />
 					</button>
 					<button class="btn-chat">채팅하기</button>
 					<button class="btn-buy" th:onclick="|location.href='@{/buy/{prdNum}(prdNum=${product.prdNum})}'|">구매하기</button>
@@ -117,31 +115,35 @@
 
 				<!-- 판매자 정보 -->
 				<div class="seller-info">
-					<h4>가게정보</h4>
+					<h4>판매자정보</h4>
 					<div class="seller-profile">
-						<div class="seller-name" th:onclick="|location.href='@{/seller?id=1}'|" style="cursor: pointer;">송민철영</div>
+						<div class="seller-name" th:onclick="|location.href='@{/seller?id=1}'|" style="cursor: pointer;"
+						th:text="${user.nickname}">송민철영</div>
 						<div class="trust-score">
-							<span>신뢰지수 455</span>
+							<span th:text="'신뢰지수 ' +${user.manner}"></span>
 							<div class="trust-gauge-bar">
-								<div class="gauge" style="width: 75%;"></div>
+								<div class="gauge" th:style="'width:' + (${user.manner} / 10) + '%'"></div>
 							</div>
 						</div>
 					</div>
 					<div class="seller-stats">
-						<span>안전거래 <b>0</b></span> 
-						<span>거래후기 <b>1</b></span>
+						<span>안전거래 <b th:text="${safeCount}">0</b></span> 
+						<span>거래후기 <b th:text="${reviewCount}">1</b></span>
 					</div>
 
 				</div>
 				
 					<!-- 판매자의 다른 상품 -->
-					<h5>레이저키요...</h5>
-					<div class="seller-other-item">
-						<img th:src="@{/images/main/img2.png}" alt="판매자의 다른 상품">
+					<h5>판매자의 다른 상품</h5>
+					<div class="seller-other-item"
+						th:onclick="|location.href='@{/detail(id=${excludeProduct.prdNum})}'|"
+						style="cursor: pointer;">
+						<img th:src="@{${excludeImage.mainImage}}" alt="판매자의 다른 상품">
 						<div class="item-info">
-							<p>레이저 키요 프로 웹캠 풀박</p>
-							<strong>220,000원</strong> 
-							<span class="badge safety-badge">안전거래</span>
+							<p th:text="${excludeProduct.title}"></p>
+							<strong th:text="${#numbers.formatInteger(excludeProduct.price, 3, 'COMMA')} + '원'">220,000원</strong> 
+							<span class="badge safety-badge"
+							th:if="${'Y'.equals(excludeProduct.safeType)}">안전거래</span>
 						</div>
 					</div>
 			</section>
@@ -151,186 +153,23 @@
 		<section class="related-products-section">
 			<h2>이런 상품은 어때요?</h2>
 			<div class="card-list-wrapper-items multiple-items">
-				<!-- 관련 상품 카드 -->
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="RAZER 구현 편차계">
-						</div>
-						<div class="product-info">
-							<p class="product-name">RAZER 구현 편차계</p>
-							<strong class="product-price">15,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레이저 오로치 v2 화이트">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레이저 오로치 v2 화이트</p>
-							<strong class="product-price">20,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="RAZER 구현 편차계">
-						</div>
-						<div class="product-info">
-							<p class="product-name">RAZER 구현 편차계</p>
-							<strong class="product-price">15,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레이저 오로치 v2 화이트">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레이저 오로치 v2 화이트</p>
-							<strong class="product-price">20,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-								<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="RAZER 구현 편차계">
-						</div>
-						<div class="product-info">
-							<p class="product-name">RAZER 구현 편차계</p>
-							<strong class="product-price">15,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레이저 오로치 v2 화이트">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레이저 오로치 v2 화이트</p>
-							<strong class="product-price">20,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="RAZER 구현 편차계">
-						</div>
-						<div class="product-info">
-							<p class="product-name">RAZER 구현 편차계</p>
-							<strong class="product-price">15,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레이저 오로치 v2 화이트">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레이저 오로치 v2 화이트</p>
-							<strong class="product-price">20,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-								<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="RAZER 구현 편차계">
-						</div>
-						<div class="product-info">
-							<p class="product-name">RAZER 구현 편차계</p>
-							<strong class="product-price">15,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레이저 오로치 v2 화이트">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레이저 오로치 v2 화이트</p>
-							<strong class="product-price">20,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img3.png}" alt="RAZER 구현 편차계">
-						</div>
-						<div class="product-info">
-							<p class="product-name">RAZER 구현 편차계</p>
-							<strong class="product-price">15,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
-				</div>
-				<div class="product-card">
-					<a href="#">
-						<div class="product-image-container">
-							<img th:src="@{/images/main/img4.png}" alt="레이저 오로치 v2 화이트">
-						</div>
-						<div class="product-info">
-							<p class="product-name">레이저 오로치 v2 화이트</p>
-							<strong class="product-price">20,000원</strong>
-						<div class="product-meta-row">
-							<p class="product-meta">10분 전</p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
-			      		</div>
-						</div>
-					</a>
+				<div class="product-card" th:each="p, iterStat : ${relatedProducts}">
+				  <a th:href="@{/detail(id=${p.prdNum})}">
+				    <div class="product-image-container">
+				      <img th:src="@{${relatedImages[iterStat.index].mainImage}}" alt="관련 상품 이미지" />
+				    </div>
+				    <div class="product-info">
+				      <p class="product-name" th:text="${p.title}"></p>
+				      <strong class="product-price"
+				              th:text="${#numbers.formatInteger(p.price, 3, 'COMMA')} + '원'"></strong>
+				      <div class="product-meta-row">
+				        <p class="product-meta" th:text="${timeAgo}">10분 전</p>
+				        <button class="wish-btn">
+				          <img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
+				        </button>
+				      </div>
+				    </div>
+				  </a>
 				</div>
 			</div>
 		</section>
@@ -339,25 +178,58 @@
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
 </body>
+<script th:inline="javascript">
+	const prdNum = [[${product.prdNum}]];
+</script>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.wish-btn, .wish-btn-border').forEach(function (btn) {
-      btn.addEventListener('click', function (event) {
-        event.preventDefault();        // 링크 이동 막기
-        event.stopPropagation();      // 상위 <a> 클릭 이벤트 막기
+$(function() {
 
-        // 하트 색 토글
-        btn.classList.toggle('active');
+	  $('.fade').slick({
+		    dots: true,
+		    infinite: true,
+		    speed: 500,
+		    fade: true,
+		    cssEase: 'linear',
+		    arrows: true,
+		    prevArrow: '<button class="carousel-nav prev-btn">&lt;</button>',
+		    nextArrow: '<button class="carousel-nav next-btn">&gt;</button>'
+		  });
+	 // 여기에 추가
+	$('.card-list-wrapper-items').slick({
+		infinite: true,
+		slidesToShow: 5,
+		slidesToScroll: 5,
+		dots: false,
+		arrows: true,
+	});
+	 
+	$('#wishBtn').click(() => {
+		axios.get('/product/wish', {
+		      params: { prdNum: prdNum }
+		    })
+			.then(res => {
+				const status = res.data;
+			    const img = $('#wishBtn img');
 
-        // btn 내부의 img 태그 찾기
-        const img = btn.querySelector('img');
-        if (btn.classList.contains('active')) {
-          img.src = '/images/productHeart/heart-on.png';   // 활성 하트 이미지
-        } else {
-          img.src = '/images/productHeart/heart-off.png';  // 비활성 하트 이미지
-        }
-      });
-    });
-  });
+			    if (status === 'liked') {
+			      $('#wishBtn').addClass('active');
+			      img.attr('src', '/images/productHeart/heart-on.png');
+			      alert("찜 등록 되었습니다");
+			    } else if (status === 'unliked') {
+			      $('#wishBtn').removeClass('active');
+			      img.attr('src', '/images/productHeart/heart-off.png');
+			      alert("찜 해제 되었습니다");
+			    }
+			})
+			.catch(err => {
+				console.log(err.response.status);
+				if (err.response?.status === 401) {
+					alert('로그인이 필요합니다.');
+					location.href = '/login';
+				}
+			});
+	});
+});
 </script>
 </html>

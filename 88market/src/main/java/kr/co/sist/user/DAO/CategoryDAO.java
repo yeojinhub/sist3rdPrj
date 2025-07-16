@@ -13,5 +13,4 @@ public interface CategoryDAO {
 	public List<CategoryDTO> selectAllCategories();
 	public CategoryDTO selectCategoryById(@Param("catNum") int catNum);
 	
-	
 }

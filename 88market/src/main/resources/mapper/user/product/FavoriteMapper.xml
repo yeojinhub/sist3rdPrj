@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FavoriteMapper">
+
+<!-- 좋아요 중복 체크 -->
+<select id="checkFavorite" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM FAVORITE WHERE USER_NUM = #{userNum} AND PRD_NUM = #{prdNum}
+</select>
+
+<!-- 찜 테이블에 추가 -->
+<insert id="insertFavorite" parameterType="map">
+    INSERT INTO FAVORITE (FAV_NUM, INPUT_DATE, PRD_NUM, USER_NUM)
+    VALUES (SEQ_FAV_NUM.NEXTVAL, SYSDATE, #{prdNum}, #{userNum})
+</insert>
+
+<delete id="deleteFavorite" parameterType="map">
+    DELETE FROM favorite WHERE user_num = #{userNum} AND prd_num = #{prdNum}
+</delete>
+</mapper>

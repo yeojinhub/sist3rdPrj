@@ -80,6 +80,79 @@
     WHERE PRD_NUM = #{prdNum, jdbcType=VARCHAR}
   </select>
 
+	<!-- 조회수 -->
+	<update id="increaseClickNum" parameterType="string">
+	  UPDATE PRODUCT
+	  SET CLICK_NUM = CLICK_NUM + 1
+	  WHERE PRD_NUM = #{prdNum}
+	</update>
+
+	<!-- 채팅방 개수 -->
+	<select id="countChatroomsByPrdNum" parameterType="string" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM CHATROOM 
+	    WHERE PRD_NUM = #{prdNum}
+	</select>
+
+	<!-- 상세페이지에 필요한 유저 정보 -->
+	<select id="getUser" parameterType="string" resultType="kr.co.sist.DTO.UserDTO">
+	    SELECT nickname, manner
+	    FROM users
+	    WHERE user_num = #{userNum}
+	</select>
+	
+	<!-- 안전거래 개수 -->
+	<select id="getSafeByUserNum" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM PRODUCT
+		WHERE USER_NUM = #{userNum}
+		AND SAFE_TYPE = 'Y'
+		AND SELL_TYPE = 'Y'
+	</select>
+	
+	<!-- 리뷰개수 -->
+	<select id="getReviewByUserNum" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM REVIEW R
+		JOIN PRODUCT P ON R.PRD_NUM = P.PRD_NUM
+		WHERE P.USER_NUM = #{userNum}
+	</select>
+	
+	<!-- 판매자의 다른 상품 -->
+	<select id="selectRandomProduct" parameterType="map" resultMap="productResultMap">
+	  SELECT *
+	  FROM (
+	    SELECT *
+	    FROM PRODUCT
+	    WHERE USER_NUM = #{userNum}
+	      AND PRD_NUM != #{excludePrdNum}
+	    ORDER BY DBMS_RANDOM.VALUE
+	  )
+	  WHERE ROWNUM = 1
+	</select>
+	
+	<!-- 같은 카테고리 내 다른 상품 15개 랜덤 조회 -->
+	<select id="selectRelatedProducts" parameterType="map" resultMap="productResultMap">
+	  SELECT *
+	  FROM (
+	    SELECT *
+	    FROM PRODUCT
+	    WHERE CAT_NUM = #{catNum}
+	      AND PRD_NUM != #{prdNum}
+	      ORDER BY DBMS_RANDOM.VALUE
+	  )
+	  WHERE ROWNUM &lt;= 15
+	</select>
+	<!-- 상품 테이블의 좋아요 수 증가 -->
+	<update id="increaseLikeNum" parameterType="String">
+	    UPDATE PRODUCT SET LIKE_NUM = NVL(LIKE_NUM,0) + 1
+	    WHERE PRD_NUM = #{prdNum}
+	</update>
+	
+	<update id="decreaseLikeNum" parameterType="String">
+    UPDATE product SET like_num = like_num - 1 WHERE prd_num = #{prdNum}
+	</update>
+	
 </mapper>
 
 
