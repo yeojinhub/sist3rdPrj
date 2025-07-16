@@ -38,6 +38,7 @@
 
 				<!-- 두번째 섹션: 배송지 정보 -->
 				<input type="hidden" th:value="${product.deliveryType}" id="deliveryType">
+				<input type="hidden" id="addrNum"/>
 				<div class="section-card mb-4" th:if="${product.deliveryType == 'Y'}">
 					<div class="section-header">
 						<h4 class="section-title">배송지 정보</h4>
@@ -319,7 +320,24 @@
 				name: productName,
 				amount: finalPrice,
 			}, function (rsp) {
-				console.log(rsp);
+				if (!rsp.success) {
+					alert('결제 진행중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+					return;
+				}// end if
+
+				// 결제 성공 시 테이블 등록
+				const formData = new FormData();
+				formData.append('product', productName); // 상품 이름
+				formData.append('price', finalPrice); // 최종 가격
+				formData.append('addrNum', $('#addrNum').val()); // 구매자 배송지 번호
+				formData.append('cardName', rsp.card_name); // 카드 이름
+				formData.append('impUid', rsp.imp_uid); // 결제 UID
+				
+				axios.post('/buy/payment', formData).then(response => {
+					console.log(response);
+				}).catch(err => {
+					console.log(err);
+				});
 			});
 		}
 	</script>

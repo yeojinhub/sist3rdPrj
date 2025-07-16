@@ -24,7 +24,7 @@
 									th:id="|address${index.index}|"
 									th:checked="${item.addrType == 'Y'}"
 									th:data-name="${item.recipientName}" th:data-tel="${item.tel}"
-									th:data-address="|[${item.zipcode}] ${item.address}|">
+									th:data-address="|[${item.zipcode}] ${item.address}|" th:data-add-num="${item.addrNum}">
 								<label class="form-check-label" th:for="|address${index.index}|">
 									<div class="address-header">
 										<strong class="address-name" th:text="${item.name}">집</strong>
@@ -85,10 +85,12 @@ $(function() {
         var name = selectedRadio.data('name');
         var tel = selectedRadio.data('tel');
         var address = selectedRadio.data('address');
+		var addrNum = selectedRadio.data('add-num');
         
         $('#receiverName').text(name);
         $('#receiverTel').text(tel);
         $('#addressText').text(address);
+		$('#addrNum').val(addrNum);
         
         $('#addressPopup').css('display', 'none');
     });
