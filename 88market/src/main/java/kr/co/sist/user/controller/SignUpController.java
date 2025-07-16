@@ -1,5 +1,8 @@
 package kr.co.sist.user.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +23,14 @@ public class SignUpController {
 	
 	@ResponseBody
 	@RequestMapping(value="/signUpProcess", method = { RequestMethod.POST })
-	public String signUpProcess(@RequestBody UserDTO userDTO) {
+	public Map<String, Object> signUpProcess(@RequestBody UserDTO userDTO) {
+		Map<String, Object> map = new HashMap<>();
 		
-		service.addMember(userDTO);
+		System.out.println("SignUpController : DTO 값 "+userDTO);
+		map.put("success", service.addMember(userDTO));
 		
-		return "";
+		System.out.println("SignUpController : map 값 "+map.toString());
+		return map;
 	} //signUpProcess;
 	
 } //class
