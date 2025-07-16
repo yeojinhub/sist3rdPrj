@@ -16,5 +16,6 @@
     <!-- 유저넘버로 배송지 조회 -->
     <select id="selectAddressByUserNum" parameterType="String" resultType="kr.co.sist.DTO.AddressDTO">
     	SELECT * FROM ADDRESS WHERE USER_NUM = #{userNum}
+    	ORDER BY ADDR_TYPE DESC
     </select>
 </mapper>

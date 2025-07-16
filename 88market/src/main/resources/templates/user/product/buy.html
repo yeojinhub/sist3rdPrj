@@ -30,7 +30,7 @@
 					<div class="product-info d-flex">
 						<img th:src="${image.mainImage}" alt="상품 이미지" class="product-image">
 						<div class="product-details ms-3">
-							<h5 class="product-name" th:text="${product.title}">레이저 키요 프로 웹캠 풀박</h5>
+							<h5 class="product-name" th:text="${product.title}" id="product-name" th:data-product-name="${product.title}">레이저 키요 프로 웹캠 풀박</h5>
 							<p class="product-price"><strong th:text="${#numbers.formatInteger(product.price,3,'COMMA')}+'원'">100,000원</strong></p>
 						</div>
 					</div>
@@ -49,16 +49,16 @@
 						<div class="row mb-2">
 							<div class="col-md-6">
 								<label class="form-label">받는 사람</label>
-								<p class="form-control-plaintext" id="receiverName">홍길동</p>
+								<p class="form-control-plaintext" id="receiverName" th:text="${addrList[0].recipientName}">홍길동</p>
 							</div>
 							<div class="col-md-6">
 								<label class="form-label">연락처</label>
-								<p class="form-control-plaintext" id="receiverPhone">010-1234-5678</p>
+								<p class="form-control-plaintext" id="receiverPhone" th:text="${addrList[0].tel}">010-1234-5678</p>
 							</div>
 						</div>
 						<div>
 							<label class="form-label">배송 주소</label>
-							<p class="form-control-plaintext" id="addressText">[12345] 서울 강남구 테헤란로 123, 456호</p>
+							<p class="form-control-plaintext" id="addressText" th:text="|[${addrList[0].zipcode}] ${addrList[0].address}|">[12345] 서울 강남구 테헤란로 123, 456호</p>
 						</div>
 					</div>
 				</div>
@@ -151,15 +151,15 @@
 								<span>상품 금액</span>
 								<span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}+'원'">100,000원</span>
 							</div>
-							<div class="price-item">
+							<div class="price-item" th:if="${product.deliveryType == 'Y'}">
 								<span>안전거래 수수료(1%)</span>
-								<span>1,000원</span>
+								<span th:text="${#numbers.formatInteger((product.price*0.01),3,'COMMA')}+'원'">1,000원</span>
 							</div>
 						</div>
 						<hr>
 						<div class="total-amount">
 							<span><strong>총 결제 금액</strong></span>
-							<span class="final-price"><strong>100,000원</strong></span>
+							<span class="final-price" id="final-price" th:data-final-price="${product.deliveryType == 'Y' ? product.price*1.01 : product.price}"><strong th:text="${#numbers.formatInteger((product.deliveryType == 'Y' ? product.price*1.01 : product.price),3,'COMMA')}+'원'">100,000원</strong></span>
 						</div>
 						<button class="btn btn-primary w-100 mt-3 order-btn" id="orderBtn" onclick="requestPay()" disabled>
 							<i class="fas fa-credit-card me-2"></i>주문하기
@@ -276,30 +276,19 @@
 		}
 
 		function requestPay() {
+			// 최종 결제 금액
+			var finalPrice = $('#final-price').data('final-price');
+			var productName = $('#product-name').data('product-name');
+			
 			// 유효성 체크
-			// 1. 배송지 정보 체크 (DeliveryType == 'Y' 일 경우)
-			if ($("#deliveryType").val() == 'Y') {
-				// jQuery를 사용하여 배송지 정보 값을 가져옴
-				var receiverName = $('#receiverName').val();
-				var receiverPhone = $('#receiverPhone').val();
-				var zipcode = $('#zipcode').val();
-				var address = $('#address').val();
-				var detailAddress = $('#detailAddress').val();
-
-				if (!receiverName || !receiverPhone || !zipcode || !address || !detailAddress) {
-					alert('배송지 정보를 입력해주세요.');
-					return;
-				}// end if
-			}// end if
-
-			// 2. 결제 방법 선택 확인
+			// 1. 결제 방법 선택 확인
 			const selectedPayment = document.querySelector('.payment-option.selected');
 			if (!selectedPayment) {
 				alert('결제 방법을 선택해주세요.');
 				return;
 			}// end if
 
-			// 3. 필수 약관 체크 확인
+			// 2. 필수 약관 체크 확인
 			if (!validateRequiredTerms()) {
 				return;
 			}// end if
@@ -327,8 +316,8 @@
 				channelKey: channelKey,
 				pay_method: pay_method,
 				merchant_uid: "order_" + new Date().getTime(),
-				name: "test",
-				amount: 1000000,
+				name: productName,
+				amount: finalPrice,
 			}, function (rsp) {
 				console.log(rsp);
 			});

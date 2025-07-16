@@ -36,14 +36,11 @@ public class BuyController {
         
         // 3. 배송지 조회
         List<AddressDTO> addrList = buyService.searchAddressByUserNum(user.getUsername());
-        
-        for(AddressDTO item : addrList) {
-        	System.out.println(item);
-        }
 
-        // 3. 모델에 추가
+        // 4. 모델에 추가
         model.addAttribute("product", product);
         model.addAttribute("image", image);
+        model.addAttribute("addrList", addrList);
 
         return "user/product/buy";
     }
