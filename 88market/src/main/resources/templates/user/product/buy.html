@@ -8,8 +8,10 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 	<link rel="stylesheet" th:href="@{/css/user/buy.css}">
+	<link rel="stylesheet" th:href="@{/css/user/buy-popup.css}">
 	<th:block th:replace="~{components/user/external :: external}"></th:block>
 	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 
 <body>
@@ -34,40 +36,30 @@
 					</div>
 				</div>
 
-				<!-- 두번째 섹션: 배송지 정보 (display: none) -->
-				 <input type="hidden" th:value="${product.deliveryType}" id="deliveryType">
+				<!-- 두번째 섹션: 배송지 정보 -->
+				<input type="hidden" th:value="${product.deliveryType}" id="deliveryType">
 				<div class="section-card mb-4" th:if="${product.deliveryType == 'Y'}">
 					<div class="section-header">
 						<h4 class="section-title">배송지 정보</h4>
 						<button type="button" class="btn address-select-btn" onclick="openAddressModal()">
-							<i class="fas fa-map-marker-alt me-1"></i>다른 배송지 선택
+							<i class="fas fa-map-marker-alt me-1"></i>배송지 변경
 						</button>
 					</div>
-					<div class="row mb-3">
-						<div class="col-md-6">
-							<label class="form-label">받는 사람 성함</label>
-							<input type="text" class="form-control" placeholder="성함을 입력하세요" id="receiverName">
-						</div>
-						<div class="col-md-6">
-							<label class="form-label">받는 사람 전화번호</label>
-							<input type="tel" class="form-control" placeholder="전화번호를 입력하세요" id="receiverPhone">
-						</div>
-					</div>
-					<div class="row mb-3">
-						<div class="col-md-4">
-							<label class="form-label">우편번호</label>
-							<div class="input-group">
-								<input type="text" class="form-control" placeholder="우편번호" id="zipcode">
+					<div id="selectedAddress">
+						<div class="row mb-2">
+							<div class="col-md-6">
+								<label class="form-label">받는 사람</label>
+								<p class="form-control-plaintext" id="receiverName">홍길동</p>
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">연락처</label>
+								<p class="form-control-plaintext" id="receiverPhone">010-1234-5678</p>
 							</div>
 						</div>
-					</div>
-					<div class="mb-3">
-						<label class="form-label">주소</label>
-						<input type="text" class="form-control" placeholder="주소를 입력하세요" id="address">
-					</div>
-					<div class="mb-3">
-						<label class="form-label">상세주소</label>
-						<input type="text" class="form-control" placeholder="상세주소를 입력하세요" id="detailAddress">
+						<div>
+							<label class="form-label">배송 주소</label>
+							<p class="form-control-plaintext" id="addressText">[12345] 서울 강남구 테헤란로 123, 456호</p>
+						</div>
 					</div>
 				</div>
 
@@ -185,8 +177,29 @@
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
 
+	<!-- 배송지 선택 팝업 -->
+	<th:block th:insert="~{user/product/buy-popup :: buy-popup}"></th:block>
+
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
+		// 주소 관련 스크립트
+		function openAddressModal() {
+			document.getElementById('addressPopup').style.display = 'flex';
+		}
+
+		function closeAddressModal() {
+			document.getElementById('addressPopup').style.display = 'none';
+		}
+
+		function execDaumPostcode() {
+			new daum.Postcode({
+				oncomplete: function(data) {
+					// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+					// 예제를 참고하여 다양한 활용법을 확인해 보세요.
+				}
+			}).open();
+		}
+
 		$(function () {
 			$('.recent-products-aside').hide();
 			

@@ -1,8 +1,11 @@
 package kr.co.sist.user.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.sist.DTO.AddressDTO;
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.ProductDTO;
 import kr.co.sist.user.DAO.BuyDAO;
@@ -20,4 +23,9 @@ public class BuyService {
     public ImageDTO searchImage(int imgNum) {
         return buyDAO.selectImage(imgNum);
     }// searchImage
+    
+    public List<AddressDTO> searchAddressByUserNum(String userNum) {
+    	return buyDAO.selectAddressByUserNum(userNum);
+    }
+    
 }// class

@@ -2,7 +2,7 @@
 .header {
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 7777;
     background-color: #ffffff;
     min-width: 900px;
 }

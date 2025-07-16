@@ -4,7 +4,7 @@
     padding: 50px 0;
     margin-top: 60px;
     position: relative; /* 추가 */
-    z-index: 9999;
+    z-index: 7777;
 }
 .footer-container {
     max-width: 1408px;

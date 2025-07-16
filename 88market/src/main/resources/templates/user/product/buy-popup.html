@@ -1,0 +1,107 @@
+<!-- 수정된 buy-popup HTML -->
+<div th:fragment="buy-popup" class="popup-overlay" id="addressPopup"
+	style="display: none;">
+	<div class="popup-content">
+		<div class="popup-header">
+			<h2>
+				<i class="fas fa-map-marker-alt me-2"></i>배송지 선택
+			</h2>
+			<button type="button" class="btn-close" onclick="closeAddressModal()">
+				<i class="fas fa-times"></i>
+			</button>
+		</div>
+		<div class="popup-body">
+			<!-- 배송지 목록 -->
+			<div class="address-list-wrapper">
+				<div class="address-list">
+					<!-- 대표배송지 -->
+					<div class="address-item selected">
+						<div class="address-info">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="addressRadio"
+									id="address1" checked> <label class="form-check-label"
+									for="address1">
+									<div class="address-header">
+										<strong class="address-name">집</strong> <span
+											class="badge badge-primary">대표</span>
+									</div>
+									<div class="address-details">
+										<span class="address-text">서울시 강남구 테헤란로 123, 456호</span><br>
+										<span class="receiver-info">홍길동 (010-1234-5678)</span>
+									</div>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<!-- 서브배송지 1 -->
+					<div class="address-item">
+						<div class="address-info">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="addressRadio"
+									id="address2"> <label class="form-check-label"
+									for="address2">
+									<div class="address-header">
+										<strong class="address-name">회사</strong>
+									</div>
+									<div class="address-details">
+										<span class="address-text">서울시 중구 을지로 100, 567호</span><br>
+										<span class="receiver-info">홍길동 (010-1234-5678)</span>
+									</div>
+								</label>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<div class="popup-footer">
+			<button type="button" class="btn btn-primary">
+				<i class="fas fa-check me-2"></i>선택 완료
+			</button>
+			<button type="button" class="btn btn-secondary"
+				onclick="closeAddressModal()">
+				<i class="fas fa-times me-2"></i>취소
+			</button>
+		</div>
+	</div>
+	<script>
+ // buy-popup.js - 필요한 경우에만 추가
+    document.addEventListener('DOMContentLoaded', function() {
+        // 라디오 버튼 변경 시 선택된 아이템 스타일 변경
+        const addressRadios = document.querySelectorAll('input[name="addressRadio"]');
+        
+        addressRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // 모든 address-item에서 selected 클래스 제거
+                document.querySelectorAll('.address-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                
+                // 선택된 라디오 버튼의 부모 address-item에 selected 클래스 추가
+                if (this.checked) {
+                    this.closest('.address-item').classList.add('selected');
+                }
+            });
+        });
+        
+        // 모달 오픈 시 스크롤 초기화
+        function openAddressModal() {
+            const addressList = document.querySelector('.address-list');
+            if (addressList) {
+                addressList.scrollTop = 0;
+            }
+            document.getElementById('addressPopup').style.display = 'flex';
+        }
+        
+        // 전역 함수로 등록 (기존 코드와 호환성 유지)
+        window.openAddressModal = openAddressModal;
+    });
+
+    function closeAddressModal() {
+        document.getElementById('addressPopup').style.display = 'none';
+    }
+
+    </script>
+</div>
