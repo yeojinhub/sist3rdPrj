@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FavoriteMapper">
+
+<!-- 좋아요 중복 체크 -->
+<select id="checkFavorite" parameterType="map" resultType="boolean">
+    SELECT COUNT(*) > 0
+    FROM FAVORITE
+    WHERE USER_NUM = #{userNum} AND PRD_NUM = #{prdNum}
+</select>
+
+<!-- 찜 테이블에 추가 -->
+<insert id="insertFavorite" parameterType="map">
+    INSERT INTO FAVORITE (FAV_NUM, INPUT_DATE, PRD_NUM, USER_NUM)
+    VALUES (SEQ_FAV_NUM.NEXTVAL, SYSDATE, #{prdNum}, #{userNum})
+</insert>
+
+<!-- 상품 테이블의 좋아요 수 증가 -->
+<update id="increaseLikeNum" parameterType="String">
+    UPDATE PRODUCT SET LIKE_NUM = NVL(LIKE_NUM,0) + 1
+    WHERE PRD_NUM = #{prdNum}
+</update>
+
+
+</mapper>

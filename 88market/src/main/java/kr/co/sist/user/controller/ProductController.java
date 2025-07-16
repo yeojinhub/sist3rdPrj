@@ -1,6 +1,7 @@
 package kr.co.sist.user.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpSession;
+import kr.co.sist.DTO.CategoryDTO;
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.UserDTO;
+import kr.co.sist.user.DAO.CategoryDAO;
 import kr.co.sist.user.Service.CategoryService;
 import kr.co.sist.user.Service.ProductService;
+import kr.co.sist.user.util.TimeAgoUtil;
 
 @Controller
 public class ProductController {
@@ -145,18 +151,78 @@ public class ProductController {
     }
     
     @GetMapping("/detail")
-    public String detail(@RequestParam("id") String prdNum, Model model) {
+    public String detail(@RequestParam("id") String prdNum, Model model, HttpSession session) {
+    	// ✅ 세션에서 조회 기록된 상품 확인
+        String viewedKey = "viewed_product_" + prdNum;
+        if (session.getAttribute(viewedKey) == null) {
+            productService.increaseClickNum(prdNum);
+            session.setAttribute(viewedKey, true); // 조회 기록 저장
+        }
+    	
+    	//상품정보 가져오기
         ProductDTO product = productService.selectProductByNum(prdNum);
-        model.addAttribute("product", product);
-
+        
+        //이미지 불러오기
         ImageDTO image = null;
-
-        // ✅ Null-safe 처리: getImgNum()이 null일 경우 처리 피하기
         if (product != null && product.getImgNum() != null) {
             image = productService.selectImageByNum(product.getImgNum());
         }
+        
+        //카테고리 이름 가져오기
+        String categoryName = "";
+        if (product.getCatNum() != 0) {
+        	categoryName= categoryService.getCategoryName(product.getCatNum());
+        }
+        
+        //유저 정보 가져오기
+        String userNum = product.getUserNum();
+        UserDTO user = null;
+        int safeCount = 0;
+        int reviewCount =0;
+        if (userNum != "") {
+        	user = productService.getUser(userNum);
+        	safeCount = productService.getSafeByUserNum(userNum);
+        	reviewCount = productService.getReviewByUserNum(userNum);
+        }
+        
+        //판매자의 다른 상품
+        ProductDTO excludeProduct = productService.selectRandomProduct(userNum, prdNum);
+        
+        //다른 상품의 이미지
+        ImageDTO excludeImage = null;
+        if (excludeProduct != null && excludeProduct.getImgNum() != null) {
+        	excludeImage = productService.selectImageByNum(excludeProduct.getImgNum());
+        } 
+        
+        //연관상품
+        List<ProductDTO> relatedProducts = productService.getRelatedProducts(product.getCatNum(), prdNum);
 
+        //연관상품 이미지
+        List<ImageDTO> relatedImages = new ArrayList<ImageDTO>();
+        for (ProductDTO P : relatedProducts) {
+        	relatedImages.add(productService.selectImageByNum(P.getImgNum()));
+        }
+        
+        //등록 채팅방 개수
+        int chatCount = productService.countChatroomsByPrdNum(product.getPrdNum());
+
+        //시간차 계산
+        String timeAgo = TimeAgoUtil.format(product.getInputDate());
+        
+        
+        model.addAttribute("product", product);
         model.addAttribute("image", image);
+        model.addAttribute("excludeImage", excludeImage);
+        model.addAttribute("categoryName",categoryName);
+        model.addAttribute("chatCount",chatCount);
+        model.addAttribute("timeAgo",timeAgo);
+        model.addAttribute("user",user);
+        model.addAttribute("safeCount",safeCount);
+        model.addAttribute("reviewCount",reviewCount);
+        model.addAttribute("excludeProduct",excludeProduct);
+        model.addAttribute("relatedProducts", relatedProducts);
+        model.addAttribute("relatedImages",relatedImages);
+        
         return "user/product/detail";
     }
 
