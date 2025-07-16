@@ -64,7 +64,7 @@
 					</div>
 					<div class="price-wrapper">
 						<strong class="product-price" th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></strong>
-						<span class="badge safety-badge">안전거래</span>
+						<span class="badge safety-badge" th:if="${product.safeType == 'Y'}">안전거래</span>
 					</div>
 					<div class="product-meta" 
 					     th:text="${timeAgo + ' · 조회 ' + product.clickNum + '회 · 채팅 ' + chatCount + ' · 찜 ' + product.likeNum}">
