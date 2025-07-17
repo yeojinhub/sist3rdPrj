@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -52,8 +53,8 @@ public class BuyController {
 
     @PostMapping("/buy/payment")
     @ResponseBody
-    public ResponseEntity<?> payment(@RequestParam("formData") Map<String, String> formData) {
-        System.out.println(formData);
+    public ResponseEntity<?> payment(@RequestBody Map<String, Object> data) {
+        System.out.println(data);
         return ResponseEntity.ok(Map.of("success", true));
     }
 	
