@@ -13,4 +13,5 @@ public interface BuyDAO {
     public ProductDTO selectProduct(String prdNum);
     public ImageDTO selectImage(int imgNum);
     public List<AddressDTO> selectAddressByUserNum(String userNum);
+    public void updateProductAppointType(String prdNum);
 }
