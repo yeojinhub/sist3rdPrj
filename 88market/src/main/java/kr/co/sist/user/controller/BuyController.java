@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,9 +55,17 @@ public class BuyController {
 
     @PostMapping("/buy/payment")
     @ResponseBody
-    public ResponseEntity<?> payment(@RequestBody Map<String, Object> data) {
-        System.out.println(data);
-        return ResponseEntity.ok(Map.of("success", true));
+    public ResponseEntity<?> payment(@RequestBody Map<String, Object> data, @AuthenticationPrincipal UserDetails user) {
+        
+    	try {
+    		buyService.addTradeHistroy(data, user);
+    		return ResponseEntity.ok(Map.of("result", true));
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","결제에 실패하였습니다. 다시 시도 해주세요."));
+    		
+    	}
+    	
     }
 	
 }

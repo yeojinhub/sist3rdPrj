@@ -23,7 +23,8 @@
 			<!-- 메인 컨텐츠 -->
 			<div class="col-lg-8">
 				<h2 class="mb-4">주문 / 결제</h2>
-
+				<input type="hidden" th:value="${product.prdNum}" id="prdNum"/>
+				<input type="hidden" th:value="${product.userNum}" id="userNum"/>
 				<!-- 첫번째 섹션: 상품 정보 -->
 				<div class="section-card mb-4">
 					<h4 class="section-title">상품 정보</h4>
@@ -281,6 +282,8 @@
 			var finalPrice = $('#final-price').data('final-price');
 			var productName = $('#product-name').data('product-name');
 			var selectedPaymentMethod = $('.payment-option.selected').data('method');
+			var prdNum = $('#prdNum').val();
+			var userNum = $('#userNum').val();
 			
 			// 유효성 체크
 			// 1. 결제 방법 선택 확인
@@ -328,7 +331,9 @@
 
 				// 결제 성공 시 테이블 등록
 				var data = {
-					prodct : productName,
+					product : productName,
+					prdNum : prdNum,
+					userNum : userNum,
 					price : finalPrice,
 					addrNum : $('#addrNum').val(),
 					payMethod : selectedPaymentMethod,
