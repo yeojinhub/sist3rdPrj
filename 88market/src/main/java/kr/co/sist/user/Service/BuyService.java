@@ -53,9 +53,9 @@ public class BuyService {
     	PaymentsDTO pDTO = new PaymentsDTO();
     	pDTO.setPatmentUid((String) data.get("impUid"));
     	pDTO.setMethod((String) data.get("payMethod"));
-    	pDTO.setAmount((Integer) data.get("price"));
+    	pDTO.setAmount((int) Double.parseDouble((String) data.get("price")));
     	pDTO.setCardCompany((String) data.get("cardName"));
-    	
+
     	// 2. 쿼리문 진행
     	// 2-1. 상품(PRODUCT) 테이블에 APPOINT_TYPE을 Y로 변경한다.
     	
