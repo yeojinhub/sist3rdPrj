@@ -70,7 +70,8 @@ public class ProductController {
     @PostMapping("/product/sell")
     public ResponseEntity<?> registerProduct(
             @RequestPart("product") String productJson,
-            @RequestPart(value = "images", required = false) List<MultipartFile> images
+            @RequestPart(value = "images", required = false) List<MultipartFile> images,
+            @AuthenticationPrincipal UserDetails currentUser
     ) {
         String prdNum = null;
         File uploadFolder = null;
@@ -111,7 +112,7 @@ public class ProductController {
             }
 
             product.setPrdNum(prdNum);
-            product.setUserNum("1");
+            product.setUserNum(currentUser.getUsername());
 
             // 트랜잭션 처리
             productService.insertProductWithImages(product, image);
@@ -171,6 +172,8 @@ public class ProductController {
     @GetMapping("/detail")
     public String detail(@RequestParam("id") String prdNum, Model model, HttpSession session,
     		@AuthenticationPrincipal UserDetails currentUser) {
+    	
+    	System.out.println(currentUser);
     	// ✅ 세션에서 조회 기록된 상품 확인
         String viewedKey = "viewed_product_" + prdNum;
         if (session.getAttribute(viewedKey) == null) {
@@ -229,8 +232,11 @@ public class ProductController {
         String timeAgo = TimeAgoUtil.format(product.getInputDate());
         
         //찜
-        String currentUserNum = currentUser.getUsername(); 
-        boolean isLiked = productService.checkFavorite(currentUserNum, prdNum);
+        boolean isLiked = false;
+        if (currentUser != null) {
+            String currentUserNum = currentUser.getUsername(); 
+            isLiked = productService.checkFavorite(currentUserNum, prdNum);
+        }
         
         model.addAttribute("product", product);
         model.addAttribute("image", image);

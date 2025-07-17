@@ -77,9 +77,8 @@ public class ProductService {
     }
     
     public boolean checkFavorite(String userNum, String prdNum) {
-    	boolean liked = favoriteDAO.checkFavorite(userNum, prdNum);
-    	if(liked) return true;
-    	return false;
+    	return favoriteDAO.checkFavorite(userNum, prdNum);
+    	
     }
     
     public void likeProduct(String userNum, String prdNum) {
