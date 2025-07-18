@@ -72,7 +72,7 @@ public class BuyController {
     @ResponseBody
     public ResponseEntity<?> sameUser(@RequestBody Map<String, String> map, @AuthenticationPrincipal UserDetails user) {
     	
-    	if (map.get("userNum").equals(user.getUsername())) {
+    	if (user != null && map.get("userNum").equals(user.getUsername())) {
     		return ResponseEntity.ok(Map.of("result",true));
     	} else {
     		return ResponseEntity.ok(Map.of("result",false));

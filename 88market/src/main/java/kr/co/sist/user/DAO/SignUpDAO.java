@@ -11,4 +11,13 @@ public interface SignUpDAO {
 	public int addUser(@RequestBody UserDTO userDTO);
 	public int addAddress(@RequestBody UserDTO userDTO);
 
+	/**
+     * 카카오 사용자 생성
+     */
+    public void insertKakaoUser(UserDTO user);
+
+    /**
+     * 카카오 사용자 주소 추가
+     */
+    public void addKakaoAddress(UserDTO user);
 } //inserface

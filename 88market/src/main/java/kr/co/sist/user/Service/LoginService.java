@@ -2,36 +2,70 @@ package kr.co.sist.user.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.sist.DTO.UserDTO;
 import kr.co.sist.user.DAO.LoginDAO;
+import kr.co.sist.user.DAO.SignUpDAO;
 
 /**
  * 로그인 관련 비즈니스 로직을 담당하는 서비스 클래스
  */
 @Service
 public class LoginService {
-	
-	@Autowired
-	private LoginDAO loginDAO;
-	
-	/**
-	 * @param email 입력받은 이메일
-	 * @param pass 입력받은 비밀번호
-	 * @return 로그인 성공시 UserDTO 반환, 실패 시 null
-	 */
-	public UserDTO selectLogin(String email, String pass) {
-		// 사용자에게 입력받은 이메일로 사용자 정보 조회
-		UserDTO loginDTO = loginDAO.selectLoginList(email);
-		
-		// 사용자 정보가 존재하고 비밀번호 일치 시
-		if( loginDTO != null && loginDTO.getPass().equals(pass) ) {
-		// 로그인 성공
-			return loginDTO;
-		} //end if
-		
-		// 로그인 실패
-		return null;
-	} //selectLoginList
-	
-} //class
+    
+    @Autowired
+    private LoginDAO loginDAO;
+
+    @Autowired
+    private SignUpDAO signUpDAO;
+    
+    /**
+     * 일반 로그인 처리 (이메일 + 비밀번호 검증)
+     */
+    public UserDTO selectLogin(String email, String pass) {
+        UserDTO loginDTO = loginDAO.selectLoginList(email);
+        
+        // 일반 사용자: 비밀번호 검증 필요
+        if( loginDTO != null && loginDTO.getPass().equals(pass) && !"kakao".equals(loginDTO.getPass()) ) {
+            return loginDTO;
+        }
+        
+        return null;
+    }
+
+    /**
+     * 카카오 사용자 찾기 (비밀번호 검증 없음)
+     */
+    public UserDTO findKakaoUser(String kakaoEmail) {
+        UserDTO user = loginDAO.selectLoginList(kakaoEmail);
+        
+        // 카카오 사용자 확인 (pass가 "kakao"인 경우만)
+        if (user != null && "kakao".equals(user.getPass())) {
+            return user;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 카카오 사용자 생성
+     */
+    @Transactional
+    public UserDTO createKakaoUser(UserDTO userDTO) {
+        String userNum = generateUserNum();
+        userDTO.setUserNum(userNum);
+        
+        // 1. 사용자 생성
+        signUpDAO.insertKakaoUser(userDTO);
+        
+        // 2. 주소 테이블에도 INSERT
+        signUpDAO.addKakaoAddress(userDTO);
+        
+        return userDTO;
+    }
+    
+    private String generateUserNum() {
+        return "USER_" + System.currentTimeMillis();
+    }
+}
