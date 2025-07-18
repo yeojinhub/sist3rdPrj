@@ -1,0 +1,222 @@
+/* 기본 스타일 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+
+/* 사이드 네비게이션 */
+.side-nav {
+    width: 250px;
+    background-color: #353535;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 로고 섹션 */
+.logo-section {
+    padding: 20px;
+    text-align: center;
+    background-color: #353535;
+}
+.logo-section img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 사용자 메뉴 */
+.user-menu {
+    font-size: 1.1em;
+}
+.user-menu strong {
+    font-weight: bold;
+}
+.user-menu a {
+    margin-left: 20px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* 메인 헤더 */
+.main-header {
+    background-color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom:0px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+
+.breadcrumbs span {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.breadcrumbs .current-page {
+    color: #555;
+}
+
+/* 컨테이너 */
+.container {
+    padding: 0;
+    background-color: #eeeeee;
+    flex-grow: 1;
+}
+
+/* 폼 전체 섹션 */
+.notice-form-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+/* 각 입력 그룹 */
+.form-group {
+    margin-bottom: 25px;
+}
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #4d4d4d;
+}
+.form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #868b94;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+.form-input:focus {
+    outline: none;
+    border-color: #7fd0f4;
+    box-shadow: 0 0 0 2px rgba(127, 208, 244, 0.1);
+}
+
+/* 이미지 업로드 미리보기 */
+.form-group input[type="file"] {
+    margin-top: 10px;
+}
+
+/* 액션 버튼 */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e6e6e6;
+}
+.action-button {
+    padding: 15px 40px;
+    border: 1px solid #dddddd;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+.cancel-btn {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+.cancel-btn:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+.submit-btn {
+    background-color: #353535;
+    color: white;
+    border-color: #353535;
+}
+.submit-btn:hover {
+    background-color: #2c2c2c;
+    border-color: #2c2c2c;
+}
+
+
+.admin-wrapper {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+
+
+
+
+.notice-form-section form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-input,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.action-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: #fff;
+}
