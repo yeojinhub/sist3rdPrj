@@ -33,7 +33,7 @@ public class SearchController {
 			@RequestParam(name="tradeOption",required=false, defaultValue="전체") String tradeOption,
 			@RequestParam(name="sortOption", required=false, defaultValue="추천순") String sortOption) {
 		//  @PathVariable annotation  - 맨마지막의 값을 얻어서 사용함 (day0708)
-		//  parameter에 정의하면 특정 부분의 값을 얻을 수 있다. - 로그인한 아이디값이 필요함, 회원/ 상품에 사용하는게 좋을듯
+		//  parameter에 정의하면 특정 부분의 값을 얻을 수 있다.
 		
 		//  List<ProductDTO> results = service.findByKeyword(keyword);
 		//  List<ProductDTO> results;
@@ -57,7 +57,9 @@ public class SearchController {
          title = (catNum == null
                 ? (keyword.isBlank() ? "전체" : keyword)
                 : serchService.getCategoryName(catNum));
-        
+    
+         
+         
         model.addAttribute("results", results);
         model.addAttribute("count",   results.size());
         model.addAttribute("keyword", keyword); 
