@@ -13,7 +13,19 @@
 	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
-
+<script>
+$(function() {
+	var userNum = "[[${product.userNum}]]";
+	axios.post('/sameUser',{userNum : userNum}).then(res=>{
+		if (res.data.result) {
+			alert('본인의 물건을 구매할 수는 없습니다.');
+			history.back();
+			return;
+		}// end if
+	});// axios
+	
+});// ready
+</script>
 <body>
 	<!-- 헤더 -->
 	<th:block th:insert="~{components/user/header :: header}"></th:block>

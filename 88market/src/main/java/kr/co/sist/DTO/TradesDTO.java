@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 public class TradesDTO {
 
-	private String tradeId; /* 거래자ID */
+	private Integer tradeId; /* 거래자ID */
 	private String buyerId; /* 구매자ID */
 	private String sellerId; /* 구매자ID */
 	private String tradeStatus; /* 거래상태 */

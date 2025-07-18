@@ -40,6 +40,9 @@ public class BuyService {
     @Transactional
     public void addTradeHistroy(Map<String, Object> data, UserDetails user) {
     	
+    	System.out.println("서비스 매개변수 data : " + data);
+    	System.out.println("서비스 매개변수 user.userNum : " + user.getUsername());
+    	
     	// 1. Map으로 이루어진 data, DTO로 쪼개기
     	// 1-1. 거래(TRADE) 테이블에 넣기 위한 DTO 생성
     	TradesDTO tDTO = new TradesDTO();
@@ -51,20 +54,22 @@ public class BuyService {
     	
     	// 1-2. 결제(PAYMENTS) 테이블에 넣기 위한 DTO 생성
     	PaymentsDTO pDTO = new PaymentsDTO();
-    	pDTO.setPatmentUid((String) data.get("impUid"));
+    	pDTO.setPaymentUid((String) data.get("impUid"));
     	pDTO.setMethod((String) data.get("payMethod"));
-    	pDTO.setAmount((int) Double.parseDouble((String) data.get("price")));
-    	pDTO.setCardCompany((String) data.get("cardName"));
+    	int price = (int) data.get("price");
+    	pDTO.setAmount(price);
+    	pDTO.setCardCompany(data.get("cardName") == null ? "" : (String) data.get("cardName"));
 
     	// 2. 쿼리문 진행
     	// 2-1. 상품(PRODUCT) 테이블에 APPOINT_TYPE을 Y로 변경한다.
     	buyDAO.updateProductAppointType((String) data.get("prdNum"));
     	
     	// 2-2. 거래(TRADE) 테이블에 INSERT
-    	
+    	buyDAO.insertProductTrades(tDTO);
+    	pDTO.setTradeId(tDTO.getTradeId());
     	
     	// 2-3. 결제(PAYMENTS) 테이블에 INSERT
-    	
+    	buyDAO.insertProductPayments(pDTO);
     	
     }// addTradeHistory
     
