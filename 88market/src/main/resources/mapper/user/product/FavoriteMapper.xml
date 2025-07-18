@@ -18,4 +18,12 @@
 <delete id="deleteFavorite" parameterType="map">
     DELETE FROM favorite WHERE user_num = #{userNum} AND prd_num = #{prdNum}
 </delete>
+
+<select id="selectWishlistByUserNum" resultType="kr.co.sist.DTO.ProductDTO">
+    SELECT P.* 
+    FROM PRODUCT P
+    JOIN FAVORITE F ON P.PRD_NUM = F.PRD_NUM
+    WHERE F.USER_NUM = #{userNum}
+</select>
+
 </mapper>

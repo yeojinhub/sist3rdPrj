@@ -19,8 +19,25 @@
     	ORDER BY ADDR_TYPE DESC
     </select>
     
-    <!-- 구매 결제 진행 후 상품에 AppointType 값 'Y' 변경 -->
+    <!-- #. 구매 결제 쿼리 -->
+    <!-- #-1. PRODUCT 테이블에 APPOINT_TYPE 값 'Y' 변경 -->
     <update id="updateProductAppointType" parameterType="String">
     	UPDATE PRODUCT SET APPOINT_TYPE = 'Y' WHERE PRD_NUM = #{prdNum}
     </update>
+    
+    <!-- #-2. TRADES 테이블에 INSERT -->
+    <insert id="insertProductTrades" parameterType="kr.co.sist.DTO.TradesDTO">
+    	<selectKey keyProperty="tradeId" resultType="int" order="BEFORE">
+			SELECT SEQ_TRD_NUM.NEXTVAL FROM DUAL
+		</selectKey>
+    	INSERT INTO TRADES (TRADE_ID, BUYER_ID, SELLER_ID, TRADE_STATUS, DELIVERY_NUM, PRD_NUM)
+    	VALUES(#{tradeId}, #{buyerId}, #{sellerId}, #{tradeStatus}, #{deliveryNum}, #{prdNum})
+    </insert>
+    
+    <!-- #-3. PAYMENTS 테이블에 INSERT -->
+    <insert id="insertProductPayments" parameterType="kr.co.sist.DTO.PaymentsDTO">
+    	INSERT INTO PAYMENTS (PAYMENT_UID, AMOUNT, METHOD, CARD_COMPANY, TRADE_ID)
+    	VALUES(#{paymentUid}, #{amount}, #{method}, #{cardCompany}, #{tradeId})
+    </insert>
+    
 </mapper>
