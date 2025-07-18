@@ -1,11 +1,14 @@
 package kr.co.sist.user.DAO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import kr.co.sist.DTO.ProductDTO;
 
 @Repository
 public class FavoriteDAO {
@@ -33,5 +36,9 @@ public class FavoriteDAO {
     	param.put("userNum", userNum);
     	param.put("prdNum", prdNum);
 		sqlSession.delete("FavoriteMapper.deleteFavorite",param);
+	}
+	
+	public List<ProductDTO> selectWishlistByUserNum(String userNum){
+		return sqlSession.selectList("FavoriteMapper.selectWishlistByUserNum",userNum);
 	}
 }

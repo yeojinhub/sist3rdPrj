@@ -155,24 +155,25 @@
 			<h2>이런 상품은 어때요?</h2>
 			<div class="card-list-wrapper-items multiple-items">
 				<div class="product-card" th:each="p, iterStat : ${relatedProducts}">
-					<a th:href="@{/detail(id=${p.prdNum})}">
-						<div class="product-image-container">
-							<img th:src="@{${relatedImages[iterStat.index].mainImage}}"
-								alt="관련 상품 이미지" />
-						</div>
-						<div class="product-info">
-							<p class="product-name" th:text="${p.title}"></p>
-							<strong class="product-price"
-								th:text="${#numbers.formatInteger(p.price, 3, 'COMMA')} + '원'"></strong>
-							<div class="product-meta-row">
-								<p class="product-meta" th:text="${timeAgo}">10분 전</p>
-								<button class="wish-btn">
-									<img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기"
-										class="heart-icon" />
-								</button>
-							</div>
-						</div>
-					</a>
+				  <a th:href="@{/detail(id=${p.prdNum})}">
+				    <div class="product-image-container">
+				      <img th:src="@{${relatedImages[iterStat.index].mainImage}}" alt="관련 상품 이미지" />
+				    </div>
+				    <div class="product-info">
+				      <p class="product-name" th:text="${p.title}"></p>
+				      <strong class="product-price"
+				              th:text="${#numbers.formatInteger(p.price, 3, 'COMMA')} + '원'"></strong>
+				      <div class="product-meta-row">
+				        <p class="product-meta" th:text="${relatedTimeAgo[iterStat.index]}">10분 전</p>
+				        <button class="wish-btn"
+						        th:attr="data-prd-num=${p.prdNum}"
+						        th:classappend="${relatedProductsWish[iterStat.index]} ? ' active' : ''">
+						  <img th:src="@{${relatedProductsWish[iterStat.index]} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+						       alt="찜하기" class="heart-icon"/>
+						</button>
+				      </div>
+				    </div>
+				  </a>
 				</div>
 			</div>
 		</section>
@@ -181,9 +182,6 @@
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
 </body>
-<script th:inline="javascript">
-	const prdNum = [[${product.prdNum}]];
-</script>
 
 <script>
 function productBuy() {
@@ -222,33 +220,40 @@ $(function() {
 		dots: false,
 		arrows: true,
 	});
-	 
-	$('#wishBtn').click(() => {
-		axios.get('/product/wish', {
-		      params: { prdNum: prdNum }
-		    })
-			.then(res => {
-				const status = res.data;
-			    const img = $('#wishBtn img');
+	
+	// 찜 토글
+    $(document).on('click', '.wish-btn', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
 
-			    if (status === 'liked') {
-			      $('#wishBtn').addClass('active');
-			      img.attr('src', '/images/productHeart/heart-on.png');
-			      alert("찜 등록 되었습니다");
-			    } else if (status === 'unliked') {
-			      $('#wishBtn').removeClass('active');
-			      img.attr('src', '/images/productHeart/heart-off.png');
-			      alert("찜 해제 되었습니다");
-			    }
-			})
-			.catch(err => {
-				console.log(err.response.status);
-				if (err.response?.status === 401) {
-					alert('로그인이 필요합니다.');
-					location.href = '/login';
-				}
-			});
-	});
+      const $btn = $(this);
+      const prdNum = $btn.data('prd-num');
+      const $img = $btn.find('img');
+
+      axios.get('/product/wish', {
+        params: { prdNum: prdNum }
+      })
+      .then(res => {
+        const status = res.data;
+        if (status === 'liked') {
+          $btn.addClass('active');
+          $img.attr('src', '/images/productHeart/heart-on.png');
+          alert("찜 등록 되었습니다");
+        } else if (status === 'unliked') {
+          $btn.removeClass('active');
+          $img.attr('src', '/images/productHeart/heart-off.png');
+          alert("찜 해제 되었습니다");
+        }
+      })
+      .catch(err => {
+        if (err.response?.status === 401) {
+          alert("로그인이 필요합니다.");
+          location.href = '/login';
+        } else {
+          console.error("찜 처리 오류:", err);
+        }
+      });
+    });
 });
 </script>
 </html>
