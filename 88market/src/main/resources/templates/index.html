@@ -142,7 +142,12 @@ $(function() {
 							<strong class="product-price" th:text="|${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}원|"></strong>
 						<div class="product-meta-row">
 							<p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
-							<button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon"/></button>
+							<button class="wish-btn"
+							        th:attr="data-prd-num=${item.prdNum}"
+							        th:classappend="${trendItemsWish[iterstat.index]} ? ' active' : ''">
+							  <img th:src="@{${trendItemsWish[iterstat.index]} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+							       alt="찜하기" class="heart-icon"/>
+							</button>
 			      		</div>
 						</div>
 					</a>
@@ -165,7 +170,12 @@ $(function() {
 			      <div class="product-meta-row">
 			        <p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
 <!-- 			        <p class="product-meta" th:text="|${item.location1}·${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}|"></p> -->
-			        <button class="wish-btn"><img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" /></button>
+			        <button class="wish-btn"
+							        th:attr="data-prd-num=${item.prdNum}"
+							        th:classappend="${topViewWish[iterstat.index]} ? ' active' : ''">
+							  <img th:src="@{${topViewWish[iterstat.index]} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+							       alt="찜하기" class="heart-icon"/>
+							</button>
 			      </div>
 			    </div>
 			  </a>
