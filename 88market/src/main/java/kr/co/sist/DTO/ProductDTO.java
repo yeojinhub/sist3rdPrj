@@ -39,6 +39,7 @@ public class ProductDTO {
 	private String comNum; /* 사업자등록번호 */
 	private Integer imgNum; /* 이미지번호 */
 	private String comName;  /* 광고 - 상호명 */
+	private int adminScore; /* 관리자 부스터 */
 
     public String getShortLocation() {
         if (location1 == null) return "";

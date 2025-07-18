@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminPlaningDAO">
+
+<select id="selectComNumById" resultType="String">
+  SELECT COM_NUM
+  FROM COMPANY
+  WHERE ID = #{id}
+</select>
+
+<!-- 기업번호로 상품 조회 리스트 -->
+<select id="searchProductsByCondition" resultType="kr.co.sist.DTO.ProductDTO">
+   SELECT * FROM (
+     SELECT ROWNUM AS rn, a.*
+     FROM (
+       SELECT * FROM PRODUCT
+       WHERE COM_NUM = #{comNum}
+       <if test="keyword != null and keyword != ''">
+         AND TITLE LIKE '%' || #{keyword} || '%'
+       </if>
+       <if test="hidden != 'all'">
+         AND SELL_TYPE = #{hidden}
+       </if>
+       ORDER BY INPUT_DATE DESC
+     ) a
+     WHERE ROWNUM &lt;= #{endRow}
+   )
+   WHERE rn &gt;= #{startRow}
+ </select>
+
+ <select id="getTotalCountByCondition" resultType="int">
+   SELECT COUNT(*)
+   FROM PRODUCT
+   WHERE COM_NUM = #{comNum}
+   <if test="keyword != null and keyword != ''">
+     AND TITLE LIKE '%' || #{keyword} || '%'
+   </if>
+   <if test="hidden != 'all'">
+     AND SELL_TYPE = #{hidden}
+   </if>
+ </select>
+  
+<!-- 카테고리  -->
+<select id="selectAllCategories" resultType="kr.co.sist.DTO.CategoryDTO">
+    SELECT CAT_NUM, NAME FROM CATEGORY
+</select>
+
+<!-- 상품 등록 -->
+ <insert id="insertProduct" parameterType="kr.co.sist.DTO.ProductDTO" useGeneratedKeys="true" keyProperty="prdNum">
+   INSERT INTO PRODUCT (
+        PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, INPUT_DATE, APPOINT_TYPE,
+        HIDDEN_TYPE, SELL_TYPE, PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE,
+        DELIVERY_TYPE, USER_NUM, CAT_NUM, COM_NUM, IMG_NUM, LIKE_NUM, ADMIN_SCORE
+    ) VALUES (
+        #{prdNum}, #{title}, #{content}, 
+        #{price, jdbcType=NUMERIC}, 
+        #{location1, jdbcType=VARCHAR},
+        SYSDATE, 
+        #{appointType, jdbcType=VARCHAR}, 
+        #{hiddenType, jdbcType=VARCHAR},
+        #{sellType, jdbcType=VARCHAR}, 
+        #{prdCnt, jdbcType=NUMERIC},
+         #{clickNum, jdbcType=NUMERIC},
+        #{safeType, jdbcType=VARCHAR}, 
+        #{meetType, jdbcType=VARCHAR},
+         #{deliveryType, jdbcType=VARCHAR},
+        #{userNum, jdbcType=NUMERIC}, 
+        #{catNum, jdbcType=NUMERIC},
+         #{comNum, jdbcType=VARCHAR},
+          #{imgNum, jdbcType=NUMERIC},
+        0, 0
+    )
+ </insert>
+
+ <!-- 이미지 등록 (단일 또는 다중) -->
+ <insert id="insertImage" parameterType="kr.co.sist.DTO.ImageDTO">
+   INSERT INTO IMAGE (
+        IMG_NUM, MAIN_IMAGE, SUB_IMAGE1, SUB_IMAGE2, SUB_IMAGE3, SUB_IMAGE4, IMAGE_TYPE
+    ) VALUES (
+        #{imgNum}, 
+        #{mainImage, jdbcType=VARCHAR}, 
+        #{subImage1, jdbcType=VARCHAR}, 
+        #{subImage2, jdbcType=VARCHAR}, 
+        #{subImage3, jdbcType=VARCHAR}, 
+        #{subImage4, jdbcType=VARCHAR}, 
+        #{imageType, jdbcType=VARCHAR}
+    )
+ </insert>
+ 
+ 
+ <!-- 시퀀스 조회 -->
+  <select id="getNextProductSeq" resultType="int">
+    SELECT SEQ_PRD_NUM.NEXTVAL FROM DUAL
+  </select>
+  
+  <!-- 이미지 번호 시퀀스 조회-->
+<select id="getNextImageSeq" resultType="int">
+  SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
+</select>
+  
+</mapper>
