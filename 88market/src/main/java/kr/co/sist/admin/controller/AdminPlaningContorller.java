@@ -122,7 +122,6 @@ public class AdminPlaningContorller {
 	        productDTO.setImgNum(imgSeq);
 	        productDTO.setPrdNum(prdNum);
 	        productDTO.setComNum("1");        // 관리자 계정
-	        productDTO.setUserNum("1");        // 관리자 계정
 
 	        // ── 5. 저장(트랜잭션) ───────────────────────
 	        adminPlaningService.insertProductWithImages(productDTO, imageDTO);
