@@ -58,7 +58,12 @@ public class BuyService {
 
     	// 2. 쿼리문 진행
     	// 2-1. 상품(PRODUCT) 테이블에 APPOINT_TYPE을 Y로 변경한다.
+    	buyDAO.updateProductAppointType((String) data.get("prdNum"));
     	
+    	// 2-2. 거래(TRADE) 테이블에 INSERT
+    	
+    	
+    	// 2-3. 결제(PAYMENTS) 테이블에 INSERT
     	
     	
     }// addTradeHistory

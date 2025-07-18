@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.sist.DTO.AddressDTO;
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.TradesDTO;
 
 @Mapper
 public interface BuyDAO {
@@ -14,4 +15,5 @@ public interface BuyDAO {
     public ImageDTO selectImage(int imgNum);
     public List<AddressDTO> selectAddressByUserNum(String userNum);
     public void updateProductAppointType(String prdNum);
+    public void insertProductTrade(TradesDTO tDTO);
 }

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 - 상품관리</title>
+  <link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
+  <th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+  <div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+  <div class="admin-wrapper">
+    <div class="main-content">
+      <header class="main-header">
+        <div class="breadcrumbs">
+          <span>기업관 관리 &gt;</span> <span class="current-page">상품 관리</span>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="search-section">
+          <form id="searchForm" th:action="@{/admin/planing/planingList}" method="get">
+            <div class="search-box">
+              <input type="text" class="search-input" name="keyword"
+                th:value="${param.keyword}" placeholder="상품명 검색">
+              
+              <label><input type="radio" name="hidden" value="all"
+                th:checked="${param.hidden == null or param.hidden == 'all'}"> 전체</label>
+              <label><input type="radio" name="hidden" value="Y"
+                th:checked="${param.hidden == 'Y'}"> 보임</label>
+              <label><input type="radio" name="hidden" value="N"
+                th:checked="${param.hidden == 'N'}"> 숨김</label>
+
+              <button type="submit" class="search-button">검색</button>
+              <button type="button" class="search-button" id="resetSearch">초기화</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="notice-section">
+          <table class="notice-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="all-checkbox"></th>
+                <th>상품번호</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>숨김</th>
+                <th>조회수</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="item, i : ${productsList}" class="table-row">
+                <td><input type="checkbox" class="checkbox"
+                  th:id="'checkbox' + ${i.count}"
+                  th:data-prd-num="${item.prdNum}"></td>
+                <td th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.count - 1)}"></td>
+                <td class="notice-title" th:text="${item.title}"
+                  style="cursor: pointer; text-align: center;"
+                  th:onclick="|location.href='@{/admin/product/detail(prdNum=${item.prdNum})}'|"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.sellType}"></td>
+                <td th:text="${item.clickNum}"></td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(productsList)}">
+                <td colspan="6" style="text-align: center;">등록된 상품이 없습니다.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="table-footer">
+            <div class="table-controls">
+              <button class="control-button"
+                th:onclick="|location.href='@{/admin/planing/planingAdd}'|">등록</button>
+              <button class="control-button" id="deleteBtn">삭제</button>
+            </div>
+
+            <div class="pagination" th:if="${pagination.totalPages > 1}">
+              <a th:if="${pagination.pageNum > 1}"
+                th:href="@{/admin/planing/planingList(page=${pagination.pageNum - 1}, keyword=${param.keyword}, hidden=${param.hidden})}"
+                class="prev">&lt;</a>
+
+              <a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
+                th:href="@{/admin/planing/planingList(page=${i}, keyword=${param.keyword}, hidden=${param.hidden})}"
+                th:classappend="${i == pagination.pageNum} ? 'active' : ''"
+                th:text="${i}"></a>
+
+              <a th:if="${pagination.pageNum < pagination.totalPages}"
+                th:href="@{/admin/planing/planingList(page=${pagination.pageNum + 1}, keyword=${param.keyword}, hidden=${param.hidden})}"
+                class="next">&gt;</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <script src="/js/admin/script.js" defer></script>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      $('#resetSearch').click(function () {
+        $('input[name="keyword"]').val('');
+        $('input[name="hidden"][value="all"]').prop('checked', true);
+        $('#searchForm').submit();
+      });
+
+      // 전체 선택
+      $('.all-checkbox').on('click', function () {
+        $('.checkbox').prop('checked', $(this).is(':checked'));
+      });
+
+      // 삭제 버튼 등은 이후 구현
+    });
+  </script>
+</body>
+
+</html>
