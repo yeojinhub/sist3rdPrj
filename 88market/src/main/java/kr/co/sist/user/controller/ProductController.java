@@ -230,11 +230,32 @@ public class ProductController {
         //시간차 계산
         String timeAgo = TimeAgoUtil.format(product.getInputDate());
         
+        //관련제품 시간차 계산
+        List<String> relatedTimeAgo = new ArrayList<String>();
+        for (ProductDTO P : relatedProducts) {
+        	relatedTimeAgo.add(TimeAgoUtil.format(P.getInputDate()));
+        }
+        
         //찜
         boolean isLiked = false;
         if (currentUser != null) {
             String currentUserNum = currentUser.getUsername(); 
             isLiked = productService.checkFavorite(currentUserNum, prdNum);
+        }
+        
+        //관련상품 찜
+        List<Boolean> relatedProductsWish = new ArrayList<Boolean>();
+	    if (currentUser != null) {
+            String currentUserNum = currentUser.getUsername();
+            for(ProductDTO P : relatedProducts) {
+            	boolean liked = productService.checkFavorite(currentUserNum, P.getPrdNum());
+            	relatedProductsWish.add(liked);
+            }
+        }else {
+            // 로그인 안 한 경우 false로 채움
+            for (int i = 0; i < relatedProducts.size(); i++) {
+            	relatedProductsWish.add(false);
+            }
         }
         
         model.addAttribute("product", product);
@@ -250,8 +271,20 @@ public class ProductController {
         model.addAttribute("relatedProducts", relatedProducts);
         model.addAttribute("relatedImages",relatedImages);
         model.addAttribute("isLiked",isLiked);
+        model.addAttribute("relatedProductsWish",relatedProductsWish);
+        model.addAttribute("relatedTimeAgo",relatedTimeAgo);
         
         return "user/product/detail";
+    }
+    
+    @GetMapping("/product/wishlist")
+    @ResponseBody
+    public List<ProductDTO> getWishList(@AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return new ArrayList<>();
+        }
+        String userNum = user.getUsername();
+        return productService.selectWishlistByUserNum(userNum);
     }
 
 
