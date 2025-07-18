@@ -20,4 +20,13 @@ public interface SignUpDAO {
      * 카카오 사용자 주소 추가
      */
     public void addKakaoAddress(UserDTO user);
+    /**
+     * 네이버 사용자 생성
+     */
+    public void insertNaverUser(UserDTO user);
+    
+    /**
+     * 네이버 사용자 주소 추가
+     */
+    public void addNaverAddress(UserDTO user);
 } //inserface

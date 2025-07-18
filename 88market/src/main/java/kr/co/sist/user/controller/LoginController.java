@@ -1,7 +1,7 @@
 package kr.co.sist.user.controller;
 
 import java.time.Duration;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +25,7 @@ import kr.co.sist.DTO.UserDTO;
 import kr.co.sist.user.Service.JwtService;
 import kr.co.sist.user.Service.KakaoService;
 import kr.co.sist.user.Service.LoginService;
+import kr.co.sist.user.Service.NaverService;
 
 /**
  * 사용자 로그인 요청을 처리하는 컨트롤러 클래스
@@ -38,6 +39,15 @@ public class LoginController {
     private JwtService jwtService;
     @Autowired
     private KakaoService kakaoService;
+
+    @Autowired
+    private NaverService naverService;
+    
+    @Value("${naver.client-id}")
+    private String naverClientId;
+    
+    @Value("${naver.redirect-uri}")
+    private String naverRedirectUri;
 
     @Value("${kakao.client-id}")
     private String kakaoClientId;
@@ -194,6 +204,148 @@ public class LoginController {
             
             // 세션에서 카카오 이메일 제거
             session.removeAttribute("kakaoEmail");
+            
+            return ResponseEntity.ok(Map.of("success", true, "message", "회원가입이 완료되었습니다."));
+            
+        } catch (Exception e) {
+            return ResponseEntity.ok(Map.of("success", false, "message", "회원가입 중 오류가 발생했습니다."));
+        }
+    }
+
+    /**
+     * 네이버 로그인 요청
+     */
+    @GetMapping("/naver/login")
+    public String naverLogin(HttpSession session) {
+        // CSRF 방지용 state 생성
+        String state = UUID.randomUUID().toString();
+        session.setAttribute("oauth_state", state);
+        
+        String naverAuthUrl = "https://nid.naver.com/oauth2.0/authorize"
+                + "?response_type=code"
+                + "&client_id=" + naverClientId
+                + "&redirect_uri=" + naverRedirectUri
+                + "&state=" + state;
+        return "redirect:" + naverAuthUrl;
+    }
+    
+    /**
+     * 네이버 로그인 콜백 처리
+     */
+    @GetMapping("/naver/callback")
+    public String naverCallback(@RequestParam String code, 
+                               @RequestParam String state,
+                               HttpSession session, 
+                               HttpServletResponse response) {
+        try {
+        System.out.println("=== 네이버 로그인 콜백 처리 시작 ===");
+        System.out.println("code: " + code);
+        System.out.println("state: " + state);
+        
+        // state 검증
+        String sessionState = (String) session.getAttribute("oauth_state");
+        System.out.println("session state: " + sessionState);
+        
+        if (!state.equals(sessionState)) {
+            System.out.println("ERROR: state 불일치");
+            return "redirect:/login?error=state_mismatch";
+        }
+        
+        System.out.println("액세스 토큰 요청 시작...");
+        String accessToken = naverService.getAccessToken(code, state);
+        System.out.println("액세스 토큰 받음: " + accessToken);
+            Map<String, Object> userInfo = naverService.getUserInfo(accessToken);
+            
+            // 네이버 ID를 이메일 형태로 변환
+            String naverId = (String) userInfo.get("id");
+            String naverEmail = "naver_" + naverId;
+            
+            UserDTO existingUser = service.findNaverUser(naverEmail);
+            
+            if (existingUser != null) {
+                // 기존 사용자 -> 로그인 처리
+                String token = jwtService.createToken(existingUser.getUserNum());
+                
+                ResponseCookie cookie = ResponseCookie.from("token", token)
+                    .httpOnly(true)
+                    .path("/")
+                    .maxAge(Duration.ofHours(1))
+                    .build();
+                response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+                
+                return "redirect:/";
+            } else {
+                // 새 사용자 -> 회원가입 페이지로
+                session.setAttribute("naverEmail", naverEmail);
+                session.setAttribute("naverUserInfo", userInfo);
+                return "redirect:/naver/signup";
+            }
+            
+        } catch (Exception e) {
+        System.out.println("ERROR: 네이버 로그인 콜백 처리 중 예외 발생");
+        System.out.println("예외 메시지: " + e.getMessage());
+        e.printStackTrace();
+        return "redirect:/login?error=naver";
+    }
+    }
+    
+    /**
+     * 네이버 회원가입 페이지
+     */
+    @GetMapping("/naver/signup")
+    public String naverSignupPage(HttpSession session, Model model) {
+        String naverEmail = (String) session.getAttribute("naverEmail");
+        if (naverEmail == null) {
+            return "redirect:/login";
+        }
+        
+        Map<String, Object> userInfo = (Map<String, Object>) session.getAttribute("naverUserInfo");
+        model.addAttribute("naverEmail", naverEmail);
+        model.addAttribute("naverUserInfo", userInfo);
+        return "user/account/naver_signup";
+    }
+    
+    /**
+     * 네이버 회원가입 처리
+     */
+    @ResponseBody
+    @PostMapping("/naver/signupProcess")
+    public ResponseEntity<Map<String, Object>> naverSignupProcess(@RequestBody UserDTO userDTO, 
+                                                                 HttpSession session, 
+                                                                 HttpServletResponse response) {
+        try {
+            String naverEmail = (String) session.getAttribute("naverEmail");
+            if (naverEmail == null) {
+                return ResponseEntity.ok(Map.of("success", false, "message", "세션이 만료되었습니다."));
+            }
+            
+            // 네이버 이메일 설정
+            userDTO.setEmail(naverEmail);
+            userDTO.setPass("naver");
+            
+            // 사용자 생성
+            UserDTO newUser = new UserDTO();
+
+            try {
+                newUser = service.createNaverUser(userDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+            // JWT 토큰 생성
+            String token = jwtService.createToken(newUser.getUserNum());
+            
+            // 쿠키 설정
+            ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(Duration.ofHours(1))
+                .build();
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+            
+            // 세션 정리
+            session.removeAttribute("naverEmail");
+            session.removeAttribute("naverUserInfo");
             
             return ResponseEntity.ok(Map.of("success", true, "message", "회원가입이 완료되었습니다."));
             

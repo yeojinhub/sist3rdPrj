@@ -68,4 +68,34 @@ public class LoginService {
     private String generateUserNum() {
         return "USER_" + System.currentTimeMillis();
     }
+
+    /**
+     * 네이버 사용자 찾기
+     */
+    public UserDTO findNaverUser(String naverEmail) {
+        UserDTO user = loginDAO.selectLoginList(naverEmail);
+        
+        if (user != null && "naver".equals(user.getPass())) {
+            return user;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 네이버 사용자 생성
+     */
+    @Transactional
+    public UserDTO createNaverUser(UserDTO userDTO) {
+        String userNum = generateUserNum();
+        userDTO.setUserNum(userNum);
+        
+        // 사용자 생성
+        signUpDAO.insertNaverUser(userDTO);
+        
+        // 주소 테이블에도 INSERT
+        signUpDAO.addNaverAddress(userDTO);
+        
+        return userDTO;
+    }
 }

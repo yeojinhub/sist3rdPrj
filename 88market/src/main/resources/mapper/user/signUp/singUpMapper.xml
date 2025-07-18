@@ -41,4 +41,23 @@
         VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{name}, #{zipcode}, #{address},
             'Y', #{userNum})
     </insert>
+
+    <!-- 네이버 사용자 생성 -->
+    <insert id="insertNaverUser" parameterType="kr.co.sist.DTO.UserDTO">
+        <selectKey resultType="String" keyProperty="userNum" order="BEFORE">
+            SELECT SEQ_USER_NUM.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO USERS
+            (USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS)
+        VALUES(#{userNum}, #{name}, #{nickname}, #{email},
+            #{pass}, #{tel}, #{zipcode}, #{address})
+    </insert>
+    
+    <!-- 네이버 사용자 주소 추가 -->
+    <insert id="addNaverAddress" parameterType="kr.co.sist.DTO.UserDTO">
+    INSERT INTO ADDRESS
+        (ADDR_NUM, TEL, RECIPIENT_NAME, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+    VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{name}, #{zipcode}, #{address},
+        'Y', #{userNum})
+    </insert>
 </mapper>
