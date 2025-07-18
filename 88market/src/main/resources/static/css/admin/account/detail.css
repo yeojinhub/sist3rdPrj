@@ -56,13 +56,16 @@ header.main-header {
 /* 페이지 탭 (좌측 네비게이션) */
 .page-tabs {
   display: flex;
-  flex-direction: column;
-  width: 200px;
+  justify-content: center;    /* 가로 축 중앙 정렬 */
+  width: 100%;                /* 부모 넓이에 맞춤 */
+  max-width: 1000px;          /* 필요하면 고정폭 상한 */
+  margin: 0 auto;             /* 전체 블록도 가운데로 */
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
 }
 .page-tabs .tab {
+  width: 100%;
   padding: 16px;
   background: none;
   border: none;
@@ -98,34 +101,6 @@ header.main-header {
   margin-bottom: 20px;
 }
 
-/* 이미지 업로드 영역 */
-.image-upload-area {
-  width: 120px;
-  height: 120px;
-  background: #f0f4f8;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-.upload-placeholder i {
-  font-size: 24px;
-  color: #ccc;
-}
-/* 이미지 업로드 버튼 */
-.upload-btn {
-  display: inline-block;
-  padding: 8px 16px;
-  background: #888;
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
 /* 폼 그룹 */
 .form-group {
   margin-bottom: 15px;
@@ -153,36 +128,6 @@ header.main-header {
   outline: none;
   border-color: #7fd0f4;
   box-shadow: 0 0 0 2px rgba(127,208,244,0.1);
-}
-
-/* 액션 버튼 (우편번호 찾기 등) */
-.action-button {
-  padding: 12px 20px;
-  background: #888;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.action-button:hover {
-  background: #666;
-}
-
-/* 라디오 버튼 영역 */
-.radio-group {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-.radio-group label {
-  font-size: 16px;
-  color: #4d4d4d;
-  cursor: pointer;
-}
-.radio-group input[type="radio"] {
-  margin-right: 5px;
 }
 
 /* 폼 액션 버튼 그룹 */

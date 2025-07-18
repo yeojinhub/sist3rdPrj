@@ -10,5 +10,6 @@ import kr.co.sist.DTO.UserDTO;
 public interface AdminAccountUserDAO {
 	
 	public List<UserDTO> selectUserList();
+	public UserDTO selectOneUser(String userNum);
 	
 } //interface

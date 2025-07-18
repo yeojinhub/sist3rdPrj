@@ -7,6 +7,9 @@
 <title>관리자 - 계정 관리</title>
 <!-- 관리자 공지사항 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/account/detail.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/personal.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/bank.css}" th:if="${tab == 'bank'}">
+ 
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
@@ -20,98 +23,79 @@
 			<!-- 헤더 -->
 			<header class="main-header">
 				<div class="breadcrumbs">
-					<span>계정 관리 &gt;</span> <span class="current-page">회원 계정 관리</span>
+					<span>계정 관리 &gt;</span>
+					<span class="current-page">회원 계정 관리</span>
 				</div>
 			</header>
 
     <!-- 메인 컨텐츠 -->
-    <main class="main-content">
-     
-      <!-- 컨테이너 -->
-      <section class="container">
         <!-- 페이지 탭 -->
-        <div class="page-tabs">
-          <button class="tab active">개인정보 관리</button>
-          <button class="tab">계좌 관리</button>
-          <button class="tab">배송 관리</button>
-          <button class="tab">포인트 조회</button>
+        <!-- 탭 네비 -->
+      <div class="page-tabs">
+        <!-- 개인정보 관리 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='personal'} ? ' active' : ''"
+   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='personal')}">
+  			개인정보 관리
+		</a>
+
+        <!-- 계좌 관리 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='bank'} ? ' active' : ''"
+   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='bank')}">
+  			계좌 관리
+		</a>
+
+        <!-- 배송 관리 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='address'} ? ' active' : ''"
+   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='address')}">
+  			배송 관리
+		</a>
+
+        <!-- 포인트 조회 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='point'} ? ' active' : ''"
+   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='point')}">
+  			포인트 조회
+		</a>
+      </div>
+      
+      <!-- 컨테이너 -->
+      <section class="container" style="display:flex; gap:24px;">
+        <!-- 왼쪽: 항상 personal -->
+        <div class="col col-1" style="flex: 2;">
+          <div th:replace="~{admin/account/personal :: personal(userDTO=${userDTO})}"></div>
         </div>
 
-        <!-- 개인정보 폼 -->
-        <form class="account-form">
-          <div class="account-form-section">기본정보</div>
+        <!-- 오른쪽: 탭별 분기 -->
+        <div class="col col-2" style="flex: 1;">
+          <div th:switch="${tab}">
 
-          <label for="profile-img">프로필 사진</label>
-          <div class="image-upload-area" id="profile-img">
-            <div class="upload-placeholder">
-              <i class="fa fa-camera"></i>
+            <!-- BANK -->
+            <div th:case="'bank'">
+              <div th:replace="~{admin/account/bank :: bank(userDTO=${userDTO})}"></div>
             </div>
+
+            <!-- ADDRESS -->
+            <div th:case="'address'">
+              <div th:replace="~{admin/account/address :: address(userDTO=${userDTO})}"></div>
+            </div>
+
+            <!-- POINT -->
+            <div th:case="'point'">
+              <div th:replace="~{admin/account/point :: point(userDTO=${userDTO})}"></div>
+            </div>
+
+            <!-- PERSONAL 혹은 그 외 -->
+            <div th:case="*">
+              <!-- personal 탭엔 오른쪽 내용 비워두거나 기본 메시지 -->
+            </div>
+
           </div>
-
-          <label for="name">이름 <span class="required">*</span></label>
-          <input id="name" class="form-input" type="text" placeholder="이름 입력" />
-
-          <label for="nickname">닉네임</label>
-          <input id="nickname" class="form-input" type="text" placeholder="닉네임 입력" />
-
-          <label for="tel">전화번호</label>
-          <input id="tel" class="form-input" type="text" placeholder="전화번호 입력" />
-
-          <div class="account-form-section">계정정보</div>
-
-          <label for="email">이메일 <span class="required">*</span></label>
-          <div style="display:flex; gap:8px;">
-            <input id="email" class="form-input" type="text" placeholder="이메일 입력" />
-            <select class="form-select">
-              <option>도메인 선택</option>
-              <option>gmail.com</option>
-              <option>naver.com</option>
-            </select>
-          </div>
-
-          <label for="password">비밀번호</label>
-          <input id="password" class="form-input" type="password" placeholder="비밀번호 조회" />
-
-          <div class="account-form-section">주소</div>
-
-          <label for="zipcode">우편번호</label>
-          <div style="display:flex; gap:8px;">
-            <input id="zipcode" class="form-input" type="text" placeholder="우편번호 입력" readonly />
-            <button type="button" class="action-button">우편번호 찾기</button>
-          </div>
-
-          <label for="road-address">도로명 주소</label>
-          <input id="road-address" class="form-input" type="text" placeholder="도로명 주소" readonly />
-
-          <label for="detail-address">상세주소</label>
-          <input id="detail-address" class="form-input" type="text" placeholder="상세주소 입력" />
-
-          <div class="account-form-section">가입 정보</div>
-
-          <label for="reg-date">가입일</label>
-          <input id="reg-date" class="form-input" type="date" value="2025-06-19" readonly />
-
-          <label>정지여부</label>
-          <div>
-            <label><input type="radio" name="ban" /> 정지</label>
-            <label><input type="radio" name="ban" checked /> 미정지</label>
-          </div>
-
-          <label>탈퇴여부</label>
-          <div>
-            <label><input type="radio" name="withdraw" /> 탈퇴</label>
-            <label><input type="radio" name="withdraw" checked /> 미탈퇴</label>
-          </div>
-
-          <!-- 폼 액션 -->
-          <div class="form-actions">
-            <button type="button" class="cancel-btn">뒤로가기</button>
-            <button type="submit" class="submit-btn">등록</button>
-          </div>
-        </form>
+        </div>
       </section>
-    </main>
-  </div>
+  	</div>
   </div>
 </body>
 </html>

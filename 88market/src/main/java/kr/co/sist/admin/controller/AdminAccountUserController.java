@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.admin.Service.AdminAccountUserService;
 
@@ -21,16 +22,21 @@ public class AdminAccountUserController {
 	 */
 	@GetMapping("/account/users")
 	public String userPage(Model model) {
-		model.addAttribute("userList", userService.selectAllUser());
+		model.addAttribute("userList", userService.searchAllUser());
 		
-		System.out.println("UserAccountController : List 값 "+userService.selectAllUser());
+		System.out.println("UserAccountController : List 값 "+userService.searchAllUser());
 		
 		
 		return "admin/account/userList";
 	} //userPage
 	
 	@GetMapping("/account/detail")
-	public String userDetailPage(Model model) {
+	public String userDetailPage(@RequestParam("userNum") String userNum,
+			 @RequestParam(value="tab", defaultValue="personal") String tab,
+			 Model model) {
+		
+		model.addAttribute("userDTO", userService.searchOneUser(userNum));
+		model.addAttribute("tab", tab);
 		
 		return "admin/account/userDetail";
 	} //userDetailPage
