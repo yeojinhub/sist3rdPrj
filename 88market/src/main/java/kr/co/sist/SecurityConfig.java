@@ -32,7 +32,7 @@ public class SecurityConfig {
                 // 인증이 필요한 경로
                 .requestMatchers(
                     "/chat",
-                    "/buy",
+                    "/buy/**",
                     "/sell",
                     "/product/**",
                     "/inquiry"

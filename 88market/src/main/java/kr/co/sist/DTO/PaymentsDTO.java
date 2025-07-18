@@ -18,9 +18,10 @@ import lombok.ToString;
 @ToString
 public class PaymentsDTO {
 	
-	private String patmentId; /* 결제자 */
+	private String patmentUid; /* 결제UID */
 	private int amount; /* 결제금액 */
 	private String method; /* 결제수단 */
+	private String cardCompany; /* 카드회사명 */
 	private Date patmentDate; /* 결제일 */
 	private String tradeId; /* 거래자 */
 

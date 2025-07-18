@@ -20,8 +20,10 @@ public class TradesDTO {
 
 	private String tradeId; /* 거래자ID */
 	private String buyerId; /* 구매자ID */
+	private String sellerId; /* 구매자ID */
 	private String tradeStatus; /* 거래상태 */
 	private Date tradeDate; /* 거래일 */
+	private String deliveryNum; /* 배송지번호(택배거래 상품일 경우 배송지 입력을 받는데 해당 배송지에 대한 번호) */
 	
 	private String prdNum; /* 상품번호 */
 

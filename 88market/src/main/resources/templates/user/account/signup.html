@@ -15,57 +15,8 @@ const signUpUrl="/signUpProcess";
 const mainURL = "/";
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-const btn = document.getElementById("btn");
-if (!btn) return;
-
-btn.addEventListener("click", function () {
-	const name = document.getElementById("name").value;
-    const nickname = document.getElementById("nickname").value;
-    const email = document.getElementById("email-id").value + "@" + document.getElementById("email-domain").value;
-    const pass = document.getElementById("pass-id").value;
-    const tel = document.getElementById("tel").value;
-    const zipcode = document.getElementById("zipcode").value;
-    const address =
-      document.getElementById("road_address").value +
-      document.getElementById("detail-address").value +
-      document.getElementById("extra-address").value;
-
-    const jsonParam = {
-      name,
-      nickname,
-      email,
-      pass,
-      tel,
-      zipcode,
-      address,
-    };
-
-    fetch(signUpUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(jsonParam),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("회원가입 실패");
-        return res.json();
-      })
-      .then((data) => {
-        alert("회원가입이 완료되었습니다.");
-        window.location.href = mainURL;
-      })
-      .catch((err) => {
-        console.error("회원가입 오류:", err);
-        alert("이메일 또는 비밀번호가 잘못되었습니다.");
-      });
-  }); //addEventListener
-}); //addEventListener
-</script>
-
 <script th:src="@{/js/user/signup.js}" defer></script>
+
 </head>
 
 <!-- 다음 주소 API -->
@@ -143,6 +94,61 @@ btn.addEventListener("click", function () {
 
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+const btn = document.getElementById("btn");
+if (!btn) return;
+
+btn.addEventListener("click", function () {
+	const name = document.getElementById("name").value;
+    const nickname = document.getElementById("nickname").value;
+    const email = document.getElementById("email-id").value + "@" + document.getElementById("email-domain").value;
+    const pass = document.getElementById("pass-id").value;
+    const tel = document.getElementById("tel").value;
+    const zipcode = document.getElementById("zipcode").value;
+    const address =
+      document.getElementById("road-address").value +
+      document.getElementById("detail-address").value +
+      document.getElementById("extra-address").value;
+
+    const jsonParam = {
+      name : name,
+      nickname : nickname,
+      email : email,
+      pass : pass,
+      tel : tel,
+      zipcode : zipcode,
+      address : address,
+    };
+
+    fetch(signUpUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(jsonParam),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP 에러 ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+    	console.log(data);
+    	if(data.success){
+        	alert("회원가입이 완료되었습니다.");
+        	window.location.href = mainURL;
+    	} else {
+    		alert("서버에서 가입 처리를 실패했습니다.");
+        } //end if else
+      }) // 응답 처리
+      .catch((err) => {
+        console.error("회원가입 오류:", err);
+        alert("이메일 또는 비밀번호가 잘못되었습니다.");
+      }); // 에러 처리
+  }); //addEventListener
+}); //addEventListener
+</script>
 
 </body>
 </html>

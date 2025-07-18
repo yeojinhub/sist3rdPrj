@@ -39,5 +39,7 @@ public class UserDTO {
     private String withdraw; /* 사용자탈퇴여부(Y,N) */
 	
     private String authCode; /* 사용자인증번호 */
+    
+    private Integer totalReport; /* 사용자누적신고수 */
 	
 } //class

@@ -15,7 +15,10 @@ public class SignUpService {
 	public boolean addMember(UserDTO userDTO) {
 		boolean flag = false;
 		
+		System.out.println("SignUpService : DTO 값 "+ userDTO);
 		flag = signDAO.addUser(userDTO);
+		
+		System.out.println("SignUpService : flag 값 "+flag);
 		
 		return flag;
 	} //addMember

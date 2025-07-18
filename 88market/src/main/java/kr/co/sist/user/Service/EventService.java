@@ -45,7 +45,6 @@ public class EventService {
 			}// end if
 		}// end for
 		
-		
 		Map<String, List<EventDTO>> eventMap = new HashMap<String, List<EventDTO>>();
 		eventMap.put("ing", ingEvent);
 		eventMap.put("end", endEvent);
@@ -53,6 +52,22 @@ public class EventService {
 		
 		return eventMap;
 	}// searchAllEvent
+
+	public List<EventDTO> searchMainEvent() {
+		List<EventDTO> eventList = new ArrayList<EventDTO>();
+
+		for (EventDTO item : eDAO.selectAllEvent()) {
+			if (item.getMainType().equals("Y")) {
+				eventList.add(item);
+			}// end if
+		}// end for
+
+		for (EventDTO item : eventList) {
+			item.setIDTO(eDAO.selectImageWithImgNum(item.getImgNum()));
+		}// end for
+
+		return eventList;
+	}
 	
 	public EventDTO searchOneEvent(int evtNum) {
 		return eDAO.selectOneEvent(evtNum);

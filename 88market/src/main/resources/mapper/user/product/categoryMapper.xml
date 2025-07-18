@@ -19,7 +19,5 @@
 		FROM CATEGORY
 		WHERE CAT_NUM = #{catNum}
 	</select>
-    
-    
 </mapper>
 

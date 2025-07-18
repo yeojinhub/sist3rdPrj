@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				} //end if
 				
 				// 텍스트 색상 변경
-				this.style.color = 'blue';
+				this.style.color = 'black';
 				// 배경 색상 변경
 				this.style.backgroundColor = '#e0f7fa';
 				// 테두리 색상 변경

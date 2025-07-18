@@ -247,30 +247,6 @@ VALUES (SEQ_REV_NUM.NEXTVAL, '책이 너무 재미있어요.',     '김영희', 
 INSERT INTO REVIEW(REV_NUM, CONTENT, NAME, KEYWORD, PRD_NUM)
 VALUES (SEQ_REV_NUM.NEXTVAL, '티셔츠가 핏이 예뻐요.',     '이민호', '좋아요', '3');
 
-/* TRADES */
-INSERT INTO TRADES(TRADE_ID, BUYER_ID, TRADE_STATUS, TRADE_DATE, PRD_NUM)
-VALUES ((select email from users where user_num=1),
-				(select email from users where user_num=2), '거래완료', SYSDATE, 1);
-INSERT INTO TRADES(TRADE_ID, BUYER_ID, TRADE_STATUS, TRADE_DATE, PRD_NUM)
-VALUES ((select email from users where user_num=2),
-				(select email from users where user_num=3), '판매중',  SYSDATE, 2);
-INSERT INTO TRADES(TRADE_ID, BUYER_ID, TRADE_STATUS, TRADE_DATE, PRD_NUM)
-VALUES ((select email from users where user_num=3),
-				(select email from users where user_num=1), '예약중',SYSDATE, 3);
-
-/* PAYMENTS */
-INSERT INTO PAYMENTS(PATMENT_ID, AMOUNT, METHOD, PATMENT_DATE, TRADE_ID)
-VALUES ((select TRADE_ID from TRADES where BUYER_ID='younghee@example.com'),
-				900000, '카드결제', SYSDATE,
-				(select TRADE_ID from TRADES where TRADE_ID='hong@example.com'));
-INSERT INTO PAYMENTS(PATMENT_ID, AMOUNT, METHOD, PATMENT_DATE, TRADE_ID)
-VALUES ((select TRADE_ID from TRADES where BUYER_ID='minho@example.com'),
-				20000,  '계좌이체', SYSDATE,
-				(select TRADE_ID from TRADES where TRADE_ID='hong@example.com'));
-INSERT INTO PAYMENTS(PATMENT_ID, AMOUNT, METHOD, PATMENT_DATE, TRADE_ID)
-VALUES ((select TRADE_ID from TRADES where BUYER_ID='younghee@example.com'),
-				15000,  '휴대폰결제', SYSDATE,
-				(select TRADE_ID from TRADES where TRADE_ID='minho@example.com'));
 
 /* FAVORITE */
 INSERT INTO FAVORITE(FAV_NUM, PRD_NUM, USER_NUM)
@@ -291,9 +267,9 @@ VALUES (SEQ_INQ_NUM.NEXTVAL, '교환 문의',     '사이즈 교환 가능한가
 /* ANSWER */
 INSERT INTO ANSWER(INQ_NUM, CONTENT, ADM_NUM)
 VALUES (1, '네, 색상 옵션 기능 곧 추가됩니다.', 1);
-INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, ADM_NUM)
+INSERT INTO ANSWER(INQ_NUM, CONTENT, ADM_NUM)
 VALUES (2, '마이페이지 > 주문내역에서 가능합니다.', 2);
-INSERT INTO ANSWER(INQ_NUM, TITLE, CONTENT, ADM_NUM)
+INSERT INTO ANSWER(INQ_NUM, CONTENT, ADM_NUM)
 VALUES (3, '사이즈 교환 신청서 작성 부탁드립니다.', 3);
 
 /* IMAGE */

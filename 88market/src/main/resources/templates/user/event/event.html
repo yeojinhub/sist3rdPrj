@@ -49,11 +49,13 @@
 					th:onclick="|location.href='/event/${ingEvent.evtNum}'|">
 				<div class="event-date-container">
 					<p class="event-date" th:text="${ingEvent.startDate} + ' ~ ' + ${ingEvent.endDate}"></p>
-					<span class="d-day" th:if="${ingEvent.endDate != null}" th:with="today=${T(java.time.LocalDate).now()},
-             endLocalDate=${ingEvent.endDate.toLocalDate()},
-             diffDays=${T(java.time.temporal.ChronoUnit).DAYS.between(today, endLocalDate)}"
-						th:text="${diffDays < 0 ? '종료' : (diffDays == 0 ? 'D-Day' : 'D-' + diffDays)}"
-						th:class="'d-day' + (${diffDays < 0} ? ' ended' : '')">
+					<span class="d-day" th:if="${ingEvent.endDate != null and ingEvent.startDate != null}" th:with="today=${T(java.time.LocalDate).now()},
+               startLocalDate=${ingEvent.startDate.toLocalDate()},
+               endLocalDate=${ingEvent.endDate.toLocalDate()},
+               diffDays=${T(java.time.temporal.ChronoUnit).DAYS.between(today, endLocalDate)},
+               startDiffDays=${T(java.time.temporal.ChronoUnit).DAYS.between(today, startLocalDate)}"
+						th:text="${startDiffDays > 0 ? '시작전' : (diffDays < 0 ? '종료' : (diffDays == 0 ? 'D-Day' : 'D-' + diffDays))}"
+						th:class="'d-day' + (${startDiffDays > 0} ? ' before-start' : (${diffDays < 0} ? ' ended' : ''))">
 					</span>
 				</div>
 			</article>

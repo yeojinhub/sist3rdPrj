@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 계정 관리</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>계정 관리 &gt;</span> <span class="current-page">회원 계정 관리</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (회원 계정 관리) -->
+			<main class="container">
+				<section class="search-section">
+					<!-- 검색 폼 추가 (method="get") -->
+					<form id="searchForm" th:action="@{/admin/account}" method="get">
+						<div class="search-box">
+							<input type="text" class="search-input" name="keyword"
+								 placeholder="검색">
+							<button type="submit" class="search-button">검색</button>
+							<!-- 검색 초기화 버튼 추가 -->
+							<button type="button" class="search-button" id="resetSearch">초기화</button>
+							<input type="radio" /> 전체 회원
+							<input type="radio" /> 일반 회원
+							<input type="radio" /> 정지 회원
+							<input type="radio" /> 탈퇴 회원
+						</div>
+					</form>
+				</section>
+
+				<section class="account-section">
+					<table class="account-table">
+						<thead>
+							<tr>
+								<th><input type="checkbox" class="all-checkbox"></th>
+								<th>닉네임</th>
+								<th>회원 유형</th>
+								<th>누적신고수</th>
+								<th>정지여부</th>
+								<th>탈퇴여부</th>
+								<th>가입일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item, i : ${userList}" class="table-row">
+								<td>
+									<input type="checkbox" class="checkbox" th:id="'checkbox' + ${i.count}" th:data-notice-num="${item.userNum}" />
+								</td>
+								<td class="account-title" th:text="${item.nickname}"
+									style="cursor: pointer; text-align: center;"
+									th:onclick="|location.href='@{/admin/account/detail(userNum=${item.userNum})}'|"></td>
+								<td th:if="${item.banType=='Y'}">정지 회원</td>
+								<td th:if="${item.withdraw=='Y'}">탈퇴 회원</td>
+								<td th:if="${item.banType=='N'} and ${item.withdraw=='N'}">일반 회원</td>
+								<td th:text="${item.totalReport}"></td>
+								<td th:text="${item.banType}"></td>
+								<td th:text="${item.withdraw}"></td>
+								<td><span class="status-badge status-visible" th:text="${item.inputDate}"></span></td>
+							</tr>
+							<tr th:if="${#lists.isEmpty(userList)}">
+								<td colspan="6" style="text-align: center;">회원 계정 정보가 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="table-footer">
+						<div class="table-controls">
+							<button class="control-button"
+								th:onclick="|location.href='@{/admin/notice/add}'|">등록</button>
+							<button class="control-button" id="deleteBtn">삭제</button>
+						</div>
+						<div class="table-controls-right">
+							<button class="control-button" id="hideOff">보이기</button>
+							<button class="control-button" id="hideOn">숨기기</button>
+						</div>
+					</div>
+				</section>
+			</main>
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
+		</div>
+	</div>
+</body>
+
+</html>

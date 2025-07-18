@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.BuyDAO">
+    <!-- 상품 정보 조회 -->
+    <select id="selectProduct" resultType="kr.co.sist.DTO.ProductDTO" parameterType="String">
+        SELECT * FROM PRODUCT WHERE PRD_NUM = #{prdNum}
+    </select>
+
+    <!-- 상품 이미지 조회 -->
+    <select id="selectImage" resultType="kr.co.sist.DTO.ImageDTO" parameterType="int">
+        SELECT * FROM IMAGE WHERE IMG_NUM = #{imgNum}
+    </select>
+    
+    <!-- 유저넘버로 배송지 조회 -->
+    <select id="selectAddressByUserNum" parameterType="String" resultType="kr.co.sist.DTO.AddressDTO">
+    	SELECT * FROM ADDRESS WHERE USER_NUM = #{userNum}
+    	ORDER BY ADDR_TYPE DESC
+    </select>
+    
+    <!-- 구매 결제 진행 후 상품에 AppointType 값 'Y' 변경 -->
+    <update id="updateProductAppointType" parameterType="String">
+    	UPDATE PRODUCT SET APPOINT_TYPE = 'Y' WHERE PRD_NUM = #{prdNum}
+    </update>
+</mapper>
