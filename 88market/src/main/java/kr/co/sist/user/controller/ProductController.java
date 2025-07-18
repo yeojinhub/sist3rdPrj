@@ -173,7 +173,6 @@ public class ProductController {
     public String detail(@RequestParam("id") String prdNum, Model model, HttpSession session,
     		@AuthenticationPrincipal UserDetails currentUser) {
     	
-    	System.out.println(currentUser);
     	// ✅ 세션에서 조회 기록된 상품 확인
         String viewedKey = "viewed_product_" + prdNum;
         if (session.getAttribute(viewedKey) == null) {
