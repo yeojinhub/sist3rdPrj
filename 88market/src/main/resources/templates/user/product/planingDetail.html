@@ -85,16 +85,12 @@
 				<!-- 상품 거래 조건 -->
 				<div class="transaction-specs">
 					<div class="spec-item">
-						<span class="spec-title">제품상태</span> 
-						<span class="spec-value" >중고</span>
-					</div>
-					<div class="spec-item">
 						<span class="spec-title">거래방식</span> 
 						<span class="spec-value" th:text="${Product[0].deliveryType == 'Y' ? '택배' : '직거래'}"></span>
 					</div>
 					<div class="spec-item">
-						<span class="spec-title">배송비</span> 
-						<span class="spec-value">포함</span>
+						<span class="spec-title">재고</span> 
+						<span class="spec-value" th:text="${Product[0].prdCnt}">재고 개수</span>
 					</div>
 				</div>
 
