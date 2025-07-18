@@ -92,6 +92,10 @@ public class ProductService {
         favoriteDAO.deleteFavorite(userNum, prdNum);
         productDAO.decreaseLikeNum(prdNum);
     }
+    
+    public List<ProductDTO> selectWishlistByUserNum(String userNum){
+    	return favoriteDAO.selectWishlistByUserNum(userNum);
+    }
 }
 
 

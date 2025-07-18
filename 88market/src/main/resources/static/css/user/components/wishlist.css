@@ -1,5 +1,5 @@
 /* 1. html, body 기본값 (스크롤바 공간 유지) */
-html, body {
+body.wishlist-active {
 	scrollbar-gutter: stable;
 	margin: 0;
 	padding: 0;
