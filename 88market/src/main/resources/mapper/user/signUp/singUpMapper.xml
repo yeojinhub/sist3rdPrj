@@ -5,10 +5,21 @@
 <mapper namespace="kr.co.sist.user.DAO.SignUpDAO">
 
     <insert id="addUser" parameterType="kr.co.sist.DTO.UserDTO">
-        INSERT INTO USERS
-        (USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE,ADDRESS)
+    	<selectKey resultType="String" keyProperty="userNum" order="BEFORE">
+        	SELECT 	SEQ_USER_NUM.NEXTVAL
+        	FROM 	DUAL
+    	</selectKey>
+    	INSERT INTO USERS
+       		(USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE,ADDRESS)
         VALUES(SEQ_USER_NUM.NEXTVAL, #{name}, #{nickname}, #{email},
-        #{pass}, #{tel}, #{zipcode}, #{address})
-    </insert>
+        	#{pass}, #{tel}, #{zipcode}, #{address})
+	</insert>
+	
+	<insert id="addAddress" parameterType="kr.co.sist.DTO.UserDTO">
+		INSERT INTO ADDRESS
+        	(ADDR_NUM, TEL, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{zipcode}, #{address},
+        	'Y', SEQ_USER_NUM.NEXTVAL)
+	</insert>
     
 </mapper>

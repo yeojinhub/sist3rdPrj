@@ -8,6 +8,7 @@ import kr.co.sist.DTO.UserDTO;
 @Mapper
 public interface SignUpDAO {
 	
-	public boolean addUser(@RequestBody UserDTO userDTO);
+	public int addUser(@RequestBody UserDTO userDTO);
+	public int addAddress(@RequestBody UserDTO userDTO);
 
 } //inserface

@@ -31,7 +31,7 @@ function sample6_execDaumPostcode() {
             }
 
             // ▶▶ 주소 필드에 자동 입력
-            document.getElementById('zipcode').value = data.zonecsode;
+            document.getElementById('zipcode').value = data.zonecode;
             document.getElementById("road-address").value = addr;
 
             // ▶▶ [추가된 부분] 자동으로 입력된 필드에 스타일 적용
