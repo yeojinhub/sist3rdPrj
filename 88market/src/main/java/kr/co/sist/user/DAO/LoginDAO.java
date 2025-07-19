@@ -19,4 +19,5 @@ public interface LoginDAO {
 	 */
 	public UserDTO selectLoginList(@Param("email") String email);
 	 
+	
 } //interface

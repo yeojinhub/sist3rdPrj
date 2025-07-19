@@ -45,7 +45,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px; /* 각 버튼 사이의 간격 */
+    gap: 15px; /* 각 버튼 사이의 간격 증가 */
+}
+
+/* 로그인 버튼들을 감싸는 컨테이너 */
+.login-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* 버튼 사이 간격 */
 }
 
 /* 로그인 유지 섹션 */
@@ -82,6 +91,21 @@
     font-size: 10px;
 }
 
+/* 로그인 버튼 이미지 스타일 */
+.login-buttons img {
+    width: 321px; /* 버튼과 같은 너비 */
+    height: 40px; /* 버튼과 같은 높이 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    cursor: pointer; /* 마우스 오버 시 포인터 모양으로 변경 */
+    object-fit: cover; /* 비율 유지하면서 크기 맞춤 */
+    transition: transform 0.2s; /* 호버 효과 */
+}
+
+/* 이미지 호버 효과 */
+.login-buttons img:hover {
+    transform: scale(1.02); /* 살짝 확대 */
+}
+
 /* 모든 버튼에 대한 공통 스타일 */
 .btn {
     width: 321px; /* 너비 */
@@ -95,6 +119,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: transform 0.2s; /* 호버 효과 */
+}
+
+/* 버튼 호버 효과 */
+.btn:hover {
+    transform: scale(1.02); /* 살짝 확대 */
 }
 
 /* 각 버튼의 개별 스타일 */
@@ -118,4 +148,5 @@
     background-color: #ffffff;
     color: #000000;
     border-color: #000000;
+    margin-top: 10px; /* 회원가입 버튼은 위쪽에 추가 여백 */
 }

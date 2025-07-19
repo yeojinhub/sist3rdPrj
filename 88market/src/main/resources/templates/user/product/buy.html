@@ -167,7 +167,7 @@ $(function() {
 							</div>
 							<div class="price-item" th:if="${product.deliveryType == 'Y'}">
 								<span>안전거래 수수료(2%)</span>
-								<span th:text="${#numbers.formatInteger((product.price*0.02),3,'COMMA')}+'원'">1,000원</span>
+								<span th:text="${#numbers.formatInteger((product.price*0.02),0,'COMMA')}+'원'">1,000원</span>
 							</div>
 						</div>
 						<hr>
