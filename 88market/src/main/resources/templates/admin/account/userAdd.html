@@ -4,8 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 - 계정 관리</title>
-<!-- 관리자 공지사항 CSS -->
+<title>관리자 - 회원 계정 등록</title>
+<!-- 관리자 계정 관리 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/account/detail.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
@@ -20,7 +20,7 @@
 			<!-- 헤더 -->
 			<header class="main-header">
 				<div class="breadcrumbs">
-					<span>계정 관리 &gt;</span> <span class="current-page">회원 계정 관리</span>
+					<span>계정 관리 &gt;</span> <span class="current-page">회원 계정 등록</span>
 				</div>
 			</header>
 
@@ -29,14 +29,6 @@
      
       <!-- 컨테이너 -->
       <section class="container">
-        <!-- 페이지 탭 -->
-        <div class="page-tabs">
-          <button class="tab active">개인정보 관리</button>
-          <button class="tab">계좌 관리</button>
-          <button class="tab">배송 관리</button>
-          <button class="tab">포인트 조회</button>
-        </div>
-
         <!-- 개인정보 폼 -->
         <form class="account-form" th:action="@{/admin/account}" method="post">
           <div class="account-form-section">기본정보</div>
@@ -49,69 +41,84 @@
           </div>
 
           <label for="name">이름 <span class="required">*</span></label>
-          <input id="name" class="form-input" type="text" placeholder="이름 입력" />
+          <input id="name" type="text" class="form-input" placeholder="이름 입력" />
 
           <label for="nickname">닉네임</label>
-          <input id="nickname" class="form-input" type="text" placeholder="닉네임 입력" />
+          <input id="nickname" type="text" class="form-input" placeholder="닉네임 입력" />
 
           <label for="tel">전화번호</label>
-          <input id="tel" class="form-input" type="text" placeholder="전화번호 입력" />
+          <input id="tel" type="text" class="form-input" placeholder="전화번호 입력"  />
 
           <div class="account-form-section">계정정보</div>
 
           <label for="email">이메일 <span class="required">*</span></label>
           <div style="display:flex; gap:8px;">
-            <input id="email" class="form-input" type="text" placeholder="이메일 입력" />
-            <select class="form-select">
+            <input id="email-id" type="text"  class="form-input" placeholder="이메일 입력" />
+            <input id="email-domain" type="text"  class="form-input" />
+            <select  id="select" class="form-select">
               <option>도메인 선택</option>
               <option>gmail.com</option>
               <option>naver.com</option>
+              <option>daum.net</option>
+              <option>nate.com</option>
+              <option value="other">직접 입력</option>
             </select>
           </div>
 
-          <label for="password">비밀번호</label>
-          <input id="password" class="form-input" type="password" placeholder="비밀번호 조회" />
+          <label for="pass">비밀번호</label>
+          <input id="pass" type="password" class="form-input" placeholder="비밀번호 입력" />
+          
+          <label for="pass-check">비밀번호 확인</label>
+          <input id="pass-check" type="password" class="form-input" placeholder="비밀번호 확인 입력" />
 
           <div class="account-form-section">주소</div>
 
           <label for="zipcode">우편번호</label>
           <div style="display:flex; gap:8px;">
-            <input id="zipcode" class="form-input" type="text" placeholder="우편번호 입력" readonly />
-            <button type="button" class="action-button">우편번호 찾기</button>
+            <input id="zipcode"type="text" placeholder="우편번호 입력" class="form-input" readonly="readonly" />
+			<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="action-button" />
           </div>
 
           <label for="road-address">도로명 주소</label>
-          <input id="road-address" class="form-input" type="text" placeholder="도로명 주소" readonly />
+          <input id="road-address" name="road-address" type="text"
+          class="form-input" readonly="readonly" />
 
           <label for="detail-address">상세주소</label>
-          <input id="detail-address" class="form-input" type="text" placeholder="상세주소 입력" />
+          <input id="detail-address" name="detail-address" type="text"
+          class="form-input" placeholder="상세주소 입력" />
+          <input id="extra-address" name="extra-address" type="text"
+          class="form-input" readonly="readonly" />
 
           <div class="account-form-section">가입 정보</div>
 
           <label for="reg-date">가입일</label>
-          <input id="reg-date" class="form-input" type="date" value="2025-06-19" readonly />
+          <input id="reg-date" type="date" th:value="${today}" class="form-input" readonly="readonly" />
 
           <label>정지여부</label>
           <div>
-            <label><input type="radio" name="ban" /> 정지</label>
-            <label><input type="radio" name="ban" checked /> 미정지</label>
+            <label><input type="radio" name="ban" value="Y" /> 정지</label>
+            <label><input type="radio" name="ban" value="N" checked="checked" /> 미정지</label>
           </div>
 
           <label>탈퇴여부</label>
           <div>
-            <label><input type="radio" name="withdraw" /> 탈퇴</label>
-            <label><input type="radio" name="withdraw" checked /> 미탈퇴</label>
+            <label><input type="radio" name="withdraw" value="Y" /> 탈퇴</label>
+            <label><input type="radio" name="withdraw" value="N" checked="checked" /> 미탈퇴</label>
           </div>
 
           <!-- 폼 액션 -->
           <div class="form-actions">
-            <button type="button" class="cancel-btn">뒤로가기</button>
-            <button type="submit" class="submit-btn">등록</button>
+            <button type="button" id="btnAdd" class="submit-btn">등록</button>
+            <button type="button" id="btnBack" class="cancel-btn">뒤로가기</button>
           </div>
         </form>
       </section>
     </main>
   </div>
-  </div>
+	</div>
+	<!-- 다음 주소 API -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script th:src="@{/js/admin/account/postcode.js}" defer></script>
+	<script th:src="@{/js/admin/account/infoAdd.js}" defer></script>
 </body>
 </html>

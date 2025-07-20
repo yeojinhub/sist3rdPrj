@@ -17,11 +17,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>대표계좌</td>
-					<td>팔팔은행</td>
-					<td>이대휘</td>
-					<td>123-456-7890</td>
+				<tr th:each="item, i : ${ bankList }" class="table-row">
+					<td th:if="${ item.bankType=='Y' }">대표 계좌</td>
+					<td th:if="${ item.bankType=='N' }">일반 계좌</td>
+					<td th:text="${ item.bankName }"></td>
+					<td th:text="${ item.name }"></td>
+					<td th:text="${ item.bankNum }"></td>
+				</tr>
+				<tr th:if="${#lists.isEmpty(bankList)}">
+					<td colspan="4" style="text-align: center;">
+						등록된 계좌 정보가 없습니다.
+					</td>
 				</tr>
 			</tbody>
 			</table>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 관리자 계정 수정</title>
+<!-- 관리자 관리자 계정 관리 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/account/detail.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/personal.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>계정 관리 &gt;</span> <span class="current-page">관리자 계정 수정</span>
+				</div>
+			</header>
+
+      	<div class="account-form-wrapper">
+        <!-- 개인정보 폼 -->
+		<form class="account-form" th:action="@{/admin/account/adminModifyProcess}" method="post" th:object="${adminDTO}">
+          <div class="account-form-section">기본정보</div>
+          <input type="hidden" id="admNum" th:value="${ adminDTO.admNum }" />
+          <label for="profile-img">프로필 사진</label>
+          <div class="image-upload-area" id="profile-img">
+            <div class="upload-placeholder">
+              <i class="fa fa-camera"></i>
+            </div>
+          </div>
+
+          <label for="name">이름 <span class="required">*</span></label>
+          <input id="name" type="text" th:value="${ adminDTO.name }"  class="form-input" />
+
+          <label for="tel">전화번호</label>
+          <input id="tel" type="text" th:value="${ adminDTO.tel }" class="form-input"  />
+
+          <div class="account-form-section">계정정보</div>
+
+          <label for="id">아이디 <span class="required">*</span></label>
+          <input id="id" type="text" th:value="${ adminDTO.id }"  class="form-input" />
+            
+          <label for="password">비밀번호</label>
+          <input id="password" type="password" th:value="${ adminDTO.pass }" class="form-input" readonly="readonly" />
+          
+          <div class="account-form-section">가입 정보</div>
+
+          <label for="reg-date">가입일</label>
+          <input id="reg-date" type="date" th:value="${ adminDTO.input_date }" class="form-input" readonly="readonly" />
+
+          <label>정지여부</label>
+          <div>
+           	<input type="radio" name="ban" value="Y" th:checked="${ adminDTO.bantype == 'Y' }" />
+           	<label>정지</label>
+            <input type="radio" name="ban" value="N"  th:checked="${ adminDTO.bantype == 'N' }" />
+            <label>미정지</label>
+          </div>
+
+          <!-- 폼 액션 -->
+          <div class="form-actions">
+            <button type="button" id="btnModify" class="submit-btn">수정</button>
+            <button type="button" id="btnBack" class="cancel-btn">뒤로가기</button>
+          </div>
+        </form>
+        </div>
+		</div>
+	</div>
+	<script th:src="@{/js/admin/account/adminModify.js}" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminAccountAdminDAO">
+
+  <resultMap id="adminMap" type="kr.co.sist.DTO.AdminDTO">
+    <id     property="admNum"    column="ADM_NUM"/>
+    <result property="name"      column="NAME"/>
+    <result property="id"        column="ID"/>
+    <result property="pass"      column="PASS"/>
+    <result property="tel"       column="TEL"/>
+    <result property="input_date" column="INPUT_DATE"/>
+    <result property="ban_date"  column="BAN_DATE"/>
+    <result property="bantype"   column="BANTYPE"/>
+    <result property="rolltype"  column="ROLLTYPE"/>
+  </resultMap>
+
+	<select id="selectAdminList" resultMap="adminMap">
+	SELECT
+		ADM_NUM, NAME, ROLLTYPE, BANTYPE, INPUT_DATE
+	FROM ADMIN
+	ORDER BY
+		INPUT_DATE
+	</select>
+	
+	<select id="selectOneAdmin" resultMap="adminMap" parameterType="String">
+	SELECT
+		NAME, TEL, ID, PASS, BANTYPE, INPUT_DATE
+	FROM ADMIN
+	WHERE
+		ADM_NUM=#{admNum}
+	</select>
+	
+	<insert id="insertAdmin" parameterType="kr.co.sist.DTO.AdminDTO">
+	INSERT INTO ADMIN
+    	(ADM_NUM, NAME, ID, PASS, TEL, INPUT_DATE, BANTYPE)
+    VALUES(SEQ_ADM_NUM.NEXTVAL, #{name}, #{id}, #{pass}, #{tel},
+   		#{input_date, jdbcType=DATE}, #{bantype, jdbcType=CHAR})
+	</insert>
+	
+	<update id="updateAdmin" parameterType="kr.co.sist.DTO.AdminDTO">
+	UPDATE ADMIN
+	SET
+		NAME=#{name}, ID=#{id}, TEL=#{tel},
+		BANTYPE=#{bantype}
+	WHERE
+		ADM_NUM=#{admNum}
+	</update>
+	
+</mapper>
