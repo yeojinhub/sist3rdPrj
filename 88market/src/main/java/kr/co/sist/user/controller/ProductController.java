@@ -56,8 +56,6 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         
-        System.out.println("야호오오오오");
-
         String userNum = user.getUsername();
         boolean alreadyLiked = productService.checkFavorite(userNum, prdNum);
 

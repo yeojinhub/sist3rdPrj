@@ -8,9 +8,11 @@
 			var wishlist_list = $('.wishlist-list'); 
 			wishlist = res.data;
 			
+			wishlist_list.empty();
+			
 			wishlist.prdList.forEach((item, index)=>{
 				wishlist_list.append(`
-						<article class="wishlist-item">
+						<article class="wishlist-item" data-prd-num="${item.prdNum}">
 						<div class="item-image-container">
 							<img class="item-image"
 								src="${wishlist.imgList[index].mainImage}"
@@ -37,10 +39,19 @@
 	$(function() {		
 		$(document).on('click', '.wishBtn', function () {
 			var prdNum = $(this).data('prd-num');
-			  axios.get('/product/wish',{
-				param : { prdNum : prdNum }
-			  }).then(res=>{console.log(res.data)});
+ 			  axios.get('/product/wish',{
+				params : { prdNum : prdNum }
+			  }).then(res=>{loadData()})
+			  .catch(err=>{
+				console.log(err);
+			  });
+ 			  
 			});// click
+			
+		$(document).on('click', '.wishlist-item', function () {
+			var prdNum = $(this).data('prd-num');
+				location.href="/detail?id="+prdNum;		  
+				});// click
 		
 	    // 찜한 상품 버튼 클릭 이벤트
 	    $('#wishlist').click(function() {
