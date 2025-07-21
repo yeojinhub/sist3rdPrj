@@ -19,14 +19,13 @@ import lombok.ToString;
 public class ChatroomDTO {
 
 	private int chatroomNum; /* 채팅방번호*/
-	private int sellerNum; /* 판매자회원번호 */
-	private int buyerNum; /* 구매자회원번호 */
+	private String sellerNum; /* 판매자회원번호 */
+	private String buyerNum; /* 구매자회원번호 */
 	
 	private Date createDate; /* 채팅방생성일시 */
 	private Date updateDate; /* 채팅방수정일 */
 	private String readStatus; /* 채팅방상태(Y,N)*/
 	
 	private String prdNum; /* 상품번호 */
-	private String userNum;/* 사용자번호 */
 
 } //class

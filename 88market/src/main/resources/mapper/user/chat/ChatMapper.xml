@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ChatMapper">
+
+	<!-- 채팅방 존재 여부 확인 -->
+    <select id="checkChatRoomExist" resultType="int" parameterType="kr.co.sist.DTO.ChatroomDTO">
+        SELECT COUNT(*)
+        FROM CHATROOM
+        WHERE prd_num = #{prdNum} AND seller_num = #{sellerNum} AND buyer_num = #{buyerNum}
+    </select>
+
+	<!-- 채팅방 생성 -->
+    <insert id="createChatRoom" parameterType="kr.co.sist.DTO.ChatroomDTO">
+        INSERT INTO CHATROOM(chatroom_num, prd_num, seller_num, buyer_num, create_date)
+        VALUES (SEQ_CHATROOM_NUM.NEXTVAL, #{prdNum}, #{sellerNum}, #{buyerNum}, SYSDATE)
+    </insert>
+
+    <!-- 채팅방 리스트 가져오기 (예시) -->
+    <select id="getChatRoomsByUser" parameterType="String" resultType="kr.co.sist.DTO.ChatroomDTO">
+        SELECT * FROM CHATROOM
+        WHERE seller_num = #{userNum} OR buyer_num = #{userNum}
+    </select>
+    
+    <!-- 유저정보 -->
+    <select id="selectUserByUserNum" parameterType="string" resultType="kr.co.sist.DTO.UserDTO">
+	  SELECT
+	    user_num,
+	    nickname,
+	    image
+	  FROM
+	    users
+	  WHERE
+	    user_num = #{userNum}
+	</select>
+
+	<!-- 특정 채팅방의 마지막 메시지 가져오기 -->
+    <select id="getLastMessage" resultType="kr.co.sist.DTO.ChatmessageDTO">
+	    SELECT content, create_date
+	    FROM (
+	        SELECT content, create_date
+	        FROM chatmessage
+	        WHERE chatroom_num = #{chatroomNum}
+	        ORDER BY create_date DESC
+	    )
+	    WHERE ROWNUM = 1
+	</select>
+	
+	<select id="getOtherUser"  parameterType="map" resultType="String">
+	    SELECT
+	        CASE 
+	            WHEN cr.seller_num = #{userNum} THEN cr.buyer_num
+	            ELSE cr.seller_num
+	        END AS opponent_num
+	    FROM chatroom cr
+	    WHERE cr.chatroom_num=#{chatroomNum}
+	</select>
+	
+	<!-- 메시지 저장 -->
+    <insert id="insertMessage" parameterType="kr.co.sist.DTO.ChatmessageDTO">
+        INSERT INTO chatmessage (msg_id,content, create_date, is_read, img_path, user_num, chatroom_num)
+        VALUES (SEQ_MSG_ID.NEXTVAL,#{content}, SYSDATE, 'N', #{imgPath, jdbcType=VARCHAR}, #{userNum}, #{chatroomNum})
+    </insert>
+	
+	<resultMap id="ChatRoomSummaryMap" type="map">
+	  <result property="chatroomNum" column="chatroom_num"/>
+	  <result property="partnerNum" column="partner_num"/>
+	  <result property="updateDate" column="update_date"/>
+	</resultMap>
+
+</mapper>
