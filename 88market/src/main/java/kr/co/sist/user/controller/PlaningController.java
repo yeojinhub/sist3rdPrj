@@ -2,8 +2,10 @@ package kr.co.sist.user.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.ibatis.annotations.Param;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO;
 import kr.co.sist.DTO.CompanyWithProductDTO;
 import kr.co.sist.DTO.ProductDTO;
@@ -46,37 +49,69 @@ public class PlaningController {
         model.addAttribute("selectedComNum", comNum);
         
         // 3. 해당 기업의 상품 리스트 조회
-        List<ProductDTO> products = planingService.getProductListByComNum(comNum);
-        model.addAttribute("products", products);
+        List<Map<String, Object>> productsWithImages = planingService.getProductListByComNumWithImage(comNum);
+        model.addAttribute("products", productsWithImages);
 		
 		return "user/planingsell";
 	}
 	
 	@GetMapping("/planingDetail")
 	public String planingDetail(@RequestParam("id") String productId, 
-			@RequestParam("comNum") String comNum, Model model) {
+			@RequestParam("comNum") String comNum, Model model,
+			HttpSession session) {
 		
-		// 1. 기업 리스트 조회
+		// 세션에 저장할 key 이름
+	    String sessionKey = "viewedProducts";
+		
+	    //  세션에서 이미 조회한 상품 리스트 가져오기
+	    @SuppressWarnings("unchecked")
+	    Set<String> viewedProducts = (Set<String>) session.getAttribute(sessionKey);
+
+	    if (viewedProducts == null) {
+	        viewedProducts = new HashSet<>();
+	    }
+	    //  아직 조회하지 않은 상품이면 조회수 증가 + 세션에 저장
+	    if (!viewedProducts.contains(productId)) {
+	        planingService.addClickCount(productId);  // 조회수 증가 서비스 호출
+	        viewedProducts.add(productId);
+	        session.setAttribute(sessionKey, viewedProducts);
+	    }
+	    
+		// 기업 리스트 조회
 		List<CategoryWithProductWithFavoriteWithCompanyWithImageDTO> companieProduct = planingService.getCompanyProduct(productId);
 		model.addAttribute("Product",companieProduct);
 		
-//		// 3. 해당 기업의 상품 리스트 조회
-//        List<ProductDTO> products = planingService.getProductListByComNum(comNum);
-//        model.addAttribute("products", products);
-		
-		// 2. 현재 상품 제외한 해당 기업의 다른 상품들 (3개 제한)
-	    List<ProductDTO> allProducts = planingService.getProductListByComNum(comNum);
+		// 이미지 파일명 리스트 만들기 (메인 + 서브)
+	    if (!companieProduct.isEmpty()) {
+	        CategoryWithProductWithFavoriteWithCompanyWithImageDTO product = companieProduct.get(0);
+	        List<String> imgFiles = new ArrayList<>();
 
-	    List<ProductDTO> filteredProducts = allProducts.stream()
-	        .filter(p -> !String.valueOf(p.getPrdNum()).equals(productId)) // 현재 상품 제외
+	        if(product.getMainImage() != null && !product.getMainImage().isEmpty())
+	            imgFiles.add(product.getMainImage());
+	        if(product.getSubImage1() != null && !product.getSubImage1().isEmpty())
+	            imgFiles.add(product.getSubImage1());
+	        if(product.getSubImage2() != null && !product.getSubImage2().isEmpty())
+	            imgFiles.add(product.getSubImage2());
+	        if(product.getSubImage3() != null && !product.getSubImage3().isEmpty())
+	            imgFiles.add(product.getSubImage3());
+	        if(product.getSubImage4() != null && !product.getSubImage4().isEmpty())
+	            imgFiles.add(product.getSubImage4());
+
+	        model.addAttribute("imgNum", imgFiles); // imgNum에 이미지 파일명 리스트 담기
+	    }
+		
+		// 현재 상품 제외한 해당 기업의 다른 상품들 (3개 제한)
+	    List<Map<String, Object>> allProducts = planingService.getProductsWithImages(comNum);
+
+	    List<Map<String, Object>> filteredProducts = allProducts.stream()
+	        .filter(p -> !String.valueOf(p.get("PRD_NUM")).equals(productId)) // 현재 상품 제외
 	        .limit(3)
 	        .collect(Collectors.toList());
 
 	    model.addAttribute("products", filteredProducts);
 	    
 	 // 같은 기업의 다른 랜덤 상품들 (현재 상품 제외)
-	    List<ProductDTO> relatedProducts =
-	            planingService.getRandomProductsByComNum(comNum, productId);
+	    List<Map<String, Object>> relatedProducts = planingService.getRandomProductsWithImage(comNum, productId);
 	    model.addAttribute("relatedProducts", relatedProducts);
 	    
 	    List<ReviewDTO> reviewList = planingService.getReviewList(comNum);
@@ -84,6 +119,7 @@ public class PlaningController {
 
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("reviewCount", reviewCount);
+        
         
 		
 		return "user/product/planingDetail";

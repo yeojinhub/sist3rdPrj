@@ -44,26 +44,24 @@
           <table class="notice-table">
             <thead>
               <tr>
-                <th><input type="checkbox" class="all-checkbox"></th>
                 <th>상품번호</th>
                 <th>상품명</th>
-                <th>가격</th>
-                <th>숨김</th>
-                <th>조회수</th>
+                <th>브랜드</th>
+                <th>구매자</th>
+                <th>거래상태</th>
+                <th>주문일자</th>
               </tr>
             </thead>
             <tbody>
               <tr th:each="item, i : ${productsList}" class="table-row">
-                <td><input type="checkbox" class="checkbox"
-                  th:id="'checkbox'"
-                  th:data-prd-num="${item.prdNum}"></td>
                 <td th:text="${item.prdNum}"></td>
                 <td class="notice-title" th:text="${item.title}"
                   style="cursor: pointer; text-align: center;"
                   th:onclick="|location.href='@{/admin/planing/planingDetail(prdNum=${item.prdNum})}'|"></td>
-                <td th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')} + '원'"></td>
-                <td th:text="${item.sellType}"></td>
-                <td th:text="${item.clickNum}"></td>
+                <td th:text="${item.comName}"></td>
+                <td th:text="${item.prdNum}">sellerId</td>
+                <td th:text="${item.sellType}">tradeStatus</td>
+                <td th:text="${item.inputDate}">tradeDate</td>
               </tr>
               <tr th:if="${#lists.isEmpty(productsList)}">
                 <td colspan="6" style="text-align: center;">등록된 상품이 없습니다.</td>
@@ -102,46 +100,7 @@
 
   <script>
     $(function () {
-      $('#resetSearch').click(function () {
-        $('input[name="keyword"]').val('');
-        $('input[name="hidden"][value="all"]').prop('checked', true);
-        $('#searchForm').submit();
-      });
-
-      // 전체 선택
-      $('.all-checkbox').on('click', function () {
-        $('.checkbox').prop('checked', $(this).is(':checked'));
-      });
-
-      // 삭제 버튼 등은 이후 구현
-      $('#deleteBtn').click(function () {
-         const checked = $('.checkbox:checked');
-
-         if (checked.length === 0) {
-           alert('삭제할 상품을 선택하세요.');
-           return;
-         }
-
-         if (!confirm('정말 삭제하시겠습니까?')) return;
-
-         // 폼 동적 생성하여 POST 전송
-         const form = $('<form>', {
-           method: 'POST',
-           action: '/admin/planing/delete'
-         });
-
-         checked.each(function () {
-           const prdNum = $(this).data('prd-num');
-           form.append($('<input>', {
-             type: 'hidden',
-             name: 'prdNums',
-             value: prdNum
-           }));
-         });
-
-         $('body').append(form);
-         form.submit();
-       });
+    
     });
   </script>
 </body>

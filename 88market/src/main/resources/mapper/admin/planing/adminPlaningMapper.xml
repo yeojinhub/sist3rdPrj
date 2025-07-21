@@ -99,5 +99,76 @@
 <select id="getNextImageSeq" resultType="int">
   SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
 </select>
-  
+
+<!-- 상품번호로 단일 상품 조회 -->
+<select id="selectProductByPrdNum" parameterType="string" resultType="kr.co.sist.DTO.ProductDTO">
+    SELECT
+        PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, INPUT_DATE, APPOINT_TYPE,
+        HIDDEN_TYPE, SELL_TYPE, PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE,
+        DELIVERY_TYPE, USER_NUM, CAT_NUM, COM_NUM, IMG_NUM, LIKE_NUM, ADMIN_SCORE
+    FROM PRODUCT
+    WHERE PRD_NUM = #{prdNum}
+</select>
+
+<!-- ① 상품 UPDATE -->
+<update id="updateProduct" parameterType="kr.co.sist.DTO.ProductDTO">
+  UPDATE PRODUCT
+     SET TITLE         = #{title},
+         CONTENT       = #{content},
+         PRICE         = #{price},
+         CAT_NUM       = #{catNum},
+         DELIVERY_TYPE = #{deliveryType},
+         SELL_TYPE     = #{sellType},
+         HIDDEN_TYPE   = #{hiddenType},
+         APPOINT_TYPE  = #{appointType},
+         SAFE_TYPE     = #{safeType},
+         MEET_TYPE     = #{meetType}
+   WHERE PRD_NUM = #{prdNum}
+</update>
+
+<!-- ② IMAGE UPDATE -->
+<update id="updateImage" parameterType="kr.co.sist.DTO.ImageDTO">
+  UPDATE IMAGE
+     SET MAIN_IMAGE = #{mainImage},
+         SUB_IMAGE1 = #{subImage1},
+         SUB_IMAGE2 = #{subImage2},
+         SUB_IMAGE3 = #{subImage3},
+         SUB_IMAGE4 = #{subImage4}
+   WHERE IMG_NUM = #{imgNum}
+</update>
+
+<!-- ③ IMAGE 존재 여부 (0/1) -->
+<select id="existsImage" resultType="int">
+  SELECT COUNT(*) FROM IMAGE WHERE IMG_NUM = #{imgNum}
+</select>
+
+<!-- 상품번호로 단일 상품 조회 -->
+<select id="getProductByPrdNum" parameterType="string" resultType="kr.co.sist.DTO.ProductDTO">
+    SELECT
+        PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, INPUT_DATE, APPOINT_TYPE,
+        HIDDEN_TYPE, SELL_TYPE, PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE,
+        DELIVERY_TYPE, USER_NUM, CAT_NUM, COM_NUM, IMG_NUM, LIKE_NUM, ADMIN_SCORE
+    FROM PRODUCT
+    WHERE PRD_NUM = #{prdNum}
+</select>
+
+<select id="selectImageByImgNum" resultType="kr.co.sist.DTO.ImageDTO">
+  SELECT *
+  FROM IMAGE
+  WHERE IMG_NUM = #{imgNum}
+</select>
+
+<!-- 상품 삭제 -->
+<delete id="deleteProductByPrdNum">
+  DELETE FROM PRODUCT WHERE PRD_NUM = #{prdNum}
+</delete>
+
+<!-- 이미지 삭제 (IMG_NUM을 PRODUCT에서 가져와야 함) -->
+<delete id="deleteImageByPrdNum">
+  DELETE FROM IMAGE
+  WHERE IMG_NUM = (
+    SELECT IMG_NUM FROM PRODUCT WHERE PRD_NUM = #{prdNum}
+  )
+</delete>
+
 </mapper>

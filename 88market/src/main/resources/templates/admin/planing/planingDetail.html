@@ -159,8 +159,16 @@
 
       <main>
         <div class="form-container">
-          <form th:action="@{/admin/planing/planingAdd}" th:object="${productDTO}" method="post" enctype="multipart/form-data" onsubmit="return false;">
-
+          <form th:action="@{/admin/planing/planingDetail}" th:object="${productDTO}"
+						      method="post"
+						      enctype="multipart/form-data"
+						      onsubmit="return false">
+						      
+	      <input type="hidden" th:field="*{prdNum}"/>
+		  <input type="hidden" th:field="*{imgNum}"/>
+		  <input type="hidden" th:field="*{userNum}"/>
+		  <input type="hidden" th:field="*{comNum}"/>
+		  
             <!-- 이미지 업로드 -->
             <div class="form-row">
               <div class="form-label">이미지</div>
@@ -172,7 +180,13 @@
                   <input type="file" id="image-upload-input" name="images" accept="images/*" multiple style="display: none;">
                   <div class="image-count-box"><span id="image-count">0/5</span></div>
                 </div>
-                <div id="image-preview-box" class="image-preview-box"></div>
+                <div id="image-preview-box" class="image-preview-box">
+                <img th:if="${imageDTO != null}" th:src="@{${imageDTO.mainImage}}" alt="메인 이미지" width="200">
+				  <img th:if="${imageDTO.subImage1 != null}" th:src="@{${imageDTO.subImage1}}" alt="서브1" width="100">
+				  <img th:if="${imageDTO.subImage2 != null}" th:src="@{${imageDTO.subImage2}}" alt="서브2" width="100">
+				  <img th:if="${imageDTO.subImage3 != null}" th:src="@{${imageDTO.subImage3}}" alt="서브3" width="100">
+				  <img th:if="${imageDTO.subImage4 != null}" th:src="@{${imageDTO.subImage4}}" alt="서브4" width="100">
+                </div>
               </div>
             </div>
 
@@ -212,7 +226,7 @@
 			  </div>
 			</div>
 			
-            <!-- 재고 -->
+			<!-- 재고 -->
             <div class="form-row">
 			  <label for="prdCnt" class="form-label">재고</label>
 			  <div class="form-field">
@@ -249,8 +263,8 @@
 			
             <!-- 버튼 -->
             <div class="button-group">
-              <button type="button" class="btn btn-submit" id="submit-btn">저장</button>
-              <a th:href="@{/products}" class="btn btn-cancel">취소</a>
+              <button type="button" class="btn btn-submit" id="update-btn">수정</button>
+              <a href="javascript:history.back()" class="btn btn-cancel" style="text-decoration: none; cursor: pointer; color: inherit;">취소</a>
             </div>
           </form>
         </div>
@@ -297,6 +311,14 @@
         updatePreview();
       });
       
+      const rawPrdCnt = $('#prdCnt').val().replace(/[^0-9]/g, '');
+      const prdCntValue = Number(rawPrdCnt);
+      if (isNaN(prdCntValue) || prdCntValue < 0 || prdCntValue > 99999) {
+        alert("재고는 0개 이상 99,999개 이하로 입력해주세요.");
+        $('#prdCnt').focus();
+        return;
+      }
+      
       //가격표시
       const $priceInput = $('#price');
       const $form = $('form');
@@ -332,72 +354,41 @@
         
       });
       
-      $('#submit-btn').on('click', function () {
-          const isDeliveryChecked = $('#delivery').is(':checked');
+      $('#update-btn').on('click', function () {
+    	    const rawPrice = $('#price').val().replace(/[^0-9]/g, '');
 
-          if (!isDeliveryChecked) {
-            $('#trade-method-error').show();
-            $('html, body').animate({ scrollTop: $('#trade-method-error').offset().top - 100 }, 300);
-            return;
-          } else {
-            $('#trade-method-error').hide();
-          }
-          
-          const rawPrdCnt = $('#prdCnt').val().replace(/[^0-9]/g, '');
-          const prdCntValue = Number(rawPrdCnt);
-          if (isNaN(prdCntValue) || prdCntValue < 0 || prdCntValue > 99999) {
-            alert("재고는 0개 이상 99,999개 이하로 입력해주세요.");
-            $('#prdCnt').focus();
-            return;
-          }
+    	    const product = {
+    	        prdNum: $('[name="prdNum"]').val(),
+    	        imgNum: $('[name="imgNum"]').val(),
+    	        userNum: $('[name="userNum"]').val(),
+    	        comNum: $('[name="comNum"]').val(),
+    	        title: $('#title').val(),
+    	        content: $('#content').val(),
+    	        price: rawPrice,
+    	        prdCnt: prdCntValue,
+    	        catNum: $("input[name='catNum']:checked").val(),
+    	        deliveryType: $('#delivery').is(':checked') ? 'Y' : 'N',
+    	        sellType: $("input[name='sellType']:checked").val() || 'Y',
+    	        hiddenType: $("input[name='hiddenType']:checked").val() || 'N',
+    	        safeType: 'N',
+    	        meetType: 'N',
+    	        appointType: 'N'
+    	    };
 
-          const rawPrice = $('#price').val().replace(/[^0-9]/g, '');
-          const priceValue = Number(rawPrice);
-          if (isNaN(priceValue) || priceValue < 0 || priceValue > 9999999999) {
-            $('#price-error').show();
-            $('#price').focus();
-            return;
-          } else {
-            $('#price-error').hide();
-          }
+    	    const formData = new FormData();
+    	    formData.append("product", new Blob([JSON.stringify(product)], {type:"application/json"}));
+    	    imageFiles.forEach(f => formData.append("images", f));
 
-          if (imageFiles.length === 0) {
-            alert("사진을 최소 1장 이상 등록해주세요.");
-            $('html, body').animate({ scrollTop: $('#image-upload-input').offset().top - 100 }, 300);
-            return;
-          }
-
-
-          const product = {
-       		  title: $('#title').val(),
-       		  content: $('#content').val(),
-       		  price: rawPrice,
-       		  prdCnt: prdCntValue,
-       		  catNum: $("input[name='catNum']:checked").val(),
-       		  deliveryType: isDeliveryChecked ? 'Y' : 'N',
-     		  sellType   : $("input[name='sellType']:checked").val()  || 'Y', // 기본값 Y
-     		  hiddenType : $("input[name='hiddenType']:checked").val()|| 'N', // 기본값 N
-     		  safeType: 'N',
-     		  meetType: 'N',
-     		  appointType: 'N'     // 필요 없는 경우에도 NOT NULL 컬럼이면 기본값 주기
-          };
-		
-          const formData = new FormData();
-          formData.append("product", new Blob([JSON.stringify(product)], {type:"application/json"}));
-          imageFiles.forEach(f => formData.append("images", f));
-
-          $.ajax({
-            url: "/admin/planing/planingAdd",
-            method: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: () => location.href="/admin/planing/planingList",
-            error        : xhr => console.log(xhr)
-          });
-
-
-        });
+    	    $.ajax({
+    	        url: "/admin/planing/planingDetail", // 💡 POST로 재사용
+    	        method: "POST",
+    	        data: formData,
+    	        processData: false,
+    	        contentType: false,
+    	        success: () => location.href = "/admin/planing/planingList",
+    	        error: xhr => console.log(xhr)
+    	    });
+    	});
       
       
       
