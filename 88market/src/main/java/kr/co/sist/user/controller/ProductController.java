@@ -2,7 +2,9 @@ package kr.co.sist.user.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,12 +48,15 @@ public class ProductController {
         return "user/product/success";
     }
 
+    @ResponseBody
     @GetMapping("/product/wish")
     public ResponseEntity<String> toggleWish(@RequestParam("prdNum") String prdNum,
                                              @AuthenticationPrincipal UserDetails user) {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        
+        System.out.println("야호오오오오");
 
         String userNum = user.getUsername();
         boolean alreadyLiked = productService.checkFavorite(userNum, prdNum);
@@ -279,12 +284,25 @@ public class ProductController {
     
     @GetMapping("/product/wishlist")
     @ResponseBody
-    public List<ProductDTO> getWishList(@AuthenticationPrincipal UserDetails user) {
+    public Map<String, Object> getWishList(@AuthenticationPrincipal UserDetails user) {
         if (user == null) {
-            return new ArrayList<>();
+            return null;
         }
         String userNum = user.getUsername();
-        return productService.selectWishlistByUserNum(userNum);
+        
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        List<ProductDTO> prdList = productService.selectWishlistByUserNum(userNum);
+        List<ImageDTO> imgList = new ArrayList<ImageDTO>();
+        
+        for (ProductDTO prd : prdList) {
+        	imgList.add(productService.selectImageByNum(prd.getImgNum()));
+        }// end for
+        
+        map.put("prdList", prdList);
+        map.put("imgList", imgList);
+        
+        return map;
     }
 
 

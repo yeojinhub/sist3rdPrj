@@ -1,13 +1,54 @@
 <th:block th:fragment="wishlistOverlay">
 	<link rel="stylesheet" th:href="@{/css/user/components/wishlist.css}">
 	<script>
-	$(function() {
+	function loadData() {
+		var wishlist = {};
+		
+		axios.get('/product/wishlist').then(res=>{
+			var wishlist_list = $('.wishlist-list'); 
+			wishlist = res.data;
+			
+			wishlist.prdList.forEach((item, index)=>{
+				wishlist_list.append(`
+						<article class="wishlist-item">
+						<div class="item-image-container">
+							<img class="item-image"
+								src="${wishlist.imgList[index].mainImage}"
+								alt="레이저 키요 프로 웹캠 풀박">
+							<div class="carousel-indicator">
+								<div class="dot active"></div>
+							</div>
+						</div>
+						<div class="item-info">
+							<p class="item-name">${item.title}</p>
+							<p class="item-price">${item.price.toLocaleString()}</p>
+							<p class="item-location">${item.shortLocation}</p>
+							${item.safeType == 'Y' ? '<span class="safe-deal-badge">안심거래</span>' : ''}
+						</div>
+						<button class="wishBtn" data-prd-num="${item.prdNum}">
+						<i class="fa-solid fa-heart" style="color: red;"></i>
+						</button>
+					</article>
+						`);//append
+			});//forEach
+		});//axios
+	}// loadData
+	
+	$(function() {		
+		$(document).on('click', '.wishBtn', function () {
+			var prdNum = $(this).data('prd-num');
+			  axios.get('/product/wish',{
+				param : { prdNum : prdNum }
+			  }).then(res=>{console.log(res.data)});
+			});// click
+		
 	    // 찜한 상품 버튼 클릭 이벤트
 	    $('#wishlist').click(function() {
 	        $('.wishlist-overlay').fadeIn(300);
 	        $('.wishlist-modal').addClass('show');
 	        // 배경 스크롤 막기
 	        $('body').addClass('modal-open');
+	        loadData();
 	    });
 
 	    // 오버레이 클릭 시 모달 닫기
@@ -30,10 +71,10 @@
 	        }, 300);
 	    });
 
-			// 모달 내부 클릭 시 이벤트 전파 막기 (오버레이 클릭 방지)
+			/* // 모달 내부 클릭 시 이벤트 전파 막기 (오버레이 클릭 방지)
 			$('.wishlist-modal').click(function(e) {
 				e.stopPropagation();
-			});
+			}); */
 
 			// 찜 아이콘 클릭 이벤트
 			$('.like-icon').click(function() {
@@ -82,59 +123,7 @@
 			<!-- 찜한 상품 목록 -->
 			<div class="wishlist-list">
 				<!-- 첫 번째 찜한 상품 -->
-				<article class="wishlist-item">
-					<div class="item-image-container">
-						<img class="item-image"
-							th:src="@{/images/main/img1.png}"
-							alt="레이저 키요 프로 웹캠 풀박">
-						<div class="carousel-indicator">
-							<div class="dot active"></div>
-						</div>
-					</div>
-					<div class="item-info">
-						<p class="item-name">레이저 키요 프로 웹캠 풀박</p>
-						<p class="item-price">100,000원</p>
-						<p class="item-location">송도동</p>
-						<span class="safe-deal-badge">안심거래</span>
-					</div>
-					<i class="fa-solid fa-heart" style="color: red;"></i>
-				</article>
-
-				<!-- 두 번째 찜한 상품 -->
-				<article class="wishlist-item">
-					<div class="item-image-container">
-						<img class="item-image" th:src="@{/images/main/img2.png}"
-							alt="댄스 노란모자">
-						<div class="carousel-indicator">
-							<div class="dot active"></div>
-						</div>
-					</div>
-					<div class="item-info">
-						<p class="item-name">댄스 노란모자 토들러</p>
-						<p class="item-price">50,000원</p>
-						<p class="item-location">연수동</p>
-						<span class="safe-deal-badge">안심거래</span>
-					</div>
-					<i class="fa-solid fa-heart" style="color: red;"></i>
-				</article>
-
-				<!-- 세 번째 찜한 상품 -->
-				<article class="wishlist-item">
-					<div class="item-image-container">
-						<img class="item-image" th:src="@{/images/main/img3.png}"
-							alt="수월우 무결점">
-						<div class="carousel-indicator">
-							<div class="dot active"></div>
-						</div>
-					</div>
-					<div class="item-info">
-						<p class="item-name">수월우 무결점</p>
-						<p class="item-price">500,000원</p>
-						<p class="item-location">구월동</p>
-						<span class="safe-deal-badge">안심거래</span>
-					</div>
-					<i class="fa-solid fa-heart" style="color: red;"></i>
-				</article>
+				
 			</div>
 		</div>
 	</div>

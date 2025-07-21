@@ -48,9 +48,6 @@ public class NaverService {
     try {
         ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, request, Map.class);
         
-        // 로그 추가
-        System.out.println("토큰 응답: " + response.getBody());
-        
         Map<String, Object> responseBody = response.getBody();
         
         // 에러 체크
@@ -67,7 +64,6 @@ public class NaverService {
         return accessToken;
         
     } catch (Exception e) {
-        System.out.println("토큰 요청 실패: " + e.getMessage());
         throw e;
     }
 }
