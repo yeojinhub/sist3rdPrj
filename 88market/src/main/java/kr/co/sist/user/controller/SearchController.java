@@ -37,29 +37,32 @@ public class SearchController {
 		
 		//  List<ProductDTO> results = service.findByKeyword(keyword);
 		//  List<ProductDTO> results;
-        String title="";
+        
+        // 일반 검색 결과
 	    List<ProductDTO> results = serchService.findByKeywordAndFilters(
 	            keyword, catNum, minPrice, maxPrice, tradeOption, sortOption
 	        );
-        
-	    ProductDTO adDTO=serchService.getTopAdminScoreItem(catNum);
-        if (adDTO != null) {
+
+	    
+	    // 광고 상품 (카테고리 기준)
+	    ProductDTO adItem=null;
+	    if (catNum != null) {
             // catNum이 넘어오면 카테고리 검색
-            // results = serchService.findByCategory(catNum);
-            results.add(0,adDTO);
-            
+	    	adItem = serchService.getTopAdminScoreItem(catNum);
+	    }
+	    
+	    // 타이틀 결정
+	    String title="";
+        if (catNum != null) {
+            // catNum이 넘어오면 카테고리 검색
+        	title = categoryService.getCategoryName(catNum);
+        } else if ( !keyword.isBlank() ) {
+        	title = keyword;
         } else {
-            // keyword로 기존 검색 - 이렇게 하지 않으면 null 생김(서비스에서도 사용하기)
-            title = (keyword.isBlank() ? "전체" : keyword);
+        	title="전체";
         }
         
-        
-         title = (catNum == null
-                ? (keyword.isBlank() ? "전체" : keyword)
-                : serchService.getCategoryName(catNum));
-    
-         
-         
+        model.addAttribute("adItem", adItem);
         model.addAttribute("results", results);
         model.addAttribute("count",   results.size());
         model.addAttribute("keyword", keyword); 

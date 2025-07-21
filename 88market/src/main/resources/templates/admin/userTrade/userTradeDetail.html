@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>관리자 - 상품관리</title>
+	<!-- 관리자 공지사항 CSS -->
+	<link rel="stylesheet" th:href="@{/css/admin/userTrade/userTradeList.css}">
+	<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+	
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>일반 회원 주문 상세 &gt;</span> <span class="current-page">주문 상세</span>
+				</div>
+			</header>
+		<!-- 메인 컨텐츠 (상품 관리) -->
+		<main class="container">
+		 <section class="product-section">
+			<form th:action="@{/admin/userTrade/update}" th:object="${trade}" method="post">
+				<input type="hidden" th:field="*{tradeId}"/>
+		          <table class="product-table detail-table">
+		            <tbody>
+		               <tr class="section-header">
+		              <th colspan="2" style="background-color: #7FD0F4">거래 상세</th>
+		              </tr>
+		              <tr><th>거래번호</th><td th:text="${trade.tradeId}">‑</td></tr>
+		              <tr><th>상품번호</th><td th:text="${trade.prdNum}">‑</td></tr>
+		              <tr><th>판매자</th><td th:text="${trade.sellerEmail}">‑</td></tr>
+		              <tr><th>구매자</th><td th:text="${trade.buyerEmail}">‑</td></tr>
+		              <tr><th>결제상태</th>  <td>
+						<select class="search-filter" th:field="*{tradeStatus}">
+						  <option th:value="${trade.tradeStatus}" th:text="${trade.tradeStatus}" selected disabled>
+						  </option>
+						  <!-- 거래진행중(예약중??) -> 판매중 변경 가능 -->
+						  <option th:if="${trade.tradeStatus == '거래진행중'}" th:value="판매중" th:text="'판매중'">
+						  </option>
+						  <!-- 결제완료   -> 결제취소(판매중) 변경 가능 -->
+						  <option th:if="${trade.tradeStatus == '결제완료'}" th:value="결제취소" th:text="'결제취소'">
+						  </option>
+						</select>	
+					  </td>
+					  </tr>
+		              <tr><th>거래일</th>
+		                <td th:text="${#dates.format(trade.tradeDate,'yyyy-MM-dd HH:mm')}">‑</td>
+		              </tr>
+		              <tr><th>배송번호</th><td th:text="${trade.deliveryNum}">‑</td></tr>
+		
+		              <!-- 결제 정보 -->
+		              <tr class="section-header">
+		              <th colspan="2" style="background-color: #7FD0F4">결제 정보</th>
+		              </tr>
+					  <tr><th>결제UID</th><td th:text="${payment.paymentUid}">‑</td></tr>
+					  <tr><th>결제금액</th><td th:text="${payment.amount}">‑</td></tr>
+					  <tr><th>결제수단</th><td th:text="${payment.method}">‑</td></tr>
+					  <tr><th>카드회사</th><td th:text="${payment.cardCompany}">‑</td></tr>
+					  <tr><th>결제일시</th><td th:text="${#dates.format(payment.patmentDate,'yyyy-MM-dd HH:mm')}">‑</td></tr>
+		            </tbody>
+		          </table>
+		
+		          <div class="form-actions"  align="center">
+		          	<button type="submit" class="control-button">저장</button>
+		            <a th:href="@{/admin/userTrade/list}" class="control-button">뒤로가기</a>
+		          </div>
+		         </form>
+		        </section>
+		
+		      </main>
+			</div>
+	</div>
+	
+  <script src="/js/admin/script.js" defer></script>
+</body>
+</html>			

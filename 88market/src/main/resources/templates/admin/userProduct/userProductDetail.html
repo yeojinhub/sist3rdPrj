@@ -14,10 +14,11 @@
 	<!-- 고정 사이드바 -->
 	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
 	<!-- 상단 헤더 -->
-	<div th:replace="fragments/admin/admin_header :: header"></div>
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
 
   <div class="admin-wrapper">
     <div class="main-content">
+    	<!-- 헤더 -->
 			<header class="main-header">
 				<div class="breadcrumbs">
 					<span>일반회원 상품 관리 &gt;</span> <span class="current-page">상품 상세</span>
@@ -26,35 +27,49 @@
 		<!-- 메인 컨텐츠 (상품 관리) -->
       <main class="container">
         <section class="notice-form-section">
-          <form th:action="@{/admin/userProduct/save}" th:object="${product}" method="post" enctype="multipart/form-data">
+          <form th:action="@{/admin/userProduct/save}" th:object="${product}" method="post" >
+            <div style="display:flex; gap:20px; align-items:flex-end; margin-bottom:16px;">
+			<!-- 상품번호 -->
+			<div class="form-group" style="display:flex; width: 800px; gap:20px; align-items:flex-end; margin-bottom:16px;">
+				<label class="form-label">상품번호</label>
+		    	<input type="text" th:field="*{product.prdNum}" style="width: 500px; background-color: #F5F5F5" readonly class="form-input" />
+			</div>
+			<!-- 회원 정보 -->
+			<div class="form-group" style="display:flex; width: 800px; gap:20px; align-items:flex-end; margin-bottom:16px;">
+		    	<label class="form-label">이메일</label>
+		    	<input type="text" th:field="*{user.email}" style="width: 500px; background-color: #F5F5F5"  readonly class="form-input" />
+			</div>
+            </div>
             
             <!-- 이미지 업로드 & 미리보기 -->
-<!--             <div class="form-group">
-              <label class="form-label">이미지</label>
-              <div style="display:flex; gap:10px;">
-                <div th:each="img,iterStat : ${product.product.imgUrls}" style="width:120px; height:120px; border:1px solid #ccc;">
-                  <img th:src="@{${img}}" alt="prd-img" style="width:100%; height:100%; object-fit:cover;" />
-                </div>
-                빈 슬롯
-                <div th:if="${#lists.isEmpty(product.product.imgUrls)}"
-                     style="width:120px; height:120px; border:1px dashed #ccc; display:flex; align-items:center; justify-content:center; color:#aaa;">
-                  업로드
-                </div>
-              </div>
-              <input type="file" name="images" multiple class="form-input" />
-            </div> -->
+			<div class="form-group">
+			  <label class="form-label">이미지</label>
+			  <div class="image-slots" style="display:flex; gap:10px; margin-top:8px;">
+			    <div class="image-slot" style="
+			         width:120px; height:120px;
+			         border:1px dashed #ccc;
+			         display:flex; align-items:center; justify-content:center;
+			         color:#aaa;
+			         font-size:0.9rem;">업로드
+			    </div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			  </div>
+			 <!--  <input type="file" name="images" multiple class="form-input" style="margin-top:8px;"/> -->
+			</div>
 
             <!-- 제목 -->
             <div class="form-group">
               <label class="form-label">제목</label>
-              <input type="text" th:field="*{product.title}" placeholder="제목을 입력하세요" class="form-input" />
+              <input type="text" th:field="*{product.title}" style="background-color: #F5F5F5"  readonly class="form-input" />
             </div>
 
             <!-- 내용 -->
             <div class="form-group">
               <label class="form-label">내용</label>
-              <textarea th:field="*{product.content}" class="form-input" rows="5"
-                        placeholder="상세 내용을 입력하세요"></textarea>
+              <textarea th:field="*{product.content}" style="background-color: #F5F5F5"  readonly class="form-input" rows="5"></textarea>
             </div>
 
             <!-- 카테고리 -->
@@ -69,34 +84,32 @@
             </div>
 
             <!-- 가격 & 안전거래 -->
-            <div class="form-group">
-              <label class="form-label">가격</label>
-              <div style="display:flex; align-items:center; gap:10px;">
-                <input type="number" th:field="*{product.price}" class="form-input" style="width:200px;" />
-                <span>원</span>
-                <label style="margin-left:20px;">
-                  <input type="checkbox" th:field="*{product.safeType}" th:value="true" /> 안전거래
-                </label>
-              </div>
-            </div>
+			<div class="form-group">
+				<label class="form-label">가격</label>
+				<div style="display:flex; align-items:center; gap:10px;">
+					<input type="number" th:field="*{product.price}" style="width:200px; background-color: #F5F5F5"  readonly class="form-input"  />
+					<span>원</span>
+					<input type="checkbox" th:field="*{product.safeType}" th:value="Y"/>안전거래
+				</div>
+			</div>
 
-<!--             상품재고
-            <div class="form-group">
-              <label class="form-label">상품상태</label>
-              <label style="margin-right:15px;">
-                <input type="radio" th:field="*{product.prdCnt}" th:value="0" /> 중고
-
-            </div> -->
+			<!-- 거래 상태 -->
+			<div class="form-group">
+			  <label class="form-label">거래상태</label>
+			  <div style="display:flex; align-items:center; gap:10px;">
+			    <label><input type="radio" name="status" th:value="'selling'" th:checked="${product.product.sellType == 'N' and product.product.appointType == 'N'}"/>판매중</label>
+			    <label><input type="radio" name="status" th:value="'reserved'" th:checked="${product.product.appointType == 'Y'}"/>예약중</label>
+			    <label><input type="radio" name="status" th:value="'sold'" th:checked="${product.product.sellType == 'Y'}"/>판매완료</label>
+			  </div>
+			</div>
 
             <!-- 거래방법 -->
             <div class="form-group">
-              <label class="form-label">거래방법</label>
-              <label style="margin-right:15px;">
-                <input type="checkbox" th:field="*{product.deliveryType}" th:value="택배거래" /> 택배거래
-              </label>
-              <label>
-                <input type="checkbox" th:field="*{product.meetType}" th:value="직거래" /> 직거래
-              </label>
+            <label class="form-label">거래방법</label>
+				<label style="margin-right:15px;">
+			    <input type="checkbox" th:field="*{product.deliveryType}" value="Y"/>택배거래</label>
+				<label>
+			    <input type="checkbox" th:field="*{product.meetType}" value="Y"/>직거래</label>
             </div>
 
             <!-- 숨김 -->
@@ -112,8 +125,8 @@
 
             <!-- 액션 버튼 -->
             <div class="form-actions">
-              <button type="submit" class="action-button submit-btn">저장</button>
-              <a th:href="@{/admin/userProduct/list}" class="action-button cancel-btn">뒤로가기</a>
+              <button type="submit" class="control-button">저장</button>
+              <a th:href="@{/admin/userProduct/list}" class="control-button">뒤로가기</a>
             </div>
           </form>
         </section>

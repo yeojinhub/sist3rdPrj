@@ -28,7 +28,7 @@ public interface AdminUserProductDAO {
 //    void updateHiddenType(@Param("prdNums") List<Integer> prdNums, @Param("hidden") String hidden);
     void updateHiddenType(Map<String, Object> map);
     
-    
+    void updateUserProduct(AdminUserProductDTO aupDTO);
    
 	
 }
