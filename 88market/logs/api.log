@@ -140,3 +140,23 @@
 2025-07-22 19:08:50 - RESPONSE / GET /event {}
 2025-07-22 19:08:50 - REQUEST / GET /planingsell {}
 2025-07-22 19:08:50 - RESPONSE / GET /planingsell {}
+2025-07-22 19:10:29 - REQUEST / GET / {}
+2025-07-22 19:10:30 - RESPONSE / GET / {}
+2025-07-22 19:10:31 - REQUEST / GET /planingsell {}
+2025-07-22 19:10:31 - RESPONSE / GET /planingsell {}
+2025-07-22 19:10:34 - REQUEST / GET /planingDetail {id=P_00000162, comNum=1}
+2025-07-22 19:10:34 - RESPONSE / GET /planingDetail {id=P_00000162, comNum=1}
+2025-07-22 19:10:36 - REQUEST / GET /login {}
+2025-07-22 19:10:36 - RESPONSE / GET /login {}
+2025-07-22 19:10:37 - REQUEST / GET /naver/login {}
+2025-07-22 19:10:37 - RESPONSE / GET /naver/login {}
+2025-07-22 19:10:38 - REQUEST / GET /naver/callback {code=qt9FoiYWRTxawvin37, state=c3da54a1-e78c-4acf-82a2-562fb5f7348a}
+2025-07-22 19:10:38 - RESPONSE / GET /naver/callback {code=qt9FoiYWRTxawvin37, state=c3da54a1-e78c-4acf-82a2-562fb5f7348a}
+2025-07-22 19:10:38 - REQUEST / GET / {}
+2025-07-22 19:10:38 - RESPONSE / GET / {}
+2025-07-22 19:10:40 - REQUEST / GET /planingsell {}
+2025-07-22 19:10:40 - RESPONSE / GET /planingsell {}
+2025-07-22 19:10:41 - REQUEST / GET /planingDetail {id=43, comNum=1}
+2025-07-22 19:10:41 - RESPONSE / GET /planingDetail {id=43, comNum=1}
+2025-07-22 19:10:42 - REQUEST / GET /error {}
+2025-07-22 19:10:42 - RESPONSE / GET /error {}
