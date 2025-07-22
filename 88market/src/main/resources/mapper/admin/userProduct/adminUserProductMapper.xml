@@ -9,8 +9,7 @@
              type="kr.co.sist.DTO.AdminUserProductDTO">
 
     <!-- (B) ProductDTO 매핑 -->
-    <association property="product"
-                 javaType="kr.co.sist.DTO.ProductDTO">
+    <association property="product" javaType="kr.co.sist.DTO.ProductDTO">
       <id     column="p_prd_num"     property="prdNum"/>
       <result column="p_title"       property="title"/>
       <result column="p_content"     property="content"/>
@@ -30,8 +29,7 @@
     </association>
 
     <!-- (C) UserDTO 매핑 -->
-    <association property="user"
-                 javaType="kr.co.sist.DTO.UserDTO">
+    <association property="user" javaType="kr.co.sist.DTO.UserDTO">
 		<id     column="u_user_num"    property="userNum"/>
 		<result column="u_name"        property="name"/>
 		<result column="u_nickname"    property="nickname"/>
@@ -40,86 +38,81 @@
 	</association>
 
     <!-- (D) CategoryDTO 매핑 -->
-    <association property="category"
-                 javaType="kr.co.sist.DTO.CategoryDTO"
-                 >
+    <association property="category" javaType="kr.co.sist.DTO.CategoryDTO">
       <id     column="c_cat_num"     property="catNum"/>
       <result column="c_name"        property="name"/>
     </association>
 
-  </resultMap>
+	</resultMap>
 
-  <!-- ① 전체 건수 조회 (변경 없음) -->
-  <select id="countAdminUserProducts"
-          parameterType="kr.co.sist.admin.util.AdminSearchUserProductDTO"
-          resultType="int">
-    SELECT COUNT(*)
-      FROM PRODUCT p
-      LEFT JOIN USERS    u ON p.USER_NUM = u.USER_NUM
-      LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
-    <where>
-      <if test="searchType != null and searchType.equals('title') and keyword != null and keyword != ''">
-        AND p.TITLE LIKE '%' || #{keyword} || '%'
-      </if>
-      <if test="searchType != null and searchType.equals('seller') and keyword != null and keyword != ''">
-        AND u.EMAIL LIKE '%' || #{keyword} || '%'
-      </if>
-      <if test="catNum != null">
-        AND p.CAT_NUM = #{catNum}
-      </if>
-      <if test="statusFilter != null and statusFilter.equals('active')">
-        AND p.SELL_TYPE = 'N' AND p.APPOINT_TYPE = 'N'
-      </if>
-      <if test="statusFilter != null and statusFilter.equals('inactive')">
-        AND p.APPOINT_TYPE = 'Y'
-      </if>
-      <if test="statusFilter != null and statusFilter.equals('sold')">
-        AND p.SELL_TYPE = 'Y'
-      </if>
-      <if test="hideFilter != null and hideFilter.equals('Y')">
-        AND p.HIDDEN_TYPE = 'Y'
-      </if>
-      <if test="hideFilter != null and hideFilter.equals('N')">
-        AND p.HIDDEN_TYPE = 'N'
-      </if>
-    </where>
-  </select>
+		<!-- ① 전체 건수 조회 -->
+	<select id="countAdminUserProducts" parameterType="kr.co.sist.admin.util.AdminSearchUserProductDTO" resultType="int">
+		SELECT COUNT(*)
+		FROM PRODUCT p
+		LEFT JOIN USERS    u ON p.USER_NUM = u.USER_NUM
+		LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
+		<where>
+		<if test="searchType != null and searchType.equals('title') and keyword != null and keyword != ''">
+			AND p.TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchType != null and searchType.equals('seller') and keyword != null and keyword != ''">
+			AND u.EMAIL LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="catNum != null">
+			AND p.CAT_NUM = #{catNum}
+		</if>
+		<if test="statusFilter != null and statusFilter.equals('active')">
+			AND p.SELL_TYPE = 'N' AND p.APPOINT_TYPE = 'N'
+		</if>
+		<if test="statusFilter != null and statusFilter.equals('inactive')">
+			AND p.APPOINT_TYPE = 'Y'
+		</if>
+		<if test="statusFilter != null and statusFilter.equals('sold')">
+			AND p.SELL_TYPE = 'Y'
+		</if>
+		<if test="hideFilter != null and hideFilter.equals('Y')">
+			AND p.HIDDEN_TYPE = 'Y'
+		</if>
+		<if test="hideFilter != null and hideFilter.equals('N')">
+	        AND p.HIDDEN_TYPE = 'N'
+		</if>
+		</where>
+	</select>
 
-  <!-- ② 페이징 + 검색 결과 -->
-  <select id="searchAdminUserProducts"
-          parameterType="map"
-          resultMap="adminUserProductMap">
-    SELECT * FROM (
-      SELECT A.*, ROWNUM rn FROM (
-        SELECT
-          p.prd_num       AS p_prd_num,
-          p.title         AS p_title,
-          p.content       AS p_content,
-          p.price         AS p_price,
-          p.location1     AS p_location1,
-          p.input_date    AS p_input_date,
-          p.appoint_type  AS p_appoint_type,
-          p.hidden_type   AS p_hidden_type,
-          p.sell_type     AS p_sell_type,
-          p.prd_cnt       AS p_prd_cnt,
-          p.click_num     AS p_click_num,
-          p.safe_type     AS p_safe_type,
-          p.meet_type     AS p_meet_type,
-          p.delivery_type AS p_delivery_type,
-          p.like_num      AS p_like_num,
-          p.com_num       AS p_com_num,
-          p.img_num       AS p_img_num,
-          u.user_num      AS u_user_num,
-          u.name          AS u_name,
-          u.nickname      AS u_nickname,
-          u.email         AS u_email,
-          u.image         AS u_image,
-          c.cat_num       AS c_cat_num,
-          c.name          AS c_name
-        FROM PRODUCT p
-        LEFT JOIN USERS    u ON p.USER_NUM = u.USER_NUM
-        LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
+		<!-- ② 페이징 + 검색 결과 -->
+		<select id="searchAdminUserProducts" parameterType="map" resultMap="adminUserProductMap">
+			SELECT * FROM (
+			SELECT A.*, ROWNUM rn FROM (
+			SELECT
+	          p.prd_num       AS p_prd_num,
+	          p.title         AS p_title,
+	          p.content       AS p_content,
+	          p.price         AS p_price,
+	          p.location1     AS p_location1,
+	          p.input_date    AS p_input_date,
+	          p.appoint_type  AS p_appoint_type,
+	          p.hidden_type   AS p_hidden_type,
+	          p.sell_type     AS p_sell_type,
+	          p.prd_cnt       AS p_prd_cnt,
+	          p.click_num     AS p_click_num,
+	          p.safe_type     AS p_safe_type,
+	          p.meet_type     AS p_meet_type,
+	          p.delivery_type AS p_delivery_type,
+	          p.like_num      AS p_like_num,
+	          p.com_num       AS p_com_num,
+	          p.img_num       AS p_img_num,
+	          u.user_num      AS u_user_num,
+	          u.name          AS u_name,
+	          u.nickname      AS u_nickname,
+	          u.email         AS u_email,
+	          u.image         AS u_image,
+	          c.cat_num       AS c_cat_num,
+	          c.name          AS c_name
+	        FROM PRODUCT p
+	        LEFT JOIN USERS    u ON p.USER_NUM = u.USER_NUM
+	        LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
 			<where>
+			AND p.com_num IS NULL
 			<if test="search.keyword != null and search.keyword != '' and 'title'.equals(search.searchType)">
 				AND p.TITLE LIKE '%' || #{search.keyword} || '%'
 			</if>
@@ -146,61 +139,72 @@
 			<if test="search.hideFilter.equals('N')">
 				AND p.HIDDEN_TYPE = 'N'
 			</if>
-		</where>
-		ORDER BY p.INPUT_DATE DESC
-		) A
-		WHERE ROWNUM &lt;= #{endRow}
-	)
-	WHERE rn &gt; #{startRow}
-	</select>
+			</where>
+			ORDER BY p.INPUT_DATE DESC
+			) A
+			WHERE ROWNUM &lt;= #{endRow}	)
+		WHERE rn &gt; #{startRow}
+		</select>
   
     <!-- ③ 숨김 상태 일괄 업데이트 -->
-<update id="updateHiddenType">
-  UPDATE PRODUCT
-    SET HIDDEN_TYPE = #{hidden, jdbcType=VARCHAR}
-  WHERE PRD_NUM IN
-  <foreach collection="prdNums"
-           item="num"
-           open="("
-           separator=","
-           close=")">
-    #{num, jdbcType=VARCHAR}
-  </foreach>
-</update>
+		<update id="updateHiddenType">
+		  UPDATE PRODUCT
+		    SET HIDDEN_TYPE = #{hidden, jdbcType=VARCHAR}
+		  WHERE PRD_NUM IN
+		  <foreach collection="prdNums"
+		           item="num"
+		           open="("
+		           separator=","
+		           close=")">
+		    #{num, jdbcType=VARCHAR}
+		  </foreach>
+		</update>
   
   
-  <!-- 단일 상세페이지 조회  -->
-  <select id="selectByPrdNum"
-          parameterType="string"
-          resultMap="adminUserProductMap">
-    SELECT
-      p.prd_num       AS p_prd_num,
-      p.title         AS p_title,
-      p.content       AS p_content,
-      p.price         AS p_price,
-      p.location1     AS p_location1,
-      p.input_date    AS p_input_date,
-      p.appoint_type  AS p_appoint_type,
-      p.hidden_type   AS p_hidden_type,
-      p.sell_type     AS p_sell_type,
-      p.prd_cnt       AS p_prd_cnt,
-      p.click_num     AS p_click_num,
-      p.safe_type     AS p_safe_type,
-      p.meet_type     AS p_meet_type,
-      p.delivery_type AS p_delivery_type,
-      p.like_num      AS p_like_num,
-      p.img_num       AS p_img_num,
-      u.user_num      AS u_user_num,
-      u.name          AS u_name,
-      u.nickname      AS u_nickname,
-      u.email         AS u_email,
-      u.image         AS u_image,
-      c.cat_num       AS c_cat_num,
-      c.name          AS c_name
-    FROM PRODUCT p
-    LEFT JOIN USERS    u ON p.USER_NUM = u.USER_NUM
-    LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
-    WHERE p.prd_num = #{prdNum}
-  </select>
+	  <!-- 단일 상세페이지 조회  -->
+	  <select id="selectByPrdNum" parameterType="string" resultMap="adminUserProductMap">
+			SELECT
+		      p.prd_num       AS p_prd_num,
+		      p.title         AS p_title,
+		      p.content       AS p_content,
+		      p.price         AS p_price,
+		      p.location1     AS p_location1,
+		      p.input_date    AS p_input_date,
+		      p.appoint_type  AS p_appoint_type,
+		      p.hidden_type   AS p_hidden_type,
+		      p.sell_type     AS p_sell_type,
+		      p.prd_cnt       AS p_prd_cnt,
+		      p.click_num     AS p_click_num,
+		      p.safe_type     AS p_safe_type,
+		      p.meet_type     AS p_meet_type,
+		      p.delivery_type AS p_delivery_type,
+		      p.like_num      AS p_like_num,
+		      p.img_num       AS p_img_num,
+		      u.user_num      AS u_user_num,
+		      u.name          AS u_name,
+		      u.nickname      AS u_nickname,
+		      u.email         AS u_email,
+		      u.image         AS u_image,
+		      c.cat_num       AS c_cat_num,
+		      c.name          AS c_name
+		    FROM PRODUCT p
+		    LEFT JOIN USERS    u ON p.USER_NUM = u.USER_NUM
+		    LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
+		    WHERE p.prd_num = #{prdNum}
+		</select>
 
+		  <!-- 수정 - 상품 상세 페이지 -->
+		<update id="updateUserProduct" parameterType="kr.co.sist.DTO.AdminUserProductDTO">
+			UPDATE PRODUCT
+			SET TITLE          = #{product.title},
+				CONTENT        = #{product.content},
+				CAT_NUM        = #{category.catNum},
+				PRICE          = #{product.price},
+				SAFE_TYPE      = #{product.safeType},
+				DELIVERY_TYPE  = #{product.deliveryType},
+				MEET_TYPE      = #{product.meetType},
+				HIDDEN_TYPE    = #{product.hiddenType}
+			WHERE PRD_NUM       = #{product.prdNum}
+		</update>
+		
 </mapper>

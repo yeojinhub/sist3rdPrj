@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>88마켓 - 상세정보</title>
-<!-- 상품 상세 CSS -->
-<link rel="stylesheet" th:href="@{/css/user/product_detail.css}">
-<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
-<th:block th:replace="~{components/user/external :: external}"></th:block>
-<!-- Slick CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-<!-- Slick Theme (선택) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Slick JS -->
-<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>88마켓 - 상세정보</title>
+	<!-- 상품 상세 CSS -->
+	<link rel="stylesheet" th:href="@{/css/user/product_detail.css}">
+	<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+	<th:block th:replace="~{components/user/external :: external}"></th:block>
+	<!-- Slick CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+	<!-- Slick Theme (선택) -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- Slick JS -->
+	<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 </head>
 
 <body>
 	<!-- 헤더 -->
 	<th:block th:insert="~{components/user/header :: header}"></th:block>
-	
+
 	<!-- 메인 콘텐츠 -->
 	<main class="product-page-container">
 		<div class="product-main-content">
@@ -29,21 +30,21 @@
 			<section class="product-gallery-section">
 				<!-- 메인 이미지 캐러셀 -->
 				<div class="main-image-carousel fade" th:if="${image != null}">
-				  <div th:if="${image.mainImage != null}">
-				    <img th:src="@{${image.mainImage}}" alt="메인이미지">
-				  </div>
-				  <div th:if="${image.subImage1 != null}">
-				    <img th:src="@{${image.subImage1}}" alt="서브1">
-				  </div>
-				  <div th:if="${image.subImage2 != null}">
-				    <img th:src="@{${image.subImage2}}" alt="서브2">
-				  </div>
-				  <div th:if="${image.subImage3 != null}">
-				    <img th:src="@{${image.subImage3}}" alt="서브3">
-				  </div>
-				  <div th:if="${image.subImage4 != null}">
-				    <img th:src="@{${image.subImage4}}" alt="서브4">
-				  </div>
+					<div th:if="${image.mainImage != null}">
+						<img th:src="@{${image.mainImage}}" alt="메인이미지">
+					</div>
+					<div th:if="${image.subImage1 != null}">
+						<img th:src="@{${image.subImage1}}" alt="서브1">
+					</div>
+					<div th:if="${image.subImage2 != null}">
+						<img th:src="@{${image.subImage2}}" alt="서브2">
+					</div>
+					<div th:if="${image.subImage3 != null}">
+						<img th:src="@{${image.subImage3}}" alt="서브3">
+					</div>
+					<div th:if="${image.subImage4 != null}">
+						<img th:src="@{${image.subImage4}}" alt="서브4">
+					</div>
 				</div>
 
 				<!-- 상품 정보 -->
@@ -55,62 +56,52 @@
 
 			<!-- 오른쪽 영역: 구매 정보 및 판매자 정보 -->
 			<section class="product-purchase-section">
-			<div class="purchase-core">
-				<!-- 상품 기본 정보 -->
-				<div class="product-summary">
-					<span class="product-category" th:text="${categoryName}">카테고리명</span>
-					<div class="product-title-wrapper">
-					  <h1><p th:text="${product.title}"></p></h1>
+				<div class="purchase-core">
+					<!-- 상품 기본 정보 -->
+					<div class="product-summary">
+						<span class="product-category" th:text="${categoryName}">카테고리명</span>
+						<div class="product-title-wrapper">
+							<h1>
+								<p th:text="${product.title}"></p>
+							</h1>
+						</div>
+						<div class="price-wrapper">
+							<strong class="product-price"
+								th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></strong>
+							<span class="badge safety-badge" th:if="${product.safeType == 'Y'}">안전거래</span>
+						</div>
+						<div class="product-meta"
+							th:text="${timeAgo + ' · 조회 ' + product.clickNum + '회 · 채팅 ' + chatCount + ' · 찜 ' + product.likeNum}">
+							16분 전 · 조회 62회 · 채팅 3 · 찜 1</div>
 					</div>
-					<div class="price-wrapper">
-						<strong class="product-price" th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></strong>
-						<span class="badge safety-badge" th:if="${product.safeType == 'Y'}">안전거래</span>
-					</div>
-					<div class="product-meta" 
-					     th:text="${timeAgo + ' · 조회 ' + product.clickNum + '회 · 채팅 ' + chatCount + ' · 찜 ' + product.likeNum}">
-					    16분 전 · 조회 62회 · 채팅 3 · 찜 1
-					</div>
-				</div>
 
-				<!-- 상품 거래 조건 -->
-				<div class="transaction-specs">
-					<div class="spec-item">
-					  <span class="spec-title">거래방식</span>
-					
-					  <span class="spec-value"
-					        th:if="${'Y'.equals(product.meetType) and 'Y'.equals(product.deliveryType)}">
-					    직거래, 택배
-					  </span>
-					
-					  <span class="spec-value"
-					        th:if="${'Y'.equals(product.meetType) and not 'Y'.equals(product.deliveryType)}">
-					    직거래
-					  </span>
-					
-					  <span class="spec-value"
-					        th:if="${not 'Y'.equals(product.meetType) and 'Y'.equals(product.deliveryType)}">
-					    택배
-					  </span>
+					<!-- 상품 거래 조건 -->
+					<div class="transaction-specs">
+						<div class="spec-item">
+							<span class="spec-title">거래방식</span> <span class="spec-value"
+								th:if="${'Y'.equals(product.meetType) and 'Y'.equals(product.deliveryType)}">
+								직거래, 택배 </span> <span class="spec-value"
+								th:if="${'Y'.equals(product.meetType) and not 'Y'.equals(product.deliveryType)}">
+								직거래 </span> <span class="spec-value"
+								th:if="${not 'Y'.equals(product.meetType) and 'Y'.equals(product.deliveryType)}">
+								택배 </span>
+						</div>
+						<div class="spec-item">
+							<span class="spec-title">안전결제</span> <span class="spec-value"
+								th:if="${'Y'.equals(product.safeType)}">사용</span> <span class="spec-value"
+								th:unless="${'Y'.equals(product.safeType)}">미사용</span>
+						</div>
 					</div>
-					<div class="spec-item">
-						<span class="spec-title">안전결제</span> 
-						<span class="spec-value"
-						 th:if="${'Y'.equals(product.safeType)}">사용</span>
-						 <span class="spec-value"
-						 th:unless="${'Y'.equals(product.safeType)}">미사용</span>
-					</div>
-				</div>
 
-				<!-- 행동 버튼 -->
-				<div class="action-buttons">
-					<button class="wish-btn-border" id="wishBtn" 
-					        th:classappend="${isLiked} ? 'active' : ''">
-					    <img th:src="@{${isLiked} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}" 
-					         alt="찜하기" class="heart-icon" />
-					</button>
-					<button class="btn-chat">채팅하기</button>
-					<button class="btn-buy" th:onclick="|location.href='@{/buy/{prdNum}(prdNum=${product.prdNum})}'|">구매하기</button>
-				</div>
+					<!-- 행동 버튼 -->
+					<div class="action-buttons">
+						<button class="wish-btn-border" id="wishBtn" th:classappend="${isLiked} ? 'active' : ''">
+							<img th:src="@{${isLiked} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+								alt="찜하기" class="heart-icon" />
+						</button>
+						<button class="btn-chat">채팅하기</button>
+						<button class="btn-buy" th:onclick="productBuy()">구매하기</button>
+					</div>
 				</div>
 
 				<!-- 판매자 정보 -->
@@ -118,7 +109,7 @@
 					<h4>판매자정보</h4>
 					<div class="seller-profile">
 						<div class="seller-name" th:onclick="|location.href='@{/seller?id=1}'|" style="cursor: pointer;"
-						th:text="${user.nickname}">송민철영</div>
+							th:text="${user.nickname}">송민철영</div>
 						<div class="trust-score">
 							<span th:text="'신뢰지수 ' +${user.manner}"></span>
 							<div class="trust-gauge-bar">
@@ -127,25 +118,28 @@
 						</div>
 					</div>
 					<div class="seller-stats">
-						<span>안전거래 <b th:text="${safeCount}">0</b></span> 
-						<span>거래후기 <b th:text="${reviewCount}">1</b></span>
+						<span>안전거래 <b th:text="${safeCount}">0</b></span> <span>거래후기
+							<b th:text="${reviewCount}">1</b>
+						</span>
 					</div>
 
 				</div>
-				
-					<!-- 판매자의 다른 상품 -->
+
+				<!-- 판매자의 다른 상품 -->
+				<div th:if="${excludeProduct != null and excludeProduct.prdNum != null}">
 					<h5>판매자의 다른 상품</h5>
 					<div class="seller-other-item"
-						th:onclick="|location.href='@{/detail(id=${excludeProduct.prdNum})}'|"
-						style="cursor: pointer;">
-						<img th:src="@{${excludeImage.mainImage}}" alt="판매자의 다른 상품">
+						th:onclick="|location.href='@{/detail(id=${excludeProduct.prdNum})}'|" style="cursor: pointer;">
+						<img th:src="@{${excludeImage != null ? excludeImage.mainImage : '/images/default-product.jpg'}}"
+							alt="판매자의 다른 상품">
 						<div class="item-info">
 							<p th:text="${excludeProduct.title}"></p>
-							<strong th:text="${#numbers.formatInteger(excludeProduct.price, 3, 'COMMA')} + '원'">220,000원</strong> 
-							<span class="badge safety-badge"
-							th:if="${'Y'.equals(excludeProduct.safeType)}">안전거래</span>
+							<strong
+								th:text="${#numbers.formatInteger(excludeProduct.price, 3, 'COMMA')} + '원'">220,000원</strong>
+							<span class="badge safety-badge" th:if="${'Y'.equals(excludeProduct.safeType)}">안전거래</span>
 						</div>
 					</div>
+				</div>
 			</section>
 		</div>
 
@@ -154,22 +148,24 @@
 			<h2>이런 상품은 어때요?</h2>
 			<div class="card-list-wrapper-items multiple-items">
 				<div class="product-card" th:each="p, iterStat : ${relatedProducts}">
-				  <a th:href="@{/detail(id=${p.prdNum})}">
-				    <div class="product-image-container">
-				      <img th:src="@{${relatedImages[iterStat.index].mainImage}}" alt="관련 상품 이미지" />
-				    </div>
-				    <div class="product-info">
-				      <p class="product-name" th:text="${p.title}"></p>
-				      <strong class="product-price"
-				              th:text="${#numbers.formatInteger(p.price, 3, 'COMMA')} + '원'"></strong>
-				      <div class="product-meta-row">
-				        <p class="product-meta" th:text="${timeAgo}">10분 전</p>
-				        <button class="wish-btn">
-				          <img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
-				        </button>
-				      </div>
-				    </div>
-				  </a>
+					<a th:href="@{/detail(id=${p.prdNum})}">
+						<div class="product-image-container">
+							<img th:src="@{${relatedImages[iterStat.index].mainImage}}" alt="관련 상품 이미지" />
+						</div>
+						<div class="product-info">
+							<p class="product-name" th:text="${p.title}"></p>
+							<strong class="product-price"
+								th:text="${#numbers.formatInteger(p.price, 3, 'COMMA')} + '원'"></strong>
+							<div class="product-meta-row">
+								<p class="product-meta" th:text="${relatedTimeAgo[iterStat.index]}">10분 전</p>
+								<button class="wish-btn" th:attr="data-prd-num=${p.prdNum}"
+									th:classappend="${relatedProductsWish[iterStat.index]} ? ' active' : ''">
+									<img th:src="@{${relatedProductsWish[iterStat.index]} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+										alt="찜하기" class="heart-icon" />
+								</button>
+							</div>
+						</div>
+					</a>
 				</div>
 			</div>
 		</section>
@@ -178,58 +174,79 @@
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
 </body>
-<script th:inline="javascript">
-	const prdNum = [[${product.prdNum}]];
-</script>
 
 <script>
-$(function() {
+	function productBuy() {
+		var userNum = "[[${product.userNum}]]";
+		var prdNum = "[[${product.prdNum}]]";
+		axios.post('/sameUser', { userNum: userNum }).then(res => {
+			if (res.data.result) {
+				alert('본인의 물건을 구매할 수는 없습니다.');
+				return;
+			} else {
+				location.href = '/buy/' + prdNum;
+			}
+		});// axios
+	}
 
-	  $('.fade').slick({
-		    dots: true,
-		    infinite: true,
-		    speed: 500,
-		    fade: true,
-		    cssEase: 'linear',
-		    arrows: true,
-		    prevArrow: '<button class="carousel-nav prev-btn">&lt;</button>',
-		    nextArrow: '<button class="carousel-nav next-btn">&gt;</button>'
-		  });
-	 // 여기에 추가
-	$('.card-list-wrapper-items').slick({
-		infinite: true,
-		slidesToShow: 5,
-		slidesToScroll: 5,
-		dots: false,
-		arrows: true,
-	});
-	 
-	$('#wishBtn').click(() => {
-		axios.get('/product/wish', {
-		      params: { prdNum: prdNum }
-		    })
-			.then(res => {
-				const status = res.data;
-			    const img = $('#wishBtn img');
+	$(function () {
 
-			    if (status === 'liked') {
-			      $('#wishBtn').addClass('active');
-			      img.attr('src', '/images/productHeart/heart-on.png');
-			      alert("찜 등록 되었습니다");
-			    } else if (status === 'unliked') {
-			      $('#wishBtn').removeClass('active');
-			      img.attr('src', '/images/productHeart/heart-off.png');
-			      alert("찜 해제 되었습니다");
-			    }
+		// 본인 상품 체크
+
+
+		$('.fade').slick({
+			dots: true,
+			infinite: true,
+			speed: 500,
+			fade: true,
+			cssEase: 'linear',
+			arrows: true,
+			prevArrow: '<button class="carousel-nav prev-btn">&lt;</button>',
+			nextArrow: '<button class="carousel-nav next-btn">&gt;</button>'
+		});
+		// 여기에 추가
+		$('.card-list-wrapper-items').slick({
+			infinite: true,
+			slidesToShow: 5,
+			slidesToScroll: 5,
+			dots: false,
+			arrows: true,
+		});
+
+		// 찜 토글
+		$(document).on('click', '.wish-btn', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			const $btn = $(this);
+			const prdNum = $btn.data('prd-num');
+			const $img = $btn.find('img');
+
+			axios.get('/product/wish', {
+				params: { prdNum: prdNum }
 			})
-			.catch(err => {
-				console.log(err.response.status);
-				if (err.response?.status === 401) {
-					alert('로그인이 필요합니다.');
-					location.href = '/login';
-				}
-			});
+				.then(res => {
+					const status = res.data;
+					if (status === 'liked') {
+						$btn.addClass('active');
+						$img.attr('src', '/images/productHeart/heart-on.png');
+						alert("찜 등록 되었습니다");
+					} else if (status === 'unliked') {
+						$btn.removeClass('active');
+						$img.attr('src', '/images/productHeart/heart-off.png');
+						alert("찜 해제 되었습니다");
+					}
+				})
+				.catch(err => {
+					if (err.response?.status === 401) {
+						alert("로그인이 필요합니다.");
+						location.href = '/login';
+					} else {
+						console.error("찜 처리 오류:", err);
+					}
+				});
+		});
 	});
-});
 </script>
+
 </html>

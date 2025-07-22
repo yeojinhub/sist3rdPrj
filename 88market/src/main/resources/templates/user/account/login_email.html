@@ -70,7 +70,6 @@ $(function(){
  $("#btn").click(function(){
    const email = $("#email").val() + "@" + $("#email-domain").val();
    const pass  = $("#pass").val();
-   alert("버튼 클릭"+email+pass);
    
    $.ajax({
      url: loginURL,

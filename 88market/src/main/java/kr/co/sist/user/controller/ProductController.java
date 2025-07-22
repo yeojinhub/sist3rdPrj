@@ -2,7 +2,9 @@ package kr.co.sist.user.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,13 +48,14 @@ public class ProductController {
         return "user/product/success";
     }
 
+    @ResponseBody
     @GetMapping("/product/wish")
     public ResponseEntity<String> toggleWish(@RequestParam("prdNum") String prdNum,
                                              @AuthenticationPrincipal UserDetails user) {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
+        
         String userNum = user.getUsername();
         boolean alreadyLiked = productService.checkFavorite(userNum, prdNum);
 
@@ -230,11 +233,32 @@ public class ProductController {
         //시간차 계산
         String timeAgo = TimeAgoUtil.format(product.getInputDate());
         
+        //관련제품 시간차 계산
+        List<String> relatedTimeAgo = new ArrayList<String>();
+        for (ProductDTO P : relatedProducts) {
+        	relatedTimeAgo.add(TimeAgoUtil.format(P.getInputDate()));
+        }
+        
         //찜
         boolean isLiked = false;
         if (currentUser != null) {
             String currentUserNum = currentUser.getUsername(); 
             isLiked = productService.checkFavorite(currentUserNum, prdNum);
+        }
+        
+        //관련상품 찜
+        List<Boolean> relatedProductsWish = new ArrayList<Boolean>();
+	    if (currentUser != null) {
+            String currentUserNum = currentUser.getUsername();
+            for(ProductDTO P : relatedProducts) {
+            	boolean liked = productService.checkFavorite(currentUserNum, P.getPrdNum());
+            	relatedProductsWish.add(liked);
+            }
+        }else {
+            // 로그인 안 한 경우 false로 채움
+            for (int i = 0; i < relatedProducts.size(); i++) {
+            	relatedProductsWish.add(false);
+            }
         }
         
         model.addAttribute("product", product);
@@ -250,8 +274,33 @@ public class ProductController {
         model.addAttribute("relatedProducts", relatedProducts);
         model.addAttribute("relatedImages",relatedImages);
         model.addAttribute("isLiked",isLiked);
+        model.addAttribute("relatedProductsWish",relatedProductsWish);
+        model.addAttribute("relatedTimeAgo",relatedTimeAgo);
         
         return "user/product/detail";
+    }
+    
+    @GetMapping("/product/wishlist")
+    @ResponseBody
+    public Map<String, Object> getWishList(@AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return null;
+        }
+        String userNum = user.getUsername();
+        
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        List<ProductDTO> prdList = productService.selectWishlistByUserNum(userNum);
+        List<ImageDTO> imgList = new ArrayList<ImageDTO>();
+        
+        for (ProductDTO prd : prdList) {
+        	imgList.add(productService.selectImageByNum(prd.getImgNum()));
+        }// end for
+        
+        map.put("prdList", prdList);
+        map.put("imgList", imgList);
+        
+        return map;
     }
 
 

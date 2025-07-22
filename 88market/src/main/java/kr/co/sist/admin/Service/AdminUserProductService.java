@@ -80,7 +80,11 @@ public class AdminUserProductService {
 	        return aupDAO.selectByPrdNum(prdNum);
 	    }
 	    
-	    
+	    // 수정 - 상세 페이지
+	    @Transactional
+	    public void updateUserProduct(AdminUserProductDTO aupDTO) {
+	        aupDAO.updateUserProduct(aupDTO);
+	    }
 	  
 
 }

@@ -136,10 +136,13 @@ btn.addEventListener("click", function () {
       .then((data) => {
     	console.log(data);
     	if(data.success){
+    		// 회원가입 성공
         	alert("회원가입이 완료되었습니다.");
+    		// 메인화면으로 이동
         	window.location.href = mainURL;
     	} else {
-    		alert("서버에서 가입 처리를 실패했습니다.");
+    		// 회원가입 실패
+    		alert(data.message);
         } //end if else
       }) // 응답 처리
       .catch((err) => {

@@ -88,8 +88,38 @@ public class AdminUserProductController {
 		  return "admin/userProduct/userProductDetail";
 	  }
   
-  
-}
+	  // 저장,수정 - 상세 페이지 
+	  @PostMapping("/save")
+	  public String save(@ModelAttribute("product") AdminUserProductDTO dto, @RequestParam("status") String status) {
+		  switch(status) {
+		  	case "reserved":dto.getProduct().setAppointType("Y");
+		  					dto.getProduct().setSellType("N"); break;
+		  	case "sold":dto.getProduct().setSellType("Y");
+						dto.getProduct().setAppointType("N"); break;
+		 default:dto.getProduct().setSellType("N");
+		 		dto.getProduct().setAppointType("N");
+		 		}
+		  if (dto.getProduct().getDeliveryType() == null) {
+			  dto.getProduct().setDeliveryType("N");
+		  	}
+		  if (dto.getProduct().getMeetType() == null) {
+			  dto.getProduct().setMeetType("N");
+		  }
+		  if (dto.getProduct().getSafeType() == null) {
+			  dto.getProduct().setSafeType("N");
+		  }
+
+		  service.updateUserProduct(dto);
+	      try {
+	          service.updateUserProduct(dto);
+	          return "redirect:/admin/userProduct/list?saved=true";
+	      } catch (Exception e) {
+	          return "redirect:/admin/userProduct/list?saved=false";
+	      }
+	  }//save
+	  
+
+}//침ㄴㄴ
 
 	
 

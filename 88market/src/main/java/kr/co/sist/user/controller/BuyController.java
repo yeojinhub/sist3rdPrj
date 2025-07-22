@@ -64,8 +64,20 @@ public class BuyController {
     		e.printStackTrace();
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","결제에 실패하였습니다. 다시 시도 해주세요."));
     		
-    	}
+    	}//end try-catch
     	
-    }
+    }// payment
+    
+    @PostMapping("/sameUser")
+    @ResponseBody
+    public ResponseEntity<?> sameUser(@RequestBody Map<String, String> map, @AuthenticationPrincipal UserDetails user) {
+    	
+    	if (user != null && map.get("userNum").equals(user.getUsername())) {
+    		return ResponseEntity.ok(Map.of("result",true));
+    	} else {
+    		return ResponseEntity.ok(Map.of("result",false));
+    	}// end if-else
+    	
+    }// sameUser
 	
-}
+}// class

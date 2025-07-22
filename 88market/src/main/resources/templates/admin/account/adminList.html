@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 관리자 계정 관리</title>
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
+<!-- 관리자 계정 관리 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 페이지 타이틀 -->
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('계정 관리','관리자 계정 관리')}" />
+		
+			<!-- 메인 컨텐츠 (관리자 계정 관리) -->
+			<main class="container">
+				<section class="search-section">
+					<!-- 검색 폼 추가 (method="get") -->
+					<form id="searchForm" th:action="@{/admin/account}" method="get">
+						<div class="search-box">
+							<input type="text" class="search-input" name="keyword"
+								 placeholder="검색">
+							<button type="submit" class="search-button">검색</button>
+							<!-- 검색 초기화 버튼 추가 -->
+							<button type="button" class="search-button" id="resetSearch">초기화</button>
+							<input type="radio" /> 전체 관리자
+							<input type="radio" /> 일반 관리자
+							<input type="radio" /> 총괄 관리자
+						</div>
+					</form>
+				</section>
+
+				<section class="account-section">
+					<table class="account-table">
+						<thead>
+							<tr>
+								<th class="hidden">번호</th>
+								<th>이름</th>
+								<th>관리자 유형</th>
+								<th>정지여부</th>
+								<th>가입일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item, i : ${adminList}" class="table-row">
+								<td class="hidden" th:text=${item.admNum}></td>
+								<td class="account-title" th:text="${item.name}"
+									style="cursor: pointer; text-align: center;"
+									th:onclick="|location.href='@{/admin/account/adminDetail(admNum=${item.admNum})}'|"></td>
+								<td th:if="${item.rollType==2} ">일반 관리자</td>
+								<td th:if="${item.rollType==1} ">총괄 관리자</td>
+								<td th:text="${item.banType}"></td>
+								<td><span class="status-badge status-visible" th:text="${item.inputDate}"></span></td>
+							</tr>
+							<tr th:if="${#lists.isEmpty(adminList)}">
+								<td colspan="5" style="text-align: center;">관리자 계정 정보가 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="table-footer">
+						<div class="table-controls">
+							<button class="control-button"
+								th:onclick="|location.href='@{/admin/account/adminAdd}'|">등록</button>
+						</div>
+					</div>
+				</section>
+			</main>
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
+		</div>
+	</div>
+</body>
+
+</html>

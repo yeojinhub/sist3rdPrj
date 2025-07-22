@@ -1,88 +1,25 @@
 @charset "UTF-8";
-/* 페이지 전체 배경 */
-body {
-  background-color: #f9f9fb;
+/* 기본 스타일 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
 }
 
-/* wrapper를 가운데 정렬하고 최대 너비 지정 */
+/* 전체 레이아웃 */
 .admin-wrapper {
-  max-width: 1440px;
-  margin: 0 auto;
+    display: flex;
 }
 
-/* 메인 컨텐츠 */
+/* 메인 컨텐츠 영역 */
 .main-content {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 실제 컨텐츠 카드 (두 번째 main) */
-main.main-content {
-  background: #fff;
-  border-radius: 8px;
-  padding: 40px;
-  box-shadow: none; /* 필요에 따라 그림자 추가 가능 */
-}
-
-/* 헤더 */
-.main-header {
-  background: #fff;
-  padding: 20px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #e0e0e0;
-}
-/* 헤더와 패딩 간격 재조정 */
-header.main-header {
-  padding: 0 0 20px 0;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-.breadcrumbs span { font-size: 1.2em; font-weight: bold; }
-.breadcrumbs .current-page { color: #555; }
-
-/* 컨테이너: 좌우 레이아웃 */
-.container {
-  background: #eeeeee;
-  padding: 30px;
-  flex-grow: 1;
-  display: flex;
-  gap: 30px;
-}
-
-/* 페이지 탭 (좌측 네비게이션) */
-.page-tabs {
-  display: flex;
-  justify-content: center;    /* 가로 축 중앙 정렬 */
-  width: 100%;                /* 부모 넓이에 맞춤 */
-  max-width: 1000px;          /* 필요하면 고정폭 상한 */
-  margin: 0 auto;             /* 전체 블록도 가운데로 */
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-}
-.page-tabs .tab {
-  width: 100%;
-  padding: 16px;
-  background: none;
-  border: none;
-  font-size: 1em;
-  font-weight: 500;
-  color: #666;
-  text-align: center;
-  cursor: pointer;
-  transition: background .2s, color .2s;
-}
-.page-tabs .tab:not(:last-child) {
-  border-bottom: 1px solid #e0e0e0;
-}
-.page-tabs .tab.active {
-  background: #7fd0f4;
-  color: #333;
-  font-weight: 600;
+    margin-left: 250px;
+    flex: 1;
+    min-width: 0; /* Flexbox 오버플로우 방지 */
+    display: flex;
+    flex-direction: column;
 }
 
 /* 개인정보 폼 (우측 영역) */
@@ -99,6 +36,73 @@ header.main-header {
   font-size: 1.2em;
   font-weight: 600;
   margin-bottom: 20px;
+}
+
+/* 이미지 */
+.image-upload-area {
+    width: 100%;
+    height: 120px;
+    border: 2px dashed #d0d0d0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-upload-area:hover {
+    border-color: #7fd0f4;
+    background-color: #f8fdff;
+}
+
+.upload-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #999;
+}
+
+.upload-placeholder i {
+    font-size: 24px;
+}
+
+.image-upload-area.has-image {
+    border-style: solid;
+    border-color: #e6e6e6;
+}
+
+.image-upload-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.image-upload-area .remove-image {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.image-upload-area .remove-image:hover {
+    background-color: rgba(0, 0, 0, 0.9);
 }
 
 /* 폼 그룹 */
