@@ -23,12 +23,18 @@ public class CategoryService {
 	
     // 카테고리 등록
     public void create(CategoryDTO dto) {
-        categoryDAO.insert(dto);
+    	if (categoryDAO.countByName(dto.getName()) > 0) {
+    			throw new IllegalArgumentException("이미 사용 중인 카테고리 이름입니다.");
+    		}
+    	categoryDAO.insert(dto);
     }
 
     // 카테고리 수정
     public void update(CategoryDTO dto) {
-        categoryDAO.update(dto);
+    	if (categoryDAO.countByName(dto.getName()) > 0) {
+			throw new IllegalArgumentException("이미 사용 중인 카테고리 이름입니다.");
+		}
+    	categoryDAO.update(dto);
     }
 
     //  카테고리 삭제

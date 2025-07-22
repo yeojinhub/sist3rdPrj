@@ -29,9 +29,16 @@
 			<!-- 메인 컨텐츠 (상품 관리) -->
       <main class="container">
         <section class="notice-form-section">
+        <!-- 알림란 - 예외처리됨 -->
+			<div th:if="${errorMessage}" class="alert alert-danger" style="margin-bottom: 1em;">
+			 <p th:text="${errorMessage}"></p>
+			</div>
+			<div th:if="${successMessage}" class="alert alert-success" style="margin-bottom: 1em;">
+			<p th:text="${successMessage}"></p>
+			</div>
           <!-- 등록 폼 -->
           <form th:action="@{/admin/category}" th:object="${categoryDTO}" method="post" style="margin-bottom:20px;">
-            <input type="text" name="catNum" th:value="${categoryDTO.catNum > 0} ? ${categoryDTO.catNum} : ''"  class="form-input" placeholder="새 카테고리 번호"  style="width:15%; display:inline-block;"/>
+            <input type="text" name="catNum" pattern="\d+" required oninvalid="this.setCustomValidity('카테고리 번호는 숫자만 입력해주세요.')" th:value="${categoryDTO.catNum > 0} ? ${categoryDTO.catNum} : ''"  class="form-input" placeholder="새 카테고리 번호"  style="width:15%; display:inline-block;"/>
             <input type="text" th:field="*{name}" class="form-input" placeholder="새 카테고리 이름" style="width: 30%" required/>
             <button type="submit" class="control-button">등록</button>
           </form>
@@ -47,13 +54,13 @@
             </thead>
             <tbody>
               <tr th:each="ctg : ${categories}">
-                <td>
+                <td style="text-align:center; vertical-align:middle;">
                   <form th:action="@{/admin/category/{id}(id=${ctg.catNum})}" method="post" style="display:inline-block;">
                     <input type="hidden" name="_method" value="put" />
-                    <input type="text" name="catNum" th:value="${ctg.catNum}" style="width:60px; text-align:center;" required/>
+                    <input type="text" name="catNum" th:value="${ctg.catNum}" style="width:100px; height:40px; font-size:16px; text-align:center;" required/>
                 </td>
-                <td>
-                    <input type="text" name="name" th:value="${ctg.name}" style="width:200px;" required/>
+                <td style="text-align:center; vertical-align:middle;">
+                    <input type="text" name="name" th:value="${ctg.name}" style="width:150px; height:40px; font-size:16px" required/>
                 </td>
                 <td>
                     <button type="submit" class="control-button">저장</button>

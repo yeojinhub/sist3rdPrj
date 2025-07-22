@@ -11,8 +11,6 @@
 		ORDER BY CAT_NUM
 	</select>
 
-
-
 	<!-- selectCategoryById : 카테고리 번호에 해당하는 것  -->
 	<select id="selectCategoryById" parameterType="int" resultType="kr.co.sist.DTO.CategoryDTO">
 		SELECT  CAT_NUM AS catNum,NAME as name
@@ -43,8 +41,15 @@
 	  <!-- 삭제 -->
 	  <delete id="delete" parameterType="int">
 	    DELETE FROM CATEGORY
-	     WHERE CAT_NUM = #{catNum}
+	    WHERE CAT_NUM = #{catNum}
 	  </delete>
+	  
+	  <!-- 중복 이름 처리 -->
+	<select id="countByName" parameterType="string" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM CATEGORY 
+	    WHERE NAME = #{name}
+	</select>
   
 </mapper>
 
