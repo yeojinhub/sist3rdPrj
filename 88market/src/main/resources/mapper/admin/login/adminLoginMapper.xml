@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminLoginDAO">
+
+    <select id="selectAdminByIdAndPass" resultType="kr.co.sist.DTO.AdminDTO">
+        SELECT
+            ADM_NUM as admNum,
+            NAME as name,
+            ID as id,
+            PASS as pass,
+            TEL as tel,
+            INPUT_DATE as input_date,
+            BAN_DATE as ban_date,
+            BANTYPE as bantype,
+            ROLLTYPE as rolltype
+        FROM ADMIN
+        WHERE ID = #{id} AND PASS = #{pass}
+    </select>
+
+    <select id="selectCompanyByIdAndPass" resultType="kr.co.sist.DTO.CompanyDTO">
+        SELECT
+            COM_NUM as comNum,
+            COM_NAME as comName,
+            CEO_NAME as ceoName,
+            NAME as name,
+            IMAGE as image,
+            ID as id,
+            PASS as pass,
+            TEL as tel,
+            ZIPCODE as zipcode,
+            ADDRESS as address,
+            INPUT_DATE as inputDate,
+            DRAW_DATE as drawDate,
+            WITHDRAW as withdraw
+        FROM COMPANY
+        WHERE ID = #{id} AND PASS = #{pass}
+    </select>
+
+</mapper>
