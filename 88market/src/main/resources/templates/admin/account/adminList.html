@@ -5,7 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 - 관리자 계정 관리</title>
-<!-- 관리자 관리자 계정 관리 CSS -->
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
+<!-- 관리자 계정 관리 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
@@ -14,16 +19,14 @@
 <body>
 	<!-- 고정 사이드바 -->
 	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
 
 	<div class="admin-wrapper">
 		<div class="main-content">
-			<!-- 헤더 -->
-			<header class="main-header">
-				<div class="breadcrumbs">
-					<span>계정 관리 &gt;</span> <span class="current-page">관리자 계정 관리</span>
-				</div>
-			</header>
-
+			<!-- 페이지 타이틀 -->
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('계정 관리','관리자 계정 관리')}" />
+		
 			<!-- 메인 컨텐츠 (관리자 계정 관리) -->
 			<main class="container">
 				<section class="search-section">
@@ -46,7 +49,7 @@
 					<table class="account-table">
 						<thead>
 							<tr>
-								<th><input type="checkbox" class="all-checkbox"></th>
+								<th class="hidden">번호</th>
 								<th>이름</th>
 								<th>관리자 유형</th>
 								<th>정지여부</th>
@@ -55,16 +58,14 @@
 						</thead>
 						<tbody>
 							<tr th:each="item, i : ${adminList}" class="table-row">
-								<td>
-									<input type="checkbox" class="checkbox" th:id="'checkbox' + ${i.count}" th:data-notice-num="${item.admNum}" />
-								</td>
+								<td class="hidden" th:text=${item.admNum}></td>
 								<td class="account-title" th:text="${item.name}"
 									style="cursor: pointer; text-align: center;"
 									th:onclick="|location.href='@{/admin/account/adminDetail(admNum=${item.admNum})}'|"></td>
-								<td th:if="${item.rolltype==1} ">일반 관리자</td>
-								<td th:if="${item.rolltype==2} ">총괄 관리자</td>
-								<td th:text="${item.bantype}"></td>
-								<td><span class="status-badge status-visible" th:text="${item.input_date}"></span></td>
+								<td th:if="${item.rollType==2} ">일반 관리자</td>
+								<td th:if="${item.rollType==1} ">총괄 관리자</td>
+								<td th:text="${item.banType}"></td>
+								<td><span class="status-badge status-visible" th:text="${item.inputDate}"></span></td>
 							</tr>
 							<tr th:if="${#lists.isEmpty(adminList)}">
 								<td colspan="5" style="text-align: center;">관리자 계정 정보가 없습니다.</td>

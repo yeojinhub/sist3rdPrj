@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				// 수정 성공
 				alert("회원 정보 수정이 완료되었습니다.");
 	    		// 이전 화면으로 이동
-	        	window.history.back();
+				window.location.href = '/admin/account/users';
 	    	} else {
 	    		// 수정 실패
 	    		alert(data.msg);
@@ -68,44 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		}); // 에러 처리
 	}); //btnModify
 	
-	const btnRemove = document.getElementById("btnRemove");
-
-	btnRemove.addEventListener("click", function () {
-		const userNum = document.getElementById("userNum").value;
-		
-		const jsonParam = {
-			userNum : userNum
-		}
-		
-		fetch('/admin/account/removeProcess', {
-			method: "POST",
-			headers: {
-				 "Content-Type": "application/json; charset=UTF-8",
-			 },
-			 body: JSON.stringify(jsonParam),
-		}).then((res) => {
-			if (!res.ok) throw new Error(`HTTP 에러 ${res.status}`);
-			return res.json();
-		}).then((data) => {
-			console.log(data);
-			if(data.result){
-				// 삭제 성공
-				alert("회원 정보 삭제가 완료되었습니다.");
-	    		// 이전 화면으로 이동
-	        	window.history.back();
-	    	} else {
-	    		// 삭제 실패
-	    		alert(data.msg);
-	        } //end if else
-		}).catch((err) => {
-	        console.error("삭제 오류:", err);
-		}); // 에러 처리
-	}); //btnRemove
-	
 	const btnBack = document.getElementById("btnBack");
 	btnBack.addEventListener("click", function () {
 		// 이전 화면으로 이동
-		window.history.back();
+		window.location.href = '/admin/account/users';
 	}); //btnBack
 	
 }); //DOMContentLoaded

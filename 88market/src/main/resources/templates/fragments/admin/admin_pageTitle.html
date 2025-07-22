@@ -1,0 +1,8 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="pageTitle(breadcrumb, title)">
+	<header class="main-header">
+		<div class="breadcrumbs">
+			<span th:text="${breadcrumb} + ' >'"></span>
+			<span class="current-page" th:text="${title}"></span>
+		</div>
+	</header>
+</div>

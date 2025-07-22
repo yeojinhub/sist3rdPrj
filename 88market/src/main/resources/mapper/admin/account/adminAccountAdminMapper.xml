@@ -4,29 +4,17 @@
 
 <mapper namespace="kr.co.sist.admin.DAO.AdminAccountAdminDAO">
 
-  <resultMap id="adminMap" type="kr.co.sist.DTO.AdminDTO">
-    <id     property="admNum"    column="ADM_NUM"/>
-    <result property="name"      column="NAME"/>
-    <result property="id"        column="ID"/>
-    <result property="pass"      column="PASS"/>
-    <result property="tel"       column="TEL"/>
-    <result property="input_date" column="INPUT_DATE"/>
-    <result property="ban_date"  column="BAN_DATE"/>
-    <result property="bantype"   column="BANTYPE"/>
-    <result property="rolltype"  column="ROLLTYPE"/>
-  </resultMap>
-
-	<select id="selectAdminList" resultMap="adminMap">
+	<select id="selectAdminList" resultType="kr.co.sist.DTO.AdminDTO" parameterType="String">
 	SELECT
 		ADM_NUM, NAME, ROLLTYPE, BANTYPE, INPUT_DATE
 	FROM ADMIN
 	ORDER BY
-		INPUT_DATE
+		INPUT_DATE DESC
 	</select>
 	
-	<select id="selectOneAdmin" resultMap="adminMap" parameterType="String">
+	<select id="selectOneAdmin" resultType="kr.co.sist.DTO.AdminDTO" parameterType="String">
 	SELECT
-		NAME, TEL, ID, PASS, BANTYPE, INPUT_DATE
+		ADM_NUM, NAME, TEL, ID, PASS, INPUT_DATE, ROLLTYPE, BANTYPE, BAN_DATE
 	FROM ADMIN
 	WHERE
 		ADM_NUM=#{admNum}
@@ -36,14 +24,19 @@
 	INSERT INTO ADMIN
     	(ADM_NUM, NAME, ID, PASS, TEL, INPUT_DATE, BANTYPE)
     VALUES(SEQ_ADM_NUM.NEXTVAL, #{name}, #{id}, #{pass}, #{tel},
-   		#{input_date, jdbcType=DATE}, #{bantype, jdbcType=CHAR})
+   		#{inputDate, jdbcType=DATE}, #{banType, jdbcType=CHAR})
 	</insert>
 	
 	<update id="updateAdmin" parameterType="kr.co.sist.DTO.AdminDTO">
 	UPDATE ADMIN
-	SET
+	<set>
 		NAME=#{name}, ID=#{id}, TEL=#{tel},
-		BANTYPE=#{bantype}
+		ROLLTYPE = #{rollType, jdbcType=INTEGER},
+		BANTYPE=#{banType, jdbcType=CHAR},
+		<if test="banType.equals('Y')">
+			BANDATE=SYSDATE
+		</if>
+	</set>
 	WHERE
 		ADM_NUM=#{admNum}
 	</update>

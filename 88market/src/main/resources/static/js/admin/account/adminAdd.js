@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			tel : tel,
 			id : id,
 			pass : pass,
-			input_date : regDate,
-			bantype : banValue
+			inputDate : regDate,
+			banType : banValue
 		};
 		
 		fetch('/admin/account/adminAddProcess', {

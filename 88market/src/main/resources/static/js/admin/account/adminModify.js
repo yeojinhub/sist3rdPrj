@@ -7,14 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		const name = document.getElementById("name").value;
 	    const tel = document.getElementById("tel").value;
 	    const id = document.getElementById("id").value;
-		const banValue = document.querySelector('input[name="ban"]:checked').value;
+		const rollType = document.querySelector('input[name="roll"]:checked').value;
+		const banType = document.querySelector('input[name="ban"]:checked').value;
 
 	    const jsonParam = {
 			admNum : admNum,
 			name : name,
 			tel : tel,
 			id : id,
-			bantype : banValue
+			rollType : rollType,
+			banType : banType
 		};
 		
 		fetch('/admin/account/adminModifyProcess', {

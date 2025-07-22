@@ -39,7 +39,8 @@
 		u.BANTYPE,
 		u.WITHDRAW,
 		u.INPUT_DATE
-	ORDER BY u.INPUT_DATE
+	ORDER BY
+		u.INPUT_DATE DESC
 	</select>
 	
 	<select id="selectOneUser" resultType="kr.co.sist.DTO.UserDTO" parameterType="String">

@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				// 등록 성공
 				alert("회원 정보 등록이 완료되었습니다.");
 	    		// 이전 화면으로 이동
-	        	window.history.back();
+	        	window.location.href = '/admin/account/users';
 	    	} else {
 	    		// 등록 실패
 	    		alert(data.msg);
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const btnBack = document.getElementById("btnBack");
 	btnBack.addEventListener("click", function () {
 		// 이전 화면으로 이동
-		window.history.back();
+		window.location.href = '/admin/account/users';
 	}); //btnBack
 	
 }); //DOMContentLoaded
