@@ -24,4 +24,8 @@ public interface CategoryDAO {
 
     // 삭제
     void delete(int id);
+    
+    // 중복 이름 처리
+    int countByName(@Param("name") String name);
+    
 }
