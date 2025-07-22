@@ -44,7 +44,7 @@ public class ProductService {
         return productDAO.selectProductByNum(prdNum);
     }
     
-    public ImageDTO selectImageByNum(int imgNum) {
+    public ImageDTO selectImageByNum(Integer imgNum) {
     	return imageDAO.selectImageByNum(imgNum);
     }
     
