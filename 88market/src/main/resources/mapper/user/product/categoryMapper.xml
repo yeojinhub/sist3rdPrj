@@ -19,5 +19,32 @@
 		FROM CATEGORY
 		WHERE CAT_NUM = #{catNum}
 	</select>
+	
+		<!-- 관리자 - 카테고리 목록 가져오기 -->
+	<select id="findAll" resultType="kr.co.sist.DTO.CategoryDTO">
+		SELECT CAT_NUM AS catNum, NAME AS name
+		FROM CATEGORY
+		ORDER BY CAT_NUM
+	</select>
+
+	  <!-- 등록 -->
+	<insert id="insert" parameterType="kr.co.sist.DTO.CategoryDTO">
+		INSERT INTO CATEGORY (CAT_NUM, NAME)
+		VALUES (#{catNum}, #{name})
+	</insert>
+	
+	  <!-- 수정 -->
+	<update id="update" parameterType="kr.co.sist.DTO.CategoryDTO">
+		UPDATE CATEGORY
+		SET NAME = #{name}
+		WHERE CAT_NUM = #{catNum}
+	</update>
+	
+	  <!-- 삭제 -->
+	  <delete id="delete" parameterType="int">
+	    DELETE FROM CATEGORY
+	     WHERE CAT_NUM = #{catNum}
+	  </delete>
+  
 </mapper>
 

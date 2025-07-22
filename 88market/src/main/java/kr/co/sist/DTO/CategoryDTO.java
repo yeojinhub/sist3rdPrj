@@ -19,6 +19,6 @@ public class CategoryDTO {
 	private int catNum; /* 카테고리번호 */
 	private String name; /* 카테고리이름 */
 	
-	private int productCount; /* 카테고리에 따른 상품 개수 */
+	private int productCount; /* 카테고리에 따른 상품 개수 */                                                                                                                                                                                                                                                                                                 
 
 } //class

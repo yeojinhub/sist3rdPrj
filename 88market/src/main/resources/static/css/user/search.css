@@ -1,3 +1,11 @@
+a,
+a:visited,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none !important;
+}
+
 .search-page-container_search {
     width: 100%;
     max-width: 1280px;
@@ -398,6 +406,38 @@
 .chats_search:hover {
     color: #7fd0f4;
 }
+
+
+/* ---------- CSS 추가/수정 ---------- */
+/* 광고 카드만 상대 위치로, overflow 풀기 */
+.results-grid_search .product-card_search.ad-item {
+  position: relative;
+  overflow: visible;
+}
+
+/* 뱃지를 항상 같은 크기·위치로 고정 */
+.results-grid_search .product-card_search.ad-item .ad-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  transform: none !important;      /* 호버 변형 차단 */
+  font-size: 11px;                 /* 원래 폰트 크기 */
+  padding: 4px 8px;                /* 원래 패딩 */
+  z-index: 10;                     /* 카드 위로 */
+  background-color: #7fd0f4;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/* 호버 시에도 변화 없이 그대로 */
+.results-grid_search .product-card_search.ad-item:hover .ad-badge {
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+
+
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {

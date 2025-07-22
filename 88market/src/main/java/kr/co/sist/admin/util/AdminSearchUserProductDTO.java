@@ -19,7 +19,6 @@ public class AdminSearchUserProductDTO {
 	private String statusFilter; //상태 - 전체, 판매중, 예약중, 거래완료- 전체가 기본
 	private String hideFilter=""; // 숨김 필터 - 전체가 기본
 
-	
 	// 페이징 파라미터
 	private int pageNum  = 1;
 	private int pageSize = 15;

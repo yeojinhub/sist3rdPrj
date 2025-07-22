@@ -10,6 +10,9 @@
 		FROM (
 				SELECT *
 				FROM PRODUCT
+				WHERE COM_NUM IS NULL
+				AND SELL_TYPE   = 'N'    <!-- 판매중인 것만 -->
+				AND APPOINT_TYPE = 'N'   <!-- 예약중이 아닌 것만 -->
 				ORDER BY LIKE_NUM DESC
 				)
 		WHERE ROWNUM &lt;= #{limit}
@@ -23,6 +26,9 @@
 				SELECT *
 				FROM PRODUCT
 				WHERE CAT_NUM = #{catNum}
+				AND COM_NUM IS NULL
+				AND SELL_TYPE   = 'N'    <!-- 판매중인 것만 -->
+				AND APPOINT_TYPE = 'N'   <!-- 예약중이 아닌 것만 -->
 				ORDER BY DBMS_RANDOM.VALUE
 				)
 		WHERE ROWNUM &lt;= #{limit}
@@ -35,7 +41,10 @@
 		FROM (
 			SELECT *
 			FROM PRODUCT
-			ORDER BY ClICK_NUM DESC
+		    WHERE COM_NUM IS NULL
+		      AND SELL_TYPE    = 'N'    <!-- 판매중인 것만 -->
+		      AND APPOINT_TYPE = 'N'    <!-- 예약중이 아닌 것만 -->
+		    ORDER BY CLICK_NUM DESC     <!-- CLICK_NUM 오타 주의 -->
 			)
 		WHERE ROWNUM &lt;= #{limit}
 	</select>
@@ -72,50 +81,56 @@
     <!-- 필터를 이용한 정렬 -->
     <select id="findByKeywordAndFilters" parameterType="map" resultType="kr.co.sist.DTO.ProductDTO">
     	SELECT *
-    	FROM PRODUCT
+    	FROM PRODUCT P
+    	LEFT JOIN USERS U
+    		ON P.USER_NUM = U.USER_NUM
     	<where>
     	<!-- 키워드 -->
     	<if test="keyword != null and keyword != ''">
-    	AND TITLE LIKE '%' || #{keyword} || '%'
+    	AND P.TITLE LIKE '%' || #{keyword} || '%'
     	</if>
     	
     	<!-- 카테고리 -->
 	    <if test="catNum != null">
-	    AND CAT_NUM = #{catNum}
+	    AND P.CAT_NUM = #{catNum}
 	    </if>
 	    
 	    <!-- 가격 범위 -->
 	    <!-- 최소 -->
     	<if test="minPrice != null">
-    	AND PRICE &gt;= #{minPrice}
+    	AND P.PRICE &gt;= #{minPrice}
     	</if>
 	    <!-- 최대 -->
     	<if test="maxPrice != null">
-    	AND PRICE &lt;= #{maxPrice}
+    	AND P.PRICE &lt;= #{maxPrice}
     	</if>
     	
     	<!-- 거래가능만 보기 -->
     	<if test="tradeOption == '거래가능'">
-    	AND SELL_TYPE = 'N'
+    	AND P.SELL_TYPE = 'N'
     	</if>
-    	AND COM_NUM IS NULL
+    	AND P.COM_NUM IS NULL
     	</where>
     	
     	<!-- 정렬 옵션 -->
     	<choose>
     	<when test="sortOption == '최신순'">
-    	ORDER BY INPUT_DATE DESC
+    	ORDER BY P.INPUT_DATE DESC
     	</when>
     	<when test="sortOption == '낮은가격순'">
-    	ORDER BY PRICE ASC
+    	ORDER BY P.PRICE ASC
     	</when>
     	<when test="sortOption == '높은가격순'">
-    	ORDER BY PRICE DESC
+    	ORDER BY P.PRICE DESC
     	</when>
     	
-    	<!-- 추천순: 찜수 -->
+    	<!-- 추천순: 찜(0.5)+조회수(0.3)+신뢰(MANER->0.2) -->
     	<otherwise>
-    	ORDER BY LIKE_NUM DESC
+    	ORDER BY ( 
+    	NVL(P.LIKE_NUM,0) * 0.5
+    	+ NVL(P.CLICK_NUM,0)* 0.3
+    	+ NVL(U.MANNER,0)   * 0.2
+    	) DESC
     	</otherwise>
     	</choose>
     </select>

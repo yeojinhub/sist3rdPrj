@@ -15,7 +15,7 @@
 	<!-- 고정 사이드바 -->
 	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
 	<!-- 상단 헤더 -->
-	<div th:replace="fragments/admin/admin_header :: header"></div>
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
 	
 	<div class="admin-wrapper">
 		<div class="main-content">
@@ -98,7 +98,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="item, i : ${userProductList}" class="table-row">
+							<tr th:each="item, i : ${userProductList}"  class="table-row">
 							  <td><input type="checkbox" class="checkbox" th:data-prd-num="${item.product.prdNum}" th:id="'checkbox' + ${i.count}"/></td>
 							  <td th:text="${item.product.prdNum}"></td>
 							    <td>
@@ -107,7 +107,8 @@
 							         style="color:#007bff; text-decoration:none;">
 							      </a>
 							    </td>
-							  <td th:text="${item.user.email}"></td>
+							  <!-- <td th:text="${item.user.email}"></td> -->
+							  <td th:text="${item.user != null ? item.user.email : '—익명—'}"></td>
 							  <td th:text="${item.category.name}"></td>
 							  <td th:text="|${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT')}원|"></td>
 							  <td th:text="${item.product.inputDate}"></td>
@@ -261,6 +262,18 @@
 		});// click
     });
 </script>
-
+	<script th:inline="javascript">
+	  function showSaveAlert() {
+	    const params = new URLSearchParams(window.location.search);
+	    const saved  = params.get('saved');
+	    if (saved === 'true') {
+	      alert('수정이 완료되었습니다.');
+	    } else if (saved === 'false') {
+	      alert('수정에 실패했습니다.');
+	    }
+	    history.replaceState(null, '', window.location.pathname);
+	  }
+	  document.addEventListener('DOMContentLoaded', showSaveAlert);
+	</script>
 </body>
 </html>
