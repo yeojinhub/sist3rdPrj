@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.sist.DTO.CategoryDTO;
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.ProductDTO;
@@ -33,11 +36,16 @@ public class AdminPlaningContorller {
 	private AdminPlaningService adminPlaningService;
 	
 	@GetMapping("/planingList")
-	public String planing(@RequestParam(defaultValue = "abc123") String id,
-		    @RequestParam(defaultValue = "1") int page,
+	public String planing(@RequestParam(defaultValue = "1") int page,
 		    @RequestParam(defaultValue = "") String keyword,
 		    @RequestParam(defaultValue = "all") String hidden, // all, Y, N
-		    Model model) {
+		    Model model,
+		    HttpSession session) {
+		
+		String id = (String) session.getAttribute("loginId");  // 로그인 시 저장된 세션값
+	    if (id == null) {
+	        return "redirect:/admin/login"; // 로그인 안 되어 있으면 로그인 페이지로
+	    }
 		
 		// 1. comNum 조회
 	    String comNum = adminPlaningService.getComNumById(id);
@@ -69,7 +77,9 @@ public class AdminPlaningContorller {
 	}
 	
 	@GetMapping("/planingAdd")
-	public String PlanningAdd(Model model) {
+	public String PlanningAdd(Model model, HttpSession session) {
+		String id = (String) session.getAttribute("loginId");
+	    if (id == null) return "redirect:/login";
 		
 		List<CategoryDTO> categories = adminPlaningService.getAllCategories();
 	    model.addAttribute("categories", categories);
@@ -83,9 +93,14 @@ public class AdminPlaningContorller {
 	@PostMapping(value = "/planingAdd", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> savePlanning(
 	        @RequestPart("product") ProductDTO productDTO,
-	        @RequestPart(value = "images", required = false) List<MultipartFile> images   // null 가능
-	) {
+	        @RequestPart(value = "images", required = false) List<MultipartFile> images,   // null 가능
+	        HttpSession session) {
 
+		String id = (String) session.getAttribute("loginId");
+	    if (id == null) return ResponseEntity.status(401).body("로그인 필요");
+		
+	    String comNum = adminPlaningService.getComNumById(id);
+	    
 	    String prdNum = null;
 	    File   uploadFolder = null;
 
@@ -103,7 +118,7 @@ public class AdminPlaningContorller {
 	        // ── 3. ImageDTO 채우기 ──────────────────────
 	        ImageDTO imageDTO = new ImageDTO();
 	        imageDTO.setImgNum(imgSeq);
-	        imageDTO.setImageType("1");        // 관리자 상품 고정
+	        imageDTO.setImageType(comNum);
 
 	        if (images != null) {
 	            for (int i = 0; i < images.size(); i++) {
@@ -121,8 +136,7 @@ public class AdminPlaningContorller {
 	        // ── 4. ProductDTO 채우기 ────────────────────
 	        productDTO.setImgNum(imgSeq);
 	        productDTO.setPrdNum(prdNum);
-	        productDTO.setComNum("1");        // 관리자 계정
-	        productDTO.setUserNum("1");        // 관리자 계정
+	        productDTO.setComNum(comNum);        // 관리자 계정
 
 	        // ── 5. 저장(트랜잭션) ───────────────────────
 	        adminPlaningService.insertProductWithImages(productDTO, imageDTO);
@@ -159,6 +173,97 @@ public class AdminPlaningContorller {
         }
         folder.delete();
     }
+	
+	@GetMapping("/planingDetail")
+	public String detail(@RequestParam("prdNum") String prdNum, Model model,
+			HttpSession session) {
+		
+		 String id = (String) session.getAttribute("loginId");
+		    if (id == null) return "redirect:/login";
+		
+		// 1. prdNum으로 상품 상세 조회
+	    ProductDTO product = adminPlaningService.getProductByPrdNum(prdNum);
+	    // 2. 조회된 상품 DTO를 모델에 담아 뷰로 전달
+	    ImageDTO image = null;
+	    if (product != null && product.getImgNum() != 0) {
+	        image = adminPlaningService.getImageByImgNum(product.getImgNum());
+	    }
+	    
+	    List<CategoryDTO> categories = adminPlaningService.getAllCategories();
+	    
+	    model.addAttribute("productDTO", product);
+	    model.addAttribute("categories", categories);  // ← 라디오용
+	    model.addAttribute("imageDTO", image);
+
+	    // 3. 상세 페이지 뷰 반환
+		return "admin/planing/planingDetail";
+	}
+	
+	@PostMapping(value = "/planingDetail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@ResponseBody
+	public ResponseEntity<?> updateProduct(
+	    @RequestPart("product") ProductDTO productDTO,
+	    @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+
+	    try {
+	        adminPlaningService.updateProductWithImages(productDTO, images);
+	        return ResponseEntity.ok().build();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body("수정 실패");
+	    }
+	}
+	
+	@PostMapping("/delete")
+	public String deleteProduct(@RequestParam("prdNums") List<String> prdNums) {
+		for (String prdNum : prdNums) {
+	        adminPlaningService.deleteProductByPrdNum(prdNum);
+	    }
+	    return "redirect:/admin/planing/planingList";
+	}
+	
+
+	@GetMapping("/planingOrderList")
+	public String planingOrderList(@RequestParam(defaultValue = "1") int page,
+		    @RequestParam(defaultValue = "") String keyword,
+		    @RequestParam(defaultValue = "all") String hidden, // all, Y, N
+		    Model model,
+		    HttpSession session) {
+		
+		String id = (String) session.getAttribute("loginId");  // 로그인 시 저장된 세션값
+	    if (id == null) {
+	        return "redirect:/admin/login"; // 로그인 안 되어 있으면 로그인 페이지로
+	    }
+		
+		// 1. comNum 조회
+	    String comNum = adminPlaningService.getComNumById(id);
+
+	    // 2. 상품 리스트 + pagination 처리
+	    int pageSize = 10;
+	    int startRow = (page - 1) * pageSize + 1;
+        int endRow = page * pageSize;
+
+        List<ProductDTO> products = adminPlaningService.searchProductsByCondition(comNum, keyword, hidden, startRow, endRow);
+        int totalCount = adminPlaningService.getTotalCountByCondition(comNum, keyword, hidden);
+        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+
+	    PlaningPaginationDTO pagination = new PlaningPaginationDTO(page, pageSize, totalCount);
+
+	    model.addAttribute("productsList", products);
+        model.addAttribute("pagination", Map.of(
+            "pageNum", page,
+            "pageSize", pageSize,
+            "totalCount", totalCount,
+            "totalPages", totalPages
+        ));
+        model.addAttribute("param", Map.of(
+            "keyword", keyword,
+            "hidden", hidden
+        ));
+		
+        return "admin/planing/planingOrderList";
+	}
 	
 	
 }

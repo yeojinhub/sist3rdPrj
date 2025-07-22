@@ -73,6 +73,7 @@ public class AdminLoginController {
                 session.setAttribute("loggedInAccountType", "COMPANY");
                 session.setAttribute("loggedInCompany", company);
                 session.setAttribute("loggedInName", company.getComName()); // 헤더에 표시할 기업 이름
+                session.setAttribute("loginId", company.getId());
                 return "redirect:/admin/planing/planingList"; // 기업 상품 관리 페이지로 리다이렉트
             } else {
                 model.addAttribute("error", "기업 아이디 또는 비밀번호가 올바르지 않습니다.");
