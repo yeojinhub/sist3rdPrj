@@ -154,4 +154,63 @@
 	   WHERE PRD_NUM   = #{prdNum}
 	</update>
 
+	<select id="selectProductsWithImages" resultType="map">
+	    SELECT 
+	        P.PRD_NUM,
+	        P.TITLE,
+	        P.PRICE,
+	        TO_CHAR(P.INPUT_DATE, 'YYYY-MM-DD') AS INPUT_DATE,
+	        P.SELL_TYPE,
+	        P.COM_NUM,
+	        I.MAIN_IMAGE
+	    FROM PRODUCT P
+	    LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	    WHERE P.COM_NUM = #{comNum}
+	</select>
+	
+	<!-- 전체 상품 (sellType 조건 없음) -->
+	<select id="selectAllProductsWithImageSort" resultType="kr.co.sist.DTO.ProductWithImageDTO">
+	    SELECT
+	        P.PRD_NUM,
+	        P.TITLE,
+	        P.PRICE,
+	        P.LOCATION1,
+	        P.INPUT_DATE,
+	        P.SELL_TYPE,
+	        I.MAIN_IMAGE
+	    FROM PRODUCT P
+	    LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	    WHERE P.COM_NUM = #{comNum}
+	    ORDER BY
+	    <choose>
+	        <when test="sort == 'recent'">P.INPUT_DATE DESC</when>
+	        <when test="sort == 'low'">P.PRICE ASC</when>
+	        <when test="sort == 'high'">P.PRICE DESC</when>
+	        <otherwise>P.INPUT_DATE DESC</otherwise>
+	    </choose>
+	</select>
+	
+	<!-- 판매중 / 판매완료 상품 -->
+	<select id="selectProductsWithImageBySellTypeSort" resultType="kr.co.sist.DTO.ProductWithImageDTO">
+	    SELECT
+	        P.PRD_NUM,
+	        P.TITLE,
+	        P.PRICE,
+	        P.LOCATION1,
+	        P.INPUT_DATE,
+	        P.SELL_TYPE,
+	        I.MAIN_IMAGE
+	    FROM PRODUCT P
+	    LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	    WHERE P.COM_NUM = #{comNum}
+	      AND P.SELL_TYPE = #{sellType}
+	    ORDER BY
+	    <choose>
+	        <when test="sort == 'recent'">P.INPUT_DATE DESC</when>
+	        <when test="sort == 'low'">P.PRICE ASC</when>
+	        <when test="sort == 'high'">P.PRICE DESC</when>
+	        <otherwise>P.INPUT_DATE DESC</otherwise>
+	    </choose>
+	</select>
+
 </mapper>

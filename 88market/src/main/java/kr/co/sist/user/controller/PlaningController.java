@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO;
 import kr.co.sist.DTO.CompanyWithProductDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.ProductWithImageDTO;
 import kr.co.sist.DTO.ReviewDTO;
 import kr.co.sist.user.Service.PlaningService;
 
@@ -151,8 +152,8 @@ public class PlaningController {
 		model.addAttribute("sellSoldOutCnt",sellSoldOutCnt);
 		
 		//해당기업 총상품 리스트
-		List<ProductDTO> AllProductsByCompany = planingService.AllProductsByCompany(comNum);
-		model.addAttribute("AllProductsByCompany",AllProductsByCompany);
+		List<Map<String, Object>> productWithImages = planingService.ProductsWithImages(comNum);
+		model.addAttribute("AllProductsByCompany",productWithImages);
 		
 		//해당기업 판매중 솔드아웃 리스트
 		List<ProductDTO> ProductsSellType = planingService.ProductsByCompanyAndSellType(comNum, sellType);
@@ -175,25 +176,24 @@ public class PlaningController {
 	    String sellType = req.get("sellType");
 	    String sort = req.get("sort");
 	    
-	    List<ProductDTO> products;
+	    List<ProductWithImageDTO> products;
 
 	    if ("all".equals(sellType)) {
-	        products = planingService.AllProductsByCompanySort(comNum, sort);
+	        products = planingService.getAllProductsWithImageSort(comNum, sort);
 	    } else {
-	        String sellTypeCode = "Y".equals(sellType) ? "Y" : "N";
-	        products = planingService.ProductsByCompanyAndSellTypeSort(comNum, sellTypeCode, sort);
+	        products = planingService.getProductsWithImageBySellTypeSort(comNum, sellType, sort);
 	    }
 
 	    List<Map<String, Object>> productList = new ArrayList<>();
-	    for (ProductDTO p : products) {
+	    for (ProductWithImageDTO p : products) {
 	        Map<String, Object> map = new HashMap<>();
 	        map.put("prdNum", p.getPrdNum());
 	        map.put("title", p.getTitle());
 	        map.put("price", p.getPrice());
 	        map.put("location1", p.getLocation1());
-	        map.put("inputDate", p.getInputDate().toString()); // LocalDate → 문자열
+	        map.put("inputDate", p.getInputDate().toString());
 	        map.put("sellType", p.getSellType());
-	        
+	        map.put("mainImage", p.getMainImage());
 	        productList.add(map);
 	    }
 

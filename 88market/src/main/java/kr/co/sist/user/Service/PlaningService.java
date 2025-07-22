@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO;
 import kr.co.sist.DTO.CompanyWithProductDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.ProductWithImageDTO;
 import kr.co.sist.DTO.ReviewDTO;
 import kr.co.sist.user.DAO.PlaningDAO;
 
@@ -83,6 +84,17 @@ public class PlaningService {
     public void addClickCount(String prdNum) {
         planingDAO.increaseClick(prdNum);
     }
+    
+    public List<Map<String, Object>> ProductsWithImages(String comNum) {
+        return planingDAO.selectProductsWithImages(comNum);
+    }
+    
+    public List<ProductWithImageDTO> getAllProductsWithImageSort(String comNum, String sort) {
+        return planingDAO.selectAllProductsWithImageSort(comNum, sort);
+    }
 
+    public List<ProductWithImageDTO> getProductsWithImageBySellTypeSort(String comNum, String sellType, String sort) {
+        return planingDAO.selectProductsWithImageBySellTypeSort(comNum, sellType, sort);
+    }
     
 }

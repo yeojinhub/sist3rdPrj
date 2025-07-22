@@ -60,6 +60,11 @@ public class AdminPlaningService {
     @Transactional
     public void insertProductWithImages(ProductDTO productDTO, ImageDTO imageDTO) {
 
+    	 // 재고 0이면 자동으로 판매상태를 '매진'으로 전환
+        if (productDTO.getPrdCnt() == 0) {
+            productDTO.setSellType("N");
+        }
+    	
     	// 이미지 번호 시퀀스 받기
         int imgSeq = getNextImageSeq();
         imageDTO.setImgNum(imgSeq);
@@ -79,7 +84,12 @@ public class AdminPlaningService {
     /** ❶ 상품 + 이미지 수정 */
     public void updateProductWithImages(ProductDTO dto,
                                         List<MultipartFile> newImages) throws IOException {
-
+    	
+    	// 재고 0이면 자동으로 판매상태를 '매진'으로 전환
+    	if (dto.getPrdCnt() == 0) {
+    	    dto.setSellType("N");
+    	}
+    	
         /* 1)  상품 기본 정보 UPDATE */
         adminPlaningDAO.updateProduct(dto);   // 제목·가격·노출여부 등
 
@@ -144,5 +154,7 @@ public class AdminPlaningService {
         adminPlaningDAO.deleteImageByPrdNum(prdNum);
         adminPlaningDAO.deleteProductByPrdNum(prdNum);
     }
+    
+    
     
 }

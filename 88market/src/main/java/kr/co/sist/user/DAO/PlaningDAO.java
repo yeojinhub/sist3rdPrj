@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO;
 import kr.co.sist.DTO.CompanyWithProductDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.ProductWithImageDTO;
 import kr.co.sist.DTO.ReviewDTO;
 
 @Mapper
@@ -46,5 +47,11 @@ public interface PlaningDAO {
     List<Map<String, Object>> selectProductsWithImageByComNum(@Param("comNum") String comNum);
     //조회수
     int increaseClick(@Param("prdNum") String prdNum);
+    
+    List<Map<String, Object>> selectProductsWithImages(@Param("comNum") String comNum);
+    
+    List<ProductWithImageDTO> selectAllProductsWithImageSort(@Param("comNum") String comNum, @Param("sort") String sort);
+
+    List<ProductWithImageDTO> selectProductsWithImageBySellTypeSort(@Param("comNum") String comNum, @Param("sellType") String sellType, @Param("sort") String sort);
 	
 }
