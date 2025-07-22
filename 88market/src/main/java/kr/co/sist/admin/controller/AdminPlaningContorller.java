@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.sist.DTO.CategoryDTO;
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.ProductDTO;
@@ -35,11 +36,16 @@ public class AdminPlaningContorller {
 	private AdminPlaningService adminPlaningService;
 	
 	@GetMapping("/planingList")
-	public String planing(@RequestParam(defaultValue = "abc123") String id,
-		    @RequestParam(defaultValue = "1") int page,
+	public String planing(@RequestParam(defaultValue = "1") int page,
 		    @RequestParam(defaultValue = "") String keyword,
 		    @RequestParam(defaultValue = "all") String hidden, // all, Y, N
-		    Model model) {
+		    Model model,
+		    HttpSession session) {
+		
+		String id = (String) session.getAttribute("loginId");  // 로그인 시 저장된 세션값
+	    if (id == null) {
+	        return "redirect:/admin/login"; // 로그인 안 되어 있으면 로그인 페이지로
+	    }
 		
 		// 1. comNum 조회
 	    String comNum = adminPlaningService.getComNumById(id);
@@ -71,7 +77,9 @@ public class AdminPlaningContorller {
 	}
 	
 	@GetMapping("/planingAdd")
-	public String PlanningAdd(Model model) {
+	public String PlanningAdd(Model model, HttpSession session) {
+		String id = (String) session.getAttribute("loginId");
+	    if (id == null) return "redirect:/login";
 		
 		List<CategoryDTO> categories = adminPlaningService.getAllCategories();
 	    model.addAttribute("categories", categories);
@@ -85,9 +93,14 @@ public class AdminPlaningContorller {
 	@PostMapping(value = "/planingAdd", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> savePlanning(
 	        @RequestPart("product") ProductDTO productDTO,
-	        @RequestPart(value = "images", required = false) List<MultipartFile> images   // null 가능
-	) {
+	        @RequestPart(value = "images", required = false) List<MultipartFile> images,   // null 가능
+	        HttpSession session) {
 
+		String id = (String) session.getAttribute("loginId");
+	    if (id == null) return ResponseEntity.status(401).body("로그인 필요");
+		
+	    String comNum = adminPlaningService.getComNumById(id);
+	    
 	    String prdNum = null;
 	    File   uploadFolder = null;
 
@@ -105,7 +118,7 @@ public class AdminPlaningContorller {
 	        // ── 3. ImageDTO 채우기 ──────────────────────
 	        ImageDTO imageDTO = new ImageDTO();
 	        imageDTO.setImgNum(imgSeq);
-	        imageDTO.setImageType("1");        // 관리자 상품 고정
+	        imageDTO.setImageType(comNum);
 
 	        if (images != null) {
 	            for (int i = 0; i < images.size(); i++) {
@@ -123,7 +136,7 @@ public class AdminPlaningContorller {
 	        // ── 4. ProductDTO 채우기 ────────────────────
 	        productDTO.setImgNum(imgSeq);
 	        productDTO.setPrdNum(prdNum);
-	        productDTO.setComNum("1");        // 관리자 계정
+	        productDTO.setComNum(comNum);        // 관리자 계정
 
 	        // ── 5. 저장(트랜잭션) ───────────────────────
 	        adminPlaningService.insertProductWithImages(productDTO, imageDTO);
@@ -162,7 +175,11 @@ public class AdminPlaningContorller {
     }
 	
 	@GetMapping("/planingDetail")
-	public String detail(@RequestParam("prdNum") String prdNum, Model model) {
+	public String detail(@RequestParam("prdNum") String prdNum, Model model,
+			HttpSession session) {
+		
+		 String id = (String) session.getAttribute("loginId");
+		    if (id == null) return "redirect:/login";
 		
 		// 1. prdNum으로 상품 상세 조회
 	    ProductDTO product = adminPlaningService.getProductByPrdNum(prdNum);
@@ -208,11 +225,16 @@ public class AdminPlaningContorller {
 	
 
 	@GetMapping("/planingOrderList")
-	public String planingOrderList(@RequestParam(defaultValue = "abc123") String id,
-		    @RequestParam(defaultValue = "1") int page,
+	public String planingOrderList(@RequestParam(defaultValue = "1") int page,
 		    @RequestParam(defaultValue = "") String keyword,
 		    @RequestParam(defaultValue = "all") String hidden, // all, Y, N
-		    Model model) {
+		    Model model,
+		    HttpSession session) {
+		
+		String id = (String) session.getAttribute("loginId");  // 로그인 시 저장된 세션값
+	    if (id == null) {
+	        return "redirect:/admin/login"; // 로그인 안 되어 있으면 로그인 페이지로
+	    }
 		
 		// 1. comNum 조회
 	    String comNum = adminPlaningService.getComNumById(id);
