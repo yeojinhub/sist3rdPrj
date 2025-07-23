@@ -241,6 +241,7 @@ body.modal-open::-webkit-scrollbar {
   }
 
   .chat-input-area {
+  	margin-left:10px;
     display: flex;
     border-top: 1px solid #ddd;
   }
@@ -273,6 +274,9 @@ body.modal-open::-webkit-scrollbar {
     margin-left: auto;
   }
 
+.sendBtn{
+	background-color: #7fd0f4;	
+}
 /* 13. 기타 접근성 */
 @media (max-width: 600px) {
     .chat-modal, .chat-container { width: 100vw; min-width: unset; }
