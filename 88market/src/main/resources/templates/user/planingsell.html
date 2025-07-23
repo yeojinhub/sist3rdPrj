@@ -58,24 +58,24 @@
 	        <p>등록된 상품이 없습니다.</p>
 	    </th:block>
 	    
-        <th:block th:each="prd : ${products}" >
-	        <div class="product-card_plan">
-	        	<a th:href="@{ /planingDetail?(id=${prd.prdNum}, comNum=${prd.comNum})}" style="text-decoration: none;">
-	            <div class="product-image_plan" >
-	                <img th:src="@{/images/main/img1.png}" alt="상품 이미지">
-	                <div class="product-status_plan" th:text="${prd.sellType == 'Y' ? '판매중' : '판매완료'}"></div>
-	            </div>
-	            <div class="product-info_plan" >
-	                <h3 class="product-title_plan" th:text="${prd.title}"></h3>
-	                <p class="product-price_plan" th:text="${#numbers.formatInteger(prd.price, 3, 'COMMA')} + '원'"></p>
-	                <div class="product-meta_plan">
-	                    <span class="product-location_plan" th:text="${prd.location1}"></span>
-	                    <span class="product-time_plan" th:text="${prd.inputDate}"></span>
-	                </div>
-	            </div>
-	            </a>
-	        </div>
-	    </th:block>
+        <th:block th:each="prd : ${products}">
+    <div class="product-card_plan">
+        <a th:href="@{/planingDetail(id=${prd['PRD_NUM']}, comNum=${prd['COM_NUM']})}" style="text-decoration: none;">
+            <div class="product-image_plan">
+                <img th:src="@{${prd['MAIN_IMAGE']}}" alt="메인이미지"/>
+                <div class="product-status_plan" th:text="${prd['SELL_TYPE'] == 'Y' ? '판매중' : '판매완료'}"></div>
+            </div>
+            <div class="product-info_plan">
+                <h3 class="product-title_plan" th:text="${prd['TITLE']}"></h3>
+                <p class="product-price_plan" th:text="${#numbers.formatInteger(prd['PRICE'], 3, 'COMMA')} + '원'"></p>
+                <div class="product-meta_plan">
+                    <span class="product-time_plan" th:text="${#dates.format(prd['INPUT_DATE'], 'yyyy-MM-dd')}"></span>
+                </div>
+            </div>
+        </a>
+    </div>
+</th:block>
+
 
     </div>
 </main>

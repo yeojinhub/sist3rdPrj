@@ -1,14 +1,17 @@
 package kr.co.sist.user.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO;
 import kr.co.sist.DTO.CompanyWithProductDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.ProductWithImageDTO;
 import kr.co.sist.DTO.ReviewDTO;
 import kr.co.sist.user.DAO.PlaningDAO;
 
@@ -30,9 +33,10 @@ public class PlaningService {
 		return planingDAO.onePlaningList(prdNum);
 	}
 	
-	public List<ProductDTO> getRandomProductsByComNum(String comNum, String productId){
-		return planingDAO.selectRandomProductsByComNum(comNum, productId);
+	public List<Map<String, Object>> getRandomProductsWithImage(String comNum, String productId) {
+	    return planingDAO.selectRandomProductsByComNum(comNum, productId);
 	}
+
 	
 	public int getCompanyProductsAllCount(String comNum){
 		return planingDAO.CompanyProductsAllCount(comNum);
@@ -66,5 +70,31 @@ public class PlaningService {
     public int getReviewCount(String prdNum) {
         return planingDAO.selectReviewCount(prdNum);
     }
-	
+    
+    public List<Map<String, Object>> getProductListByComNumWithImage(String comNum) {
+        return planingDAO.selectProductsByComNumWithImage(comNum);
+    }
+    
+    public List<Map<String, Object>> getProductsWithImages(String comNum) {
+        return planingDAO.selectProductsWithImageByComNum(comNum);
+    }
+    
+    /** 상세보기 시 조회수 +1 */
+    @Transactional
+    public void addClickCount(String prdNum) {
+        planingDAO.increaseClick(prdNum);
+    }
+    
+    public List<Map<String, Object>> ProductsWithImages(String comNum) {
+        return planingDAO.selectProductsWithImages(comNum);
+    }
+    
+    public List<ProductWithImageDTO> getAllProductsWithImageSort(String comNum, String sort) {
+        return planingDAO.selectAllProductsWithImageSort(comNum, sort);
+    }
+
+    public List<ProductWithImageDTO> getProductsWithImageBySellTypeSort(String comNum, String sellType, String sort) {
+        return planingDAO.selectProductsWithImageBySellTypeSort(comNum, sellType, sort);
+    }
+    
 }

@@ -21,7 +21,7 @@ public class ImageDAO {
         sqlSession.insert("ImageMapper.insertImage", image);
     }
     
-    public ImageDTO selectImageByNum(@Param("imgNum")int imgNum) {
+    public ImageDTO selectImageByNum(@Param("imgNum") Integer imgNum) {
     	return sqlSession.selectOne("ImageMapper.selectImageByNum",imgNum);
     }
 }

@@ -4,9 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 - 계정 관리</title>
-<!-- 관리자 공지사항 CSS -->
-<link rel="stylesheet" th:href="@{/css/admin/account/detail.css}">
+<title>관리자 - 회원 계정 수정</title>
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
+<!-- 관리자 계정 관리 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/info.css}">
 <link rel="stylesheet" th:href="@{/css/admin/account/personal.css}">
 <link rel="stylesheet" th:href="@{/css/admin/account/bank.css}" th:if="${tab == 'bank'}">
  
@@ -17,16 +23,13 @@
 <body>
 	<!-- 고정 사이드바 -->
 	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
-
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+	
 	<div class="admin-wrapper">
 		<div class="main-content">
-			<!-- 헤더 -->
-			<header class="main-header">
-				<div class="breadcrumbs">
-					<span>계정 관리 &gt;</span>
-					<span class="current-page">회원 계정 관리</span>
-				</div>
-			</header>
+			<!-- 페이지 타이틀 -->
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('계정 관리','회원 계정 수정')}" />
 
     <!-- 메인 컨텐츠 -->
         <!-- 페이지 탭 -->
@@ -35,28 +38,28 @@
         <!-- 개인정보 관리 -->
         <a type="button" class="tab"
    			th:classappend="${tab=='personal'} ? ' active' : ''"
-   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='personal')}">
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='personal')}">
   			개인정보 관리
 		</a>
 
-        <!-- 계좌 관리 -->
+        <!-- 계좌 조회 -->
         <a type="button" class="tab"
    			th:classappend="${tab=='bank'} ? ' active' : ''"
-   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='bank')}">
-  			계좌 관리
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='bank')}">
+  			계좌 조회
 		</a>
 
-        <!-- 배송 관리 -->
+        <!-- 배송지 조회 -->
         <a type="button" class="tab"
    			th:classappend="${tab=='address'} ? ' active' : ''"
-   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='address')}">
-  			배송 관리
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='address')}">
+  			배송지 조회
 		</a>
 
         <!-- 포인트 조회 -->
         <a type="button" class="tab"
    			th:classappend="${tab=='point'} ? ' active' : ''"
-   			th:href="@{/admin/account/detail(userNum=${userDTO.userNum},tab='point')}">
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='point')}">
   			포인트 조회
 		</a>
       </div>

@@ -12,6 +12,13 @@ body.modal-open {
 	width: 100%; */
 }
 
+.wishBtn{
+  background: none;   /* 기본 배경 제거 */
+  border: 0;          /* 테두리 제거 */
+  padding: 0;         /* 여백 제거 */
+  cursor: pointer;    /* 손가락 커서 */
+}
+
 /* 2. 찜하기 오버레이 */
 .wishlist-overlay {
 	position: fixed;

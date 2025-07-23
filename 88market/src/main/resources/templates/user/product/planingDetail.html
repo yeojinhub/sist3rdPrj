@@ -55,7 +55,7 @@
 				<div class="main-image-carousel fade">
 				<th:block th:each="imgName : ${imgNum}">
 				  <div>
-				    <img th:src="@{/images/main/{file}(file=${imgName})}" alt="상품 이미지">
+				    <img th:src="@{${imgName}}" alt="상품 이미지">
 				  </div>
 				</th:block>
 				</div>
@@ -119,17 +119,16 @@
 				</div>
 				
 					<!-- 판매자의 다른 상품 -->
-					<th:block th:each="prd, iter : ${products}" th:if="${iter.count <= 3}">
-					<h5 th:text="${prd.title}">레이저키요...</h5>
-					<div class="seller-other-item">
-						<img th:src="@{prd.imgNum}" alt="판매자의 다른 상품">
-						<div class="item-info">
-						<a th:href="@{ /planingDetail?(id=${prd.prdNum}, comNum=${prd.comNum})}" style="cursor: pointer; color: inherit; text-decoration: none;">
-							<p th:text="${prd.content}">레이저 키요 프로 웹캠 풀박</p>
-							<strong th:text="|${#numbers.formatInteger(prd.price, 3, 'COMMA')}원|">220,000원</strong> 
-						</a>
-						</div>
-					</div>
+					<th:block th:each="prd : ${products}">
+					  <div class="seller-other-item">
+					    <img th:src="@{${prd['MAIN_IMAGE']}}" alt="다른 상품 이미지" />
+					    <div class="item-info">
+					      <a th:href="@{/planingDetail(id=${prd['PRD_NUM']}, comNum=${prd['COM_NUM']})}" style="cursor: pointer; color: inherit; text-decoration: none; margin: 20px">
+					        <p th:text="${prd['TITLE']}"></p>
+					        <strong th:text="|${#numbers.formatInteger(prd['PRICE'], 3, 'COMMA')}원|"></strong>
+					      </a>
+					    </div>
+					  </div>
 					</th:block>
 			</section>
 		</div>
@@ -140,27 +139,22 @@
 			<div class="card-list-wrapper-items multiple-items">
 			<!-- 관련 상품 카드 -->
 			<th:block th:each="product : ${relatedProducts}">
-			    <div class="product-card">
-			      <a th:href="@{/planingDetail(id=${product.prdNum}, comNum=${product.comNum})}">
-			        <div class="product-image-container">
-			          <img th:src="@{/images/main/img3.png}" alt="관련 상품 이미지">
-			          <!-- 필요하다면 이미지 동적으로: -->
-			          <!-- <img th:src="@{/images/main/{img}(img=${product.imgName})}" alt="관련 상품 이미지"> -->
+			  <div class="product-card">
+			    <a th:href="@{/planingDetail(id=${product['PRD_NUM']}, comNum=${product['COM_NUM']})}">
+			      <div class="product-image-container">
+			        <img th:src="@{${product['MAIN_IMAGE']}}" alt="관련 상품 이미지">
+			      </div>
+			      <div class="product-info">
+			        <p class="product-name" th:text="${product['TITLE']}">상품명</p>
+			        <strong class="product-price" 
+			                th:text="|${#numbers.formatInteger(product['PRICE'], 3, 'COMMA')}원|">가격</strong>
+			        <div class="product-meta-row">
+			          <p class="product-meta" th:text="${#dates.format(product['INPUT_DATE'], 'yyyy-MM-dd')}"></p>
 			        </div>
-			        <div class="product-info">
-			          <p class="product-name" th:text="${product.title}">상품명</p>
-			          <strong class="product-price" 
-			                  th:text="|${#numbers.formatInteger(product.price, 3, 'COMMA')}원|">가격</strong>
-			          <div class="product-meta-row">
-			            <p class="product-meta" ><span th:text="${product.inputDate}">2025-07-07 19:00</span></p>
-			            <button class="wish-btn">
-			              <img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
-			            </button>
-			          </div>
-			        </div>
-			      </a>
-			    </div>
-			  </th:block>
+			      </div>
+			    </a>
+			  </div>
+			</th:block>
 				
 			</div>
 		</section>

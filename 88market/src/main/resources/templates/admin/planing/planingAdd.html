@@ -211,6 +211,14 @@
 			    <div id="price-error" style="color:red; display:none;">가격을 올바르게 입력해주세요.</div>
 			  </div>
 			</div>
+			
+            <!-- 재고 -->
+            <div class="form-row">
+			  <label for="prdCnt" class="form-label">재고</label>
+			  <div class="form-field">
+			    <input type="text" id="prdCnt" name="prdCnt" th:field="*{prdCnt}" style="width: 200px;">
+			  </div>
+			</div>
 
             <!-- 거래 방법 -->
             <div class="form-row">
@@ -334,6 +342,14 @@
           } else {
             $('#trade-method-error').hide();
           }
+          
+          const rawPrdCnt = $('#prdCnt').val().replace(/[^0-9]/g, '');
+          const prdCntValue = Number(rawPrdCnt);
+          if (isNaN(prdCntValue) || prdCntValue < 0 || prdCntValue > 99999) {
+            alert("재고는 0개 이상 99,999개 이하로 입력해주세요.");
+            $('#prdCnt').focus();
+            return;
+          }
 
           const rawPrice = $('#price').val().replace(/[^0-9]/g, '');
           const priceValue = Number(rawPrice);
@@ -356,6 +372,7 @@
        		  title: $('#title').val(),
        		  content: $('#content').val(),
        		  price: rawPrice,
+       		  prdCnt: prdCntValue,
        		  catNum: $("input[name='catNum']:checked").val(),
        		  deliveryType: isDeliveryChecked ? 'Y' : 'N',
      		  sellType   : $("input[name='sellType']:checked").val()  || 'Y', // 기본값 Y

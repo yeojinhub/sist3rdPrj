@@ -35,7 +35,7 @@
 	  WHERE IMG_NUM = #{imgNum}
 	</update>
 	<!-- resources/mapper/ProductMapper.xml -->
-	<select id="selectImageByNum" parameterType="int" resultType="kr.co.sist.DTO.ImageDTO">
+	<select id="selectImageByNum" parameterType="Integer" resultType="kr.co.sist.DTO.ImageDTO">
 	    SELECT 
 	        img_num, image_type, main_image, sub_image1, sub_image2, sub_image3, sub_image4
 	    FROM 

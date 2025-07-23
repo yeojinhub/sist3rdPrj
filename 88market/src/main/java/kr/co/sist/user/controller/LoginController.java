@@ -238,22 +238,15 @@ public class LoginController {
                                HttpSession session, 
                                HttpServletResponse response) {
         try {
-        System.out.println("=== 네이버 로그인 콜백 처리 시작 ===");
-        System.out.println("code: " + code);
-        System.out.println("state: " + state);
         
         // state 검증
         String sessionState = (String) session.getAttribute("oauth_state");
-        System.out.println("session state: " + sessionState);
         
         if (!state.equals(sessionState)) {
-            System.out.println("ERROR: state 불일치");
             return "redirect:/login?error=state_mismatch";
         }
         
-        System.out.println("액세스 토큰 요청 시작...");
         String accessToken = naverService.getAccessToken(code, state);
-        System.out.println("액세스 토큰 받음: " + accessToken);
             Map<String, Object> userInfo = naverService.getUserInfo(accessToken);
             
             // 네이버 ID를 이메일 형태로 변환
@@ -282,7 +275,6 @@ public class LoginController {
             }
             
         } catch (Exception e) {
-        System.out.println("ERROR: 네이버 로그인 콜백 처리 중 예외 발생");
         System.out.println("예외 메시지: " + e.getMessage());
         e.printStackTrace();
         return "redirect:/login?error=naver";

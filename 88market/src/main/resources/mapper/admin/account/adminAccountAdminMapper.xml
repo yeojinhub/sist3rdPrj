@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminAccountAdminDAO">
+
+	<select id="selectAdminList" resultType="kr.co.sist.DTO.AdminDTO" parameterType="String">
+	SELECT
+		ADM_NUM, NAME, ROLLTYPE, BANTYPE, INPUT_DATE
+	FROM ADMIN
+	ORDER BY
+		INPUT_DATE DESC
+	</select>
+	
+	<select id="selectOneAdmin" resultType="kr.co.sist.DTO.AdminDTO" parameterType="String">
+	SELECT
+		ADM_NUM, NAME, TEL, ID, PASS, INPUT_DATE, ROLLTYPE, BANTYPE, BAN_DATE
+	FROM ADMIN
+	WHERE
+		ADM_NUM=#{admNum}
+	</select>
+	
+	<insert id="insertAdmin" parameterType="kr.co.sist.DTO.AdminDTO">
+	INSERT INTO ADMIN
+    	(ADM_NUM, NAME, ID, PASS, TEL, INPUT_DATE, BANTYPE)
+    VALUES(SEQ_ADM_NUM.NEXTVAL, #{name}, #{id}, #{pass}, #{tel},
+   		#{inputDate, jdbcType=DATE}, #{banType, jdbcType=CHAR})
+	</insert>
+	
+	<update id="updateAdmin" parameterType="kr.co.sist.DTO.AdminDTO">
+	UPDATE ADMIN
+	<set>
+		NAME=#{name}, ID=#{id}, TEL=#{tel},
+		ROLLTYPE = #{rollType, jdbcType=INTEGER},
+		BANTYPE=#{banType, jdbcType=CHAR},
+		<if test="banType.equals('Y')">
+			BANDATE=SYSDATE
+		</if>
+	</set>
+	WHERE
+		ADM_NUM=#{admNum}
+	</update>
+	
+</mapper>

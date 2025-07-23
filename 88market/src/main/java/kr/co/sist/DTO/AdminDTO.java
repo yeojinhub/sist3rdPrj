@@ -24,10 +24,10 @@ public class AdminDTO {
 	private String pass; /* 관리자비밀번호 */
 	private String tel; /* 관리자전화번호 */
 	
-	private Date input_date; /* 관리자가입일 */
-	private Date ban_date; /* 관리자정지일 */
+	private Date inputDate; /* 관리자가입일 */
+	private Date banDate; /* 관리자정지일 */
 	
-	private String bantype; /* 관리자정지여부(Y,N) */
-	private int rolltype; /* 관리자계정타입(1,2) */
+	private String banType; /* 관리자정지여부(Y,N) */
+	private int rollType; /* 관리자계정타입(1,2) */
 
 } //class
