@@ -50,7 +50,6 @@
 					<table class="account-table">
 						<thead>
 							<tr>
-								<th><input type="checkbox" class="all-checkbox"></th>
 								<th>이름</th>
 								<th>회원 유형</th>
 								<th>누적신고수</th>
@@ -61,9 +60,6 @@
 						</thead>
 						<tbody>
 							<tr th:each="item, i : ${userList}" class="table-row">
-								<td>
-									<input type="checkbox" class="checkbox" th:id="'checkbox' + ${i.count}" th:data-notice-num="${item.userNum}" />
-								</td>
 								<td class="account-title" th:text="${item.name}"
 									style="cursor: pointer; text-align: center;"
 									th:onclick="|location.href='@{/admin/account/userDetail(userNum=${item.userNum})}'|"></td>
@@ -76,7 +72,7 @@
 								<td><span class="status-badge status-visible" th:text="${item.inputDate}"></span></td>
 							</tr>
 							<tr th:if="${#lists.isEmpty(userList)}">
-								<td colspan="6" style="text-align: center;">회원 계정 정보가 없습니다.</td>
+								<td colspan="5" style="text-align: center;">회원 계정 정보가 없습니다.</td>
 							</tr>
 						</tbody>
 					</table>

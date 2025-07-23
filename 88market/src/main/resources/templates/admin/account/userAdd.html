@@ -11,7 +11,7 @@
 <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
 
 <!-- 관리자 계정 관리 CSS -->
-<link rel="stylesheet" th:href="@{/css/admin/account/detail.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/add.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
@@ -27,8 +27,7 @@
 			<!-- 페이지 타이틀 -->
 			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('계정 관리','회원 계정 등록')}" />
 			
-    <!-- 메인 컨텐츠 -->
-    <main class="main-content">
+	<div class="account-form-wrapper">
      
       <!-- 컨테이너 -->
       <section class="container">
@@ -44,10 +43,10 @@
           </div>
 
           <label for="name">이름 <span class="required">*</span></label>
-          <input id="name" type="text" class="form-input" placeholder="이름 입력" />
+          <input id="name" type="text" maxlength="10" class="form-input" placeholder="이름 입력" />
 
           <label for="nickname">닉네임</label>
-          <input id="nickname" type="text" class="form-input" placeholder="닉네임 입력" />
+          <input id="nickname" type="text" maxlength="50" class="form-input" placeholder="닉네임 입력" />
 
           <label for="tel">전화번호</label>
           <input id="tel" type="text" class="form-input" placeholder="전화번호 입력"  />
@@ -116,7 +115,7 @@
           </div>
         </form>
       </section>
-    </main>
+    </div>
   </div>
 	</div>
 	<!-- 다음 주소 API -->

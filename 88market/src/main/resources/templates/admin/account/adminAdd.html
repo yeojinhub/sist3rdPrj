@@ -11,7 +11,7 @@
 <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
 
 <!-- 관리자 관리자 계정 관리 CSS -->
-<link rel="stylesheet" th:href="@{/css/admin/account/detail.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/adminDetail.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
@@ -31,29 +31,23 @@
         <!-- 개인정보 폼 -->
 		<form class="account-form" th:action="@{/admin/account/adminModify}" method="post" th:object="${adminDTO}">
           <div class="account-form-section">기본정보</div>
-          <label for="profile-img">프로필 사진</label>
-          <div class="image-upload-area" id="profile-img">
-            <div class="upload-placeholder">
-              <i class="fa fa-camera"></i>
-            </div>
-          </div>
-
+          
           <label for="name">이름 <span class="required">*</span></label>
-          <input id="name" type="text" class="form-input" placeholder="이름 입력" />
-
+          <input id="name" type="text" maxlength="10" class="form-input" placeholder="이름 입력" /><div id="error-message" class="error-message"></div><br>
+          
           <label for="tel">전화번호</label>
-          <input id="tel" type="text" class="form-input" placeholder="전화번호 입력"  />
+          <input id="tel" type="text" maxlength="11" class="form-input" placeholder="전화번호 입력"  /><span id="error-message"></span>
 
           <div class="account-form-section">계정정보</div>
 
           <label for="id">아이디 <span class="required">*</span></label>
-          <input id="id" type="text" class="form-input" placeholder="아이디 입력" />
+          <input id="id" type="text" maxlength="16" class="form-input" placeholder="아이디 입력" />
             
           <label for="pass">비밀번호</label>
-          <input id="pass" type="password" class="form-input" placeholder="비밀번호 입력" />
+          <input id="pass" type="password" maxlength="16" class="form-input" placeholder="비밀번호 입력" />
             
           <label for="pass-check">비밀번호 확인</label>
-          <input id="pass-check" type="password" class="form-input" placeholder="비밀번호 확인 입력" />
+          <input id="pass-check" type="password" maxlength="16" class="form-input" placeholder="비밀번호 확인 입력" />
           
           <div class="account-form-section">가입 정보</div>
 

@@ -11,7 +11,7 @@
 <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
 
 <!-- 관리자 관리자 계정 관리 CSS -->
-<link rel="stylesheet" th:href="@{/css/admin/account/detail.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/adminDetail.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
@@ -31,14 +31,6 @@
 		<!-- 개인정보 폼 -->
 		<form class="account-form" th:action="@{/admin/account/adminModifyProcess}" method="post" th:object="${adminDTO}">
 			<div class="account-form-section">기본정보</div>
-				
-				<!-- 사진 -->
-				<label for="profile-img">프로필 사진</label>
-				<div class="image-upload-area" id="profile-img">
-					<div class="upload-placeholder">
-						<i class="fa fa-camera"></i>
-					</div>
-				</div>
 				
 				<!-- 번호 -->
 				<input type="hidden" id="admNum" th:value="${ adminDTO.admNum }" />
