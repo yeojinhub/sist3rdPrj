@@ -5,6 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 - 문의사항</title>
+
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
 <!-- 관리자 문의사항 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/inquiry/inquiry.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
@@ -15,16 +21,12 @@
 	<!-- 고정 사이드바 -->
 	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
 	<!-- 상단 헤더 -->
-	<div th:replace="fragments/admin/admin_header :: header"></div>
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
 	
 	<div class="admin-wrapper">
 		<div class="main-content">
 			<!-- 헤더 -->
-			<header class="main-header">
-				<div class="breadcrumbs">
-					<span>문의 관리 &gt;</span> <span class="current-page">문의 목록</span>
-				</div>
-			</header>
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('문의사항','목록')}" />
 
 			<!-- 메인 컨텐츠 (문의관리) -->
 			<main class="container">

@@ -8,18 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Get the parent li element
       const menuItem = button.closest(".has-submenu")
-	  if(!menuItem) return
+      if(!menuItem) return
 
       // Toggle the 'open' class on the parent li
-	  document.querySelectorAll(".has-submenu.open").forEach(openItem=>{
-		if(openItem !== menuItem){
-			openItem.classList.remove("open");
-			const openSub=openItem.querySelector(".submenu");
-			if(openSub) openSub.classList.remove("open");
-		}
-	  });
-	  
-	  menuItem.classList.toggle("open")
+      document.querySelectorAll(".has-submenu.open").forEach(openItem=>{
+        if(openItem !== menuItem){
+          openItem.classList.remove("open");
+          const openSub=openItem.querySelector(".submenu");
+          if(openSub) openSub.classList.remove("open");
+        }
+      });
+      
+      menuItem.classList.toggle("open")
 
       // Find the submenu within this menu item
       const submenu = menuItem.querySelector(".submenu")
@@ -32,13 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   // Highlight active menu item based on current page
-  /*const currentPage = window.location.pathname.split("/").pop()*/
   const menuLinks = document.querySelectorAll(".menu a")
-
   const currentPath = window.location.pathname
+  
   menuLinks.forEach((link) => {
     const href = link.getAttribute("href")
-    if (href === currentPath) {
+    
+    // /board/로 시작하는 모든 경로에서 /board/ 메뉴 활성화
+    const isActive = href === currentPath || 
+      (href.length > 1 && currentPath.startsWith(href + '/'))
+    
+    if (isActive) {
       link.parentElement.classList.add("active")
 
       const parentMenuItem = link.closest(".has-submenu")
@@ -51,13 +55,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   })
-
-
-/*  // Add event listeners for the buttons
-  const registerBtn = document.querySelector(".btn-add")
-  if (registerBtn) {
-    registerBtn.addEventListener("click", () => {
-      alert("작성 기능이 구현될 예정입니다.")
-    })
-  }*/
 })

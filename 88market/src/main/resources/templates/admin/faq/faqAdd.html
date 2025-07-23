@@ -5,6 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 - FAQ</title>
+
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
 <!-- 관리자 공지사항 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/faq/faq.css}">
 <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
@@ -14,15 +20,13 @@
 <body>
 	<!-- 고정 사이드바 -->
 	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
 
 	<div class="admin-wrapper">
 		<div class="main-content">
 			<!-- 헤더 -->
-			<header class="main-header">
-				<div class="breadcrumbs">
-					<span>게시판 관리 &gt;</span> <span class="current-page">FAQ 등록</span>
-				</div>
-			</header>
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('FAQ','등록')}" />
 
 			<!-- 메인 컨텐츠 (공지사항 관리) -->
 			<main class="container">

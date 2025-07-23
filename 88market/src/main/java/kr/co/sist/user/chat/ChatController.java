@@ -61,7 +61,7 @@ public class ChatController {
         	return;
         }
 
-        chatService.addMessage(message);
+//        chatService.addMessage(message);
         
         // 클라이언트에게 해당 채팅방에 메시지 전송
         System.out.println("Sending message to /topic/chatroom/" + chatroomNum);
