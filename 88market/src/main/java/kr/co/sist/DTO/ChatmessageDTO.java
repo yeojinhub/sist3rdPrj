@@ -23,6 +23,7 @@ public class ChatmessageDTO {
 	private Date createDate;
 	private String isRead;
 	private String imgPath;
+	private String userNum;
 	
 	private int chatroomNum; /* 채팅방번호 */
 }

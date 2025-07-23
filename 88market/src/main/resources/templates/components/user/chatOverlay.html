@@ -1,100 +1,210 @@
-<!-- chatOverlay.html -->
 <th:block th:fragment="chatOverlay">
   <link rel="stylesheet" th:href="@{/css/user/components/chat.css}">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
   <script>
     let stompClient = null;
     let currentRoomId = null;
-    let currentUser = sessionStorage.getItem("user");
+    let currentUser = null; // username = userNum (문자열)
+    let currentRoomSubscription = null; // 현재 방 구독 관리
 
+    // 채팅 오버레이 열기(로그인 체크 + 사용자 정보 세팅)
+    $('#chat').click(() => {
+      console.log("Opening chat overlay...");
+      axios.get('/chat')
+        .then(res => {
+          currentUser = res.data; // userNum
+          console.log("User logged in:", currentUser);
+          $('.chat-overlay').fadeIn(300);
+          $('.chat-modal').addClass('show');
+          $('body').addClass('modal-open');
+          loadChatRooms();
+        })
+        .catch(err => {
+          console.log("Error occurred while fetching user data:", err);
+          if (err.response?.status === 401) {
+            alert('로그인이 필요합니다.');
+            location.href = '/login';
+          }
+        });
+    });
+
+    // WebSocket 연결 (최초 한 번만)
     function connect() {
+      if (stompClient) return; // 중복 연결 방지
+      console.log("Attempting to connect to WebSocket...");
       const socket = new SockJS('/ws-chat');
       stompClient = Stomp.over(socket);
-      stompClient.debug = function () {}; // 로그 비활성화
-      stompClient.connect({}, function () {
+      stompClient.debug = function () {};  // 로그 비활성화
 
-        document.querySelectorAll('.chat-item').forEach(item => {
-          const roomId = item.getAttribute('data-room-id');
-          stompClient.subscribe(`/topic/chatroom/${roomId}`, function (messageOutput) {
-            const message = JSON.parse(messageOutput.body);
-            if (roomId === currentRoomId && message.sender !== currentUser) {
-              document.querySelector('#chatMessages').insertAdjacentHTML('beforeend',
-                `<div class="message-left">${message.sender}: ${message.content}</div>`);
-            }
-          });
-        });
+      stompClient.connect({}, function (frame) {
+        console.log('WebSocket connected: ' + frame);
+        // 방 구독은 이 시점이 아니라 enterChatRoom에서!
+      }, function (error) {
+        console.log('WebSocket connection error:', error);
       });
     }
 
+ 	// 채팅방 목록 로드
+    function loadChatRooms() {
+      console.log("Loading chat rooms...");
+      axios.get('/chat/rooms')
+        .then(res => {
+          const chatRooms = res.data;
+          const chatListContainer = document.querySelector('#chatList');
+          chatListContainer.innerHTML = '';
+          chatRooms.forEach(room => {
+            const listItem = `
+              <div class="chat-item" data-room-id="${room.chatroomNum}">
+                <div class="chat-content">
+                  <div class="chat-info">
+                    <!-- 상대방 프로필 이미지와 닉네임 -->
+                    <img src="${room.opponentImgPath}" alt="Profile" class="profile-image" />
+                    <span class="username">${room.opponentNickname}</span>
+                    <span class="last-message-time">${room.lastMessageTime}</span>
+                  </div>
+                  <div class="last-message">
+                    <!-- 마지막 메시지 내용 -->
+                    <span class="message-content">${room.lastMessage}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+            chatListContainer.insertAdjacentHTML('beforeend', listItem);
+          });
+
+          document.querySelectorAll('.chat-item').forEach(item => {
+            item.addEventListener('click', function () {
+              const chatroomNum = this.getAttribute('data-room-id');
+              enterChatRoom(chatroomNum); // 채팅방 입장
+            });
+          });
+        })
+        .catch(err => {
+          console.error("채팅방 목록 조회 오류:", err);
+        });
+    }
+
+    // 채팅방 들어가기 및 구독
+    function enterChatRoom(roomId) {
+      console.log("Entering chat room with ID:", roomId);
+
+      // 기존 구독 해제
+      if (currentRoomSubscription) {
+        currentRoomSubscription.unsubscribe();
+        currentRoomSubscription = null;
+      }
+
+      // 메시지 목록 초기화
+      document.querySelector('#chatMessages').innerHTML = '';
+
+      // 구독 (WebSocket 연결이 되어있어야 함)
+      if (stompClient && stompClient.connected) {
+        currentRoomSubscription = stompClient.subscribe(`/topic/chatroom/${roomId}`, function (messageOutput) {
+          const message = JSON.parse(messageOutput.body);
+          console.log("Received message:", message);
+          // 내 메시지는 오른쪽, 남의 메시지는 왼쪽 표시
+          const side = (String(message.userNum) === String(currentUser)) ? 'right' : 'left';
+          document.querySelector('#chatMessages').insertAdjacentHTML('beforeend',
+            `<div class="message-${side}">${message.userNum}: ${message.content}</div>`);
+        });
+        console.log("Subscribed to room:", roomId);
+      } else {
+        // 혹시 아직 연결이 안됐으면 연결 후에 재시도
+        connect();
+        setTimeout(() => enterChatRoom(roomId), 300); // 지연 후 재호출
+        return;
+      }
+
+      // UI 표시 전환 및 전역 변수 세팅
+      document.querySelector('.chat-list').style.display = 'none';
+      document.querySelector('.chat-room').style.display = 'block';
+      currentRoomId = roomId;
+
+      // (선택) 예전 메시지 불러오기, 실패해도 무시
+      loadChatRoomMessages(roomId);
+    }
+
+    // 메시지 기록 가져오기 (404 발생 시 무시)
+    function loadChatRoomMessages(roomId) {
+      console.log("Loading messages for room:", roomId);
+      axios.get(`/chat/messages/${roomId}`)
+        .then(res => {
+          const messages = res.data;
+          messages.forEach(message => {
+            const side = (String(message.userNum) === String(currentUser)) ? 'right' : 'left';
+            const messageDiv = `<div class="message-${side}">${message.userNum}: ${message.content}</div>`;
+            document.querySelector('#chatMessages').insertAdjacentHTML('beforeend', messageDiv);
+          });
+        })
+        .catch(err => {
+          console.error("채팅 메시지 조회 오류:", err);
+        });
+    }
+
+    // 메시지 전송
     function sendMessage() {
-      const content = document.querySelector('#chatInput').value;
-      if (!content || !currentUser || !currentRoomId) return;
+      const content = document.querySelector('#chatInput').value.trim();
+      if (!content) return;
+      if (!currentUser || !currentRoomId) {
+        console.log("Invalid message or missing user/room data.");
+        return;
+      }
+      if (!stompClient || !stompClient.connected) {
+        alert("서버와 연결되지 않았습니다. 새로고침 후 시도해주세요.");
+        return;
+      }
 
-      stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({
-        sender: currentUser,
+      const message = {
+        userNum: currentUser,          // 서버 ChatmessageDTO와 필드명 1:1
         content: content,
-        roomId: currentRoomId
-      }));
+        chatroomNum: Number(currentRoomId)
+      };
+      console.log("Sending message:", message);
 
-      document.querySelector('#chatMessages').insertAdjacentHTML('beforeend',
-        `<div class="message-right">${content}</div>`);
+      stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message));
       document.querySelector('#chatInput').value = '';
+      // 실제 메시지 도착 시 구독 콜백에서 append됨!
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+      console.log("Document loaded, connecting to WebSocket...");
       connect();
-
-      document.querySelectorAll('.chat-item').forEach(item => {
-        item.addEventListener('click', function () {
-          const partnerName = this.querySelector('.username').textContent;
-          currentRoomId = this.getAttribute('data-room-id');
-
-          document.querySelector('.chat-list').style.display = 'none';
-          document.querySelector('.chat-room').style.display = 'block';
-          document.querySelector('.chat-partner-name').textContent = partnerName;
-          document.querySelector('#chatMessages').innerHTML = '';
-        });
-      });
-
+      // 뒤로가기 버튼
       document.querySelector('.back-button').addEventListener('click', function () {
         document.querySelector('.chat-room').style.display = 'none';
         document.querySelector('.chat-list').style.display = 'block';
+        // 방 구독 해제
+        if (currentRoomSubscription) {
+          currentRoomSubscription.unsubscribe();
+          currentRoomSubscription = null;
+        }
         currentRoomId = null;
       });
-
+      // 메시지 전송
       document.querySelector('#sendBtn').addEventListener('click', sendMessage);
-
+      // Enter키로 메시지 전송
       document.querySelector('#chatInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') sendMessage();
       });
-
-      document.querySelector('#chat').addEventListener('click', function () {
-        if (!currentUser) {
-          location.href = '/login.html';
-          return;
-        }
-        document.querySelector('.chat-overlay').style.display = 'block';
-        document.querySelector('.chat-modal').classList.add('show');
-        document.querySelector('html').classList.add('modal-open');
-      });
-
+      // 채팅 오버레이 닫기
       document.querySelector('.chat-overlay').addEventListener('click', function () {
         document.querySelector('.chat-modal').classList.remove('show');
         setTimeout(() => {
           this.style.display = 'none';
           document.querySelector('html').classList.remove('modal-open');
+          document.querySelector('body').classList.remove('modal-open');
         }, 300);
       });
-
       document.querySelector('.close-button').addEventListener('click', function () {
         document.querySelector('.chat-modal').classList.remove('show');
         setTimeout(() => {
           document.querySelector('.chat-overlay').style.display = 'none';
           document.querySelector('html').classList.remove('modal-open');
+          document.querySelector('body').classList.remove('modal-open');
         }, 300);
       });
-
       document.querySelector('.chat-modal').addEventListener('click', function (e) {
         e.stopPropagation();
       });
@@ -110,36 +220,10 @@
         <button class="close-button">X</button>
       </div>
 
-      <div class="chat-list">
-        <div class="chat-item" data-room-id="room1" th:if="${session.user == 'user01' or session.user == 'user02'}">
-          <div class="profile-image"></div>
-          <div class="chat-content">
-            <div class="chat-info">
-              <span class="username">웅이대</span><span class="time">오후 4:12</span>
-            </div>
-            <div class="last-message">상품권 판매중인가요?</div>
-          </div>
-        </div>
-        <div class="chat-item" data-room-id="room2" th:if="${session.user == 'user01' or session.user == 'user03'}">
-          <div class="profile-image profile-image-2"></div>
-          <div class="chat-content">
-            <div class="chat-info">
-              <span class="username">요구르트아줌마</span><span class="time">오전 8:42</span>
-            </div>
-            <div class="last-message">오늘 거래하시나요?</div>
-          </div>
-        </div>
-        <div class="chat-item" data-room-id="room3" th:if="${session.user == 'user02' or session.user == 'user03'}">
-          <div class="profile-image profile-image-3"></div>
-          <div class="chat-content">
-            <div class="chat-info">
-              <span class="username">아저씨</span><span class="time">오전 11:37</span>
-            </div>
-            <div class="last-message">안전거래 안하시죠?</div>
-          </div>
-        </div>
-      </div>
+      <!-- 채팅방 목록 -->
+      <div class="chat-list" id="chatList"></div>
 
+      <!-- 채팅방 내용 -->
       <div class="chat-room" style="display: none;">
         <div class="chat-room-header">
           <button class="back-button">←</button>
@@ -154,7 +238,3 @@
     </div>
   </div>
 </th:block>
-
-
-
-

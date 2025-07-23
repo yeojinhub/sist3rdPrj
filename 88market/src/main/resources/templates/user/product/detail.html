@@ -93,15 +93,19 @@
 						</div>
 					</div>
 
-					<!-- 행동 버튼 -->
-					<div class="action-buttons">
-						<button class="wish-btn-border" id="wishBtn" th:classappend="${isLiked} ? 'active' : ''">
-							<img th:src="@{${isLiked} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
-								alt="찜하기" class="heart-icon" />
-						</button>
-						<button class="btn-chat">채팅하기</button>
-						<button class="btn-buy" th:onclick="productBuy()">구매하기</button>
-					</div>
+				<!-- 행동 버튼 -->
+				<div class="action-buttons">
+					<button class="wish-btn" 
+							th:attr="data-prd-num=${product.prdNum}"
+					        th:classappend="${isLiked} ? 'active' : ''">
+					    <img th:src="@{${isLiked} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}" 
+					         alt="찜하기" class="heart-icon" />
+					</button>
+					<button class="btn-chat">
+					    채팅하기
+					</button>
+					<button class="btn-buy" th:onclick="|location.href='@{/buy/{prdNum}(prdNum=${product.prdNum})}'|">구매하기</button>
+				</div>
 				</div>
 
 				<!-- 판매자 정보 -->
@@ -247,6 +251,40 @@
 				});
 		});
 	});
+	
+    $(document).on('click', '.btn-chat', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $btn = $(this);
+        const prdNum = '[[${product.prdNum}]]'; // Thymeleaf 템플릿 엔진으로 값을 채움
+        const sellerNum = '[[${product.userNum}]]'; // 판매자 ID
+
+        // 로그인 상태 확인
+        axios.get('/chat/create', {
+            params: { prdNum: prdNum, sellerNum: sellerNum }
+        })
+        .then(res => {
+            // 서버에서 반환한 메시지 값에 따라 다르게 처리
+            if (res.data === "Chatroom created") {
+                alert("채팅방이 생성되었습니다.");
+                // 채팅방을 띄우는 추가적인 로직을 여기에 넣을 수 있습니다.
+            } else if (res.data === "Chatroom exists") {
+                alert("이미 존재하는 채팅방입니다.");
+            } else {
+                alert("채팅방 생성에 실패했습니다.");
+            }
+        })
+        .catch(err => {
+            if (err.response?.status === 401) {
+                alert('로그인이 필요합니다.');
+                location.href = '/login';
+            } else {
+                console.error("채팅방 생성 오류:", err);
+            }
+        });
+    });
+});
 </script>
 
 </html>

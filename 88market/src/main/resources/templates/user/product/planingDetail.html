@@ -99,7 +99,7 @@
 					<button class="wish-btn-border">
 						<img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
 					</button>
-					<button class="btn-buy" th:onclick="|location.href='@{/buy}'|">구매하기</button>
+					<button class="btn-buy" th:onclick="|location.href='@{/buy/{prdNum}(prdNum=${Product[0].prdNum})}'|">구매하기</button>
 				</div>
 				</div>
 
