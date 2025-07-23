@@ -12,11 +12,11 @@
 			
 			wishlist.prdList.forEach((item, index)=>{
 				wishlist_list.append(`
-						<article class="wishlist-item" data-prd-num="${item.prdNum}">
-						<div class="item-image-container">
+						<article class="wishlist-item" >
+						<div class="item-image-container" data-prd-num="${item.prdNum}">
 							<img class="item-image"
 								src="${wishlist.imgList[index].mainImage}"
-								alt="레이저 키요 프로 웹캠 풀박">
+								alt="레이저 키요 프로 웹캠 풀박" style="cursor: pointer;">
 							<div class="carousel-indicator">
 								<div class="dot active"></div>
 							</div>
@@ -48,7 +48,7 @@
  			  
 			});// click
 			
-		$(document).on('click', '.wishlist-item', function () {
+		$(document).on('click', '.item-image-container', function () {
 			var prdNum = $(this).data('prd-num');
 				location.href="/detail?id="+prdNum;		  
 				});// click
