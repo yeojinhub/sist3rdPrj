@@ -5,6 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 - 이벤트</title>
+
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
 <!-- 관리자 공지사항 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/event/event.css}">
 
@@ -169,11 +175,7 @@
 	<div class="admin-wrapper">
 		<div class="main-content">
 			<!-- 헤더 -->
-			<header class="main-header">
-				<div class="breadcrumbs">
-					<span>게시판 관리 &gt;</span> <span class="current-page">이벤트 상세정보</span>
-				</div>
-			</header>
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('이벤트','상세정보')}" />
 
 			<!-- 메인 컨텐츠 (공지사항 관리) -->
 			<main class="container">
