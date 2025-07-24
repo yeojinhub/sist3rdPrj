@@ -9,6 +9,8 @@
 <link rel="stylesheet" th:href="@{/css/admin/style.css}">
 <!-- 페이지 타이틀 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+<!-- 공통 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/dlatl.css}">
 
 <!-- 관리자 관리자 계정 관리 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/account/adminDetail.css}">
@@ -33,26 +35,26 @@
           <div class="account-form-section">기본정보</div>
           
           <label for="name">이름 <span class="required">*</span></label>
-          <input id="name" type="text" maxlength="10" class="form-input" placeholder="이름 입력" /><div id="error-message" class="error-message"></div><br>
+          <input id="name" type="text" maxlength="10" class="form-input" placeholder="이름 입력" /><div id="error-message" class="error-message"></div>
           
           <label for="tel">전화번호</label>
-          <input id="tel" type="text" maxlength="11" class="form-input" placeholder="전화번호 입력"  /><span id="error-message"></span>
+          <input id="tel" type="text" maxlength="11" class="form-input" placeholder="전화번호 입력"  /><div id="error-message" class="error-message"></div>
 
           <div class="account-form-section">계정정보</div>
 
           <label for="id">아이디 <span class="required">*</span></label>
-          <input id="id" type="text" maxlength="16" class="form-input" placeholder="아이디 입력" />
+          <input id="id" type="text" maxlength="15" class="form-input" placeholder="아이디 입력" /><div id="error-message" class="error-message"></div>
             
           <label for="pass">비밀번호</label>
           <input id="pass" type="password" maxlength="16" class="form-input" placeholder="비밀번호 입력" />
             
           <label for="pass-check">비밀번호 확인</label>
-          <input id="pass-check" type="password" maxlength="16" class="form-input" placeholder="비밀번호 확인 입력" />
+          <input id="pass-check" type="password" maxlength="16" class="form-input" placeholder="비밀번호 확인 입력" /><div id="error-message" class="error-message"></div>
           
           <div class="account-form-section">가입 정보</div>
 
           <label for="reg-date">가입일</label>
-          <input id="reg-date" type="date" th:value="${today}" class="form-input" readonly="readonly" />
+          <input id="reg-date" type="date" th:value="${today}" class="status-badge status-visible" readonly="readonly" /><br>
 
           <label>정지여부</label>
           <div>
@@ -71,6 +73,9 @@
         </div>
 		</div>
 	</div>
+	<!-- 사이드바 동작 스크립트 -->
+	<script th:src="@{/js/admin/script.js}" defer></script>
+	<!-- 버튼 동작 스크립트 -->
 	<script th:src="@{/js/admin/account/adminAdd.js}" defer></script>
 </body>
 

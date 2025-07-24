@@ -1,0 +1,35 @@
+<!-- templates/admin/index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>기획관 대시보드</title>
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
+<!-- 공통 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/dlatl.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/company/company_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+	<!-- 페이지 타이틀 -->
+	<th:block th:replace="~{fragments/company/company_pageTitle :: pageTitle('기획관','대시보드')}" />
+	
+	<div th:fragment="content">
+
+		<h1>기획관 홈할건지?</h1>
+		<p>통계나오는 부분</p>
+		<div></div>
+	</div>
+
+	<!-- 사이드바 동작 스크립트 -->
+	<script th:src="@{/js/admin/script.js}" defer></script>
+</body>
+</html>

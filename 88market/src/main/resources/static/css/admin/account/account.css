@@ -1,33 +1,3 @@
-/* 기본 스타일 */
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', 'Noto Sans KR', sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
-}
-
-/* 전체 레이아웃 */
-.admin-wrapper {
-    display: flex;
-}
-
-/* 메인 컨텐츠 영역 */
-.main-content {
-    margin-left: 250px;
-    flex: 1;
-    min-width: 0; /* Flexbox 오버플로우 방지 */
-    display: flex;
-    flex-direction: column;
-}
-
-/* 컨테이너 (테이블 등) */
-.container {
-    padding: 30px;
-    background-color: #eeeeee;
-    flex-grow: 1;
-}
-
 .search-section {
     padding: 20px;
     margin-bottom: 20px;

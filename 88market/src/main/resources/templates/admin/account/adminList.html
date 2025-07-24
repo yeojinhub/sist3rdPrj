@@ -9,6 +9,8 @@
 <link rel="stylesheet" th:href="@{/css/admin/style.css}">
 <!-- 페이지 타이틀 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+<!-- 공통 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/dlatl.css}">
 
 <!-- 관리자 계정 관리 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
@@ -31,16 +33,16 @@
 			<main class="container">
 				<section class="search-section">
 					<!-- 검색 폼 추가 (method="get") -->
-					<form id="searchForm" th:action="@{/admin/account}" method="get">
+					<form id="searchForm" th:action="@{/admin/account/admins}" method="get">
 						<div class="search-box">
 							<input type="text" class="search-input" name="keyword"
 								 placeholder="검색">
 							<button type="submit" class="search-button">검색</button>
 							<!-- 검색 초기화 버튼 추가 -->
 							<button type="button" class="search-button" id="resetSearch">초기화</button>
-							<input type="radio" /> 전체 관리자
-							<input type="radio" /> 일반 관리자
-							<input type="radio" /> 총괄 관리자
+							<input type="radio" name="roleType" value="" checked="checked"/> 전체 관리자
+							<input type="radio" name="roleType" value="2" /> 일반 관리자
+							<input type="radio" name="roleType" value="1"/> 총괄 관리자
 						</div>
 					</form>
 				</section>
@@ -81,10 +83,18 @@
 					</div>
 				</section>
 			</main>
-			<!-- 필요하다면 하단 스크립트 -->
+			<!-- 사이드바 동작 스크립트 -->
 			<script src="/js/admin/script.js" defer></script>
 		</div>
 	</div>
 </body>
+<script type="text/javascript">
+$(function(){
+	$('#resetSearch').click(function () {
+		$('input[name="keyword"]').val('');
+		$('#searchForm').submit();
+	});
+}); //ready
+</script>
 
 </html>

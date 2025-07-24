@@ -1,65 +1,63 @@
 document.addEventListener('DOMContentLoaded', function() {
-	const tel = document.getElementById("tel").value;
-	// 전화번호에 하이픈 추가
-	const formattedTel = formatTel(tel);
 	
-	// 전화번호 포맷 함수
-	function formatTel(tel) {
-		return tel.replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
-	} //formatTel
+	// 이름 실시간 유효성 검사
+	const nameInput = document.getElementById("name");
+	nameInput.addEventListener('input', function() {
+	    validateName(nameInput.value);
+	}); //idInput
 	
-	// null 체크 함수('을')
-	function validateNullEul(value, fieldName) {
-		if (!value || value.trim() === "") {
-			showErrorMessage(fieldName, `${fieldName}을 입력해주세요.`);
-			// 체크 실패
-			return false;
-		} //end if
-		// 체크 성공
-		hideErrorMessage(fieldName);
-		return true;
-	} //validateNullEul
-	
-	// null 체크 함수('를')
-	function validateNullRul(value, fieldName) {
-		if (!value || value.trim() === "") {
-			showErrorMessage(fieldName,`${fieldName}를 입력해주세요.`);
-			// 체크 실패
-			return false;
-		} //end if
-		// 체크 성공
-		hideErrorMessage(fieldName);
-		return true;
-	} //validateNullRul
-	
-	// 이름 유효성 검사
+	// 이름 유효성 검사 함수
 	function validateName(name) {
-		const nameText = /^[가-힣]{2,10}$/;
-		if (!name || !nameText.test(name)) {
-			// 유효성 검사 실패
-			showErrorMessage("name", "이름은 최소 2자리, 최대 10자리 한글만 가능합니다.");
+		const nameText = /^[가-힣]+$/;
+		// null 검사 실패
+		if (!name){
+			showErrorMessage("name", "이름을 입력하세요.");
 			return false;
 		} //end if
+		
+		// 길이 검사 실패
+		if(name.length < 1) {
+			showErrorMessage("name", "이름은 최소 2자리, 최대 10자리 가능합니다.");
+			return false;
+		} //end if
+		
+		// 한글 검사 실패
+		if (!nameText.test(name)) {
+			showErrorMessage("name", "이름은 한글만 가능합니다.");
+			return false;
+		} //end if
+		
 		// 유효성 검사 성공
 		hideErrorMessage("name");
 		return true;
 	} //validateName
+/*	
+	// 전화번호 실시간 유효성 검사
+	const telInput = document.getElementById("tel");
+	telInput.addEventListener('input', function() {
+	    // 전화번호 포맷
+	    const formattedTel = formatTel(telInput.value);
+	    telInput.value = formattedTel;
 
-	// 비밀번호 유효성 검사(일치 여부 확인)
-	function validatePass(pass, passCheck){
-		if(pass == passCheck){
-			showErrorMessage("pass","비밀번호와 비밀번호 확인이 일치하지 않습니다.\n비밀번호를 다시 확인해주세요.");
-			// 유효성 검사 실패
-			return false;
-		} //end if
-		// 유효성 검사 성공
-		hideErrorMessage("pass");
-		return true;
-	} //validatePass
-	
+	    // 포맷 후 전화번호 유효성 검사
+	    validateTel(formattedTel);
+	}); //telInput
+
+	// 전화번호 포맷 함수
+	function formatTel(tel) {
+	    // 숫자만 추출
+	    let cleaned = tel.replace(/[^0-9]/g, '');
+	    if (cleaned.length < 4) {
+	        return cleaned;
+	    } else if (cleaned.length < 7) {
+	        return cleaned.replace(/(\d{3})(\d{0,4})/, "$1-$2");
+	    } else {
+	        return cleaned.replace(/(\d{3})(\d{3})(\d{0,4})/, "$1-$2-$3");
+	    }
+	}
 	// 전화번호 유효성 검사
 	function validateTel(tel) {
-		const telText = /^\d{10,11}$/;
+		const telText = /^\d{3}-\d{3,4}-\d{4}$/;
 		if (!tel || !telText.test(tel)) {
 			showErrorMessage("tel","전화번호는 숫자만 입력하고, 10자리 또는 11자리만 가능합니다.");
 			// 유효성 검사 실패
@@ -69,6 +67,86 @@ document.addEventListener('DOMContentLoaded', function() {
 		hideErrorMessage("tel");
 		return true;
 	} //validateTel
+*/	
+	// 아이디 실시간 유효성 검사
+	const idInput = document.getElementById("id");
+	idInput.addEventListener('input', function() {
+	    validateID(idInput.value);
+	}); //idInput
+	
+	// 아이디 유효성 검사 함수
+	function validateID(id) {
+	  const idRegex = /^[a-zA-Z0-9]+$/;
+
+	  // null 검사 실패
+	  if (!id) {
+	    showErrorMessage("id", "아이디를 입력하세요.");
+	    return false;
+	  } //end if
+
+	  // 길이 검사 실패
+	  if (id < 4){
+		showErrorMessage("id","아이디는 최소 4자리, 최대 15자리 가능합니다.")
+		return false;
+	  } //end if
+	  
+	  // 영문, 숫자 검사 실패
+	  if (!idRegex.test(id)) {
+	    showErrorMessage("id", "아이디는 영문 포함 숫자만 가능합니다.");
+	    return false;
+	  } //end if
+
+	  // 유효성 검사 성공
+	  hideErrorMessage("id");
+	  return true;
+	} //validateID
+	
+	// 비밀번호와 비밀번호 확인 실시간 유효성 검사
+	const passInput = document.getElementById("pass");
+	const passCheckInput = document.getElementById("pass-check");
+	passInput.addEventListener('input', function() {
+	    validatePass(passInput.value, passCheckInput.value);
+	}); //passInput
+
+	passCheckInput.addEventListener('input', function() {
+	    validatePass(passInput.value, passCheckInput.value);
+	}); //passCheckInput
+	
+	// 비밀번호 유효성 검사 함수
+	function validatePass(pass, passCheck){
+		
+		// null 검사 실패
+		if (!pass) {
+		  showErrorMessage("pass-check", "비밀번호를 입력하세요.");
+		  return false;
+		} //end if
+		// null 검사 실패
+		if (!passCheck) {
+		  showErrorMessage("pass-check", "비밀번호 확인을 입력하세요.");
+		  return false;
+		} //end if
+		
+		// 길이 검사 실패
+		if (pass.length < 4){
+			showErrorMessage("pass-check","비밀번호는 최소 4자리, 최대 16자리 가능합니다.")
+			return false;
+		} //end if
+		// 길이 검사 실패
+		if (passCheck.length < 4){
+			showErrorMessage("pass-check","비밀번호 확인은 최소 4자리, 최대 16자리 가능합니다.")
+			return false;
+		} //end if
+		
+		if(pass != passCheck){
+			showErrorMessage("pass-check","비밀번호와 비밀번호 확인이 일치하지 않습니다.\n비밀번호를 다시 확인해주세요.");
+			return false;
+		} //end if
+		
+		// 유효성 검사 성공
+		hideErrorMessage("pass");
+		hideErrorMessage("pass-check");
+		return true;
+	} //validatePass
 	
 	// 에러 메시지를 출력하는 함수
 	function showErrorMessage(fieldName, message) {
@@ -85,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    inputElement.style.borderWidth = '1px';
 	    inputElement.style.borderStyle = 'solid';
 	} //showErrorMessage
-	
+
 	// 에러 메시지를 숨기는 함수
 	function hideErrorMessage(fieldName) {
 	    const errorDiv =  document.querySelector(`#${fieldName} + .error-message`);
@@ -101,26 +179,27 @@ document.addEventListener('DOMContentLoaded', function() {
 		inputElement.style.backgroundColor = '#e0f7fa';
 	} //hideErrorMessage
 	
-	// 각 입력 필드에 input 이벤트 리스너 추가
-	const inputs = document.querySelectorAll('input');
-	inputs.forEach(input => {
-		input.addEventListener('input', function() {
-			const value = this.value;
-			const id = this.id;
+	// null 체크 함수('을')
+	function validateNullEul(value, fieldName) {
+		if (!value || !value.trim() === "") {
+			alert(`${fieldName}을 입력해주세요.`);
+			// 체크 실패
+			return false;
+		} //end if
+		// 체크 성공
+		return true;
+	} //validateNullEul
 
-			// 각 필드별 유효성 검사
-			if (id === 'name') {
-				validateName(value);
-			} else if (id === 'tel') {
-				validateTel(value);
-			} else if (id === 'id') {
-				validateNullRul(value, "아이디");
-			} else if (id === 'pass') {
-				validatePass(document.getElementById("pass").value, document.getElementById("pass-Check").value);
-			} //end if else
-		}); //input
-	}); //forEach
-	
+	// null 체크 함수('를')
+	function validateNullRul(value, fieldName) {
+		if (!value || !value.trim() === "") {
+			alert(`${fieldName}를 입력해주세요.`);
+			// 체크 실패
+			return false;
+		} //end if
+		// 체크 성공
+		return true;
+	} //validateNullRul
 	
 	const btnAdd = document.getElementById("btnAdd");
 	btnAdd.addEventListener("click", function () {
@@ -131,9 +210,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const regDate = document.getElementById("reg-date").value;
 		const banValue = document.querySelector('input[name="ban"]:checked').value;
 
+		// 전화번호 null 검사
 		if( !validateNullEul(name, "이름") ){
+			// null 검사 실패
 			return;
-		}
+		} //end if
+		// null 검사 성공
+		
 		// 전화번호 유효성 검사
 		if(!validateNullRul(tel, "전화번호")){
 			// 유효성 검사 실패
@@ -154,10 +237,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		} //end if
 		// 유효성 검사 성공
 		
-		
 	    const jsonParam = {
 			name : name,
-			tel : formattedTel,
+			tel : tel,
 			id : id,
 			pass : pass,
 			inputDate : regDate,
@@ -179,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				// 등록 성공
 				alert("관리자 정보 등록이 완료되었습니다.");
 	    		// 이전 화면으로 이동
-	        	window.history.back();
+	        	window.location.href = '/admin/account/admins';
 	    	} else {
 	    		// 등록 실패
 	    		alert(data.msg);
@@ -192,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const btnBack = document.getElementById("btnBack");
 	btnBack.addEventListener("click", function () {
 		// 이전 화면으로 이동
-		window.history.back();
+		window.location.href = '/admin/account/admins';
 	}); //btnBack
 	
 }); //DOMContentLoaded
