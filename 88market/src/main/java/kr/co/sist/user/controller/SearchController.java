@@ -1,5 +1,6 @@
 package kr.co.sist.user.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.sist.DTO.ProductDTO;
 import kr.co.sist.DTO.CategoryDTO;
+import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.user.DAO.CategoryDAO;
 import kr.co.sist.user.Service.CategoryService;
+import kr.co.sist.user.Service.ProductService;
 import kr.co.sist.user.Service.SearchItemService;
 
 @Controller
 @RequestMapping("/search")
 public class SearchController {
 
+	@Autowired
+	private ProductService productService;
+	
 	@Autowired
 	private SearchItemService serchService;
 	
@@ -43,6 +49,12 @@ public class SearchController {
 	            keyword, catNum, minPrice, maxPrice, tradeOption, sortOption
 	        );
 
+	    List<ImageDTO> resultsImage = new ArrayList<ImageDTO>();
+	    for (ProductDTO p : results) {
+	    	resultsImage.add(productService.selectImageByNum(p.getImgNum()));
+	    }
+	    
+	    model.addAttribute("resultsImage",resultsImage);
 	    
 	    // 광고 상품 (카테고리 기준)
 	    ProductDTO adItem=null;
@@ -50,7 +62,10 @@ public class SearchController {
             // catNum이 넘어오면 카테고리 검색
 	    	adItem = serchService.getTopAdminScoreItem(catNum);
 	    }
-	    
+	    if (adItem != null) {
+	    	ImageDTO adImage = productService.selectImageByNum(adItem.getImgNum());
+	    	model.addAttribute("adImage",adImage);
+	    }
 	    // 타이틀 결정
 	    String title="";
         if (catNum != null) {

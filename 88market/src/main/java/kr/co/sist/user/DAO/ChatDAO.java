@@ -53,4 +53,8 @@ public class ChatDAO {
     public void insertMessage(ChatmessageDTO message) {
     	sqlSession.insert("ChatMapper.insertMessage",message);
     }
+    
+    public List<ChatmessageDTO> getMessagesByChatRoomNum(int chatroomNum){
+    	return sqlSession.selectList("ChatMapper.getMessagesByChatRoomNum",chatroomNum);
+    }
 }

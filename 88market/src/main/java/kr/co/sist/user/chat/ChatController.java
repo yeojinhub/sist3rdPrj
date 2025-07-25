@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,13 +48,10 @@ public class ChatController {
         String username = currentUser.getUsername();
         return ResponseEntity.ok(username);
     }
-
+    
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload ChatmessageDTO message) {
         int chatroomNum = message.getChatroomNum();  // 메시지에서 chatroomNum 가져오기
-
-        // 디버깅: chatroomNum 값 출력
-        System.out.println("Received message with chatroomNum: " + chatroomNum);
 
         // 메시지가 null인지 확인
         if (message == null) {
@@ -64,11 +62,7 @@ public class ChatController {
 //        chatService.addMessage(message);
         
         // 클라이언트에게 해당 채팅방에 메시지 전송
-        System.out.println("Sending message to /topic/chatroom/" + chatroomNum);
         messagingTemplate.convertAndSend("/topic/chatroom/" + chatroomNum, message);
-
-        // 디버깅: 메시지 전송 후
-        System.out.println("Message sent to /topic/chatroom/" + chatroomNum + ": " + message);
     }
     
     //채팅방 생성
@@ -139,6 +133,27 @@ public class ChatController {
         }
 
         return chatRoomDetails;
+    }
+    
+    @GetMapping("/chat/messages/{chatroomNum}")
+    public ResponseEntity<List<ChatmessageDTO>> getMessagesByChatRoomNum(
+            @PathVariable("chatroomNum") int chatroomNum,
+            @AuthenticationPrincipal UserDetails currentUser) {
+
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String userNum = currentUser.getUsername();
+
+        // 이 유저가 이 채팅방에 속해있는지 체크.
+        // boolean isParticipant = chatService.isUserInChatRoom(chatroomNum, userNum);
+        // if (!isParticipant) {
+        //     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        // }
+
+        List<ChatmessageDTO> messages = chatService.getMessagesByChatRoomNum(chatroomNum);
+        return ResponseEntity.ok(messages);
     }
 
 }

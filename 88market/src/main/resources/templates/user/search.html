@@ -111,7 +111,7 @@
 		       class="product-card_search ad-item">
 		      <div class="ad-badge"><p>광고</p></div>
 		    <div class="product-image-wrapper">
-		      <img th:src="@{/images/main/img1.png}" alt="광고 상품" />
+		      <img th:src="@{${adImage.mainImage}}" alt="광고 상품" />
 		    </div>
 		    <div class="product-info_search">
 		      <p class="product-name_search" th:text="${adItem.title}">상품명</p>
@@ -131,7 +131,7 @@
 		  </div>
 		
 		  <!-- 일반 상품 리스트 -->
-		  <div th:each="item : ${results}"
+		  <div th:each="item, iterstat : ${results}"
 		       class="product-card_search">
 		        <a th:href="@{/detail(id=${item.prdNum})}" class="product-link_search">
 		    <div class="product-image-wrapper">
@@ -139,7 +139,7 @@
 		           th:if="${item.sellType=='N' and item.appointType=='Y'}"><p>예약중</p></div>
 		      <div class="overlay_seller"
 		           th:if="${item.sellType=='Y'}"><p>판매완료</p></div>
-		      <img th:src="@{/images/main/img1.png}" alt="상품 이미지" />
+		      <img th:src="@{${resultsImage[iterstat.index].mainImage}}" alt="상품 이미지" />
 		    </div>
 		    <div class="product-info_search">
 		      <p class="product-name_search" th:text="${item.title}">상품명</p>

@@ -63,6 +63,23 @@
         VALUES (SEQ_MSG_ID.NEXTVAL,#{content}, SYSDATE, 'N', #{imgPath, jdbcType=VARCHAR}, #{userNum}, #{chatroomNum})
     </insert>
 	
+    <!-- 채팅방 번호로 메시지 목록 조회 -->
+    <select id="getMessagesByChatRoomNum" parameterType="int" resultType="kr.co.sist.DTO.ChatmessageDTO">
+        SELECT 
+            MSG_ID,
+            CHATROOM_NUM,
+            USER_NUM,
+            CONTENT,
+            CREATE_DATE
+        FROM
+            CHATMESSAGE
+        WHERE
+            CHATROOM_NUM = #{chatroomNum}
+        ORDER BY
+            CREATE_DATE ASC
+    </select>
+
+	
 	<resultMap id="ChatRoomSummaryMap" type="map">
 	  <result property="chatroomNum" column="chatroom_num"/>
 	  <result property="partnerNum" column="partner_num"/>
