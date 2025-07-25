@@ -27,7 +27,7 @@ public class MypageController {
 
 		// 로그인 되어 있으면 마이페이지로 이동
 		
-		String[] validTabs = {"mypageMain", "sales", "purchase", "wishlist"};
+		String[] validTabs = {"mypageMain", "sales", "purchase", "wishlist","info","bank","address","review","withdraw"};
 		boolean isValidTab = false;
 		
 		for (String validTab : validTabs) {
