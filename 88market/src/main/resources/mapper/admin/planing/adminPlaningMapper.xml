@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminPlaningDAO">
+
+<select id="selectComNumById" resultType="String">
+  SELECT COM_NUM
+  FROM COMPANY
+  WHERE ID = #{id}
+</select>
+
+<!-- 기업번호로 상품 조회 리스트 -->
+<select id="searchProductsByCondition" resultType="kr.co.sist.DTO.ProductDTO">
+   SELECT * FROM (
+     SELECT ROWNUM AS rn, a.*
+     FROM (
+       SELECT * FROM PRODUCT
+       WHERE COM_NUM = #{comNum}
+       <if test="keyword != null and keyword != ''">
+         AND TITLE LIKE '%' || #{keyword} || '%'
+       </if>
+       <if test="hidden != 'all'">
+         AND SELL_TYPE = #{hidden}
+       </if>
+       ORDER BY INPUT_DATE DESC
+     ) a
+     WHERE ROWNUM &lt;= #{endRow}
+   )
+   WHERE rn &gt;= #{startRow}
+ </select>
+
+ <select id="getTotalCountByCondition" resultType="int">
+   SELECT COUNT(*)
+   FROM PRODUCT
+   WHERE COM_NUM = #{comNum}
+   <if test="keyword != null and keyword != ''">
+     AND TITLE LIKE '%' || #{keyword} || '%'
+   </if>
+   <if test="hidden != 'all'">
+     AND SELL_TYPE = #{hidden}
+   </if>
+ </select>
+  
+<!-- 카테고리  -->
+<select id="selectAllCategories" resultType="kr.co.sist.DTO.CategoryDTO">
+    SELECT CAT_NUM, NAME FROM CATEGORY
+</select>
+
+<!-- 상품 등록 -->
+ <insert id="insertProduct" parameterType="kr.co.sist.DTO.ProductDTO" useGeneratedKeys="true" keyProperty="prdNum">
+   INSERT INTO PRODUCT (
+        PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, INPUT_DATE, APPOINT_TYPE,
+        HIDDEN_TYPE, SELL_TYPE, PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE,
+        DELIVERY_TYPE, USER_NUM, CAT_NUM, COM_NUM, IMG_NUM, LIKE_NUM, ADMIN_SCORE
+    ) VALUES (
+        #{prdNum}, #{title}, #{content}, 
+        #{price, jdbcType=NUMERIC}, 
+        #{location1, jdbcType=VARCHAR},
+        SYSDATE, 
+        #{appointType, jdbcType=VARCHAR}, 
+        #{hiddenType, jdbcType=VARCHAR},
+        #{sellType, jdbcType=VARCHAR}, 
+        #{prdCnt, jdbcType=NUMERIC},
+         #{clickNum, jdbcType=NUMERIC},
+        #{safeType, jdbcType=VARCHAR}, 
+        #{meetType, jdbcType=VARCHAR},
+         #{deliveryType, jdbcType=VARCHAR},
+        #{userNum, jdbcType=NUMERIC}, 
+        #{catNum, jdbcType=NUMERIC},
+         #{comNum, jdbcType=VARCHAR},
+          #{imgNum, jdbcType=NUMERIC},
+        0, 0
+    )
+ </insert>
+
+ <!-- 이미지 등록 (단일 또는 다중) -->
+ <insert id="insertImage" parameterType="kr.co.sist.DTO.ImageDTO">
+   INSERT INTO IMAGE (
+        IMG_NUM, MAIN_IMAGE, SUB_IMAGE1, SUB_IMAGE2, SUB_IMAGE3, SUB_IMAGE4, IMAGE_TYPE
+    ) VALUES (
+        #{imgNum}, 
+        #{mainImage, jdbcType=VARCHAR}, 
+        #{subImage1, jdbcType=VARCHAR}, 
+        #{subImage2, jdbcType=VARCHAR}, 
+        #{subImage3, jdbcType=VARCHAR}, 
+        #{subImage4, jdbcType=VARCHAR}, 
+        #{imageType, jdbcType=VARCHAR}
+    )
+ </insert>
+ 
+ 
+ <!-- 시퀀스 조회 -->
+  <select id="getNextProductSeq" resultType="int">
+    SELECT SEQ_PRD_NUM.NEXTVAL FROM DUAL
+  </select>
+  
+  <!-- 이미지 번호 시퀀스 조회-->
+<select id="getNextImageSeq" resultType="int">
+  SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
+</select>
+
+<!-- 상품번호로 단일 상품 조회 -->
+<select id="selectProductByPrdNum" parameterType="string" resultType="kr.co.sist.DTO.ProductDTO">
+    SELECT
+        PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, INPUT_DATE, APPOINT_TYPE,
+        HIDDEN_TYPE, SELL_TYPE, PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE,
+        DELIVERY_TYPE, USER_NUM, CAT_NUM, COM_NUM, IMG_NUM, LIKE_NUM, ADMIN_SCORE
+    FROM PRODUCT
+    WHERE PRD_NUM = #{prdNum}
+</select>
+
+<!-- ① 상품 UPDATE -->
+<update id="updateProduct" parameterType="kr.co.sist.DTO.ProductDTO">
+  UPDATE PRODUCT
+     SET TITLE         = #{title},
+         CONTENT       = #{content},
+         PRICE         = #{price},
+         CAT_NUM       = #{catNum},
+         DELIVERY_TYPE = #{deliveryType},
+         SELL_TYPE     = #{sellType},
+         HIDDEN_TYPE   = #{hiddenType},
+         APPOINT_TYPE  = #{appointType},
+         SAFE_TYPE     = #{safeType},
+         MEET_TYPE     = #{meetType}
+   WHERE PRD_NUM = #{prdNum}
+</update>
+
+<!-- ② IMAGE UPDATE -->
+<update id="updateImage" parameterType="kr.co.sist.DTO.ImageDTO">
+  UPDATE IMAGE
+     SET MAIN_IMAGE = #{mainImage},
+         SUB_IMAGE1 = #{subImage1},
+         SUB_IMAGE2 = #{subImage2},
+         SUB_IMAGE3 = #{subImage3},
+         SUB_IMAGE4 = #{subImage4}
+   WHERE IMG_NUM = #{imgNum}
+</update>
+
+<!-- ③ IMAGE 존재 여부 (0/1) -->
+<select id="existsImage" resultType="int">
+  SELECT COUNT(*) FROM IMAGE WHERE IMG_NUM = #{imgNum}
+</select>
+
+<!-- 상품번호로 단일 상품 조회 -->
+<select id="getProductByPrdNum" parameterType="string" resultType="kr.co.sist.DTO.ProductDTO">
+    SELECT
+        PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1, INPUT_DATE, APPOINT_TYPE,
+        HIDDEN_TYPE, SELL_TYPE, PRD_CNT, CLICK_NUM, SAFE_TYPE, MEET_TYPE,
+        DELIVERY_TYPE, USER_NUM, CAT_NUM, COM_NUM, IMG_NUM, LIKE_NUM, ADMIN_SCORE
+    FROM PRODUCT
+    WHERE PRD_NUM = #{prdNum}
+</select>
+
+<select id="selectImageByImgNum" resultType="kr.co.sist.DTO.ImageDTO">
+  SELECT *
+  FROM IMAGE
+  WHERE IMG_NUM = #{imgNum}
+</select>
+
+<!-- 상품 삭제 -->
+<delete id="deleteProductByPrdNum">
+  DELETE FROM PRODUCT WHERE PRD_NUM = #{prdNum}
+</delete>
+
+<!-- 이미지 삭제 (IMG_NUM을 PRODUCT에서 가져와야 함) -->
+<delete id="deleteImageByPrdNum">
+  DELETE FROM IMAGE
+  WHERE IMG_NUM = (
+    SELECT IMG_NUM FROM PRODUCT WHERE PRD_NUM = #{prdNum}
+  )
+</delete>
+
+<!-- 주문 -->
+<select id="selectOrdersByCompany" resultType="kr.co.sist.DTO.OrderManageDTO">
+SELECT *
+FROM (
+    SELECT 
+        ROWNUM AS rn,
+        ordered_data.*
+    FROM (
+        SELECT 
+            p.PAYMENT_UID       AS orderNumber,
+            pr.TITLE            AS productName,
+            c.COM_NAME          AS brandName,
+            u.NAME              AS buyerName,
+            t.TRADE_ID         AS tradeId,
+            t.TRADE_STATUS      AS tradeStatus,
+            t.TRADE_DATE        AS orderDate,
+            u.ADDRESS           AS buyerAddress,
+            u.TEL               AS buyerTel,
+            pr.PRD_CNT          AS quantity,
+            p.METHOD            AS paymentMethod,
+            p.AMOUNT            AS paymentAmount
+        FROM trades t
+        JOIN users u ON t.BUYER_ID = u.USER_NUM
+        JOIN product pr ON t.PRD_NUM = pr.PRD_NUM
+        JOIN company c ON pr.COM_NUM = c.COM_NUM
+        JOIN payments p ON t.TRADE_ID = p.TRADE_ID
+        WHERE pr.COM_NUM = #{comNum}
+        <if test="keyword != null and keyword != ''">
+            AND (
+                LOWER(pr.TITLE) LIKE '%' || LOWER(#{keyword}) || '%'
+                OR LOWER(u.NAME) LIKE '%' || LOWER(#{keyword}) || '%'
+            )
+        </if>
+        <if test="tradeStatus != 'all'">
+            AND t.TRADE_STATUS = #{tradeStatus}
+        </if>
+        ORDER BY t.TRADE_DATE DESC
+    ) ordered_data
+)
+WHERE rn BETWEEN #{startRow} AND #{endRow}
+
+</select>
+
+<!-- 주문 수 카운트 -->
+<select id="countOrdersByCompany" resultType="int">
+    SELECT COUNT(*)
+    FROM TRADES t
+    JOIN PRODUCT pr ON t.prd_num = pr.prd_num
+    JOIN USERS u ON t.buyer_id = u.user_num
+    WHERE pr.com_num = #{comNum}
+    <if test="keyword != null and keyword != ''">
+        AND (pr.title LIKE '%' || #{keyword} || '%' OR u.name LIKE '%' || #{keyword} || '%')
+    </if>
+    <if test="tradeStatus != null and tradeStatus != 'all'">
+        AND t.trade_status = #{tradeStatus}
+    </if>
+</select>
+
+<!-- 단일 거래 상세 조회 -->
+<select id="selectOrderDetailByTradeId" resultType="kr.co.sist.DTO.OrderManageDTO">
+    SELECT 
+        p.PAYMENT_UID       AS orderNumber,
+        pr.TITLE            AS productName,
+        c.COM_NAME          AS brandName,
+        u.NAME              AS buyerName,
+        t.TRADE_STATUS      AS tradeStatus,
+        t.TRADE_DATE        AS orderDate,
+        u.ADDRESS           AS buyerAddress,
+        u.TEL               AS buyerTel,
+        pr.PRD_CNT          AS quantity,
+        p.METHOD            AS paymentMethod,
+        p.AMOUNT            AS paymentAmount
+    FROM trades t
+    JOIN users u ON t.BUYER_ID = u.USER_NUM
+    JOIN product pr ON t.PRD_NUM = pr.PRD_NUM
+    JOIN company c ON pr.COM_NUM = c.COM_NUM
+    JOIN payments p ON t.TRADE_ID = p.TRADE_ID
+    WHERE t.TRADE_ID = #{tradeId}
+</select>
+
+
+<!-- 거래 상태 업데이트 -->
+<update id="updateTradeStatus">
+    UPDATE TRADES
+    SET trade_status = #{tradeStatus}
+    WHERE trade_id = #{tradeId}
+</update>
+
+
+</mapper>

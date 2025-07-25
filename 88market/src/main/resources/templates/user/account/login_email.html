@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<title>88마켓 - 로그인</title>
+  	<!-- 로그인 CSS -->
+  	<link rel="stylesheet" th:href="@{/css/user/login.css}">
+  	<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+  	<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+
+<body>
+  	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+ 	 <!-- 메인 콘텐츠 -->
+  	<main class="product-page-container">
+   		<div class="login-container">
+    		<div class="login-box">
+        		<img class="market-icon" th:src="@{/images/logo.png}" alt="88마켓 아이콘">
+        		<h1>88마켓에 오신 것을 환영합니다.</h1>
+
+        		<div class="login-options">
+         			<div class="remember-login">
+            			<div class="checkbox-wrapper">
+             				<div class="checkbox"></div>
+              				<span>&lt;</span>
+            			</div>
+            			<span>로그인 유지하기</span>
+          			</div>
+
+          			<form th:action="@{/loginProcess}" th:method="post" id="frm">
+          				<!-- 이메일 입력 Form	-->    			
+          				<div class="form-group">
+          					<label for="email">이메일</label>
+							<div class="email-field">
+								<input type="text" id="email" name="email" placeholder="이메일 입력" />
+								<span>@</span>
+								<input type="text" id="email-domain" name="email-domain" placeholder="naver.com" />
+							</div>
+						</div>
+						
+						<!-- 비밀번호 입력 From -->
+						<div class="form-group">
+							<label for="pass">비밀번호</label>
+							<input type="password" id="pass" name="pass" class="input-error" placeholder="영문, 숫자 포함 8자 이상">
+							<p class="error-message">비밀번호를 입력해주세요</p>
+						</div>
+						
+						<div class="form-group">
+							<input type="button" id="btn" value="로그인" class="btn btn-success" />
+						</div>
+					</form>
+          			<button class="btn btn-signup" th:onclick="|location.href='@{/signup}'|">회원가입</button>
+        		</div>
+      		</div>
+    	</div>
+	</main>
+
+  	<!-- 푸터 -->
+  	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+<script th:inline="javascript">
+var loginURL = "/loginProcess";
+var mainURL = "/";
+</script>
+<script>
+/*<![CDATA[*/
+$(function(){
+ $("#btn").click(function(){
+   const email = $("#email").val() + "@" + $("#email-domain").val();
+   const pass  = $("#pass").val();
+   
+   $.ajax({
+     url: loginURL,
+     type: "POST",
+     contentType: "application/json; charset=UTF-8",
+     dataType: "json",
+     data: JSON.stringify({ email, pass }),
+     success: function(response){
+       // 쿠키에 토큰이 담겼으니 바로 메인 페이지로 이동
+       window.location.href = mainURL;
+     }, //success
+     error: function(xhr, status, error){
+    console.error("Login error:", status, error, xhr.responseText);
+       alert("이메일 또는 비밀번호가 잘못되었습니다.");
+     } //error
+   }); //ajax
+   
+ }); //click
+ 
+}); //ready
+/*]]>*/
+</script>
+</body>
+</html>
+

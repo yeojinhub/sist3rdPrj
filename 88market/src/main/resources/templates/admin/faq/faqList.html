@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - FAQ</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/faq/faq.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<!-- 상단 헤더 -->
+	<div th:replace="fragments/admin/admin_header :: header"></div>
+	
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>게시판 관리 &gt;</span> <span class="current-page">FAQ 관리</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (공지사항 관리) -->
+			<main class="container">
+				<section class="search-section">
+					<!-- 검색 폼 추가 (method="get") -->
+					<form id="searchForm" th:action="@{/admin/faq}" method="get">
+						<div class="search-box">
+							<select class="search-filter" name="searchType">
+								<option value="title"
+									th:selected="${param.searchType != null and param.searchType[0] == 'title'}">제목
+								</option>
+								<option value="content"
+									th:selected="${param.searchType != null and param.searchType[0] == 'content'}">내용
+								</option>
+								<option value="name"
+									th:selected="${param.searchType != null and param.searchType[0] == 'name'}">작성자
+								</option>
+							</select> <input type="text" class="search-input" name="keyword"
+								th:value="${param.keyword}" placeholder="검색">
+							<button type="submit" class="search-button">검색</button>
+							<!-- 검색 초기화 버튼 추가 -->
+							<button type="button" class="search-button" id="resetSearch">초기화</button>
+						</div>
+					</form>
+				</section>
+
+				<section class="faq-section">
+					<table class="faq-table">
+						<thead>
+							<tr>
+								<th><input type="checkbox" class="all-checkbox"></th>
+								<th>번호</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>구분</th>
+								<th>작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item, i : ${faqList}" class="table-row">
+								<td><input type="checkbox" class="checkbox"
+									th:id="'checkbox' + ${i.count}"
+									th:data-faq-num="${item.faqNum}"></td>
+								<td
+									th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.count - 1)}">
+								</td>
+								<td class="faq-title" th:text="${item.title}"
+									style="cursor: pointer; text-align: center;"
+									th:onclick="|location.href='@{/admin/faq/detail(faqNum=${item.faqNum})}'|"></td>
+								<td th:text="${item.name}"></td>
+								<td th:text="${item.faqType}"></td>
+								<td th:text="${item.inputDate}"></td>
+							</tr>
+							<tr th:if="${#lists.isEmpty(faqList)}">
+								<td colspan="6" style="text-align: center;">등록된 공지사항이 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="table-footer">
+						<div class="table-controls">
+							<button class="control-button"
+								th:onclick="|location.href='@{/admin/faq/add}'|">등록</button>
+							<button class="control-button" id="deleteBtn">삭제</button>
+						</div>
+						<!-- 페이지네이션 -->
+						<div class="pagination" th:if="${pagination.totalPages > 0}">
+							<div class="pagination">
+								<!-- 이전 페이지 -->
+								<a th:if="${pagination.pageNum > 1}"
+									th:href="@{/admin/faq(page=${pagination.pageNum - 1},
+searchType=${param.searchType},
+keyword=${param.keyword})}"
+									class="prev">&lt;</a> <a th:unless="${pagination.pageNum > 1}"
+									class="prev disabled">&lt;</a>
+
+								<!-- 페이지 번호 -->
+								<a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
+									th:href="@{/admin/faq(page=${i},
+searchType=${param.searchType},
+keyword=${param.keyword})}"
+									th:text="${i}"
+									th:classappend="${i == pagination.pageNum} ? 'active' : ''"></a>
+
+								<!-- 다음 페이지 -->
+								<a th:if="${pagination.pageNum < pagination.totalPages}"
+									th:href="@{/admin/faq(page=${pagination.pageNum + 1},
+searchType=${param.searchType},
+keyword=${param.keyword})}"
+									class="next">&gt;</a> <a
+									th:unless="${pagination.pageNum < pagination.totalPages}"
+									class="next disabled">&gt;</a>
+							</div>
+						</div>
+					</div>
+				</section>
+			</main>
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
+		</div>
+	</div>
+
+	<script>
+		$(function () {
+			$('#resetSearch').click(function () {
+				$('input[name="keyword"]').val('');
+				$('#searchForm').submit();
+			});
+
+			// 체크박스 전체 선택
+			$('.all-checkbox').click(function () {
+				if ($('.all-checkbox').is(':checked')) {
+					$('.checkbox').prop('checked', true);
+				} else {
+					$('.checkbox').prop('checked', false);
+				}
+			});// click
+
+			// 체크박스 선택 삭제
+			$('#deleteBtn').click(function () {
+				var selectedNums = [];
+
+				// 선택된 체크박스의 notNum 수집
+				$('.checkbox:checked').each(function () {
+					selectedNums.push($(this).data('faq-num'));
+				});
+
+				if (selectedNums.length === 0) {
+					alert('삭제할 항목을 선택해주세요.');
+					return;
+				}
+
+				if (confirm('선택한 [ ' + selectedNums.length + ' ]개 항목을 정말 삭제하시겠습니까?')) {
+					axios.post('/admin/faq/delete', {
+						faqNums: selectedNums
+					})
+						.then(function (response) {
+							alert('삭제되었습니다.');
+							location.reload(); // 페이지 새로고침
+						})
+						.catch(function (error) {
+							alert('삭제 중 오류가 발생했습니다.');
+							console.error(error);
+						});
+				}
+			});// click
+		});
+	</script>
+</body>
+
+</html>

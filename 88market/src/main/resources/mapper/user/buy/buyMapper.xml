@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.BuyDAO">
+    <!-- 상품 정보 조회 -->
+    <select id="selectProduct" resultType="kr.co.sist.DTO.ProductDTO" parameterType="String">
+        SELECT * FROM PRODUCT WHERE PRD_NUM = #{prdNum}
+    </select>
+
+    <!-- 상품 이미지 조회 -->
+    <select id="selectImage" resultType="kr.co.sist.DTO.ImageDTO" parameterType="int">
+        SELECT * FROM IMAGE WHERE IMG_NUM = #{imgNum}
+    </select>
+    
+    <!-- 유저넘버로 배송지 조회 -->
+    <select id="selectAddressByUserNum" parameterType="String" resultType="kr.co.sist.DTO.AddressDTO">
+    	SELECT * FROM ADDRESS WHERE USER_NUM = #{userNum}
+    	ORDER BY ADDR_TYPE DESC
+    </select>
+    
+    <!-- #. 구매 결제 쿼리 -->
+    <!-- #-1. PRODUCT 테이블에 APPOINT_TYPE 값 'Y' 변경 -->
+    <update id="updateProductAppointType" parameterType="String">
+    	UPDATE PRODUCT SET APPOINT_TYPE = 'Y' WHERE PRD_NUM = #{prdNum}
+    </update>
+    
+    <!-- #-2. TRADES 테이블에 INSERT -->
+    <insert id="insertProductTrades" parameterType="kr.co.sist.DTO.TradesDTO">
+    	<selectKey keyProperty="tradeId" resultType="int" order="BEFORE">
+			SELECT SEQ_TRD_NUM.NEXTVAL FROM DUAL
+		</selectKey>
+    	INSERT INTO TRADES (TRADE_ID, BUYER_ID, SELLER_ID, TRADE_STATUS, DELIVERY_NUM, PRD_NUM)
+    	VALUES(#{tradeId}, #{buyerId}, #{sellerId}, #{tradeStatus}, #{deliveryNum}, #{prdNum})
+    </insert>
+    
+    <!-- #-3. PAYMENTS 테이블에 INSERT -->
+    <insert id="insertProductPayments" parameterType="kr.co.sist.DTO.PaymentsDTO">
+    	INSERT INTO PAYMENTS (PAYMENT_UID, AMOUNT, METHOD, CARD_COMPANY, TRADE_ID)
+    	VALUES(#{paymentUid}, #{amount}, #{method}, #{cardCompany}, #{tradeId})
+    </insert>
+    
+</mapper>

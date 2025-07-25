@@ -1,0 +1,16 @@
+<th:block th:fragment="recentProduct">
+	<link rel="stylesheet" th:href="@{/css/user/components/recent.css}">
+	<div id="recent-products-aside" class="recent-products-aside">
+		<div class="aside-header">
+			<h3>최근본상품</h3>
+		</div>
+		<div class="aside-body">
+			<ul class="product-list">
+				<li><a th:href="@{/detail?id=1}"> <img th:src="@{/images/main/img1.png}"
+						alt="레이저 키요 프로 웹캠">
+				</a></li>
+				<!-- 최근 본 상품이 추가될 영역 -->
+			</ul>
+		</div>
+	</div>
+</th:block>

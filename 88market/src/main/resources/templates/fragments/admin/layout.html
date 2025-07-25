@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:fragment="layout(pageTitle, contentFragment)">
+<head>
+<meta charset="UTF-8">
+<title th:text="${pageTitle}">관리자 페이지</title>
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+<body>
+	<!-- 전체 레이아웃 -->
+	<!-- 고정 사이드바 -->
+	<div th:replace="fragments/admin/admin_sidebar :: sidebar"></div>
+
+	<!-- 상단 헤더 -->
+	<div th:replace="fragments/admin/admin_header :: header"></div>
+
+	<!-- 실제 컨텐츠 영역 -->
+	<div class="content">
+		<div th:insert="${contentFragment}"></div>
+	</div>
+
+	<!-- 필요하다면 하단 스크립트 -->
+	<script th:src="@{/js/admin/script.js}" defer></script>
+</body>
+</html>

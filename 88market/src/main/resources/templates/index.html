@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 당신이 찾는 중고거래 플랫폼</title>
+<!-- 메인 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/main.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+
+<script>
+$(function() {
+	$('.autoplay').slick({
+		slidesToShow: 3,
+		slidesToScroll: 1,
+		autoplay: true,
+		autoplaySpeed: 2000,
+		dots: true
+	});
+
+	  // 여기에 추가
+ 	  $('.top-like-slider').slick({
+	    infinite: true,
+	    slidesToShow: 5,
+	    slidesToScroll: 5,
+	    dots: true,
+	    arrows: true,
+	  }); 
+	  
+ 	  $('.trend-slider').slick({
+ 		    infinite: true,
+ 		    slidesToShow: 5,
+ 		    slidesToScroll: 5,
+ 		    dots: true,
+ 		    arrows: true,
+ 		  });
+
+ 	  $('.view-slider').slick({
+		    infinite: true,
+		    slidesToShow: 5,
+		    slidesToScroll: 5,
+		    dots: true,
+		    arrows: true,
+		  });
+ 	  
+ 	// 찜 토글
+      $(document).on('click', '.wish-btn', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $btn = $(this);
+        const prdNum = $btn.data('prd-num');
+        const $img = $btn.find('img');
+
+        axios.get('/product/wish', {
+          params: { prdNum: prdNum }
+        })
+        .then(res => {
+          const status = res.data;
+          if (status === 'liked') {
+            $btn.addClass('active');
+            $img.attr('src', '/images/productHeart/heart-on.png');
+            alert("찜 등록 되었습니다");
+          } else if (status === 'unliked') {
+            $btn.removeClass('active');
+            $img.attr('src', '/images/productHeart/heart-off.png');
+            alert("찜 해제 되었습니다");
+          }
+        })
+        .catch(err => {
+          if (err.response?.status === 401) {
+            alert("로그인이 필요합니다.");
+            location.href = '/login';
+          } else {
+            console.error("찜 처리 오류:", err);
+          }
+        });
+      });
+	});		
+</script>
+
+
+</head>
+<body>
+	
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<!-- 메인 콘텐츠 -->
+	<main class="page-container">
+		<!-- 이벤트 배너 섹션 -->
+		<section class="card-section event-section" >
+			<div class="card-list-wrapper autoplay" style="height: 500px;">
+				<div class="event-card" th:each="item : ${eventList}">
+					<a th:href="@{/event/{evtNum}(evtNum=${item.evtNum})}"> <img th:src="${item.iDTO.subImage1}"
+						alt="이벤트 배너 이미지">
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- 찜이 많은 상품 섹션 -->
+ 		<section class="card-section">
+			<h2 class="section-title">찜이 많은 상품</h2>
+			<div class="card-list-wrapper-items top-like-slider">
+			<div class="product-card" th:each="item, iterstat :${topLike}">
+			  <a th:href="@{/detail(id=${item.prdNum})}">
+			    <div class="product-image-container">
+			     <img th:src="@{${topLikeImages[iterstat.index].mainImage}}" alt="상품 이미지" />
+			    </div>
+			    <div class="product-info">
+			      <p class="product-name" th:text="${item.title}"></p>
+			      <strong class="product-price" th:text="|${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}원|"></strong>
+			      <div class="product-meta-row">
+			       <p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
+			        <button class="wish-btn"
+					        th:attr="data-prd-num=${item.prdNum}"
+					        th:classappend="${topLikeWish[iterstat.index]} ? ' active' : ''">
+					  <img th:src="@{${topLikeWish[iterstat.index]} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+					       alt="찜하기" class="heart-icon"/>
+					</button>
+			      </div>
+			    </div>
+			  </a>
+			</div>
+			</div>
+		</section>
+		<!-- 다른 사람들은 이 키워드를 주목하고 있어요 -->
+		<section class="card-section">
+			<h2 class="section-title">
+				다른 사람들은 이 키워드를 주목하고 있어요 <span class="text-highlight"  th:text="${trendCategory}"></span>
+			</h2>
+			<div class="card-list-wrapper-items trend-slider">
+				<div class="product-card" th:each="item, iterstat : ${trendItems}">
+					<a th:href="@{/detail(id=${item.prdNum})}">
+						<div class="product-image-container">
+							<img th:src="@{${trendItemsImages[iterstat.index].mainImage}}" alt="상품 이미지" />
+						</div>
+						<div class="product-info">
+							<p class="product-name" th:text="${item.title}"></p>
+							<strong class="product-price" th:text="|${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}원|"></strong>
+						<div class="product-meta-row">
+							<p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
+							<button class="wish-btn"
+							        th:attr="data-prd-num=${item.prdNum}"
+							        th:classappend="${trendItemsWish[iterstat.index]} ? ' active' : ''">
+							  <img th:src="@{${trendItemsWish[iterstat.index]} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+							       alt="찜하기" class="heart-icon"/>
+							</button>
+			      		</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- 많이 본 상품 섹션 -->
+		<section class="card-section">
+			<h2 class="section-title">많이 본 상품</h2>
+			<div class="card-list-wrapper-items view-slider">
+				<div class="product-card" th:each="item, iterstat : ${topView}">
+			  <a th:href="@{/detail(id=${item.prdNum})}">
+			    <div class="product-image-container">
+			      <img th:src="@{${topViewImages[iterstat.index].mainImage}}" alt="상품 이미지" />
+			    </div>
+			    <div class="product-info">
+			      <p class="product-name" th:text="${item.title}"></p>
+			      <strong class="product-price" th:text="|${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}원|"></strong>
+			      <div class="product-meta-row">
+			        <p class="product-meta" th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}"></p>
+<!-- 			        <p class="product-meta" th:text="|${item.location1}·${#dates.format(item.inputDate, 'yyyy-MM-dd HH:mm')}|"></p> -->
+			        <button class="wish-btn"
+							        th:attr="data-prd-num=${item.prdNum}"
+							        th:classappend="${topViewWish[iterstat.index]} ? ' active' : ''">
+							  <img th:src="@{${topViewWish[iterstat.index]} ? '/images/productHeart/heart-on.png' : '/images/productHeart/heart-off.png'}"
+							       alt="찜하기" class="heart-icon"/>
+							</button>
+			      </div>
+			    </div>
+			  </a>
+				</div>
+			</div>
+		</section>
+
+	</main>
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+</body>
+</html>

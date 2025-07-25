@@ -1,0 +1,19 @@
+<!-- templates/admin/index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/admin/layout :: layout('관리자 홈', ~{admin/admin_index :: content})}">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 대시보드</title>
+</head>
+<body>
+    <!-- 실제 컨텐츠 영역 -->
+  <div th:fragment="content">
+
+    <h1>관리자 홈</h1>
+    <p>통계나오는 부분</p>
+    <div></div>
+  </div>
+
+  <!-- 필요하다면 하단 스크립트 -->
+</body>
+</html>

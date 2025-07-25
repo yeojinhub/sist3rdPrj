@@ -1,0 +1,110 @@
+<!-- 수정된 buy-popup HTML -->
+<div th:fragment="buy-popup" class="popup-overlay" id="addressPopup"
+	style="display: none;">
+	<div class="popup-content">
+		<div class="popup-header">
+			<h2>
+				<i class="fas fa-map-marker-alt me-2"></i>배송지 선택
+			</h2>
+			<button type="button" class="btn-close" onclick="closeAddressModal()">
+				<i class="fas fa-times"></i>
+			</button>
+		</div>
+		<div class="popup-body">
+			<!-- 배송지 목록 -->
+			<div class="address-list-wrapper">
+				<div class="address-list">
+					<!-- 대표배송지 -->
+					<div
+						th:class="|address-item ${item.addrType == 'Y' ? 'selected' : ''}|"
+						th:each="item, index : ${addrList}">
+						<div class="address-info">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="addressRadio"
+									th:id="|address${index.index}|"
+									th:checked="${item.addrType == 'Y'}"
+									th:data-name="${item.recipientName}" th:data-tel="${item.tel}"
+									th:data-address="|[${item.zipcode}] ${item.address}|" th:data-add-num="${item.addrNum}">
+								<label class="form-check-label" th:for="|address${index.index}|">
+									<div class="address-header">
+										<strong class="address-name" th:text="${item.name}">집</strong>
+										<span class="badge badge-primary"
+											th:if="${item.addrType == 'Y'}">대표</span>
+									</div>
+									<div class="address-details">
+										<input type="hidden"
+											th:value="|[${item.zipcode}] ${item.address}|"
+											id="selectedAddress" /> <span class="address-text"
+											th:text="|[${item.zipcode}] ${item.address}|">서울시 강남구
+											테헤란로 123, 456호</span><br> <span class="receiver-info"
+											th:text="|${item.recipientName} (${item.tel})|">홍길동
+											(010-1234-5678)</span> <input type="hidden" id="selectedTel"
+											th:value="${item.tel}" /> <input type="hidden"
+											id="selectedName" th:value="${item.recipientName}" />
+									</div>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="popup-footer">
+			<button type="button" class="btn btn-primary" id="btnChoice">
+				<i class="fas fa-check me-2"></i>선택 완료
+			</button>
+			<button type="button" class="btn btn-secondary"
+				onclick="closeAddressModal()">
+				<i class="fas fa-times me-2"></i>취소
+			</button>
+		</div>
+	</div>
+	<script>
+$(function() {
+    // 섹션 전체 클릭 시 라디오버튼 체크
+    $('.address-item').click(function() {
+        var radio = $(this).find('input[name="addressRadio"]');
+        radio.prop('checked', true);
+        
+        // 모든 address-item에서 selected 클래스 제거
+        $('.address-item').removeClass('selected');
+        
+        // 클릭한 아이템에 selected 클래스 추가
+        $(this).addClass('selected');
+    });
+    
+    $('#btnChoice').click(()=>{
+        var selectedRadio = $('input[name="addressRadio"]:checked');
+        
+        if (selectedRadio.length <= 0) {
+            alert('선택된 배송지가 없습니다. 선택해주세요.');
+            return;
+        }
+        
+        var name = selectedRadio.data('name');
+        var tel = selectedRadio.data('tel');
+        var address = selectedRadio.data('address');
+		var addrNum = selectedRadio.data('add-num');
+        
+        $('#receiverName').text(name);
+        $('#receiverTel').text(tel);
+        $('#addressText').text(address);
+		$('#addrNum').val(addrNum);
+        
+        $('#addressPopup').css('display', 'none');
+    });
+});
+
+// 모달 오픈 시 스크롤 초기화
+function openAddressModal() {
+    $('.address-list').scrollTop(0);
+    $('#addressPopup').css('display', 'flex');
+}
+
+function closeAddressModal() {
+    $('#addressPopup').css('display', 'none');
+}
+</script>
+
+</div>

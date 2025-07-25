@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 회원 계정 수정</title>
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
+<!-- 관리자 계정 관리 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/info.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/personal.css}">
+<link rel="stylesheet" th:href="@{/css/admin/account/bank.css}" th:if="${tab == 'bank'}">
+ 
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+	
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 페이지 타이틀 -->
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('계정 관리','회원 계정 수정')}" />
+
+    <!-- 메인 컨텐츠 -->
+        <!-- 페이지 탭 -->
+        <!-- 탭 네비 -->
+      <div class="page-tabs">
+        <!-- 개인정보 관리 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='personal'} ? ' active' : ''"
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='personal')}">
+  			개인정보 관리
+		</a>
+
+        <!-- 계좌 조회 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='bank'} ? ' active' : ''"
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='bank')}">
+  			계좌 조회
+		</a>
+
+        <!-- 배송지 조회 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='address'} ? ' active' : ''"
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='address')}">
+  			배송지 조회
+		</a>
+
+        <!-- 포인트 조회 -->
+        <a type="button" class="tab"
+   			th:classappend="${tab=='point'} ? ' active' : ''"
+   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='point')}">
+  			포인트 조회
+		</a>
+      </div>
+      
+      <!-- 컨테이너 -->
+      <section class="container" style="display:flex; gap:24px;">
+        <!-- 왼쪽: 항상 personal -->
+        <div class="col col-1" style="flex: 2;">
+          <div th:replace="~{admin/account/personal :: personal(userDTO=${userDTO})}"></div>
+        </div>
+
+        <!-- 오른쪽: 탭별 분기 -->
+        <div class="col col-2" style="flex: 1;">
+          <div th:switch="${tab}">
+
+            <!-- BANK -->
+            <div th:case="'bank'">
+              <div th:replace="~{admin/account/bank :: bank(userDTO=${userDTO})}"></div>
+            </div>
+
+            <!-- ADDRESS -->
+            <div th:case="'address'">
+              <div th:replace="~{admin/account/address :: address(userDTO=${userDTO})}"></div>
+            </div>
+
+            <!-- POINT -->
+            <div th:case="'point'">
+              <div th:replace="~{admin/account/point :: point(userDTO=${userDTO})}"></div>
+            </div>
+
+            <!-- PERSONAL 혹은 그 외 -->
+            <div th:case="*">
+              <!-- personal 탭엔 오른쪽 내용 비워두거나 기본 메시지 -->
+            </div>
+
+          </div>
+        </div>
+      </section>
+  	</div>
+  </div>
+</body>
+</html>

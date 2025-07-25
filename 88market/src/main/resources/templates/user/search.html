@@ -1,0 +1,178 @@
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 공지사항</title>
+<!-- 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/search.css}">
+<!-- 외부파일(jQuery, bootstrep 등 -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+
+<script>
+	$(function() {
+
+	});
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.wish-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (event) {
+        event.preventDefault();        // 링크 이동 막기
+        event.stopPropagation();      // 상위 <a> 클릭 이벤트 막기
+
+        // 하트 색 토글
+        btn.classList.toggle('active');
+
+        // btn 내부의 img 태그 찾기
+        const img = btn.querySelector('img');
+        if (btn.classList.contains('active')) {
+          img.src = '/images/productHeart/heart-on.png';   // 활성 하트 이미지
+        } else {
+          img.src = '/images/productHeart/heart-off.png';  // 비활성 하트 이미지
+        }
+      });
+    });
+  });
+</script>
+
+
+</head>
+<body>
+	<!-- 헤더 -->
+	<div th:insert="~{components/user/header :: header}"></div>
+	<!-- 메인 콘텐츠 -->
+	<main class="search-page-container_search">
+		<div class="search-header_search">
+			<div class="search-title_search">
+				<!-- <i class="fa fa-search" aria-hidden="true"></i> -->
+				<h1>
+					<span th:text="${title}"></span> 검색결과
+				</h1>
+			</div>
+			<p class="results-count_search">
+				검색결과 <span  class="item-count-number" th:text="|${count}개|"></span>
+			</p>
+		</div>
+
+		<!-- 검색 설정 패널 (상단) -->
+		<form th:action="@{/search}" method="get" class="filter-panel_search">
+		<input type="hidden" name="keyword" id="keyword" th:value="${keyword}" />
+		<input type="hidden" name="catNum" id="catNum" th:value="${catNum}" />
+			<div class="filter-section_search">
+				<div class="filter-row_search price-filter_search">
+					<label>가격</label>
+					<div class="price-inputs_search">
+						<input type="text" name="minPrice" id="minPrice" th:value="${minPrice}" placeholder="최소 금액">
+						<span class="price-separator">-</span>
+						<input type="text" name="maxPrice" id="maxPrice" th:value="${maxPrice}"placeholder="최대 금액">
+					</div>
+				</div>
+				<div class="filter-row_search">
+					<label>거래옵션</label>
+					<div class="options_search">
+						<label class="radio-option"> <input type="radio" name="tradeOption" id="tradeOption" th:value="'전체'" th:checked="${tradeOption=='전체'}"> <span class="checkmark"></span>전체</label>
+						<label class="radio-option"> <input type="radio" name="tradeOption" id="tradeOption" th:value="'거래가능'" th:checked="${tradeOption=='거래가능'}"> <span class="checkmark"></span> 거래가능만 보기</label>
+					</div>
+				</div>
+				<div class="filter-row_search">
+					<label>정렬옵션</label>
+					<div class="options_search sort-options">
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'추천순'" th:checked="${sortOption=='추천순'}">
+						<span class="checkmark"></span>추천순
+						</label>
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'최신순'"  th:checked="${sortOption=='최신순'}">
+						<span class="checkmark"></span> 최신순
+						</label>
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'낮은가격순'" th:checked="${sortOption=='낮은가격순'}">
+						<span class="checkmark"></span> 낮은가격순
+						</label>
+						<label class="radio-option">
+						<input type="radio" name="sortOption" th:value="'높은가격순'" th:checked="${sortOption=='높은가격순'}">
+						<span class="checkmark"></span> 높은가격순
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="filter-actions_search">
+				<a th:href="@{/search(keyword=${keyword},catNum=${catNum})}" class="reset-btn_search">초기화</a>
+				<button type="submit" class="apply-btn_search" >적용</button>
+			</div>
+		</form>
+
+		<!-- 상품 패널 (하단) -->
+		<section class="results-grid_search">
+		  
+		  <!-- 광고 상품 잇음 ( 카테고리 - 기업) -->
+		  <div th:if="${adItem != null}"
+		       class="product-card_search ad-item">
+		      <div class="ad-badge"><p>광고</p></div>
+		    <div class="product-image-wrapper">
+		      <img th:src="@{/images/main/img1.png}" alt="광고 상품" />
+		    </div>
+		    <div class="product-info_search">
+		      <p class="product-name_search" th:text="${adItem.title}">상품명</p>
+		      <p class="product-price_search"
+		         th:text="|${#numbers.formatDecimal(adItem.price,0,'COMMA',0,'POINT')}원|">가격</p>
+		      <p class="product-meta_search" th:text="${adItem.comName}">회사명</p>
+		    </div>
+		  </div>
+		
+		  <!-- 광고 상품 없음 ( 카테고리 - 기업)  + 일반상품도 없을때 -->
+		  <div th:if="${adItem == null and #lists.isEmpty(results)}"
+		       class="empty-wrapper">
+		    <div class="empty-state">
+		      <i class="fa fa-box-open empty-icon"></i>
+		      <p class="empty-text">등록된 상품이 없습니다.</p>
+		    </div>
+		  </div>
+		
+		  <!-- 일반 상품 리스트 -->
+		  <div th:each="item : ${results}"
+		       class="product-card_search">
+		        <a th:href="@{/detail(id=${item.prdNum})}" class="product-link_search">
+		    <div class="product-image-wrapper">
+		      <div class="overlay_seller"
+		           th:if="${item.sellType=='N' and item.appointType=='Y'}"><p>예약중</p></div>
+		      <div class="overlay_seller"
+		           th:if="${item.sellType=='Y'}"><p>판매완료</p></div>
+		      <img th:src="@{/images/main/img1.png}" alt="상품 이미지" />
+		    </div>
+		    <div class="product-info_search">
+		      <p class="product-name_search" th:text="${item.title}">상품명</p>
+		      <p class="product-price_search"
+		         th:text="|${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}원|">가격</p>
+		      <th:block>
+		        <p class="product-meta_search" th:if="${item.comNum != null}"
+		           th:text="${item.comName}">회사명</p>
+		        <p class="product-meta_search" th:unless="${item.comNum != null}"
+		           th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate,'yyyy-MM-dd HH:mm')}">
+		          위치
+		        </p>
+		      </th:block>
+		      <div class="product-meta-row">
+		        <div class="product-engagement_search">
+		          <i class="fa fa-eye"></i><span th:text="${item.clickNum}">0</span>
+		          <th:block th:if="${item.comNum == null}">
+		            <i class="fa fa-comment"></i><span th:text="${item.catNum}">0</span>
+		            <i class="fa fa-heart"></i><span th:text="${item.likeNum}">0</span>
+		          </th:block>
+		        </div>
+		        
+		        <button class="wish-btn">
+		          <img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon"/>
+		        </button>
+		      </div>
+		    </div>
+		    </a>
+		  </div>
+		 
+		</section>
+	</main>
+	<!-- 푸터 -->
+	<div th:insert="~{components/user/footer :: footer}"></div>
+</body>
+</html>

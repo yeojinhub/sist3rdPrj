@@ -1,0 +1,141 @@
+<th:block th:fragment="wishlistOverlay">
+	<link rel="stylesheet" th:href="@{/css/user/components/wishlist.css}">
+	<script>
+	function loadData() {
+		var wishlist = {};
+		
+		axios.get('/product/wishlist').then(res=>{
+			var wishlist_list = $('.wishlist-list'); 
+			wishlist = res.data;
+			
+			wishlist_list.empty();
+			
+			wishlist.prdList.forEach((item, index)=>{
+				wishlist_list.append(`
+						<article class="wishlist-item" data-prd-num="${item.prdNum}">
+						<div class="item-image-container">
+							<img class="item-image"
+								src="${wishlist.imgList[index].mainImage}"
+								alt="레이저 키요 프로 웹캠 풀박">
+							<div class="carousel-indicator">
+								<div class="dot active"></div>
+							</div>
+						</div>
+						<div class="item-info">
+							<p class="item-name">${item.title}</p>
+							<p class="item-price">${item.price.toLocaleString()}</p>
+							<p class="item-location">${item.shortLocation}</p>
+							${item.safeType == 'Y' ? '<span class="safe-deal-badge">안심거래</span>' : ''}
+						</div>
+						<button class="wishBtn" data-prd-num="${item.prdNum}">
+						<i class="fa-solid fa-heart" style="color: red;"></i>
+						</button>
+					</article>
+						`);//append
+			});//forEach
+		});//axios
+	}// loadData
+	
+	$(function() {		
+		$(document).on('click', '.wishBtn', function () {
+			var prdNum = $(this).data('prd-num');
+ 			  axios.get('/product/wish',{
+				params : { prdNum : prdNum }
+			  }).then(res=>{loadData()})
+			  .catch(err=>{
+				console.log(err);
+			  });
+ 			  
+			});// click
+			
+		$(document).on('click', '.wishlist-item', function () {
+			var prdNum = $(this).data('prd-num');
+				location.href="/detail?id="+prdNum;		  
+				});// click
+		
+	    // 찜한 상품 버튼 클릭 이벤트
+	    $('#wishlist').click(function() {
+	        $('.wishlist-overlay').fadeIn(300);
+	        $('.wishlist-modal').addClass('show');
+	        // 배경 스크롤 막기
+	        $('body').addClass('modal-open');
+	        loadData();
+	    });
+
+	    // 오버레이 클릭 시 모달 닫기
+	    $('.wishlist-overlay').click(function() {
+	        $('.wishlist-modal').removeClass('show');
+	        setTimeout(function() {
+	            $('.wishlist-overlay').fadeOut(300);
+	            // 배경 스크롤 복원
+	            $('body').removeClass('modal-open');
+	        }, 300);
+	    });
+
+	    // 뒤로가기 버튼 클릭 시 모달 닫기
+	    $('.back-icon').click(function() {
+	        $('.wishlist-modal').removeClass('show');
+	        setTimeout(function() {
+	            $('.wishlist-overlay').fadeOut(300);
+	            // 배경 스크롤 복원
+	            $('body').removeClass('modal-open');
+	        }, 300);
+	    });
+
+			/* // 모달 내부 클릭 시 이벤트 전파 막기 (오버레이 클릭 방지)
+			$('.wishlist-modal').click(function(e) {
+				e.stopPropagation();
+			}); */
+
+			// 찜 아이콘 클릭 이벤트
+			$('.like-icon').click(function() {
+				$(this).toggleClass('liked');
+			});
+
+			// 검색 기능
+			$('.search-input-wishlist').on(
+					'input',
+					function() {
+						var searchTerm = $(this).val().toLowerCase();
+						$('.wishlist-item').each(
+								function() {
+									var itemName = $(this).find('.item-name')
+											.text().toLowerCase();
+									if (itemName.includes(searchTerm)) {
+										$(this).show();
+									} else {
+										$(this).hide();
+									}
+								});
+					});
+		});
+	</script>
+	<!-- 찜하기 모달 오버레이 -->
+	<div class="wishlist-overlay"></div>
+
+	<!-- 찜하기 모달 -->
+	<div class="wishlist-modal">
+		<div class="wishlist-container">
+			<!-- 헤더 부분 -->
+			<div class="wishlist-header">
+				<h1 class="main-title">찜한상품</h1>
+				<button class="back-icon">X</button>
+			</div>
+
+
+			<!-- 검색바 -->
+			<div class="search-bar-wishlist">
+				<div class="search-container-wishlist">
+					<i class="fa fa-search" aria-hidden="true"></i> <input type="text"
+						class="search-input-wishlist" placeholder="검색어를 입력하세요">
+				</div>
+			</div>
+
+			<!-- 찜한 상품 목록 -->
+			<div class="wishlist-list">
+				<!-- 첫 번째 찜한 상품 -->
+				
+			</div>
+		</div>
+	</div>
+</th:block>

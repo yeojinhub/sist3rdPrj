@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminInquiryDAO">
+	<!-- 두 개의 파라미터를 전달하기 위해 Map 사용 -->
+	<select id="selectAllInquiry" resultType="kr.co.sist.DTO.InquiryDTO" parameterType="map">
+	    SELECT *
+	    FROM (
+	        SELECT ROWNUM rn, A.*
+	        FROM (
+	            SELECT * 
+	            FROM INQUIRY 
+	           <where>
+	              <if test="sDTO.searchType == 'title' and sDTO.keyword != null and sDTO.keyword != ''">
+	                AND title LIKE '%' || #{sDTO.keyword} || '%'
+	              </if>
+	              <if test="sDTO.searchType == 'content' and sDTO.keyword != null and sDTO.keyword != ''">
+	                AND content LIKE '%' || #{sDTO.keyword} || '%'
+	              </if>
+	              <if test="sDTO.searchType == 'name' and sDTO.keyword != null and sDTO.keyword != ''">
+	                AND name LIKE '%' || #{sDTO.keyword} || '%'
+	              </if>
+	            </where>
+	            ORDER BY inq_num DESC
+	        ) A
+	        WHERE ROWNUM &lt;= #{pagination.endRow}
+	    )
+	    WHERE rn &gt; #{pagination.startRow}
+	</select>
+	
+	<!-- 전체 개수 조회 쿼리 -->
+	<select id="selectTotalCount" resultType="int" parameterType="map">
+	    SELECT COUNT(*) FROM INQUIRY
+	    <where>
+	        <if test="sDTO.searchType == 'title' and sDTO.keyword != null and sDTO.keyword != ''">
+	            AND title LIKE '%' || #{sDTO.keyword} || '%'
+	        </if>
+	        <if test="sDTO.searchType == 'content' and sDTO.keyword != null and sDTO.keyword != ''">
+	            AND content LIKE '%' || #{sDTO.keyword} || '%'
+	        </if>
+	        <if test="sDTO.searchType == 'name' and sDTO.keyword != null and sDTO.keyword != ''">
+	            AND name LIKE '%' || #{sDTO.keyword} || '%'
+	        </if>
+	    </where>
+	</select>
+
+	<!-- 답변 등록 페이지, 문의 내용 조회 -->
+	<select id="selectInquiryByInqNum" resultType="kr.co.sist.DTO.InquiryDTO" parameterType="int">
+	    SELECT * FROM INQUIRY WHERE inq_num = #{inqNum}
+	</select>
+
+	<!-- 답변 등록 페이지, 답변 내용 조회 -->
+	<select id="selectAnswerByInqNum" resultType="kr.co.sist.DTO.AnswerDTO" parameterType="int">
+	    SELECT * FROM ANSWER WHERE inq_num = #{inqNum}
+	</select>
+
+	<!-- 답변 등록 페이지, 이미지 조회 -->
+	<select id="selectImageByImgNum" resultType="kr.co.sist.DTO.ImageDTO" parameterType="int">
+	    SELECT * FROM IMAGE WHERE img_num = #{imgNum}
+	</select>
+
+	<!-- 답변 등록 -->
+	<insert id="insertAnswer" parameterType="kr.co.sist.DTO.AnswerDTO">
+	    INSERT INTO ANSWER (inq_num, adm_num, content)
+	    VALUES (#{inqNum}, #{admNum}, #{content})
+	</insert>
+
+	<!-- 문의 상태 변경 -->
+	<update id="updateInquiryStatus" parameterType="map">
+	    UPDATE INQUIRY SET status_type = #{map.statusType}, adm_num = #{map.admNum} WHERE inq_num = #{map.inqNum}
+	</update>
+
+	<!-- 답변 수정 -->
+	<update id="updateAnswer" parameterType="kr.co.sist.DTO.AnswerDTO">
+		UPDATE ANSWER SET content = #{content}, adm_num = #{admNum} WHERE inq_num = #{inqNum}
+	</update>
+
+	<!-- 문의 상태 변경 -->
+	<update id="updateInquiryStatusModify" parameterType="map">
+		UPDATE INQUIRY SET adm_num = #{admNum} WHERE inq_num = #{inqNum}
+	</update>
+
+	<!-- 답변 삭제 -->
+	<delete id="deleteAnswer" parameterType="int">
+		DELETE FROM ANSWER WHERE inq_num = #{inqNum}
+	</delete>
+
+	<!-- 문의 삭제 -->
+	<delete id="deleteInquiry" parameterType="int">
+		DELETE FROM INQUIRY WHERE inq_num = #{inqNum}
+	</delete>
+
+	<!-- 이미지 삭제 -->
+	<delete id="deleteImage" parameterType="int">
+		DELETE FROM IMAGE WHERE img_num = #{imgNum}
+	</delete>
+</mapper>

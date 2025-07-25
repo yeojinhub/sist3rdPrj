@@ -1,0 +1,90 @@
+<th:block th:fragment="locationOverlay">
+  <link rel="stylesheet" th:href="@{/css/user/components/location.css}" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function () {
+      // 오버레이 열기
+      $('.add-region-button').click(function () {
+        $('.location-overlay').fadeIn(300);
+        $('.location-modal').addClass('show');
+        $('body').addClass('modal-open');
+      });
+
+      // 오버레이 닫기
+      $('.location-overlay, .close-overlay').click(function () {
+        $('.location-modal').removeClass('show');
+        setTimeout(() => {
+          $('.location-overlay').fadeOut(300);
+          $('body').removeClass('modal-open');
+        }, 300);
+      });
+
+      $('.location-modal').click(e => e.stopPropagation());
+
+      // 엔터 입력 시 검색
+      $('#region-search-input').on('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const keyword = $(this).val().trim();
+          if (keyword.length >= 2) {
+            searchRegion(keyword);
+          }
+        }
+      });
+
+      function searchRegion(keyword) {
+        fetch(`/kakao/search?query=${encodeURIComponent(keyword)}`)
+          .then(res => {
+            if (!res.ok) throw new Error("백엔드 프록시 API 호출 실패");
+            return res.json();
+          })
+          .then(data => {
+            const results = data.documents || [];
+            const $list = $('#region-result-list').empty();
+
+            if (results.length === 0) {
+              $list.append('<li class="no-result">검색 결과가 없습니다</li>');
+              return;
+            }
+
+            results.forEach(item => {
+              const fullAddress = item.address_name || "";
+              const placeName = item.place_name || "";
+              const displayText = placeName ? `${placeName} (${fullAddress})` : fullAddress;
+
+              const $li = $('<li>').text(displayText).addClass('region-item');
+
+              $li.on('click', function () {
+                addWishRegion(fullAddress); // ← 여기! 상세 주소만 추가되게 수정
+                $('.location-modal').removeClass('show');
+                $('.location-overlay').fadeOut(300);
+                $('body').removeClass('modal-open');
+              });
+
+              $list.append($li);
+            });
+          })
+          .catch(error => {
+            console.error("주소 검색 오류:", error);
+          });
+      }
+
+    });
+  </script>
+
+  <!-- 오버레이 구조 -->
+  <div class="location-overlay" style="display: none;">
+    <div class="location-modal">
+      <div class="location-header">
+        <input type="text" id="region-search-input" placeholder="지역명을 검색해 주세요." />
+        <button class="close-overlay">X</button>
+      </div>
+      <ul id="region-result-list" class="region-list"></ul>
+    </div>
+  </div>
+
+  <!-- 희망지역 출력 영역 -->
+  <div class="selected-region-container"></div>
+</th:block>
+
+

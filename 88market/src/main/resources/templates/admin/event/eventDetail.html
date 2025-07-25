@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 이벤트</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/event/event.css}">
+
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+<script>
+	$(function() {
+		// Summernote 초기화
+		$('#content').summernote(
+				{
+					height : 350,
+					minHeight : 200,
+					maxHeight : 600,
+					lang : 'ko-KR',
+					toolbar : [ [ 'style', [ 'style' ] ],
+							[ 'font', [ 'bold', 'underline', 'clear' ] ],
+							[ 'fontname', [ 'fontname' ] ],
+							[ 'fontsize', [ 'fontsize' ] ],
+							[ 'color', [ 'color' ] ],
+							[ 'para', [ 'ul', 'ol', 'paragraph' ] ],
+							[ 'table', [ 'table' ] ],
+							[ 'insert', [ 'link', 'picture' ] ],
+							[ 'view', [ 'fullscreen', 'codeview' ] ] ],
+					callbacks : {
+						onInit : function() {
+							// DOM이 완전히 로드된 후 실행
+							setTimeout(function() {
+								$('.note-editable').css('text-align',
+										'center');
+							}, 100);
+						}
+					}
+				});// summernote
+		
+		// 썸네일 업로드/제거
+		$('#thumbnailArea').on('click', function(e) {
+		  if ($(this).find('img').length > 0) {
+		    // 이미지 미리보기 클릭 시 제거
+		    $('#thumbnailImage').val('');
+		    $(this).empty().append('<div class="upload-placeholder"><i class="fas fa-plus"></i></div>');
+		  } else if ($(e.target).hasClass('upload-placeholder') || $(e.target).hasClass('fa-plus')) {
+		    // placeholder나 +아이콘 클릭 시 파일 선택
+		    $('#thumbnailImage').click();
+		  }
+		});//click
+
+		// 메인 업로드/제거
+		$('#mainArea').on('click', function(e) {
+		  if ($(this).find('img').length > 0) {
+		    // 이미지 미리보기 클릭 시 제거
+		    $('#mainImage').val('');
+		    $(this).empty().append('<div class="upload-placeholder"><i class="fas fa-plus"></i></div>');
+		  } else if ($(e.target).hasClass('upload-placeholder') || $(e.target).hasClass('fa-plus')) {
+		    // placeholder나 +아이콘 클릭 시 파일 선택
+		    $('#mainImage').click();
+		  }
+		});//click
+
+		// 썸네일 이미지 미리보기
+		$('#thumbnailImage').on('change', function(event) {
+		  var input = event.target;
+		  if (input.files && input.files[0]) {
+		    if (!isValidImageFile(input.files[0])) {
+		      alert('jpg, jpeg, png 파일만 업로드 가능합니다.');
+		      $(this).val(''); // 파일 선택 초기화
+		      return;
+		    }
+		    var reader = new FileReader();
+		    reader.onload = function(e) {
+		      $('#thumbnailArea').empty().append('<img src="' + e.target.result + '" alt="썸네일" style="width: 200px; height: 100px;">');
+		    };
+		    reader.readAsDataURL(input.files[0]);
+		  }
+		});//change
+
+		// 메인 이미지 미리보기
+		$('#mainImage').on('change', function(event) {
+			  var input = event.target;
+			  if (input.files && input.files[0]) {
+			    if (!isValidImageFile(input.files[0])) {
+			      alert('jpg, jpeg, png 파일만 업로드 가능합니다.');
+			      $(this).val('');
+			      return;
+			    }
+			    var reader = new FileReader();
+			    reader.onload = function(e) {
+			      $('#mainArea').empty().append('<img src="' + e.target.result + '" alt="메인 미리보기" style="width: 200px; height: 100px;">');
+			    };
+			    reader.readAsDataURL(input.files[0]);
+			  }
+		});//change
+		
+		$('#submitBtn').click(()=>{
+			// 유효성 검사
+			// 1. 제목 공란
+			if ($('#title').val().length <= 0) {
+				alert('제목을 입력해주세요.');
+				return;
+			}// end if
+
+			// 2. 구분 공란
+			if ($('#evtType').val().length <= 0) {
+				alert('구분을 선택해주세요.');
+				return;
+			}// end if
+
+			// 3. 메인화면 표시 여부 공란
+			if ($('#mainType').val().length <= 0) {
+				alert('메인화면 표시 여부를 선택해주세요.');
+				return;
+			}// end if
+
+			// 4. 시작날짜 공란
+			if ($('#startDate').val().length <= 0) {
+				alert('시작날짜를 선택해주세요.');
+				return;
+			}// end if
+
+			// 5. 끝날짜 공란
+			if ($('#endDate').val().length <= 0) {
+				alert('끝날짜를 선택해주세요.');
+				return;
+			}// end if
+
+			// 5. 썸네일 이미지 추가 안함
+			if ($('#thumbnailImage').val().length <= 0 && $('#thumbnailArea img').length === 0) {
+				alert('썸네일 이미지를 선택해주세요.');
+				return;
+			}// end if
+
+			// 6. 메인 이미지 추가 안함
+			if ($('#mainImage').val().length <= 0 && $('#mainArea img').length === 0) {
+				alert('메인 이미지를 선택해주세요.');
+				return;
+			}// end if
+
+			// 7. 내용 공란
+			if ($('#content').val().length <= 0) {
+				alert('내용을 입력해주세요.');
+				return;
+			}// end if
+
+			$('input[name="files"]').remove();
+			$('#eventForm').submit();
+			
+		});//click
+	});// ready
+	
+	// 이미지 확장자 유효성 검사
+	function isValidImageFile(file) {
+	  const allowedExtensions = ['jpg', 'jpeg', 'png'];
+	  const fileName = file.name.toLowerCase();
+	  const extension = fileName.split('.').pop();
+	  return allowedExtensions.includes(extension);
+	}//isValidImageFile
+</script>
+</head>
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>게시판 관리 &gt;</span> <span class="current-page">이벤트 상세정보</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (공지사항 관리) -->
+			<main class="container">
+				<section class="event-form-section">
+					<form id="eventForm" th:action="@{/admin/event/modify}"
+						method="post" enctype="multipart/form-data">
+						<input type="hidden" name="evtNum" th:value="${eventDTO.evtNum}">
+						<input type="hidden" name="imgNum" th:value="${eventDTO.imgNum}">
+						<div class="form-group">
+							<label for="title" class="form-label">제목</label> <input
+								type="text" class="form-input" id="title" name="title"
+								placeholder="제목을 입력해주세요." required th:value="${eventDTO.title}">
+						</div>
+
+						<div class="form-row">
+							<div class="form-group half-width">
+								<label for="evtType" class="form-label">구분</label> <select
+									class="form-select" id="evtType" name="evtType" required>
+									<option value="">선택하세요</option>
+									<option value="1" th:selected="${eventDTO.evtType == 1}">이벤트</option>
+									<option value="2" th:selected="${eventDTO.evtType == 2}">당첨자</option>
+								</select>
+							</div>
+							<div class="form-group half-width">
+								<label for="mainType" class="form-label">메인화면 표시 여부</label> <select
+									class="form-select" id="mainType" name="mainType" required>
+									<option value="">선택하세요</option>
+									<option value="Y" th:selected="${eventDTO.mainType == 'Y'}">표시</option>
+									<option value="N" th:selected="${eventDTO.mainType == 'N'}">숨김</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group half-width">
+								<label for="startDate" class="form-label">시작일</label> <input
+									type="date" class="form-input" id="startDate" name="startDate"
+									th:value="${eventDTO.startDate}">
+							</div>
+							<div class="form-group half-width">
+								<label for="endDate" class="form-label">종료일</label> <input
+									type="date" class="form-input" id="endDate" name="endDate"
+									th:value="${eventDTO.endDate}">
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-group half-width">
+								<label for="thumbnailImage" class="form-label">썸네일</label>
+								<div class="image-upload-area" id="thumbnailArea">
+									<img th:src="@{${eventDTO.IDTO.subImage1}}" alt="썸네일"
+										style="width: 200px; height: 100px;">
+								</div>
+								<input type="file" id="thumbnailImage" name="thumbnailImage"
+									accept="image/*" style="display: none;">
+							</div>
+							<div class="form-group half-width">
+								<label for="mainImage" class="form-label">메인</label>
+								<div class="image-upload-area" id="mainArea">
+									<img th:src="@{${eventDTO.IDTO.mainImage}}" alt="메인"
+										style="width: 200px; height: 100px;">
+								</div>
+								<input type="file" id="mainImage" name="mainImage"
+									accept="image/*" style="display: none;">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="content" class="form-label">내용</label>
+							<textarea id="content" name="content" class="summernote-editor"
+								th:text="${eventDTO.content}"></textarea>
+						</div>
+
+						<div class="form-actions">
+							<button type="button" class="action-button cancel-btn"
+								onclick="history.back()">취소</button>
+							<button type="button" class="action-button submit-btn"
+								id="submitBtn">수정</button>
+						</div>
+					</form>
+				</section>
+			</main>
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
+		</div>
+	</div>
+
+</body>
+</html>

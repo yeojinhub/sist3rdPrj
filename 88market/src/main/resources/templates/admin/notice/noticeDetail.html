@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 공지사항</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>게시판 관리 &gt;</span> <span class="current-page">공지사항 수정</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (공지사항 관리) -->
+			<main class="container">
+				<section class="notice-form-section">
+					<form id="noticeForm" th:action="@{/admin/notice/modify}"
+						method="post">
+						<div class="form-group">
+							<label for="title" class="form-label">제목</label> <input
+								type="text" class="form-input" id="title" name="title"
+								th:value="${noticeDTO.title}" required> <input
+								type="hidden" name="notNum" th:value="${notNum}">
+						</div>
+
+						<div class="form-group">
+							<label for="content" class="form-label">내용</label>
+							<textarea id="content" name="content" class="summernote-editor"
+								th:text="${noticeDTO.content}"></textarea>
+						</div>
+
+						<div class="form-actions">
+							<button type="button" class="action-button cancel-btn"
+								onclick="history.back()">취소</button>
+							<button type="button" class="action-button submit-btn"
+								id="modifyBtn">수정</button>
+						</div>
+					</form>
+				</section>
+			</main>
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			// Summernote 초기화
+			$('#content').summernote(
+					{
+						height : 350,
+						minHeight : 200,
+						maxHeight : 600,
+						lang : 'ko-KR',
+						toolbar : [ [ 'style', [ 'style' ] ],
+								[ 'font', [ 'bold', 'underline', 'clear' ] ],
+								[ 'fontname', [ 'fontname' ] ],
+								[ 'fontsize', [ 'fontsize' ] ],
+								[ 'color', [ 'color' ] ],
+								[ 'para', [ 'ul', 'ol', 'paragraph' ] ],
+								[ 'table', [ 'table' ] ],
+								[ 'insert', [ 'link', 'picture' ] ],
+								[ 'view', [ 'fullscreen', 'codeview' ] ] ],
+						callbacks : {
+							onInit : function() {
+								// DOM이 완전히 로드된 후 실행
+								setTimeout(function() {
+									$('.note-editable').css('text-align',
+											'center');
+								}, 100);
+							}
+						}
+					});
+
+			// 폼 제출 시 유효성 검사
+			$('#noticeForm').on('submit', function(e) {
+				const title = $('#title').val().trim();
+				const content = $('#content').summernote('isEmpty');
+
+				if (!title) {
+					alert('제목을 입력해주세요.');
+					$('#title').focus();
+					e.preventDefault();
+					return false;
+				}
+
+				if (content) {
+					alert('내용을 입력해주세요.');
+					$('#content').summernote('focus');
+					e.preventDefault();
+					return false;
+				}
+			});
+
+			$('#modifyBtn').click(function() {
+				// 유효성 검사
+				if ($('#title').val() == '') {
+					alert('제목을 입력해주세요.');
+					$('#title').focus();
+					return false;
+				}
+				if ($('#content').summernote('isEmpty')) {
+					alert('내용을 입력해주세요.');
+					$('#content').summernote('focus');
+					return false;
+				}
+
+				// 폼 제출
+				$('#noticeForm').submit();
+			});
+		});// ready
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>88마켓 - 구매하기</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" th:href="@{/css/user/buy.css}">
+	<link rel="stylesheet" th:href="@{/css/user/buy-popup.css}">
+	<th:block th:replace="~{components/user/external :: external}"></th:block>
+	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<script>
+$(function() {
+	var userNum = "[[${product.userNum}]]";
+	axios.post('/sameUser',{userNum : userNum}).then(res=>{
+		if (res.data.result) {
+			alert('본인의 물건을 구매할 수는 없습니다.');
+			history.back();
+			return;
+		}// end if
+	});// axios
+	
+});// ready
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<div class="container mt-4">
+		<div class="row">
+			<!-- 메인 컨텐츠 -->
+			<div class="col-lg-8">
+				<h2 class="mb-4">주문 / 결제</h2>
+				<input type="hidden" th:value="${product.prdNum}" id="prdNum"/>
+				<input type="hidden" th:value="${product.userNum}" id="userNum"/>
+				<!-- 첫번째 섹션: 상품 정보 -->
+				<div class="section-card mb-4">
+					<h4 class="section-title">상품 정보</h4>
+					<div class="product-info d-flex">
+						<img th:src="${image.mainImage}" alt="상품 이미지" class="product-image">
+						<div class="product-details ms-3">
+							<h5 class="product-name" th:text="${product.title}" id="product-name" th:data-product-name="${product.title}">레이저 키요 프로 웹캠 풀박</h5>
+							<p class="product-price"><strong th:text="${#numbers.formatInteger(product.price,3,'COMMA')}+'원'">100,000원</strong></p>
+						</div>
+					</div>
+				</div>
+
+				<!-- 두번째 섹션: 배송지 정보 -->
+				<input type="hidden" th:value="${product.deliveryType}" id="deliveryType">
+				<input type="hidden" id="addrNum" th:value="${addrList[0].addrNum}"/>
+				<div class="section-card mb-4" th:if="${product.deliveryType == 'Y'}">
+					<div class="section-header">
+						<h4 class="section-title">배송지 정보</h4>
+						<button type="button" class="btn address-select-btn" onclick="openAddressModal()">
+							<i class="fas fa-map-marker-alt me-1"></i>배송지 변경
+						</button>
+					</div>
+					<div id="selectedAddress">
+						<div class="row mb-2">
+							<div class="col-md-6">
+								<label class="form-label">받는 사람</label>
+								<p class="form-control-plaintext" id="receiverName" th:text="${addrList[0].recipientName}">홍길동</p>
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">연락처</label>
+								<p class="form-control-plaintext" id="receiverPhone" th:text="${addrList[0].tel}">010-1234-5678</p>
+							</div>
+						</div>
+						<div>
+							<label class="form-label">배송 주소</label>
+							<p class="form-control-plaintext" id="addressText" th:text="|[${addrList[0].zipcode}] ${addrList[0].address}|">[12345] 서울 강남구 테헤란로 123, 456호</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- 세번째 섹션: 결제방법 -->
+				<div class="section-card mb-4">
+					<h4 class="section-title">결제방법</h4>
+					<div class="payment-methods">
+						<div class="payment-option" data-method="card">
+							<i class="fas fa-credit-card"></i>
+							<span>카드결제</span>
+						</div>
+						<div class="payment-option" data-method="bank">
+							<i class="fas fa-n"></i>
+							<span>무통장입금</span>
+						</div>
+						<div class="payment-option" data-method="kakao">
+							<i class="fas fa-comment"></i>
+							<span>카카오페이</span>
+						</div>
+						<div class="payment-option" data-method="toss">
+							<i class="fas fa-mobile-alt"></i>
+							<span>토스페이</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- 네번째 섹션: 이용약관 동의 -->
+				<div class="section-card mb-4">
+					<div class="terms-header">
+						<div class="d-flex align-items-center">
+							<div class="form-check me-3">
+								<input class="form-check-input terms-main-checkbox" type="checkbox" id="agreeAll">
+							</div>
+							<h4 class="section-title mb-0">상품정보 및 결제 대행 서비스 이용약관 동의</h4>
+						</div>
+					</div>
+					
+					<div class="terms-section">
+						<!-- 필수 약관들 -->
+						<div class="terms-item mb-3">
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" id="termsPersonal" required>
+								<label class="form-check-label terms-label" for="termsPersonal">
+									<i class="fas fa-shield-alt me-2 text-primary"></i>
+									<strong>개인정보 수집 및 이용 동의 (필수)</strong>
+								</label>
+							</div>
+							<div class="terms-content">
+								개인정보보호법에 따라 88마켓에 회원가입 신청하시는 분께 수집하는 개인정보의 항목, 개인정보의 수집 및 이용목적, 개인정보의 보유 및 이용기간, 동의 거부권 및 동의 거부 시 불이익에 관한 사항을 안내 드리오니 자세히 읽은 후 동의하여 주시기 바랍니다.
+							</div>
+						</div>
+
+						<div class="terms-item mb-3">
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" id="termsPayment" required>
+								<label class="form-check-label terms-label" for="termsPayment">
+									<i class="fas fa-credit-card me-2 text-success"></i>
+									<strong>결제대행 서비스 이용약관 동의 (필수)</strong>
+								</label>
+							</div>
+							<div class="terms-content">
+								전자상거래 등에서의 소비자보호에 관한 법률, 전자금융거래법, 통신판매업에 관한 법률, 정보통신망 이용촉진 및 정보보호 등에 관한 법률에 따라 결제대행 서비스 이용약관에 동의하셔야 합니다.
+							</div>
+						</div>
+
+						<div class="terms-item mb-3">
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" id="termsPurchase" required>
+								<label class="form-check-label terms-label" for="termsPurchase">
+									<i class="fas fa-shopping-cart me-2 text-warning"></i>
+									<strong>구매조건 확인 및 결제진행 동의 (필수)</strong>
+								</label>
+							</div>
+							<div class="terms-content">
+								주문할 상품의 상품명, 상품가격, 배송정보를 확인하였으며, 구매에 동의하시겠습니까? (전자상거래법 제8조 제2항)
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 오른쪽 사이드바: 결제 정보 -->
+			<div class="col-lg-4">
+				<div class="payment-summary" id="paymentSummary">
+					<div class="summary-card">
+						<h5 class="summary-title">최종 결제 금액</h5>
+						<div class="price-breakdown">
+							<div class="price-item">
+								<span>상품 금액</span>
+								<span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}+'원'">100,000원</span>
+							</div>
+							<div class="price-item" th:if="${product.deliveryType == 'Y'}">
+								<span>안전거래 수수료(2%)</span>
+								<span th:text="${#numbers.formatInteger((product.price*0.02),0,'COMMA')}+'원'">1,000원</span>
+							</div>
+						</div>
+						<hr>
+						<div class="total-amount">
+							<span><strong>총 결제 금액</strong></span>
+							<span class="final-price" id="final-price" th:data-final-price="${product.deliveryType == 'Y' ? product.price*1.01 : product.price}"><strong th:text="${#numbers.formatInteger((product.deliveryType == 'Y' ? product.price*1.02 : product.price),3,'COMMA')}+'원'">100,000원</strong></span>
+						</div>
+						<button class="btn btn-primary w-100 mt-3 order-btn" id="orderBtn" onclick="requestPay()" disabled>
+							<i class="fas fa-credit-card me-2"></i>주문하기
+						</button>
+						<div class="terms-warning mt-2" id="termsWarning">
+							<i class="fas fa-exclamation-triangle me-1"></i>
+							약관의 동의 해주세요.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+
+	<!-- 배송지 선택 팝업 -->
+	<th:block th:insert="~{user/product/buy-popup :: buy-popup}"></th:block>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		// 주소 관련 스크립트
+		function openAddressModal() {
+			document.getElementById('addressPopup').style.display = 'flex';
+		}
+
+		function closeAddressModal() {
+			document.getElementById('addressPopup').style.display = 'none';
+		}
+
+		function execDaumPostcode() {
+			new daum.Postcode({
+				oncomplete: function(data) {
+					// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+					// 예제를 참고하여 다양한 활용법을 확인해 보세요.
+				}
+			}).open();
+		}
+
+		$(function () {
+			$('.recent-products-aside').hide();
+			
+			// 페이지 로드 시 주문하기 버튼 상태 초기화
+			updateOrderButtonState();
+		})
+		
+		// 결제방법 선택
+		document.querySelectorAll('.payment-option').forEach(option => {
+			option.addEventListener('click', function () {
+				document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+				this.classList.add('selected');
+			});
+		});
+
+		// 전체동의 체크박스 기능
+		document.getElementById('agreeAll').addEventListener('change', function () {
+			const checkboxes = document.querySelectorAll('#termsPersonal, #termsPayment, #termsPurchase');
+			checkboxes.forEach(checkbox => {
+				checkbox.checked = this.checked;
+			});
+			updateOrderButtonState();
+		});
+
+		// 개별 체크박스들 상태 변경 시 전체동의 체크박스 상태 업데이트
+		document.querySelectorAll('#termsPersonal, #termsPayment, #termsPurchase').forEach(checkbox => {
+			checkbox.addEventListener('change', function () {
+				const allCheckboxes = document.querySelectorAll('#termsPersonal, #termsPayment, #termsPurchase');
+				const checkedCount = document.querySelectorAll('#termsPersonal:checked, #termsPayment:checked, #termsPurchase:checked').length;
+				
+				document.getElementById('agreeAll').checked = checkedCount === allCheckboxes.length;
+				updateOrderButtonState();
+			});
+		});
+
+		// 주문하기 버튼 활성화/비활성화 상태 업데이트 함수
+		function updateOrderButtonState() {
+			const requiredTerms = ['termsPersonal', 'termsPayment', 'termsPurchase'];
+			const orderBtn = document.getElementById('orderBtn');
+			
+			const allRequiredChecked = requiredTerms.every(termId => 
+				document.getElementById(termId).checked
+			);
+			
+			if (allRequiredChecked) {
+				orderBtn.disabled = false;
+				orderBtn.classList.remove('btn-disabled');
+				orderBtn.classList.add('btn-primary');
+				document.getElementById('termsWarning').style.display = 'none';
+			} else {
+				orderBtn.disabled = true;
+				orderBtn.classList.remove('btn-primary');
+				orderBtn.classList.add('btn-disabled');
+				document.getElementById('termsWarning').style.display = 'block';
+			}
+		}
+
+		// 필수 약관 체크 확인 함수
+		function validateRequiredTerms() {
+			const requiredTerms = ['termsPersonal', 'termsPayment', 'termsPurchase'];
+			const uncheckedTerms = [];
+			
+			requiredTerms.forEach(termId => {
+				if (!document.getElementById(termId).checked) {
+					uncheckedTerms.push(termId);
+				}
+			});
+			
+			if (uncheckedTerms.length > 0) {
+				alert('필수 약관에 모두 동의해주세요.');
+				return false;
+			}
+			return true;
+		}
+
+		function requestPay() {
+			// 최종 결제 금액
+			var finalPrice = $('#final-price').data('final-price');
+			var productName = $('#product-name').data('product-name');
+			var selectedPaymentMethod = $('.payment-option.selected').data('method');
+			var prdNum = $('#prdNum').val();
+			var userNum = $('#userNum').val();
+			
+			// 유효성 체크
+			// 1. 결제 방법 선택 확인
+			const selectedPayment = document.querySelector('.payment-option.selected');
+			if (!selectedPayment) {
+				alert('결제 방법을 선택해주세요.');
+				return;
+			}// end if
+
+			// 2. 필수 약관 체크 확인
+			if (!validateRequiredTerms()) {
+				return;
+			}// end if
+
+			var channelKey = "";
+			var pay_method = "";
+			var $selectedPaymentOption = $('.payment-option.selected');
+			if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'kakao') {
+				channelKey = "channel-key-01764171-b249-4c16-9d18-e9174fa8e611"; // 카카오페이
+				pay_method = "card";
+				
+			} else if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'toss') {
+				channelKey = "channel-key-01aab9b9-828b-4913-9395-52f922e578f6"; // 토스페이
+				pay_method = "card";
+			} else if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'card') {
+				channelKey = "channel-key-bf43e218-5567-4875-96da-3270e1fba054"; // 카드
+			} else if ($selectedPaymentOption.length > 0 && $selectedPaymentOption.data('method') === 'bank') {
+				channelKey = "channel-key-001cc830-159d-45af-a551-fa834c07f6b9"; // 무통장입금
+				pay_method = "vbank";
+			}// end if-else
+
+
+			IMP.init("imp14397622");
+			IMP.request_pay({
+				channelKey: channelKey,
+				pay_method: pay_method,
+				merchant_uid: "order_" + new Date().getTime(),
+				name: productName,
+				amount: finalPrice,
+			}, function (rsp) {
+				if (!rsp.success) {
+					alert('결제 진행중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+					return;
+				}// end if
+
+				// 결제 성공 시 테이블 등록
+				var data = {
+					product : productName,
+					prdNum : prdNum,
+					userNum : userNum,
+					price : finalPrice,
+					addrNum : $('#addrNum').val(),
+					payMethod : selectedPaymentMethod,
+					cardName : rsp.card_name,
+					impUid : rsp.imp_uid
+				}
+
+				axios.post('/buy/payment', data).then(response => {
+					console.log(response);
+				}).catch(err => {
+					console.log(err);
+				});
+			});
+		}
+	</script>
+</body>
+
+</html>

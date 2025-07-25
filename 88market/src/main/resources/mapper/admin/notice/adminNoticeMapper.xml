@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminNoticeDAO">
+<!-- 전체 개수 조회 쿼리 -->
+<select id="selectTotalCount" resultType="int">
+    SELECT COUNT(*) FROM NOTICE
+    <where>
+        <if test="nsDTO.searchType == 'title' and nsDTO.keyword != null and nsDTO.keyword != ''">
+            AND title LIKE '%' || #{nsDTO.keyword} || '%'
+        </if>
+        <if test="nsDTO.searchType == 'content' and nsDTO.keyword != null and nsDTO.keyword != ''">
+            AND content LIKE '%' || #{nsDTO.keyword} || '%'
+        </if>
+        <if test="nsDTO.searchType == 'name' and nsDTO.keyword != null and nsDTO.keyword != ''">
+            AND name LIKE '%' || #{nsDTO.keyword} || '%'
+        </if>
+    </where>
+</select>
+
+<!-- 두 개의 파라미터를 전달하기 위해 Map 사용 -->
+<select id="selectAllNotice" resultType="kr.co.sist.DTO.NoticeDTO" parameterType="map">
+    SELECT *
+    FROM (
+        SELECT ROWNUM rn, A.*
+        FROM (
+            SELECT * 
+            FROM NOTICE 
+           <where>
+              <if test="nsDTO.searchType == 'title' and nsDTO.keyword != null and nsDTO.keyword != ''">
+                AND title LIKE '%' || #{nsDTO.keyword} || '%'
+              </if>
+              <if test="nsDTO.searchType == 'content' and nsDTO.keyword != null and nsDTO.keyword != ''">
+                AND content LIKE '%' || #{nsDTO.keyword} || '%'
+              </if>
+              <if test="nsDTO.searchType == 'name' and nsDTO.keyword != null and nsDTO.keyword != ''">
+                AND name LIKE '%' || #{nsDTO.keyword} || '%'
+              </if>
+            </where>
+            ORDER BY not_num DESC
+        ) A
+        WHERE ROWNUM &lt;= #{pagination.endRow}
+    )
+    WHERE rn &gt; #{pagination.startRow}
+</select>
+
+<insert id="insertNotice" parameterType="kr.co.sist.DTO.NoticeDTO">
+    INSERT INTO NOTICE (not_num, title, content, name, adm_num)
+    VALUES (seq_not_num.nextval, #{title}, #{content}, #{name}, #{admNum})
+</insert>
+
+<select id="selectNoticeDetail" resultType="kr.co.sist.DTO.NoticeDTO" parameterType="int">
+    SELECT * FROM NOTICE WHERE not_num = #{notNum}
+</select>
+
+<update id="updateNotice" parameterType="kr.co.sist.DTO.NoticeDTO">
+    UPDATE NOTICE SET title = #{title}, content = #{content} WHERE not_num = #{notNum}
+</update>
+
+<delete id="deleteNotices" parameterType="java.util.List">
+    DELETE FROM NOTICE 
+    WHERE not_num IN
+    <foreach collection="list" item="notNum" open="(" separator="," close=")">
+        #{notNum}
+    </foreach>
+</delete>
+
+<!-- 공지 보이기 -->
+<select id="updateNoticeHideOff" parameterType="java.util.List">
+	UPDATE NOTICE SET STATUS_TYPE = '공지' WHERE NOT_NUM IN 
+	<foreach collection="list" item="notNum" open="(" separator="," close=")">
+		#{notNum}
+	</foreach>
+</select>
+
+<!-- 공지 숨기기 -->
+<select id="updateNoticeHideOn" parameterType="java.util.List">
+	UPDATE NOTICE SET STATUS_TYPE = '비공지' WHERE NOT_NUM IN 
+	<foreach collection="list" item="notNum" open="(" separator="," close=")">
+		#{notNum}
+	</foreach>
+</select>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminFaqDAO">
+<!-- 전체 개수 조회 쿼리 -->
+<select id="selectTotalCount" resultType="int" parameterType="map">
+    SELECT COUNT(*) FROM FAQ
+    <where>
+        <if test="fsDTO.searchType == 'title' and fsDTO.keyword != null and fsDTO.keyword != ''">
+            AND title LIKE '%' || #{fsDTO.keyword} || '%'
+        </if>
+        <if test="fsDTO.searchType == 'content' and fsDTO.keyword != null and fsDTO.keyword != ''">
+            AND content LIKE '%' || #{fsDTO.keyword} || '%'
+        </if>
+        <if test="fsDTO.searchType == 'name' and fsDTO.keyword != null and fsDTO.keyword != ''">
+            AND name LIKE '%' || #{fsDTO.keyword} || '%'
+        </if>
+    </where>
+</select>
+
+<!-- 두 개의 파라미터를 전달하기 위해 Map 사용 -->
+<select id="selectAllNotice" resultType="kr.co.sist.DTO.FaqDTO" parameterType="map">
+    SELECT *
+    FROM (
+        SELECT ROWNUM rn, A.*
+        FROM (
+            SELECT * 
+            FROM FAQ 
+           <where>
+              <if test="fsDTO.searchType == 'title' and fsDTO.keyword != null and fsDTO.keyword != ''">
+                AND title LIKE '%' || #{fsDTO.keyword} || '%'
+              </if>
+              <if test="fsDTO.searchType == 'content' and fsDTO.keyword != null and fsDTO.keyword != ''">
+                AND content LIKE '%' || #{fsDTO.keyword} || '%'
+              </if>
+              <if test="fsDTO.searchType == 'name' and fsDTO.keyword != null and fsDTO.keyword != ''">
+                AND name LIKE '%' || #{fsDTO.keyword} || '%'
+              </if>
+            </where>
+            ORDER BY faq_num DESC
+        ) A
+        WHERE ROWNUM &lt;= #{pagination.endRow}
+    )
+    WHERE rn &gt; #{pagination.startRow}
+</select>
+
+<!-- FAQ 게시물 삭제 -->
+<delete id="deleteFaqs" parameterType="java.util.List">
+    DELETE FROM FAQ 
+    WHERE faq_num IN
+    <foreach collection="list" item="faqNum" open="(" separator="," close=")">
+        #{faqNum}
+    </foreach>
+</delete>
+
+<!-- FAQ 게시물 등록 -->
+<insert id="insertFaq" parameterType="kr.co.sist.DTO.FaqDTO">
+    INSERT INTO FAQ (faq_num, title, content, name, adm_num, faq_type)
+    VALUES (seq_faq_num.nextval, #{title}, #{content}, #{name}, #{admNum}, #{faqType})
+</insert>
+
+<!-- FAQ 상세정보 보기 -->
+<select id="selectFaqDetail" resultType="kr.co.sist.DTO.FaqDTO" parameterType="int">
+    SELECT * FROM FAQ WHERE faq_num = #{faqNum}
+</select>
+
+<!-- FAQ 수정 -->
+<update id="updateFaq" parameterType="kr.co.sist.DTO.FaqDTO">
+    UPDATE FAQ SET title = #{title}, content = #{content} WHERE faq_num = #{faqNum}
+</update>
+</mapper>

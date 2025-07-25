@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.InquiryDAO">
+	<insert id="insertInquiry" parameterType="kr.co.sist.DTO.InquiryDTO">
+		<selectKey keyProperty="inqNum" resultType="int" order="BEFORE">
+			SELECT SEQ_INQ_NUM.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO INQUIRY (INQ_NUM, TITLE, CONTENT, NAME, USER_NUM, INQUIRY_TYPE)
+		VALUES (#{inqNum}, #{title}, #{content}, #{name}, #{userNum}, #{inquiryType})
+	</insert>
+	<insert id="insertImage" parameterType="Map">
+		<selectKey keyProperty="imgNum" resultType="int" order="BEFORE">
+			SELECT SEQ_IMG_NUM.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO IMAGE (IMG_NUM, IMAGE_TYPE, MAIN_IMAGE, SUB_IMAGE1, SUB_IMAGE2)
+		VALUES (#{imgNum}, #{imageType}, #{mainImage}, #{subImage1}, #{subImage2})
+	</insert>
+	<update id="updateInqNum" parameterType="Map">
+		UPDATE INQUIRY SET IMG_NUM = #{imgNum} WHERE INQ_NUM = #{inqNum}
+	</update>
+
+	<!-- 유저 정보 조회 -->
+	<select id="selectUserInfo" parameterType="int" resultType="String">
+		SELECT NAME FROM USERS WHERE USER_NUM = #{userNum}
+	</select>
+
+	<!-- 문의 리스트 조회 -->
+	<select id="inquiryList" parameterType="int" resultType="kr.co.sist.DTO.InquiryDTO">
+		SELECT * FROM INQUIRY WHERE USER_NUM = #{userNum}
+	</select>
+
+	<!-- 문의 상세 조회 -->
+	<select id="inquiryDetail" parameterType="int" resultType="kr.co.sist.DTO.InquiryDTO">
+		SELECT * FROM INQUIRY WHERE INQ_NUM = #{inqNum}
+	</select>
+
+	<!-- 문의 답변 조회 -->
+	<select id="inquiryAnswer" parameterType="int" resultType="kr.co.sist.DTO.AnswerDTO">
+		SELECT * FROM ANSWER WHERE INQ_NUM = #{inqNum}
+	</select>
+</mapper>

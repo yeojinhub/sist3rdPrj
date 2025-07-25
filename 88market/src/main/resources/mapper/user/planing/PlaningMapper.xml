@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.PlaningDAO">
+    
+    <select id="selectPlaningList" resultType="kr.co.sist.DTO.CompanyWithProductDTO">
+        SELECT * FROM company
+    </select>
+    
+    <select id="selectProductsByComNum" resultType="kr.co.sist.DTO.ProductDTO">
+	    SELECT * FROM PRODUCT
+	    WHERE COM_NUM = #{comNum}
+	    AND SELL_TYPE = 'Y'
+	</select>
+	
+	<select id="onePlaningList" resultType="kr.co.sist.DTO.CategoryWithProductWithFavoriteWithCompanyWithImageDTO">
+       SELECT 
+		    P.prd_num, P.title, P.content, P.price, P.location1, 
+		    P.input_date AS prdInputDate,
+		    P.hidden_type, P.sell_type, P.prd_cnt, P.click_num, 
+		    P.delivery_type, P.user_num, P.cat_num, P.com_num, 
+		    P.img_num, P.like_num,
+		    Ca.name AS coName, 
+		    Co.com_name, Co.ceo_name, Co.tel, Co.zipcode, Co.address,
+		    R.rev_Num AS revNum,
+		    R.content AS reContent,
+		    R.name AS re_name,
+		    R.input_date AS reInputDate,
+		    (SELECT COUNT(*) FROM REVIEW WHERE prd_num = P.prd_num) AS reviewCount,
+		    I.main_image, I.sub_image1, I.sub_image2, I.sub_image3, I.sub_image4, I.image_type
+		
+		FROM PRODUCT P
+		JOIN CATEGORY Ca ON P.cat_num = Ca.cat_num
+		JOIN COMPANY Co ON P.com_num = Co.com_num
+		LEFT JOIN REVIEW R ON P.prd_num = R.prd_num
+		LEFT JOIN IMAGE I ON I.img_num = P.img_num
+		WHERE P.PRD_NUM = #{prdNum}
+    </select>
+    
+    <select id="selectReview" resultType="kr.co.sist.DTO.ReviewDTO">
+       SELECT *
+		FROM  REVIEW 
+		WHERE PRD_NUM = #{prdNum}
+    </select>
+    
+    <select id="selectReviewCount" resultType="int">
+	    SELECT COUNT(*) FROM REVIEW 
+	    WHERE PRD_NUM = #{prdNum}
+	</select>
+    
+    <select id="selectRandomProductsByComNum" resultType="map">
+	  SELECT 
+	    P.PRD_NUM, P.TITLE, P.PRICE, P.INPUT_DATE, P.COM_NUM,
+	    I.MAIN_IMAGE
+	  FROM PRODUCT P
+	  LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	  WHERE P.COM_NUM = #{comNum}
+	    AND P.PRD_NUM != #{productId}
+	    AND P.SELL_TYPE = 'Y'
+	  ORDER BY DBMS_RANDOM.VALUE
+	</select>
+	
+	<select id="CompanyProductsAllCount" resultType="int" parameterType="String">
+	    SELECT COUNT(*) AS product_count
+		FROM PRODUCT
+		WHERE COM_NUM = #{comNum}
+	</select>
+	
+	<select id="CompanyProductsSellCount" resultType="int" parameterType="String">
+	    SELECT COUNT(*) AS product_count
+		FROM PRODUCT
+		WHERE COM_NUM = #{comNum}
+		  AND SELL_TYPE = 'Y'
+	</select>
+	
+	<select id="CompanyProductsSoldOutCount" resultType="int" parameterType="String">
+	    SELECT COUNT(*) AS product_count
+		FROM PRODUCT
+		WHERE COM_NUM = #{comNum}
+		  AND SELL_TYPE = 'N'
+	</select>
+	
+	<select id="ProductsByCompanyAndSellType" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT 
+	  WHERE COM_NUM = #{comNum} 
+	  AND SELL_TYPE = #{sellType}
+	</select>
+	
+	<select id="AllProductsByCompany" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT
+	   WHERE COM_NUM = #{comNum}
+	   
+	</select>
+	<select id="ProductsByCompanyAndSellTypeSort" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT 
+	  WHERE COM_NUM = #{comNum} 
+	  AND SELL_TYPE = #{sellType}
+	  <choose>
+	    <when test="sort == 'low'">
+	      ORDER BY PRICE ASC
+	    </when>
+	    <when test="sort == 'high'">
+	      ORDER BY PRICE DESC
+	    </when>
+	    <otherwise>
+	      ORDER BY INPUT_DATE DESC
+	    </otherwise>
+	  </choose>
+	</select>
+	
+	<select id="AllProductsByCompanySort" resultType="kr.co.sist.DTO.ProductDTO">
+	  SELECT * FROM PRODUCT
+	   WHERE COM_NUM = #{comNum}
+	   <choose>
+		    <when test="sort == 'low'">
+		      ORDER BY PRICE ASC
+		    </when>
+		    <when test="sort == 'high'">
+		      ORDER BY PRICE DESC
+		    </when>
+		    <otherwise>
+		      ORDER BY INPUT_DATE DESC
+		    </otherwise>
+	  </choose>
+	</select>
+	
+	<select id="selectProductsByComNumWithImage" resultType="map">
+	  SELECT 
+	    P.PRD_NUM, P.TITLE, P.PRICE, P.LOCATION1, P.INPUT_DATE, P.SELL_TYPE, P.COM_NUM,
+	    I.MAIN_IMAGE
+	  FROM PRODUCT P
+	  LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	  WHERE P.COM_NUM = #{comNum}
+	    AND P.SELL_TYPE = 'Y'
+	</select>
+
+
+	<select id="selectProductsWithImageByComNum" resultType="map">
+	  SELECT 
+	    P.PRD_NUM, P.TITLE, P.CONTENT, P.PRICE, P.LOCATION1, P.INPUT_DATE, 
+	    P.SELL_TYPE, P.COM_NUM, P.IMG_NUM,
+	    I.MAIN_IMAGE, I.SUB_IMAGE1, I.SUB_IMAGE2, I.SUB_IMAGE3, I.SUB_IMAGE4
+	  FROM PRODUCT P
+	  LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	  WHERE P.COM_NUM = #{comNum}
+	    AND P.SELL_TYPE = 'Y'
+	</select>
+	
+	<!-- 조회수 -->
+	<update id="increaseClick" parameterType="string">
+	  UPDATE PRODUCT
+	     SET CLICK_NUM = CLICK_NUM + 1
+	   WHERE PRD_NUM   = #{prdNum}
+	</update>
+
+	<select id="selectProductsWithImages" resultType="map">
+	    SELECT 
+	        P.PRD_NUM,
+	        P.TITLE,
+	        P.PRICE,
+	        TO_CHAR(P.INPUT_DATE, 'YYYY-MM-DD') AS INPUT_DATE,
+	        P.SELL_TYPE,
+	        P.COM_NUM,
+	        I.MAIN_IMAGE
+	    FROM PRODUCT P
+	    LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	    WHERE P.COM_NUM = #{comNum}
+	</select>
+	
+	<!-- 전체 상품 (sellType 조건 없음) -->
+	<select id="selectAllProductsWithImageSort" resultType="kr.co.sist.DTO.ProductWithImageDTO">
+	    SELECT
+	        P.PRD_NUM,
+	        P.TITLE,
+	        P.PRICE,
+	        P.LOCATION1,
+	        P.INPUT_DATE,
+	        P.SELL_TYPE,
+	        I.MAIN_IMAGE
+	    FROM PRODUCT P
+	    LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	    WHERE P.COM_NUM = #{comNum}
+	    ORDER BY
+	    <choose>
+	        <when test="sort == 'recent'">P.INPUT_DATE DESC</when>
+	        <when test="sort == 'low'">P.PRICE ASC</when>
+	        <when test="sort == 'high'">P.PRICE DESC</when>
+	        <otherwise>P.INPUT_DATE DESC</otherwise>
+	    </choose>
+	</select>
+	
+	<!-- 판매중 / 판매완료 상품 -->
+	<select id="selectProductsWithImageBySellTypeSort" resultType="kr.co.sist.DTO.ProductWithImageDTO">
+	    SELECT
+	        P.PRD_NUM,
+	        P.TITLE,
+	        P.PRICE,
+	        P.LOCATION1,
+	        P.INPUT_DATE,
+	        P.SELL_TYPE,
+	        I.MAIN_IMAGE
+	    FROM PRODUCT P
+	    LEFT JOIN IMAGE I ON P.IMG_NUM = I.IMG_NUM
+	    WHERE P.COM_NUM = #{comNum}
+	      AND P.SELL_TYPE = #{sellType}
+	    ORDER BY
+	    <choose>
+	        <when test="sort == 'recent'">P.INPUT_DATE DESC</when>
+	        <when test="sort == 'low'">P.PRICE ASC</when>
+	        <when test="sort == 'high'">P.PRICE DESC</when>
+	        <otherwise>P.INPUT_DATE DESC</otherwise>
+	    </choose>
+	</select>
+
+</mapper>

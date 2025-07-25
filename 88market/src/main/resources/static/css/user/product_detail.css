@@ -1,0 +1,434 @@
+/* 기본 폰트 및 페이지 배경 설정 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fff;
+    color: #212121;
+}
+
+/* 페이지 전체 컨테이너 */
+.product-page-container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 40px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* 메인 콘텐츠 영역 (좌/우 분할) */
+.product-main-content {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* 왼쪽 섹션 (갤러리) */
+.product-gallery-section {
+    flex: 1;
+    max-width: 600px;
+}
+
+/* 메인 이미지 캐러셀 */
+.main-image-carousel {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    height: 600px; /* 메인 이미지와 높이 동일하게 */
+    overflow: visible; /* dots가 보이도록 변경 */
+
+}
+
+.main-image-carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+
+.carousel-nav.prev-btn {
+  display: block !important;
+  opacity: 1 !important;
+  z-index: 1000 !important;
+  visibility: visible !important;
+  z-index: 20 !important; /* 캐러셀 내에서 버튼이 보이도록 적당히 */
+}
+
+/* dots */
+.slick-dots {
+  position: absolute;
+  bottom: -50px;
+  width: 100%;
+  display: block;
+  text-align: center;
+  list-style: none;
+  margin: 0;
+  z-index: 30;
+}
+
+.slick-dots li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.slick-dots li button {
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  width: 12px;
+  height: 12px;
+  padding: 5px;
+  cursor: pointer;
+  color: transparent;
+  border: 0;
+  outline: none;
+  background: #c4c4c4;
+  border-radius: 50%;
+}
+
+.slick-dots li.slick-active button {
+  background: #29B6F6; /* 활성화된 점 색 */
+}
+
+
+.image-counter {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+/* 상품 설명 */
+.product-title-wrapper {
+  min-height: 6em;  /* 예: 줄간격 1.8em * 2줄 = 3.6em */
+  padding-top: 0.3em; /* 위쪽 여유 공간 */
+  padding-bottom: 0.3em; /* 아래쪽 여유 공간 */
+  overflow: hidden;
+}
+
+.product-title-wrapper h1 {
+  margin: 0;
+  line-height: 1.8em; /* 한 줄 높이 */
+  font-size: 1.5rem; /* 필요시 글자 크기 조절 */
+}
+
+.product-description {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #f0f0f0;
+    height: 300px;
+}
+.product-description h3 { font-size: 20px; margin-bottom: 15px; }
+.product-description p { font-size: 16px; line-height: 1.6; color: #555; }
+
+/* 오른쪽 섹션 (구매 정보) */
+.product-purchase-section {
+    flex: 1;
+    max-width: 500px;
+}
+
+/* 상품 요약 정보 */
+.product-summary .product-category { font-size: 14px; color: #777; }
+.product-summary h1 { font-size: 28px; font-weight: bold; margin: 8px 0; }
+.product-summary .price-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.product-summary .product-price { font-size: 32px; font-weight: 900; }
+.product-summary .product-meta { font-size: 14px; color: #888; }
+
+.badge {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.safety-badge { background-color: #E3F2FD; color: #1565C0; }
+
+/* 거래 조건 */
+.transaction-specs {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.spec-item .spec-title { display: block; font-size: 14px; color: #888; margin-bottom: 5px; }
+.spec-item .spec-value { font-size: 16px; font-weight: 500; }
+
+/* 행동 버튼 */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative; /* 혹시 겹침 문제 방지 */
+  z-index: 0;
+   width: 100%;  
+}
+
+.action-buttons button {
+	flex-grow: 1;
+	height: 60px;           /* 고정 높이 */
+	line-height: 1;         /* 텍스트 수직 정렬 위해 */
+	padding: 0 20px;        /* 좌우 여백은 원하는 만큼 조절 */
+    display: flex;          
+	align-items: center;    /* 텍스트/아이콘 수직 중앙 정렬 */
+	justify-content: center;
+  
+	font-size: 18px;
+	font-weight: bold;
+	border-radius: 8px;
+	cursor: pointer;
+	border: 1px solid #ccc;
+}
+
+.wish-btn-border {
+  /* flex-grow, padding, margin 완전 초기화 */
+  flex: 0 0 60px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  /* 크기 고정 */
+  width: 60px !important;
+  height: 60px !important;
+
+  /* 중앙 정렬 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  /* 겹침 방지 */
+  position: relative !important;
+  z-index: 10 !important;
+
+  /* 나머지 스타일 */
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.btn-chat { background-color: #fff; color: #333; }
+.btn-buy { background-color: #29B6F6; color: #fff; border-color: #29B6F6; }
+
+.purchase-core {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+/* 판매자 정보 */
+.seller-info { margin-top: 30px; padding-top: 30px; border-top: 1px solid #f0f0f0; }
+.seller-info h4, .seller-info h5 { font-size: 18px; margin-bottom: 15px; }
+.seller-profile { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+.seller-name { font-weight: bold; }
+.trust-score { font-size: 14px; }
+.trust-gauge-bar { width: 120px; height: 8px; background-color: #e0e0e0; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+.trust-gauge-bar .gauge { height: 100%; background-color: #29B6F6; }
+.seller-stats { display: flex; gap: 20px; font-size: 14px; color: #555; margin-bottom: 25px; }
+.seller-stats b { color: #212121; }
+
+.seller-other-item { display: flex; gap: 15px; align-items: center; }
+.seller-other-item img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; }
+.seller-other-item .item-info p { margin: 0 0 5px; }
+.seller-other-item .item-info strong { font-size: 16px; }
+
+/* 추천 상품 섹션 */
+.related-products-section h2 { font-size: 22px; margin-bottom: 20px; }
+
+
+.page-container {
+    width: 100%;
+    max-width: 1280px; /* 콘텐츠의 최대 너비를 제한하여 가독성을 높입니다. */
+    margin: 0 auto; /* 페이지를 화면 중앙에 배치합니다. */
+    padding: 20px;
+    box-sizing: border-box; /* padding이 너비에 포함되도록 설정합니다. */
+}
+
+
+/* 상품 메타 + 찜 버튼 한 줄 정렬 */
+.product-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 기존 찜 버튼 스타일 유지 + 정렬 개선 */
+.wish-btn {
+    flex-shrink: 0;
+    margin-left: 8px;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    color: #FF4081;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.wish-btn.active {
+  color: #FF0000; /* 눌렀을 때 빨간색 */
+}
+
+.wish-btn-border img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* 카드 섹션 공통 스타일 */
+.card-section {
+	overflow: visible;
+    width: 100%;
+    margin-bottom: 50px; /* 각 섹션 사이에 충분한 여백을 줍니다. */
+}
+/* 카드 목록을 감싸는 래퍼 스타일 - 이벤트 외 물품들 */
+ .card-list-wrapper-items {	
+	overflow: hidden !important;
+    overflow-x: auto;/*  내용이 넘칠 경우 가로 스크롤을 생성합니다. */
+    gap: 20px !important; /* 카드와 카드 사이의 간격을 설정합니다. */
+    padding-bottom: 15px; /* 스크롤바가 콘텐츠를 가리지 않도록 하단에 패딩을 줍니다. */
+    
+   /*  스크롤바를 시각적으로 숨깁니다 (기능은 유지). */
+    -ms-overflow-style: none; /*  IE and Edge */
+    scrollbar-width: none;  /* Firefox */ 
+}
+
+/* Slick 화살표 보이도록 */
+.card-list-wrapper-items .slick-prev:before,
+.card-list-wrapper-items .slick-next:before {
+  content: ''; /* 기존 아이콘을 없애고 커스텀으로 바꿔보기 */
+  background: none !important;
+  color: transparent !important;
+  opacity: 0 !important;
+}
+.slick-track,
+.slick-slide {
+    overflow: visible !important;
+}
+
+.slick-list {
+    overflow: visible !important; 
+}
+/* 아래는 .card-list-wrapper-items 전용 */
+.card-list-wrapper-items .slick-prev,
+.card-list-wrapper-items .slick-next {
+  background-color:rgba(255, 255, 255, 0.3) !important; /* 화이트 배경 */
+  border-radius: 4px !important;
+  width: 55px !important;
+  height: 55px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10;
+  top: 31%;
+  transform: translateY(-50%);
+}
+
+.card-list-wrapper-items .slick-prev {
+  left: 0px !important;
+  background-image: url('/images/main/prev-shadow.png')!important; /* 원하는 하얀배경용 아이콘 */
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 50px 50px !important;
+}
+
+.card-list-wrapper-items .slick-next {
+  right: 0px !important;
+  background-image: url('/images/main/next-shadow.png')!important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 50px 50px !important;
+}
+
+/* Slick 기본 before 아이콘 제거 */
+.card-list-wrapper-items  {
+  content: none !important;
+}
+
+	
+/* 일반 상품 카드 스타일 */
+.product-card {
+    flex: 0 0 auto; /* 카드의 크기를 고정합니다. */
+    width: 200px; /* 상품 카드의 너비를 설정합니다. */
+    border: 1px solid #e0e0e0; /* 카드에 옅은 테두리를 추가합니다. */
+    border-radius: 8px; /* 모서리를 둥글게 처리합니다. */
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 효과를 줍니다. */
+}
+
+/* 상품 카드의 링크 스타일 */
+.product-card a {
+    text-decoration: none;
+    color: inherit; /* 부모 요소의 색상을 상속받습니다. */
+    display: block;
+}
+
+/* 상품 이미지 컨테이너 */
+.product-image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 이미지 비율을 1:1로 유지합니다. */
+}
+
+.product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 컨테이너에 꽉 차도록 설정합니다. */
+}
+
+/* 상품 정보 영역 스타일 */
+.product-info {
+    padding: 15px;
+}
+
+.product-name {
+    font-size: 14px;
+    margin-bottom: 8px;
+    /* 텍스트가 두 줄을 넘어갈 경우 ...으로 표시합니다. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    height: 5em; /* 대략 두 줄 높이 */
+}
+
+.product-price {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-meta {
+    font-size: 12px;
+    color: #888888;
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>관리자 - 상품 상세</title>
+  <!-- 기존 CSS -->
+  <link rel="stylesheet" th:href="@{/css/admin/userProduct/userProductDetail.css}" />
+  <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+
+  <div class="admin-wrapper">
+    <div class="main-content">
+    	<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>일반회원 상품 관리 &gt;</span> <span class="current-page">상품 상세</span>
+				</div>
+			</header>
+		<!-- 메인 컨텐츠 (상품 관리) -->
+      <main class="container">
+        <section class="notice-form-section">
+          <form th:action="@{/admin/userProduct/save}" th:object="${product}" method="post" >
+            <div style="display:flex; gap:20px; align-items:flex-end; margin-bottom:16px;">
+			<!-- 상품번호 -->
+			<div class="form-group" style="display:flex; width: 800px; gap:20px; align-items:flex-end; margin-bottom:16px;">
+				<label class="form-label">상품번호</label>
+		    	<input type="text" th:field="*{product.prdNum}" style="width: 500px; background-color: #F5F5F5" readonly class="form-input" />
+			</div>
+			<!-- 회원 정보 -->
+			<div class="form-group" style="display:flex; width: 800px; gap:20px; align-items:flex-end; margin-bottom:16px;">
+		    	<label class="form-label">이메일</label>
+		    	<input type="text" th:field="*{user.email}" style="width: 500px; background-color: #F5F5F5"  readonly class="form-input" />
+			</div>
+            </div>
+            
+            <!-- 이미지 업로드 & 미리보기 -->
+			<div class="form-group">
+			  <label class="form-label">이미지</label>
+			  <div class="image-slots" style="display:flex; gap:10px; margin-top:8px;">
+			    <div class="image-slot" style="
+			         width:120px; height:120px;
+			         border:1px dashed #ccc;
+			         display:flex; align-items:center; justify-content:center;
+			         color:#aaa;
+			         font-size:0.9rem;">업로드
+			    </div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			    <div class="image-slot" style="width:120px; height:120px; border:1px dashed #ccc;"></div>
+			  </div>
+			 <!--  <input type="file" name="images" multiple class="form-input" style="margin-top:8px;"/> -->
+			</div>
+
+            <!-- 제목 -->
+            <div class="form-group">
+              <label class="form-label">제목</label>
+              <input type="text" th:field="*{product.title}" style="background-color: #F5F5F5"  readonly class="form-input" />
+            </div>
+
+            <!-- 내용 -->
+            <div class="form-group">
+              <label class="form-label">내용</label>
+              <textarea th:field="*{product.content}" style="background-color: #F5F5F5"  readonly class="form-input" rows="5"></textarea>
+            </div>
+
+            <!-- 카테고리 -->
+            <div class="form-group">
+              <label class="form-label">카테고리</label>
+              <div>
+                <label th:each="cat : ${categories}" style="margin-right:15px;">
+                  <input type="radio" th:field="*{category.catNum}" th:value="${cat.catNum}" />
+                  <span th:text="${cat.name}"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 가격 & 안전거래 -->
+			<div class="form-group">
+				<label class="form-label">가격</label>
+				<div style="display:flex; align-items:center; gap:10px;">
+					<input type="number" th:field="*{product.price}" style="width:200px; background-color: #F5F5F5"  readonly class="form-input"  />
+					<span>원</span>
+					<input type="checkbox" th:field="*{product.safeType}" th:value="Y"/>안전거래
+				</div>
+			</div>
+
+			<!-- 거래 상태 -->
+			<div class="form-group">
+			  <label class="form-label">거래상태</label>
+			  <div style="display:flex; align-items:center; gap:10px;">
+			    <label><input type="radio" name="status" th:value="'selling'" th:checked="${product.product.sellType == 'N' and product.product.appointType == 'N'}"/>판매중</label>
+			    <label><input type="radio" name="status" th:value="'reserved'" th:checked="${product.product.appointType == 'Y'}"/>예약중</label>
+			    <label><input type="radio" name="status" th:value="'sold'" th:checked="${product.product.sellType == 'Y'}"/>판매완료</label>
+			  </div>
+			</div>
+
+            <!-- 거래방법 -->
+            <div class="form-group">
+            <label class="form-label">거래방법</label>
+				<label style="margin-right:15px;">
+			    <input type="checkbox" th:field="*{product.deliveryType}" value="Y"/>택배거래</label>
+				<label>
+			    <input type="checkbox" th:field="*{product.meetType}" value="Y"/>직거래</label>
+            </div>
+
+            <!-- 숨김 -->
+            <div class="form-group">
+              <label class="form-label">숨김</label>
+              <label style="margin-right:15px;">
+                <input type="radio" th:field="*{product.hiddenType}" th:value="Y" /> Y
+              </label>
+              <label>
+                <input type="radio" th:field="*{product.hiddenType}" th:value="N" /> N
+              </label>
+            </div>
+
+            <!-- 액션 버튼 -->
+            <div class="form-actions">
+              <button type="submit" class="control-button">저장</button>
+              <a th:href="@{/admin/userProduct/list}" class="control-button">뒤로가기</a>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

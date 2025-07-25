@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminAccountUserDAO">
+
+	<resultMap id="userMap" type="kr.co.sist.DTO.UserDTO">
+  		<id   column="USER_NUM"       property="userNum"/>
+  		<result column="NAME"      property="name"/>
+  		<result column="total_report"  property="totalReport"/>
+  		<result column="BANTYPE"       property="banType"/>
+  		<result column="WITHDRAW"      property="withdraw"/>
+  		<result column="INPUT_DATE"    property="inputDate"/>
+	</resultMap>
+	
+	<resultMap id="bankMap" type="kr.co.sist.DTO.UserDTO">
+  		<id   column="USER_NUM"       property="userNum"/>
+  		<result column="NAME"      property="name"/>
+  		<result column="total_report"  property="totalReport"/>
+  		<result column="BANTYPE"       property="banType"/>
+  		<result column="WITHDRAW"      property="withdraw"/>
+  		<result column="INPUT_DATE"    property="inputDate"/>
+	</resultMap>
+	
+    <select id="selectUserList" resultMap="userMap">
+	SELECT
+		u.USER_NUM AS USER_NUM,
+		u.NAME AS NAME,
+		COUNT(r.REP_NUM) AS total_report,
+		u.BANTYPE AS BANTYPE,
+		u.WITHDRAW AS WITHDRAW,
+		u.INPUT_DATE AS INPUT_DATE
+	FROM USERS u
+	LEFT JOIN REPORT r
+		ON u.USER_NUM = r.USER_NUM
+	GROUP BY
+		u.USER_NUM,
+		u.NAME,
+		u.BANTYPE,
+		u.WITHDRAW,
+		u.INPUT_DATE
+	ORDER BY
+		u.INPUT_DATE DESC
+	</select>
+	
+	<select id="selectOneUser" resultType="kr.co.sist.DTO.UserDTO" parameterType="String">
+	SELECT
+		USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS,
+		MANNER, POINT, INPUT_DATE, BAN_DATE, BANTYPE, DRAW_DATE, WITHDRAW
+	FROM USERS
+	WHERE
+		USER_NUM=#{userNum}
+	</select>
+	
+	<insert id="insertUser" parameterType="kr.co.sist.DTO.UserDTO">
+	INSERT INTO USERS
+    (USER_NUM, NAME, NICKNAME, TEL, EMAIL, PASS, ZIPCODE, ADDRESS,
+    INPUT_DATE, BANTYPE, WITHDRAW)
+    VALUES(SEQ_USER_NUM.NEXTVAL, #{name}, #{nickname}, #{tel}, #{email},
+    #{pass}, #{zipcode}, #{address},
+    #{inputDate, jdbcType=DATE}, #{banType, jdbcType=CHAR}, #{withdraw, jdbcType=CHAR})
+	</insert>
+	
+	<update id="updateUser" parameterType="kr.co.sist.DTO.UserDTO">
+	UPDATE USERS
+	SET
+		NAME=#{name}, NICKNAME=#{nickname}, TEL=#{tel},
+		EMAIL=#{email}, ZIPCODE=#{zipcode}, ADDRESS=#{address},
+		BANTYPE=#{banType}, WITHDRAW=#{withdraw}
+	WHERE
+		USER_NUM=#{userNum}
+	</update>
+	
+	<delete id="deleteUser" parameterType="String">
+	DELETE
+	FROM USERS
+	WHERE
+		USER_NUM=#{userNum}
+	</delete>
+	
+	<select id="selectBankList" resultType="kr.co.sist.DTO.BankDTO" parameterType="String">
+	SELECT
+		NAME, BANK_NAME, BANK_NUM, BANK_TYPE
+	FROM BANK
+	WHERE
+		USER_NUM=#{userNum}
+	</select>
+	
+	<select id="selectAddressList" resultType="kr.co.sist.DTO.AddressDTO" parameterType="String">
+	SELECT
+		ADDR_NUM, RECIPIENT_NAME, TEL, ZIPCODE, ADDRESS, ADDR_TYPE
+	FROM ADDRESS
+	WHERE
+		USER_NUM=#{userNum}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.CategoryDAO">
+
+	<!-- selectAllCategories : 모든 카테고리의 번호와 이름을 순서대로 조회  -->
+	<select id="selectAllCategories" resultType="kr.co.sist.DTO.CategoryDTO">
+		SELECT CAT_NUM AS catNum, NAME as name
+		FROM CATEGORY
+		ORDER BY CAT_NUM
+	</select>
+
+
+
+	<!-- selectCategoryById : 카테고리 번호에 해당하는 것  -->
+	<select id="selectCategoryById" parameterType="int" resultType="kr.co.sist.DTO.CategoryDTO">
+		SELECT  CAT_NUM AS catNum,NAME as name
+		FROM CATEGORY
+		WHERE CAT_NUM = #{catNum}
+	</select>
+	
+		<!-- 관리자 - 카테고리 목록 가져오기 -->
+	<select id="findAll" resultType="kr.co.sist.DTO.CategoryDTO">
+		SELECT CAT_NUM AS catNum, NAME AS name
+		FROM CATEGORY
+		ORDER BY CAT_NUM
+	</select>
+
+	  <!-- 등록 -->
+	<insert id="insert" parameterType="kr.co.sist.DTO.CategoryDTO">
+		INSERT INTO CATEGORY (CAT_NUM, NAME)
+		VALUES (#{catNum}, #{name})
+	</insert>
+	
+	  <!-- 수정 -->
+	<update id="update" parameterType="kr.co.sist.DTO.CategoryDTO">
+		UPDATE CATEGORY
+		SET NAME = #{name}
+		WHERE CAT_NUM = #{catNum}
+	</update>
+	
+	  <!-- 삭제 -->
+	  <delete id="delete" parameterType="int">
+	    DELETE FROM CATEGORY
+	     WHERE CAT_NUM = #{catNum}
+	  </delete>
+  
+</mapper>
+

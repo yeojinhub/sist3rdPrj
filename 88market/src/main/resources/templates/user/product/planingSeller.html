@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 판매등록</title>
+<!-- 메인 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/seller.css}">
+<!-- 외부파일(jQuery, Font Awesome 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+$(function() {
+	  let currentSellType = 'all';
+	  let currentSort = 'recent'; // 기본 정렬
+	  const comNum = '[[${Product[0].comNum}]]'; // Thymeleaf로 회사번호 바인딩
+
+	  // AJAX 요청 함수
+	  function fetchProducts() {
+	    $.ajax({
+	      url: '/planingSeller/products/json',
+	      type: 'POST',
+	      contentType: 'application/json',
+	      data: JSON.stringify({
+	        comNum: comNum,
+	        sellType: currentSellType,
+	        sort: currentSort
+	      }),
+	      success: function (data) {
+	        const $grid = $('.product-grid_seller');
+	        $grid.empty();
+
+	        if (data.products.length === 0) {
+	          $grid.append('<p>상품이 없습니다.</p>');
+	          return;
+	        }
+
+	        data.products.forEach(p => {
+	          const soldClass = p.sellType === 'N' ? ' sold-out_seller' : '';
+	          const overlayHtml = p.sellType === 'N'
+	            ? '<div class="overlay_seller"><p>판매완료</p></div>'
+	            : '';
+	          const cardHtml = `
+	            <div class="product-card_seller${soldClass}">
+	              <a href="/planingDetail?id=${p.prdNum}&comNum=${p.comNum}" style="text-decoration: none; color: inherit;">
+	                <img src="${p.mainImage}" alt="${p.title}">
+	                ${overlayHtml}
+	                <div class="product-info_seller">
+	                  <p class="product-name_seller">${p.title}</p>
+	                  <p class="product-price_seller">${p.price.toLocaleString()}원</p>
+	                  <p class="product-meta_seller"> ${p.inputDate}</p>
+	                </div>
+	              </a>
+	            </div>
+	          `;
+	          $grid.append(cardHtml);
+	        });
+	      },
+	      error: function () {
+	        alert('상품 정보를 불러오지 못했습니다.');
+	      }
+	    });
+	  }
+
+	  // 필터 탭 클릭
+	  $('.product-filter-nav_seller a').on('click', function (e) {
+	    e.preventDefault();
+	    currentSellType = $(this).data('type');
+	    $('.product-filter-nav_seller a').removeClass('active_seller');
+	    $(this).addClass('active_seller');
+	    fetchProducts();
+	  });
+
+	  // 정렬 버튼 클릭
+	  $('.sort-option').on('click', function (e) {
+	    e.preventDefault();
+	    currentSort = $(this).data('sort');
+	    fetchProducts();
+	  });
+
+	  // 페이지 최초 진입 시 AJAX로 전체상품 불러오기
+	  fetchProducts();
+	});
+</script>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<main class="seller-profile-container_seller">
+		<div class="profile-main_seller">
+			<section class="profile-header_seller">
+				<div class="profile-avatar_seller">
+					<img th:src="@{images/default_profile.jpg}" alt="판매자 아바타">
+				</div>
+				<div class="profile-info_seller">
+					<h1 class="seller-name_seller" th:text="${Product[0].comName}">기업명</h1>
+				</div>
+			</section>
+
+			<section class="products-section_seller">
+				<h2 class="section-title_seller">판매상품</h2>
+				<nav class="product-filter-nav_seller">
+					<a href="#" class="filter-tab_seller active_seller" data-type="all">전체 <span th:text="${ProductAllCnt}"></span></a>
+					<a href="#" class="filter-tab_seller" data-type="Y">판매중 <span th:text="${sellAllCnt}"></span></a>
+					<a href="#" class="filter-tab_seller" data-type="N">판매완료 <span th:text="${sellSoldOutCnt}"></span></a>
+				</nav>
+				<div class="products-header_seller">
+					<span class="total-products_seller" th:text="|총 ${ ProductAllCnt }개|">상품총 갯수</span>
+					<div class="sort-options_seller">
+						<a href="#" class="sort-option" data-sort="recent" >최신순</a> | 
+						<a href="#" class="sort-option" data-sort="low">낮은가격순</a> | 
+						<a href="#" class="sort-option" data-sort="high">높은가격순</a>
+					</div>
+				</div>
+				<div class="product-grid_seller">
+				  <div th:each="product : ${AllProductsByCompany}" class="product-card_seller">
+					  <a th:href="@{/planingDetail(id=${product.PRD_NUM}, comNum=${product.COM_NUM})}" style="text-decoration: none; color: inherit;">
+					    <img th:src="@{product['MAIN_IMAGE']}" alt="상품 이미지" />
+					    <div th:if="${product.SELL_TYPE == 'N'}" class="overlay_seller">
+					      <p>판매완료</p>
+					    </div>
+					    <div class="product-info_seller">
+					      <p class="product-name_seller" th:text="${product.TITLE}">상품명</p>
+					      <p class="product-price_seller" th:text="|${#numbers.formatInteger(product.PRICE, 3, 'COMMA')}원|">가격</p>
+					      <p class="product-meta_seller" th:text="${product.INPUT_DATE}">등록일</p>
+					    </div>
+					  </a>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+	<!-- 후기 오버레이 -->
+	<th:block th:insert="~{components/user/reviewOverlay :: reviewOverlay}"></th:block>
+</body>
+</html>

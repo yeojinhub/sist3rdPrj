@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 상품관리</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/userProduct/userProduct.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+	
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>일반 회원 상품 관리 &gt;</span> <span class="current-page">상품 관리</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (상품 관리) -->
+			<main class="container">
+				<section class="search-section">
+					<!-- 필터 영역 -->
+					<div class="search-filters">
+						<div class="filter-group">
+							<label>상태필터</label>
+							<input type="radio" name="statusFilter" value="all" id="status-all" checked>
+							<label for="status-all">전체</label>
+							<input type="radio" name="statusFilter" value="active" id="status-active">
+							<label for="status-active">판매중</label>
+							<input type="radio" name="statusFilter" value="inactive" id="status-inactive">
+							<label for="status-inactive">예약중</label>
+							<input type="radio" name="statusFilter" value="sold" id="status-sold">
+							<label for="status-sold">판매완료</label>
+						</div>
+						<div class="filter-group">
+							<label>숨김</label>
+							<input type="radio" name="hideFilter" value="" id="hide-all" checked>
+							<label for="hide-all">전체</label>
+							<input type="radio" name="hideFilter" value="Y" id="hide-y">
+							<label for="hide-y">Y</label>
+							<input type="radio" name="hideFilter" value="N" id="hide-n">
+							<label for="hide-n">N</label>
+						</div>
+						
+					</div>
+					
+					<!-- 검색 폼 -->
+					<form id="searchForm" th:action="@{/admin/userProduct/list}" method="get">
+						<input type="hidden" name="statusFilter" id="statusFilterInput" th:value="${search.statusFilter}" />
+						<input type="hidden" name="hideFilter" id="hideFilterInput" th:value="${search.hideFilter}" />
+						<div class="search-box">
+							<select class="search-filter" name="searchType">
+								<option value="title"
+									th:selected="${param.searchType != null and param.searchType[0] == 'title'}">제목</option>
+								<option value="seller"
+									th:selected="${param.searchType != null and param.searchType[0] == 'seller'}">판매자email</option>
+							</select>													
+							<select class="search-filter" name="catNum">
+							  <option value="" th:selected="${catNum == null}">전체 카테고리</option>
+							  <option th:each="cat : ${categories}"
+							          th:value="${cat.catNum}"
+							          th:text="${cat.name}"
+							          th:selected="${catNum != null and catNum == cat.catNum}">
+							  </option>
+							</select>
+							<input type="text" class="search-input" name="keyword"
+								th:value="${param.keyword}" placeholder="검색어를 입력하세요">
+							<button type="submit" class="search-button">검색</button>
+							<!-- 검색 초기화 버튼 추가 -->
+							<button type="button" class="search-button" id="resetSearch">초기화</button>
+						</div>
+					</form>
+				</section>
+
+				<section class="product-section">
+					<table class="product-table">
+						<thead>
+							<tr>
+								<th><input type="checkbox" class="all-checkbox"></th>
+								<th>상품번호</th>
+								<th>제목</th>
+								<th>판매자email</th>
+								<th>카테고리</th>
+								<th>가격</th>
+								<th>등록일</th>
+								<th>상태</th>
+								<th>숨김</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item, i : ${userProductList}"  class="table-row">
+							  <td><input type="checkbox" class="checkbox" th:data-prd-num="${item.product.prdNum}" th:id="'checkbox' + ${i.count}"/></td>
+							  <td th:text="${item.product.prdNum}"></td>
+							    <td>
+							      <a th:href="@{/admin/userProduct/detail/{prdNum}(prdNum=${item.product.prdNum})}"
+							         th:text="${item.product.title}"
+							         style="color:#007bff; text-decoration:none;">
+							      </a>
+							    </td>
+							  <!-- <td th:text="${item.user.email}"></td> -->
+							  <td th:text="${item.user != null ? item.user.email : '—익명—'}"></td>
+							  <td th:text="${item.category.name}"></td>
+							  <td th:text="|${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT')}원|"></td>
+							  <td th:text="${item.product.inputDate}"></td>
+							  <td><span th:text="${item.product.sellType =='Y'?'판매완료' :( item.product.appointType=='Y'?'예약중':'판매중')}"></span></td>
+							  <td th:text="${item.product.hiddenType}"></td>
+							</tr>
+							<tr th:if="${#lists.isEmpty(userProductList)}">
+								<td colspan="9" style="text-align: center;">등록된 상품이 없습니다.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="table-footer">
+						<!-- 페이지네이션 -->
+					<div class="pagination" th:if="${pagination.totalPages > 1}">
+					  <a th:if="${pagination.pageNum > 1}"
+					     th:href="@{/admin/userProduct/list(
+					       pageNum=${pagination.pageNum-1},
+					       pageSize=${pagination.pageSize},
+					       searchType=${search.searchType},
+					       keyword=${search.keyword},
+					       catNum=${search.catNum},
+					       statusFilter=${search.statusFilter},
+					       hideFilter=${search.hideFilter}
+					     )}">&laquo; 이전</a>
+					  <a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
+					     th:classappend="${i==pagination.pageNum} ? 'active'"
+					     th:href="@{/admin/userProduct/list(
+					       pageNum=${i},
+					       pageSize=${pagination.pageSize},
+					       searchType=${search.searchType},
+					       keyword=${search.keyword},
+					       catNum=${search.catNum},
+					       statusFilter=${search.statusFilter},
+					       hideFilter=${search.hideFilter}
+					     )}"
+					     th:text="${i}"></a>
+					  <a th:if="${pagination.pageNum < pagination.totalPages}"
+					     th:href="@{/admin/userProduct/list(
+					       pageNum=${pagination.pageNum+1},
+					       pageSize=${pagination.pageSize},
+					       searchType=${search.searchType},
+					       keyword=${search.keyword},
+					       catNum=${search.catNum},
+					       statusFilter=${search.statusFilter},
+					       hideFilter=${search.hideFilter}
+					     )}">다음 &raquo;</a>
+					</div>
+					<div class="table-controls-right">
+						<button class="control-button" id="hideOff">보이기</button>
+						<button class="control-button" id="hideOn">숨기기</button>
+					</div>
+					</div>
+				</section>
+			</main>
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
+		</div>
+	</div>
+
+<script>
+    $(function () {
+        // 페이지 로드 시 현재 필터 상태 설정
+        var currentStatusFilter = '[[${search.statusFilter}]]' || 'all';
+        var currentHideFilter = '[[${search.hideFilter}]]';
+        
+        // 라디오 버튼 상태 설정
+        $('input[name="statusFilter"][value="' + currentStatusFilter + '"]').prop('checked', true);
+        $('input[name="hideFilter"][value="' + currentHideFilter + '"]').prop('checked', true);
+        
+        // hidden input 값 설정
+        $('#statusFilterInput').val(currentStatusFilter);
+        $('#hideFilterInput').val(currentHideFilter);
+        
+        // 라디오 버튼 변경 이벤트
+        $('input[name="statusFilter"]').change(function() {
+            $('#statusFilterInput').val($(this).val());
+        });
+        
+        $('input[type="radio"][name="hideFilter"]').change(function() {
+        	  $('#hideFilterInput').val($(this).val());
+        	});
+        
+        // 검색 초기화
+        $('#resetSearch').click(function () {
+            $('input[name="keyword"]').val('');
+            $('select[name="searchType"]').val('title');
+            $('select[name="catNum"]').val('');
+            $('input[name="statusFilter"][value="all"]').prop('checked', true);
+            $('input[name="hideFilter"][value=""]').prop('checked', true);
+            $('#statusFilterInput').val('all');
+            $('#hideFilterInput').val('');
+            $('#searchForm').submit();
+        });
+
+        // 체크박스 전체 선택
+        $('.all-checkbox').click(function () {
+            if ($('.all-checkbox').is(':checked')) {
+                $('.checkbox').prop('checked', true);
+            } else {
+                $('.checkbox').prop('checked', false);
+            }
+        });
+        
+		$('#hideOn').click(()=>{
+			var selectedNums = [];
+			
+			// 선택된 체크박스의 prd-num 수집
+			$('.checkbox:checked').each(function () {
+				selectedNums.push($(this).data('prd-num')); // data-prd-num 
+			});
+			
+			if (selectedNums.length === 0) {
+				alert('숨길 물품을 선택해주세요.');
+				return;
+			}
+			
+			axios.post('/admin/userProduct/hideon',{
+				prdNums : selectedNums
+			}).then(res=>{
+				alert("수정 완료되었습니다.")
+				location.reload();
+			}).catch(err=>{
+				console.log(err);
+			});
+			
+		});// click
+		
+		$('#hideOff').click(()=>{
+			var selectedNums = [];
+			
+			// 선택된 체크박스의 prd-num 수집
+			$('.checkbox:checked').each(function () {
+				selectedNums.push($(this).data('prd-num')); // data-prd-num 
+			});
+
+			if (selectedNums.length === 0) {
+				alert('보이게 할 물품을 선택해주세요.');
+				return;
+			}
+			
+			axios.post('/admin/userProduct/hideoff',{
+				prdNums : selectedNums
+			}).then(res=>{
+				alert("수정 완료되었습니다.")
+				location.reload();
+			}).catch(err=>{
+				console.log(err);
+			});
+			
+		});// click
+    });
+</script>
+	<script th:inline="javascript">
+	  function showSaveAlert() {
+	    const params = new URLSearchParams(window.location.search);
+	    const saved  = params.get('saved');
+	    if (saved === 'true') {
+	      alert('수정이 완료되었습니다.');
+	    } else if (saved === 'false') {
+	      alert('수정에 실패했습니다.');
+	    }
+	    history.replaceState(null, '', window.location.pathname);
+	  }
+	  document.addEventListener('DOMContentLoaded', showSaveAlert);
+	</script>
+</body>
+</html>

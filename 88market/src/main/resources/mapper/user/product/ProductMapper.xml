@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductMapper">
+
+  <!-- ✅ 결과 매핑 정의 -->
+  <resultMap id="productResultMap" type="kr.co.sist.DTO.ProductDTO">
+    <result property="prdNum" column="prd_num"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="price" column="price"/>
+    <result property="location1" column="location1"/>
+    <result property="inputDate" column="input_date"/>
+    <result property="appointType" column="appoint_type"/>
+    <result property="hiddenType" column="hidden_type"/>
+    <result property="sellType" column="sell_type"/>
+    <result property="prdCnt" column="prd_cnt"/>
+    <result property="clickNum" column="click_num"/>
+    <result property="safeType" column="safe_type"/>
+    <result property="meetType" column="meet_type"/>
+    <result property="deliveryType" column="delivery_type"/>
+    <result property="likeNum" column="like_num"/>
+    <result property="userNum" column="user_num"/>
+    <result property="catNum" column="cat_num"/>
+    <result property="comNum" column="com_num"/>
+    <result property="imgNum" column="img_num" jdbcType="INTEGER"/>
+  </resultMap>
+
+  <!-- 상품 등록 -->
+  <insert id="insertProduct" parameterType="kr.co.sist.DTO.ProductDTO">
+    INSERT INTO PRODUCT (
+      PRD_NUM, TITLE, CONTENT, PRICE, LOCATION1,
+      INPUT_DATE, SAFE_TYPE, MEET_TYPE, DELIVERY_TYPE,
+      USER_NUM, CAT_NUM, IMG_NUM
+    ) VALUES (
+      #{prdNum, jdbcType=VARCHAR},
+      #{title, jdbcType=VARCHAR},
+      #{content, jdbcType=VARCHAR},
+      #{price, jdbcType=INTEGER},
+      #{location1, jdbcType=VARCHAR},
+      SYSDATE,
+      #{safeType, jdbcType=VARCHAR},
+      #{meetType, jdbcType=VARCHAR},
+      #{deliveryType, jdbcType=VARCHAR},
+      #{userNum, jdbcType=VARCHAR},
+      #{catNum, jdbcType=INTEGER},
+      #{imgNum, jdbcType=INTEGER}
+    )
+  </insert>
+
+  <!-- 시퀀스 조회 -->
+  <select id="getNextProductSeq" resultType="int">
+    SELECT SEQ_PRD_NUM.NEXTVAL FROM DUAL
+  </select>
+
+  <!-- 상품 단건 조회 -->
+  <select id="selectProductByNum" parameterType="string" resultMap="productResultMap">
+    SELECT 
+      PRD_NUM         AS prd_num,
+      TITLE           AS title,
+      CONTENT         AS content,
+      PRICE           AS price,
+      LOCATION1       AS location1,
+      INPUT_DATE      AS input_date,
+      APPOINT_TYPE    AS appoint_type,
+      HIDDEN_TYPE     AS hidden_type,
+      SELL_TYPE       AS sell_type,
+      PRD_CNT         AS prd_cnt,
+      CLICK_NUM       AS click_num,
+      SAFE_TYPE       AS safe_type,
+      MEET_TYPE       AS meet_type,
+      DELIVERY_TYPE   AS delivery_type,
+      LIKE_NUM        AS like_num,
+      USER_NUM        AS user_num,
+      CAT_NUM         AS cat_num,
+      COM_NUM         AS com_num,
+      IMG_NUM         AS img_num
+    FROM PRODUCT
+    WHERE PRD_NUM = #{prdNum, jdbcType=VARCHAR}
+  </select>
+
+	<!-- 조회수 -->
+	<update id="increaseClickNum" parameterType="string">
+	  UPDATE PRODUCT
+	  SET CLICK_NUM = CLICK_NUM + 1
+	  WHERE PRD_NUM = #{prdNum}
+	</update>
+
+	<!-- 채팅방 개수 -->
+	<select id="countChatroomsByPrdNum" parameterType="string" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM CHATROOM 
+	    WHERE PRD_NUM = #{prdNum}
+	</select>
+
+	<!-- 상세페이지에 필요한 유저 정보 -->
+	<select id="getUser" parameterType="string" resultType="kr.co.sist.DTO.UserDTO">
+	    SELECT nickname, manner
+	    FROM users
+	    WHERE user_num = #{userNum}
+	</select>
+	
+	<!-- 안전거래 개수 -->
+	<select id="getSafeByUserNum" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM PRODUCT
+		WHERE USER_NUM = #{userNum}
+		AND SAFE_TYPE = 'Y'
+		AND SELL_TYPE = 'Y'
+	</select>
+	
+	<!-- 리뷰개수 -->
+	<select id="getReviewByUserNum" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM REVIEW R
+		JOIN PRODUCT P ON R.PRD_NUM = P.PRD_NUM
+		WHERE P.USER_NUM = #{userNum}
+	</select>
+	
+	<!-- 판매자의 다른 상품 -->
+	<select id="selectRandomProduct" parameterType="map" resultMap="productResultMap">
+	  SELECT *
+	  FROM (
+	    SELECT *
+	    FROM PRODUCT
+	    WHERE USER_NUM = #{userNum}
+	      AND PRD_NUM != #{excludePrdNum}
+	    ORDER BY DBMS_RANDOM.VALUE
+	  )
+	  WHERE ROWNUM = 1
+	</select>
+	
+	<!-- 같은 카테고리 내 다른 상품 15개 랜덤 조회 -->
+	<select id="selectRelatedProducts" parameterType="map" resultMap="productResultMap">
+	  SELECT *
+	  FROM (
+	    SELECT *
+	    FROM PRODUCT
+	    WHERE CAT_NUM = #{catNum}
+	      AND PRD_NUM != #{prdNum}
+	      ORDER BY DBMS_RANDOM.VALUE
+	  )
+	  WHERE ROWNUM &lt;= 15
+	</select>
+	
+	<!-- 상품 테이블의 좋아요 수 증가 -->
+	<update id="increaseLikeNum" parameterType="String">
+	    UPDATE PRODUCT SET LIKE_NUM = NVL(LIKE_NUM,0) + 1
+	    WHERE PRD_NUM = #{prdNum}
+	</update>
+	
+	<update id="decreaseLikeNum" parameterType="String">
+    UPDATE product SET like_num = like_num - 1 WHERE prd_num = #{prdNum}
+	</update>
+	
+</mapper>
+
+
+
+  

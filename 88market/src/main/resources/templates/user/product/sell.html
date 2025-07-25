@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>88마켓 - 판매등록</title>
+  <link rel="stylesheet" th:href="@{/css/user/sell.css}" />
+  <th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<body>
+  <th:block th:insert="~{components/user/header :: header}"></th:block>
+
+  <main class="product-registration-container">
+    <form id="product-form" enctype="multipart/form-data" onsubmit="return false;">
+      <div class="image-upload-section">
+        <div class="upload-box">
+          <label for="image-upload-input" class="upload-label">
+            <img src="/images/upload.png" alt="이미지 업로드" />
+          </label>
+          <input type="file" id="image-upload-input" accept="image/*" multiple style="display: none;" />
+          <div class="image-count-box"><span id="image-count">0/5</span></div>
+        </div>
+        <div id="image-preview-box" class="image-preview-box"></div>
+      </div>
+
+      <div class="form-section">
+        <div class="input-group">
+          <input type="text" id="product-name" placeholder="상품명을 입력해주세요." required />
+        </div>
+
+        <div class="input-group">
+          <p style="margin: 0 0 5px;">카테고리</p>
+          <ul class="category-list" id="categoryList">
+            <th:block th:each="cat : ${categoryList}">
+              <li class="category-item" th:data-cat-num="${cat.catNum}" th:text="${cat.name}"></li>
+            </th:block>
+          </ul>
+          <input type="hidden" id="catNum" required />
+          <p id="category-error" class="error-msg" style="display: none;">카테고리를 선택해주세요.</p>
+        </div>
+
+        <div class="input-group">
+          <input type="text" id="price" placeholder="판매가격을 입력해주세요." required />
+          <div class="safe-trade-option">
+            <input type="checkbox" id="safe-trade" />
+            <label for="safe-trade">안전거래</label>
+          </div>
+          <p id="price-error" class="error-msg" style="display: none;">1원 이상, 9,999,999,999원 이하로 입력해주세요.</p>
+        </div>
+
+        <div class="input-group">
+          <textarea id="product-description" placeholder="상품 설명을 입력해주세요." required></textarea>
+        </div>
+
+        <div class="trade-method-section">
+          <p>거래방법</p>
+          <div class="trade-option">
+            <input type="checkbox" id="delivery" />
+            <label for="delivery">택배거래</label>
+          </div>
+          <div class="trade-option">
+            <input type="checkbox" id="direct-deal" />
+            <label for="direct-deal">직거래</label>
+          </div>
+          <p id="trade-method-error" class="error-msg" style="display: none;">거래방법을 하나 이상 선택해주세요.</p>
+        </div>
+
+        <div id="direct-region-box" style="display: none; margin-top: 10px;">
+          <p style="margin: 0 0 5px;">희망 지역</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button type="button" class="add-region-button">+ 추가하기</button>
+            <div class="selected-region-container"></div>
+          </div>
+        </div>
+
+        <input type="hidden" id="location1" />
+      </div>
+
+      <div class="agreement-section">
+        <input type="checkbox" id="info-agreement" required />
+        <label for="info-agreement">판매 정보가 실제 상품과 다를 경우, 책임은 판매자에게 있음을 동의합니다.</label>
+        <p id="agreement-error" class="error-msg" style="display: none;">주의사항에 동의해야 등록할 수 있습니다.</p>
+      </div>
+
+      <button type="submit" class="submit-button" id="submit-btn">판매하기</button>
+    </form>
+  </main>
+
+  <th:block th:insert="~{components/user/footer :: footer}"></th:block>
+  <th:block th:insert="~{components/user/locationOverlay :: locationOverlay}"></th:block>
+
+  <script>
+    $(function () {
+      let imageFiles = [];
+
+      $('#image-upload-input').on('change', function (e) {
+        const files = Array.from(e.target.files);
+        if (imageFiles.length + files.length > 5) {
+          alert('최대 5장까지 업로드 가능합니다.');
+          return;
+        }
+        imageFiles = imageFiles.concat(files);
+        updatePreview();
+      });
+
+      function updatePreview() {
+        const previewBox = $('#image-preview-box').empty();
+        $('#image-count').text(`${imageFiles.length}/5`);
+        imageFiles.forEach((file, i) => {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const wrapper = $('<div>').addClass('image-wrapper');
+            const img = $('<img>').addClass('preview-image').attr('src', e.target.result);
+            const del = $('<div>').addClass('delete-image').text('×').attr('data-index', i);
+            wrapper.append(img).append(del);
+            previewBox.append(wrapper);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      $(document).on('click', '.delete-image', function () {
+        const index = $(this).data('index');
+        imageFiles.splice(index, 1);
+        updatePreview();
+      });
+
+      $('#price').on('input', function () {
+        const val = $(this).val().replace(/[^0-9]/g, '');
+        if (val.length > 10) {
+          $(this).val(val.slice(0, 10).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+        } else {
+          $(this).val(val.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+        }
+      });
+
+      $(document).on("click", ".category-item", function () {
+        $(".category-item").removeClass("active");
+        $(this).addClass("active");
+        const catNum = $(this).attr("data-cat-num");
+        $("#catNum").val(catNum);
+        $("#category-error").hide();
+      });
+
+      $("#direct-deal").on("change", function () {
+        if ($(this).is(":checked")) {
+          $("#direct-region-box").show();
+        } else {
+          $("#direct-region-box").hide();
+        }
+      });
+
+      function updateLocationHiddenInput() {
+    	  const uniqueLocations = [...new Set($(".region-tag").map(function () {
+    	    return $(this).clone().children().remove().end().text().trim();
+    	  }).get())];
+    	  $("#location1").val(uniqueLocations.join(","));
+    	}
+
+
+      window.addWishRegion = function (name) {
+        const $container = $(".selected-region-container");
+        if ($container.find(".region-tag").filter((_, el) => $(el).text().includes(name)).length > 0) return;
+        const $tag = $("<span>").addClass("region-tag").text(name);
+        const $remove = $("<button type='button'>").text("×");
+        $tag.append($remove);
+        $container.append($tag);
+        updateLocationHiddenInput();
+      };
+
+      $(document).on("click", ".region-tag button", function () {
+        $(this).closest(".region-tag").remove();
+        updateLocationHiddenInput();
+      });
+
+      $('#submit-btn').on('click', function () {
+        const isDeliveryChecked = $('#delivery').is(':checked');
+        const isDirectChecked = $('#direct-deal').is(':checked');
+
+        if (!isDeliveryChecked && !isDirectChecked) {
+          $('#trade-method-error').show();
+          $('html, body').animate({ scrollTop: $('#trade-method-error').offset().top - 100 }, 300);
+          return;
+        } else {
+          $('#trade-method-error').hide();
+        }
+
+        const rawPrice = $('#price').val().replace(/,/g, '');
+        const priceValue = Number(rawPrice);
+        if (isNaN(priceValue) || priceValue < 0 || priceValue > 9999999999) {
+          $('#price-error').show();
+          $('#price').focus();
+          return;
+        } else {
+          $('#price-error').hide();
+        }
+
+        if (imageFiles.length === 0) {
+          alert("사진을 최소 1장 이상 등록해주세요.");
+          $('html, body').animate({ scrollTop: $('#image-upload-input').offset().top - 100 }, 300);
+          return;
+        }
+
+        if (!$('#info-agreement').is(':checked')) {
+          $('#agreement-error').show();
+          $('#info-agreement').focus();
+          $('html, body').animate({ scrollTop: $('#agreement-error').offset().top - 100 }, 300);
+          return;
+        } else {
+          $('#agreement-error').hide();
+        }
+
+        const product = {
+          title: $('#product-name').val(),
+          content: $('#product-description').val(),
+          price: rawPrice,
+          location1: $('#location1').val(),
+          catNum: $('#catNum').val(),
+          safeType: $('#safe-trade').is(':checked') ? 'Y' : null,
+          deliveryType: isDeliveryChecked ? 'Y' : null,
+          meetType: isDirectChecked ? 'Y' : null
+        };
+
+        const formData = new FormData();
+        formData.append("product", new Blob([JSON.stringify(product)], { type: "application/json" }));
+        imageFiles.forEach(file => formData.append("images", file));
+
+        $.ajax({
+          url: "/product/sell",
+          method: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function () {
+        	  setTimeout(function () {
+        	    window.location.href = "/success";
+        	  }, 100);
+       		},
+          error: function (xhr) {
+            console.log(xhr);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+

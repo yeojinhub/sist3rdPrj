@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>88마켓 - 이벤트</title>
+	<!-- 이벤트 CSS -->
+	<link rel="stylesheet" th:href="@{/css/user/event.css}">
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+	<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+	<th:block th:replace="~{components/user/external :: external}"></th:block>
+</head>
+<script>
+	$(function () {
+		$('.tab-item').click(function (e) {
+			e.preventDefault();
+
+			// 모든 탭에서 active 클래스 제거하고 클릭된 탭에만 추가
+			$('.tab-item').removeClass('active');
+			$(this).addClass('active');
+
+			// 클릭된 탭의 순서에 따라 해당 섹션만 보이게 처리
+			var index = $('.tab-item').index(this);
+			$('.event-list').hide();
+			$('.event-list').eq(index).show();
+		});// click
+
+	});// ready
+</script>
+
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<!-- 메인 콘텐츠 (이벤트) -->
+	<main class="event-container">
+		<h1 class="event-title">이벤트</h1>
+		<nav class="event-tabs">
+			<a href="#" class="tab-item active">진행중</a> <a href="#" class="tab-item">종료</a> <a href="#"
+				class="tab-item">당첨자발표</a>
+		</nav>
+		<section class="event-list" id="event-ing">
+			<article class="event-item" th:each="ingEvent : ${ingEventList}">
+				<img th:src="${ingEvent.iDTO.subImage1}" alt="이벤트 배너 이미지" class="event-image"
+					th:onclick="|location.href='/event/${ingEvent.evtNum}'|">
+				<div class="event-date-container">
+					<p class="event-date" th:text="${ingEvent.startDate} + ' ~ ' + ${ingEvent.endDate}"></p>
+					<span class="d-day" th:if="${ingEvent.endDate != null and ingEvent.startDate != null}" th:with="today=${T(java.time.LocalDate).now()},
+               startLocalDate=${ingEvent.startDate.toLocalDate()},
+               endLocalDate=${ingEvent.endDate.toLocalDate()},
+               diffDays=${T(java.time.temporal.ChronoUnit).DAYS.between(today, endLocalDate)},
+               startDiffDays=${T(java.time.temporal.ChronoUnit).DAYS.between(today, startLocalDate)}"
+						th:text="${startDiffDays > 0 ? '시작전' : (diffDays < 0 ? '종료' : (diffDays == 0 ? 'D-Day' : 'D-' + diffDays))}"
+						th:class="'d-day' + (${startDiffDays > 0} ? ' before-start' : (${diffDays < 0} ? ' ended' : ''))">
+					</span>
+				</div>
+			</article>
+		</section>
+		<section class="event-list" id="event-end" style="display: none;">
+			<article class="event-item" th:each="endEvent : ${endEventList}">
+				<img th:src="${endEvent.iDTO.subImage1}" alt="이벤트 배너 이미지" class="event-image"
+					th:onclick="|location.href='/event/${endEvent.evtNum}'|">
+				<div class="event-date-container">
+					<p class="event-date" th:text="${endEvent.startDate} + ' ~ ' + ${endEvent.endDate}"></p>
+					<span class="d-day" th:if="${endEvent.endDate != null}" th:with="today=${T(java.time.LocalDate).now()},
+             endLocalDate=${endEvent.endDate.toLocalDate()},
+             diffDays=${T(java.time.temporal.ChronoUnit).DAYS.between(today, endLocalDate)}"
+						th:text="${diffDays < 0 ? '종료' : (diffDays == 0 ? 'D-Day' : 'D-' + diffDays)}"
+						th:class="'d-day' + (${diffDays < 0} ? ' ended' : '')">
+					</span>
+				</div>
+			</article>
+		</section>
+		<section class="event-list" id="event-winner" style="display: none;">
+			<article class="event-item" th:each="winnerEvent : ${winnerEventList}">
+				<img th:src="${winnerEvent.iDTO.subImage1}" alt="이벤트 배너 이미지" class="event-image"
+					th:onclick="|location.href='/event/${winnerEvent.evtNum}'|">
+				<div class="event-date-container">
+					<p class="event-date" th:text="${winnerEvent.startDate} + ' ~ ' + ${winnerEvent.endDate}"></p>
+					<span class="d-day" th:if="${winnerEvent.endDate != null}" th:with="today=${T(java.time.LocalDate).now()},
+             endLocalDate=${winnerEvent.endDate.toLocalDate()},
+             diffDays=${T(java.time.temporal.ChronoUnit).DAYS.between(today, endLocalDate)}"
+						th:text="${diffDays < 0 ? '종료' : (diffDays == 0 ? 'D-Day' : 'D-' + diffDays)}"
+						th:class="'d-day' + (${diffDays < 0} ? ' ended' : '')">
+					</span>
+				</div>
+			</article>
+		</section>
+	</main>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+</body>
+
+</html>

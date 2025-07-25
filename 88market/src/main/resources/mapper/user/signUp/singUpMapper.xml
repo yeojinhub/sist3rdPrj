@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.SignUpDAO">
+
+    <insert id="addUser" parameterType="kr.co.sist.DTO.UserDTO">
+    	<selectKey resultType="String" keyProperty="userNum" order="BEFORE">
+        	SELECT 	SEQ_USER_NUM.NEXTVAL
+        	FROM 	DUAL
+    	</selectKey>
+    	INSERT INTO USERS
+       		(USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE,ADDRESS)
+        VALUES(SEQ_USER_NUM.NEXTVAL, #{name}, #{nickname}, #{email},
+        	#{pass}, #{tel}, #{zipcode}, #{address})
+	</insert>
+	
+	<insert id="addAddress" parameterType="kr.co.sist.DTO.UserDTO">
+		INSERT INTO ADDRESS
+        	(ADDR_NUM, TEL, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{zipcode}, #{address},
+        	'Y', SEQ_USER_NUM.NEXTVAL)
+	</insert>
+
+	<!-- 카카오 회원가입 쿼리 추가 -->
+    <insert id="insertKakaoUser" parameterType="kr.co.sist.DTO.UserDTO">
+        <selectKey resultType="String" keyProperty="userNum" order="BEFORE">
+            SELECT SEQ_USER_NUM.NEXTVAL
+            FROM DUAL
+        </selectKey>
+        INSERT INTO USERS
+            (USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS)
+        VALUES(#{userNum}, #{name}, #{nickname}, #{email},
+            #{pass}, #{tel}, #{zipcode}, #{address})
+    </insert>
+    
+    <!-- 카카오 사용자 주소 추가 -->
+    <insert id="addKakaoAddress" parameterType="kr.co.sist.DTO.UserDTO">
+        INSERT INTO ADDRESS
+            (ADDR_NUM, TEL, RECIPIENT_NAME, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{name}, #{zipcode}, #{address},
+            'Y', #{userNum})
+    </insert>
+
+    <!-- 네이버 사용자 생성 -->
+    <insert id="insertNaverUser" parameterType="kr.co.sist.DTO.UserDTO">
+        <selectKey resultType="String" keyProperty="userNum" order="BEFORE">
+            SELECT SEQ_USER_NUM.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO USERS
+            (USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS)
+        VALUES(#{userNum}, #{name}, #{nickname}, #{email},
+            #{pass}, #{tel}, #{zipcode}, #{address})
+    </insert>
+    
+    <!-- 네이버 사용자 주소 추가 -->
+    <insert id="addNaverAddress" parameterType="kr.co.sist.DTO.UserDTO">
+    INSERT INTO ADDRESS
+        (ADDR_NUM, TEL, RECIPIENT_NAME, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+    VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{name}, #{zipcode}, #{address},
+        'Y', #{userNum})
+    </insert>
+</mapper>

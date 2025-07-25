@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.AnticheatDAO">
+    <select id="selectTotalprevention" resultType="int">
+        SELECT COUNT(*) FROM REPORT WHERE SEARCH_TYPE='Y'
+    </select>
+
+    <select id="selectTodayLookUpScam" resultType="int">
+        SELECT COUNT(*) FROM SCAM WHERE TO_CHAR(INPUT_DATE, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+    </select>
+
+    <select id="selectTotalLookUpScam" resultType="int">
+        SELECT COUNT(*) FROM SCAM
+    </select>
+
+    <select id="selectRealTimeMonitoring" resultType="kr.co.sist.DTO.ScamDTO">
+        <![CDATA[
+        SELECT SCAM_NUM, INPUT_VALUE, TO_CHAR(INPUT_DATE, 'YYYY-MM-DD HH24:MI:SS') INPUT_DATE
+FROM (
+  SELECT SCAM_NUM, INPUT_VALUE, INPUT_DATE
+  FROM SCAM
+  ORDER BY INPUT_DATE DESC
+)
+WHERE ROWNUM <= 16]]>
+    </select>
+
+    <insert id="insertScam" parameterType="String">
+        INSERT INTO SCAM VALUES (SEQ_SCAM_NUM.NEXTVAL, #{inputValue}, SYSDATE)
+    </insert>
+
+    <!-- 사용자 정보로 사기 조회 결과 조회 -->
+    <select id="selectScamResultWithUsers" resultType="int" parameterType="String">
+        SELECT
+    COUNT(*) AS cnt
+FROM
+    REPORT r
+    INNER JOIN USERS u ON r.user_num = u.user_num
+WHERE
+    r.search_type = 'Y'
+    AND (u.email = #{inputValue} OR u.tel = #{inputValue})
+    </select>
+
+    <!-- 계좌 정보로 사기 조회 결과 조회 -->
+    <select id="selectScamResultWithBank" resultType="int" parameterType="String">
+    SELECT
+    COUNT(*) AS cnt
+FROM
+    BANK b
+    INNER JOIN REPORT r ON b.user_num = r.user_num
+WHERE
+    b.bank_num = #{inputValue}
+    AND r.search_type = 'Y'
+    </select>
+</mapper>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 상품관리</title>
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/userTrade/userTradeList.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
+	
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>일반 회원 주문 관리 &gt;</span> <span class="current-page">주문 관리</span>
+				</div>
+			</header>
+
+			<!-- 메인 컨텐츠 (상품 관리) -->
+		      <main class="container">
+		        <section class="search-section">
+		          <form id="searchForm" th:action="@{/admin/userTrade/list}" method="get">
+		          <!-- 필터 영역 -->
+		            <div class="search-filters">
+						<div class="filter-group">
+		              <label>결제상태필터</label>
+		              <input type="radio" name="statusFilter" value="all" id="status-all" checked
+		                     th:checked="${search.statusFilter=='all'}"/>
+		              <label for="status-all">전체</label>
+		              <input type="radio" name="statusFilter" value="active" id="status-active"
+		                     th:checked="${search.statusFilter=='판매중'}"/>
+		              <label for="status-active">판매중</label>
+		              <input type="radio" name="statusFilter" value="거래진행중" id="status-inactive"
+		                     th:checked="${search.statusFilter=='거래진행중'}"/>
+		              <label for="status-inactive">거래진행중</label>
+		              <input type="radio" name="statusFilter" value="sold" id="status-sold"
+		                     th:checked="${search.statusFilter=='결제완료'}"/>
+		              <label for="status-sold">결제완료</label>
+		            </div>
+		           </div>
+		            <div class="search-box">
+					<select class="search-filter" name="searchType">
+						  <option value="" th:selected="${search.searchType == ''}">전체</option>
+						<option value="prdNum" th:selected="${search.searchType=='prdNum'}">상품번호</option>
+						<option value="sellerId" th:selected="${search.searchType=='sellerEmail'}">판매자</option>
+						<option value="buyerId" th:selected="${search.searchType=='buyerEmail'}">구매자</option>
+					</select>
+					<input type="text" class="search-input" name="keyword" th:value="${param.keyword}" placeholder="검색어를 입력하세요">
+					<button type="submit" class="search-button">검색</button>
+					<button type="button" class="search-button" id="resetSearch">초기화</button>
+		            </div>
+		          </form>
+		        </section>
+		
+		        <section class="product-section">
+		          <table class="product-table">
+		            <thead>
+		              <tr>
+		                <th>거래번호</th>
+		                <th>상품번호</th>
+		                <th>판매자</th>
+		                <th>구매자</th>
+		                <th>상태</th>
+		                <th>거래일</th>
+		              </tr>
+		            </thead>
+		            <tbody>
+		              <tr th:each="t : ${userTradeList}">
+		                <td><a th:href="@{/admin/userTrade/detail/{id}(id=${t.tradeId})}" th:text="${t.tradeId}"></a></td>
+		                <td th:text="${t.prdNum}"></td>
+		                <td th:text="${t.sellerEmail}"></td>
+		                <td th:text="${t.buyerEmail}"></td>
+		                <td th:text="${t.tradeStatus}"></td>
+		                <td th:text="${t.tradeDate}"></td>
+		              </tr>
+		              <tr th:if="${#lists.isEmpty(userTradeList)}">
+		                <td colspan="6" style="text-align:center">조회된 내역이 없습니다.</td>
+		              </tr>
+		            </tbody>
+		          </table>
+		
+
+          <!-- 페이징 -->
+          <div class="pagination" th:if="${pagination.totalPages>1}">
+            <a th:if="${pagination.pageNum>1}"
+               th:href="@{/admin/userTrade/list(
+                 pageNum=${pagination.pageNum-1},
+                 pageSize=${pagination.pageSize},
+                 statusFilter=${search.statusFilter},
+                 keyword=${search.keyword}
+               )}">&laquo; 이전</a>
+            <a th:each="i : ${#numbers.sequence(1,pagination.totalPages)}"
+               th:classappend="${i==pagination.pageNum} ? 'active'"
+               th:href="@{/admin/userTrade/list(
+                 pageNum=${i},
+                 pageSize=${pagination.pageSize},
+                 statusFilter=${search.statusFilter},
+                 keyword=${search.keyword}
+               )}"
+               th:text="${i}"></a>
+            <a th:if="${pagination.pageNum<pagination.totalPages}"
+               th:href="@{/admin/userTrade/list(
+                 pageNum=${pagination.pageNum+1},
+                 pageSize=${pagination.pageSize},
+                 statusFilter=${search.statusFilter},
+                 keyword=${search.keyword}
+               )}">다음 &raquo;</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+        <script src="/js/admin/script.js" defer></script>
+  <script th:inline="javascript">
+    $(function(){
+      // 검색 초기화
+      $('#resetSearch').on('click', function(){
+        $('#searchForm')[0].reset();
+        $('input[name="statusFilter"][value="all"]').prop('checked', true);
+        $('#searchForm').submit();
+      });
+    });
+  </script>
+</body>
+</html>

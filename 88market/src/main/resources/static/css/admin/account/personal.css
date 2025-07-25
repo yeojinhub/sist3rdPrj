@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+/* 이미지 업로드 영역 */
+.image-upload-area {
+  width: 120px;
+  height: 120px;
+  background: #f0f4f8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.upload-placeholder i {
+  font-size: 24px;
+  color: #ccc;
+}
+
+/* 이미지 업로드 버튼 */
+.upload-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #888;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+/* 액션 버튼 (우편번호 찾기 등) */
+.action-button {
+  padding: 12px 20px;
+  background: #888;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.action-button:hover {
+  background: #666;
+}
+
+/* 라디오 버튼 영역 */
+.radio-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.radio-group label {
+  font-size: 16px;
+  color: #4d4d4d;
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 5px;
+}

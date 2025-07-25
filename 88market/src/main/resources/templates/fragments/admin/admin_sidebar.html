@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<!-- 이 파일은 layout에서 th:replace로 포함될 뿐, 단독으로 렌더링하지 않습니다 -->
+	<div th:fragment="sidebar">
+		<div class="sidebar">
+			<div class="logo-container">
+				<img th:src="@{/images/logo.png}" alt="로고" class="logo"
+					style="width: 100%;">
+			</div>
+			<div class="admin-side-info">
+				<span class="admin-label"> <img
+					th:src="@{/images/inside.png}" class="admin-label"
+					style="width: 30px; height: 30px; vertical-align: middle">
+				</span> <span style="font-weight: bold; font-size: 20px">사이트 바로가기</span>
+			</div>
+			<ul class="menu">
+				<!-- 관리자 역할일 때만 보이는 항목들 -->
+				<li class="menu-item"
+					th:if="${session.loggedInAccountType == 'ADMIN' }"><a
+					th:href="@{/admin/home}"><i class="fas fa-home"></i>대시보드</a></li>
+
+				<li class="menu-item has-submenu"
+					th:if="${session.loggedInAccountType == 'ADMIN'}"><a href="#"
+					class="toggle-submenu"> <i class="fas fa-users"></i> 계정 관리 <i
+						class="fas fa-chevron-down arrow"></i>
+				</a>
+					<ul class="submenu">
+						<li><a th:href="@{/admin/account/users}">ㄴ 회원 계정관리</a></li>
+						<li><a th:href="@{/admin/account/admins}">ㄴ 관리자 계정관리</a></li>
+						<li><a th:href="@{/admin/account/admins}">ㄴ 기업 계정관리</a></li>
+					</ul></li>
+
+				<li class="menu-item has-submenu"
+					th:if="${session.loggedInAccountType == 'ADMIN'}"><a href="#"
+					class="toggle-submenu"> <i class="fas fa-clipboard-list"></i>
+						상품 관리 <i class="fas fa-chevron-down arrow"></i>
+				</a>
+					<ul class="submenu">
+						<li><a th:href="@{/admin/userProduct}">ㄴ 상품 관리</a></li>
+						<li><a th:href="@{/admin/userTrade}">ㄴ 주문 관리</a></li>
+					</ul></li>
+				<!-- 관리자/기업 모두 보이는 항목들 -->
+				<li class="menu-item has-submenu"
+					th:if="${session.loggedInAccountType == 'ADMIN' || session.loggedInAccountType == 'COMPANY' }"><a href="#"
+					class="toggle-submenu"> <i class="fas fa-clipboard-list"></i>기획전 관리 <i class="fas fa-chevron-down arrow"></i>
+				</a>
+					<ul class="submenu">
+						<li><a th:href="@{/admin/planing/planingList}">ㄴ 상품 관리</a></li>
+						<li><a th:href="@{/admin/planing/planingOrderList}">ㄴ 주문 관리</a></li>
+					</ul></li>
+
+				<li class="menu-item"
+					th:if="${session.loggedInAccountType == 'ADMIN'}"><a
+					th:href="@{/admin/category/categoryList}"><i
+						class="fas fa-star"></i>카테고리 관리</a></li>
+
+				<li class="menu-item has-submenu"
+					th:if="${session.loggedInAccountType == 'ADMIN'}"><a href="#"
+					class="toggle-submenu"> <i class="fas fa-map-marker-alt"></i>게시판 관리 <i class="fas fa-chevron-down arrow"></i>
+				</a>
+					<ul class="submenu">
+						<li><a th:href="@{/admin/notice}">ㄴ 공지사항 관리</a></li>
+						<li><a th:href="@{/admin/faq}">ㄴ FAQ 관리</a></li>
+						<li><a th:href="@{/admin/inquiry}">ㄴ 문의사항 관리</a></li>
+						<li><a th:href="@{/admin/event}">ㄴ 이벤트 관리</a></li>
+					</ul></li>
+
+				<li class="menu-item"
+					th:if="${session.loggedInAccountType == 'ADMIN'}"><a
+					th:href="@{/admin/review}"><i class="fas fa-star"></i>채팅 관리</a></li>
+
+				<li class="menu-item"
+					th:if="${session.loggedInAccountType == 'ADMIN'}"><a
+					th:href="@{/admin/review}"><i class="fas fa-star"></i>신고 관리</a></li>
+
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

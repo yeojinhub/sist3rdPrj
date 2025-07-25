@@ -1,0 +1,124 @@
+@charset "UTF-8";
+a,
+a:visited,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none !important;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* 전체 레이아웃 */
+.admin-wrapper {
+    display: flex;
+}
+
+/* 메인 컨텐츠 영역 */
+.main-content {
+    margin-left: 250px;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 헤더 */
+.main-header {
+    background-color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.breadcrumbs span {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.breadcrumbs .current-page {
+    color: #555;
+}
+
+/* 컨테이너 */
+.container {
+    padding: 30px;
+    background-color: #eeeeee;
+    flex-grow: 1;
+}
+
+/* 폼 전체 섹션 */
+.notice-form-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+/* 각 입력 그룹 */
+.form-group {
+    margin-bottom: 25px;
+}
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #4d4d4d;
+}
+.form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #868b94;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+.form-input:focus {
+    outline: none;
+    border-color: #7fd0f4;
+    box-shadow: 0 0 0 2px rgba(127, 208, 244, 0.1);
+}
+
+
+
+.control-button {
+    padding: 12px 35px;
+    background-color: #e5f6fd;
+    border: 1px solid #dddddd;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #737373;
+    transition: all 0.3s ease;
+}
+
+.control-button:hover {
+    background-color: #d0f0ff;
+    border-color: #7fd0f4;
+}
+
+
+
+
+
+
+/* 가격 포맷팅 */
+.price {
+    font-weight: 600;
+    color: #e74c3c;
+}
+

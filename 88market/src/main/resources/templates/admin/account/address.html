@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<!-- 배송지 관리 탭(content) -->
+    <div th:fragment="address(userDTO)">
+    
+        <!-- 배송지 폼 -->
+        <form class="account-form" th:action="@{/admin/account/modify}" method="post" th:object="${userDTO}">
+          <div class="account-form-section">배송지 조회</div>
+<table class="account-table">
+			<thead>
+				<tr>
+					<th>구분</th>
+					<th>받는사람</th>
+					<th>전화번호</th>
+					<th>우편번호</th>
+					<th>주소</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item, i : ${ addressList }" class="table-row">
+					<td th:if="${ item.addrType=='Y' }">대표 배송지</td>
+					<td th:if="${ item.addrType=='N' }">일반 배송지</td>
+					<td th:text="${ item.recipientName }"></td>
+					<td th:text="${ item.tel }"></td>
+					<td th:text="${ item.zipcode }"></td>
+					<td th:text="${ item.address }"></td>
+				</tr>
+				<tr th:if="${#lists.isEmpty(addressList)}">
+					<td colspan="5" style="text-align: center;">
+						등록된 계좌 정보가 없습니다.
+					</td>
+				</tr>
+			</tbody>
+			</table>
+        </form>
+        
+	</div>
+</body>
+</html>

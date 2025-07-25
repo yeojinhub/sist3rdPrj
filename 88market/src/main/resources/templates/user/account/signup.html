@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>88마켓 - 회원가입</title>
+
+<!-- 회원가입 CSS -->
+<link rel="stylesheet" th:href="@{/css/user/signup.css}">
+<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
+<th:block th:replace="~{components/user/external :: external}"></th:block>
+
+<script th:inline="javascript">
+const signUpUrl="/signUpProcess";
+const mainURL = "/";
+</script>
+
+<script th:src="@{/js/user/signup.js}" defer></script>
+
+</head>
+
+<!-- 다음 주소 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- 주소 관련 함수 -->
+<script th:src="@{/js/user/postcode.js}" defer></script>
+
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{components/user/header :: header}"></th:block>
+
+	<!-- 메인 콘텐츠 -->
+	<main class="product-page-container">
+		<div class="signup-container">
+			<h1 class="signup-title">회원가입</h1>
+			<form class="signup-form">
+				<div class="form-group">
+					<label for="name">이름</label>
+					<input type="text" id="name" name="name" placeholder="이름 입력" /><p class="error-message">이름을 입력해주세요</p>
+				</div>
+
+				<div class="form-group">
+					<label for="nickname">닉네임</label>
+					<input type="text" id="nickname" name="nickname" placeholder="닉네임 입력" /><p class="error-message">닉네임을 입력해주세요</p>
+				</div>
+
+				<div class="form-group">
+					<label for="email-id">이메일</label>
+					<div class="email-field">
+						<input type="text" id="email-id" name="email-id" placeholder="이메일 입력">
+						<span>@</span>
+						<select id="email-domain" name="email-domain">
+							<option id="naver">naver.com</option>
+							<option id="gmail">gmail.com</option>
+							<option id="daum">daum.net</option>
+							<option id="nate">nate.com</option>
+							<option id="custum">직접 입력</option>
+						</select><p class="error-message">이메일을 입력해주세요</p>
+						<!-- <input type="text" id="email-domain" name="email-domain" placeholder="naver.com"> -->
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="pass-id">비밀번호</label>
+					<input type="password" id="pass-id" name="pass-id" placeholder="비밀번호 입력" /><p class="error-message">비밀번호를 입력해주세요</p>
+				</div>
+
+				<div class="form-group">
+					<label for="pass-id">비밀번호 확인</label>
+					<input type="password" id="pass-check" name="pass-check" placeholder="비밀번호 확인 입력" /><p class="error-message">비밀번호 확인을 입력해주세요</p>
+				</div>
+
+				<div class="form-group">
+					<label for="tel">휴대폰 번호</label>
+					<input type="tel" id="tel" name="tel" class="input-error" placeholder="-없이 숫자만 입력" /><p class="error-message">휴대폰 번호를 입력해주세요</p>
+				</div>
+
+				<div class="form-group">
+					<label>주소</label>
+					<div class="address-field">
+						<div class="zip-code-field">
+							<input type="text" id="zipcode" name="zipcode" placeholder="우편번호 입력" readonly>
+							<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="find-zipcode-btn" />
+						</div>
+						<input type="text" id="road-address" name="road-address" placeholder="도로명 주소" readonly>
+						<input type="text" id="detail-address" name="detail-address" placeholder="상세주소"><p class="error-message">상세주소를 입력해주세요</p>
+						<input type="text" id="extra-address" placeholder="참고항목">
+					</div>
+				</div>
+
+				<button type="button" id="btn" class="submit-btn">제출하기</button>
+			</form>
+		</div>
+	</main>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+const btn = document.getElementById("btn");
+if (!btn) return;
+
+btn.addEventListener("click", function () {
+	const name = document.getElementById("name").value;
+    const nickname = document.getElementById("nickname").value;
+    const email = document.getElementById("email-id").value + "@" + document.getElementById("email-domain").value;
+    const pass = document.getElementById("pass-id").value;
+    const tel = document.getElementById("tel").value;
+    const zipcode = document.getElementById("zipcode").value;
+    const address =
+      document.getElementById("road-address").value +
+      document.getElementById("detail-address").value +
+      document.getElementById("extra-address").value;
+
+    const jsonParam = {
+      name : name,
+      nickname : nickname,
+      email : email,
+      pass : pass,
+      tel : tel,
+      zipcode : zipcode,
+      address : address,
+    };
+
+    fetch(signUpUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(jsonParam),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP 에러 ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+    	console.log(data);
+    	if(data.success){
+    		// 회원가입 성공
+        	alert("회원가입이 완료되었습니다.");
+    		// 메인화면으로 이동
+        	window.location.href = mainURL;
+    	} else {
+    		// 회원가입 실패
+    		alert(data.message);
+        } //end if else
+      }) // 응답 처리
+      .catch((err) => {
+        console.error("회원가입 오류:", err);
+        alert("이메일 또는 비밀번호가 잘못되었습니다.");
+      }); // 에러 처리
+  }); //addEventListener
+}); //addEventListener
+</script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="header">
+ 	  	<div class="admin-info">
+  		<span class="admin-info-name" th:if="${session.loggedInAccountType == 'ADMIN'}" th:text="${session.loggedInAdmin.name}"></span>
+  		<span class="admin-info-name" th:if="${session.loggedInAccountType == 'COMPANY'}" th:text="${session.loggedInCompany.comName}"></span>
+  		<span class="admin-info-roll" th:if="${session.loggedInAccountType == 'ADMIN'}">관리자님</span>
+  		<span class="admin-info-roll" th:if="${session.loggedInAccountType == 'COMPANY'}">기업님</span>
+  		&nbsp;|&nbsp;
+  		<span class="admin-logout"><img th:src="@{/images/outside.png}" class="admin-label" style="width:12px; height:12px; vertical-align:middle"><a th:href="@{/admin/logout}">로그아웃</a></span>
+  	</div>
+
+</div>

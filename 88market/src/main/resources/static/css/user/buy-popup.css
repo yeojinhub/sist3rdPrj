@@ -1,0 +1,293 @@
+/* buy-popup.css 수정 */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    width: 600px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.popup-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    color: #333;
+}
+
+.popup-header h2 i {
+    color: #47bbec;
+}
+
+.popup-body {
+    padding: 1.5rem;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.address-list-wrapper {
+    flex: 1;
+    overflow: hidden;
+}
+
+.address-list {
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+/* 스크롤바 스타일링 */
+.address-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.address-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.address-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+.address-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.25rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.address-item:hover {
+    border-color: #7fd0f4;
+    box-shadow: 0 2px 4px rgba(127, 208, 244, 0.1);
+}
+
+.address-item.selected {
+    border-color: #47bbec;
+    background: #e7f3ff;
+}
+
+.address-item:last-child {
+    margin-bottom: 0;
+}
+
+.address-info {
+    flex: 1;
+}
+
+.address-item .form-check {
+    margin-bottom: 0;
+}
+
+.address-item .form-check-input {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #6c757d;
+    margin-right: 12px;
+}
+
+.address-item .form-check-input:checked {
+    background-color: #47bbec;
+    border-color: #47bbec;
+}
+
+.address-item .form-check-input:focus {
+    border-color: #7fd0f4;
+    box-shadow: 0 0 0 0.2rem rgba(71, 187, 236, 0.25);
+}
+
+.address-item .form-check-label {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    cursor: pointer;
+    width: 100%;
+}
+
+.address-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.address-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.badge-primary {
+    background-color: #47bbec;
+    color: #fff;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.address-details {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.address-text {
+    font-weight: 500;
+    color: #333;
+}
+
+.receiver-info {
+    color: #666;
+    font-size: 13px;
+}
+
+.address-actions {
+    margin-left: 1rem;
+}
+
+.address-actions .btn {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1.5px solid #7fd0f4;
+    color: #47bbec;
+    background: transparent;
+}
+
+.address-actions .btn:hover {
+    background-color: #7fd0f4;
+    color: #fff;
+    border-color: #7fd0f4;
+    transform: translateY(-1px);
+}
+
+.popup-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.popup-footer .btn {
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.popup-footer .btn-primary {
+    background-color: #7fd0f4;
+    border-color: #7fd0f4;
+}
+
+.popup-footer .btn-primary:hover {
+    background-color: #6dc9f0;
+    border-color: #6dc9f0;
+}
+
+.popup-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.popup-footer .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+}
+
+.btn-close {
+    background: transparent;
+    border: 0;
+    font-size: 1.2rem;
+    color: #6c757d;
+    padding: 0;
+    width: auto;
+    height: auto;
+}
+
+.btn-close:hover {
+    color: #333;
+}
+
+/* 반응형 - 모바일에서만 사이즈 조정 */
+@media (max-width: 768px) {
+    .popup-content {
+        width: 95%;
+        height: 80vh;
+    }
+    
+    .address-item {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .address-actions {
+        margin-left: 0;
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 576px) {
+    .popup-content {
+        width: 95%;
+        height: 85vh;
+    }
+    
+    .popup-header {
+        padding: 1rem;
+    }
+    
+    .popup-body {
+        padding: 1rem;
+    }
+    
+    .popup-footer {
+        padding: 1rem;
+        flex-direction: column;
+    }
+    
+    .popup-footer .btn {
+        width: 100%;
+    }
+}

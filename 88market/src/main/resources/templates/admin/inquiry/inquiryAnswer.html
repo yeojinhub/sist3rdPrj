@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 문의사항</title>
+<!-- 관리자 문의사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/inquiry/inquiry.css}">
+<!-- Lightbox2 CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css"
+	rel="stylesheet">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+
+<body>
+	<!-- 고정 사이드바 -->
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<!-- 헤더 -->
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>문의 관리 &gt;</span> <span class="current-page">답변 등록</span>
+				</div>
+			</header>
+
+			<main class="container">
+				<!-- 사용자 문의 내용 -->
+				<section class="inquiry-view-section">
+					<div class="inquiry-header">
+						<div class="inquiry-header-left">
+							<h2>문의 내용</h2>
+							<div class="inquiry-badge-container">
+								<span class="inquiry-type-badge"
+									th:text="${inquiry.inquiryType}">문의유형</span>
+							</div>
+						</div>
+						<div class="inquiry-meta">
+							<span class="inquiry-author" th:text="${inquiry.name}">작성자</span>
+							<span class="inquiry-date" th:text="${inquiry.inputDate}">2025-01-01</span>
+						</div>
+					</div>
+					<div class="inquiry-content">
+						<div class="inquiry-title">
+							<h3 th:text="${inquiry.title}">문의 제목</h3>
+						</div>
+						<div class="inquiry-body" th:text="${inquiry.content}">문의
+							내용이 여기에 표시됩니다.</div>
+					</div>
+				</section>
+
+				<!-- 구분선 -->
+				<div class="section-divider"></div>
+
+				<!-- 첨부한 이미지 섹션 -->
+				<section class="attachment-section"
+					th:if="${inquiry.imageDTO != null}">
+					<div class="attachment-header">
+						<h2>첨부한 이미지</h2>
+					</div>
+					<div class="attachment-content">
+						<div class="attachment-grid">
+							<!-- 메인 이미지 -->
+							<div class="attachment-item"
+								th:if="${inquiry.imageDTO.mainImage != null}">
+								<a th:href="${inquiry.imageDTO.mainImage}"
+									data-lightbox="inquiry-images" data-title="첨부이미지 1"> <img
+									th:src="${inquiry.imageDTO.mainImage}" alt="첨부이미지 1"
+									class="attachment-image">
+								</a>
+								<div class="attachment-info">
+									<span class="attachment-name">첨부이미지 1</span>
+								</div>
+							</div>
+
+							<!-- 서브 이미지 1 -->
+							<div class="attachment-item"
+								th:if="${inquiry.imageDTO.subImage1 != null}">
+								<a th:href="${inquiry.imageDTO.subImage1}"
+									data-lightbox="inquiry-images" data-title="첨부이미지 2"> <img
+									th:src="${inquiry.imageDTO.subImage1}" alt="첨부이미지 2"
+									class="attachment-image">
+								</a>
+								<div class="attachment-info">
+									<span class="attachment-name">첨부이미지 2</span>
+								</div>
+							</div>
+
+							<!-- 서브 이미지 2 -->
+							<div class="attachment-item"
+								th:if="${inquiry.imageDTO.subImage2 != null}">
+								<a th:href="${inquiry.imageDTO.subImage2}"
+									data-lightbox="inquiry-images" data-title="첨부이미지 3"> <img
+									th:src="${inquiry.imageDTO.subImage2}" alt="첨부이미지 3"
+									class="attachment-image">
+								</a>
+								<div class="attachment-info">
+									<span class="attachment-name">첨부이미지 3</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- 구분선 (첨부파일이 있을 때만) -->
+				<div class="section-divider"
+					th:if="${inquiry.imageDTO != null and (inquiry.imageDTO.mainImage != null or inquiry.imageDTO.subImage1 != null or inquiry.imageDTO.subImage2 != null)}">
+				</div>
+
+				<!-- 관리자 답변 등록 -->
+				<section class="reply-form-section">
+					<div class="reply-header">
+						<h2>관리자 답변</h2>
+					</div>
+					<form id="replyForm" th:action="@{/admin/inquiry/reply}"
+						method="post">
+						<input type="hidden" name="admNum" th:value="${nowAdminId}">
+						<input type="hidden" name="inqNum" th:value="${inquiry.inqNum}">
+
+						<div class="form-group">
+							<textarea id="reply" name="reply" class="summernote-editor"
+								placeholder="답변을 입력해주세요."
+								th:text="${inquiry.answerDTO == null ? '' : inquiry.answerDTO.content}"></textarea>
+						</div>
+
+						<div class="form-actions">
+							<button type="button" class="action-button submit-btn"
+								th:id="|${inquiry.answerDTO == null ? 'addBtn' : 'modifyBtn'}|"
+								th:text="${inquiry.answerDTO == null ? '등록' : '수정'}"></button>
+							<button type="button" class="action-button delete-btn"
+								id="deleteBtn">삭제</button>
+							<button type="button" class="action-button cancel-btn"
+								onclick="history.back()">취소</button>
+						</div>
+					</form>
+				</section>
+			</main>
+			<!-- 필요하다면 하단 스크립트 -->
+			<script src="/js/admin/script.js" defer></script>
+		</div>
+	</div>
+
+	<!-- Lightbox2 JS (jQuery 없는 버전) -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
+
+	<script>
+        $(document).ready(function () {
+            // Summernote 초기화
+            if (typeof $('#reply').summernote === 'function') {
+                $('#reply').summernote({
+                    height: 350,
+                    minHeight: 200,
+                    maxHeight: 600,
+                    lang: 'ko-KR',
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['fontname', ['fontname']],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture']],
+                        ['view', ['fullscreen', 'codeview']]
+                    ],
+                    callbacks: {
+                        onInit: function () {
+                            $('.note-editable').css('text-align', 'left');
+                        }
+                    }
+                });
+            } else {
+                console.error('Summernote가 로드되지 않았습니다.');
+            }
+
+            // 등록 버튼 클릭 시
+            $('#addBtn').click(function () {
+                if ($('#reply').summernote('isEmpty')) {
+                    alert('답변을 입력해주세요.');
+                    return;
+                }
+
+                axios.post('/admin/inquiry/answer/add', {
+                    admNum: $('#replyForm input[name="admNum"]').val(),
+                    inqNum: $('#replyForm input[name="inqNum"]').val(),
+                    content: $('#reply').summernote('code')
+                }).then(res => {
+                    alert('답변이 등록되었습니다.');
+                    location.href = '/admin/inquiry';
+                }).catch(err => {
+                    console.log(err);
+                });// axios
+            });// addBtn
+
+            // 수정 버튼 클릭 시
+            $('#modifyBtn').click(function () {
+                if ($('#reply').summernote('isEmpty')) {
+                    alert('답변을 입력해주세요.');
+                    return;
+                }// end if
+
+                axios.post('/admin/inquiry/answer/modify', {
+                    admNum: $('#replyForm input[name="admNum"]').val(),
+                    inqNum: $('#replyForm input[name="inqNum"]').val(),
+                    content: $('#reply').summernote('code')
+                }).then(res => {
+                    alert('답변이 수정되었습니다.');
+                    location.href = '/admin/inquiry';
+                }).catch(err => {
+                    console.log(err);
+                });// axios
+            });// modifyBtn
+
+            // 삭제 버튼 클릭 시
+            $('#deleteBtn').click(function () {
+                if (confirm('정말 삭제하시겠습니까?')) {
+                    axios.post('/admin/inquiry/answer/delete', {
+                        inqNum: $('#replyForm input[name="inqNum"]').val()
+                    }).then(res => {
+                        alert('답변이 삭제되었습니다.');
+                        location.href = '/admin/inquiry';
+                    }).catch(err => {
+                        console.log(err);
+                    });// axios
+                }// end if
+            });// deleteBtn
+        });// ready
+    </script>
+</body>
+
+</html>
