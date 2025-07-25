@@ -167,10 +167,7 @@ public class ProductController {
         return (dotIndex >= 0) ? originalFilename.substring(dotIndex) : "";
     }
 
-    @GetMapping("/seller")
-    public String seller(@RequestParam("id") int sellerId) {
-        return "user/product/seller";
-    }
+
     
     @GetMapping("/detail")
     public String detail(@RequestParam("id") String prdNum, Model model, HttpSession session,
