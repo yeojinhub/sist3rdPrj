@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .settings/settings.json
+api.log
 
 ### STS ###
 .apt_generated
