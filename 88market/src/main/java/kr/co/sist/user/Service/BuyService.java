@@ -56,7 +56,7 @@ public class BuyService {
     	PaymentsDTO pDTO = new PaymentsDTO();
     	pDTO.setPaymentUid((String) data.get("impUid"));
     	pDTO.setMethod((String) data.get("payMethod"));
-    	int price = (int) data.get("price");
+    	int price = data.get("price") != null ? (int) data.get("price") : 0;
     	pDTO.setAmount(price);
     	pDTO.setCardCompany(data.get("cardName") == null ? "" : (String) data.get("cardName"));
 
