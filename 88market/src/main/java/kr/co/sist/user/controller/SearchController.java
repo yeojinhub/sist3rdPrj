@@ -62,7 +62,10 @@ public class SearchController {
             // catNum이 넘어오면 카테고리 검색
 	    	adItem = serchService.getTopAdminScoreItem(catNum);
 	    }
-	    
+	    if (adItem != null) {
+	    	ImageDTO adImage = productService.selectImageByNum(adItem.getImgNum());
+	    	model.addAttribute("adImage",adImage);
+	    }
 	    // 타이틀 결정
 	    String title="";
         if (catNum != null) {
