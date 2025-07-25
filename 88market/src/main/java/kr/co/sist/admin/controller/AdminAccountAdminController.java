@@ -1,12 +1,14 @@
 package kr.co.sist.admin.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,8 +31,27 @@ public class AdminAccountAdminController {
 	 * @return admin/account/adminList
 	 */
 	@GetMapping("/account/admins")
-	public String adminPage(Model model) {
-		model.addAttribute("adminList", adminService.searchAllAdmin());
+	public String adminPage(@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "") String roleType, Model model) {
+		
+	    String key = keyword.isBlank() ? null : keyword.trim();
+	    String role = roleType.isBlank() ? null : roleType.trim();
+
+	    // 2) Map 생성
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("keyword", key);
+	    map.put("roleType", role); // or cond.put("roleType", rtInt);
+
+	    // 3) 조건 유무 판단 후 조회
+	    boolean noCond = (key == null) && (role == null);
+	    List<AdminDTO> adminList = noCond
+	            ? adminService.searchAllAdmin()
+	            : adminService.searchKeyword(map);  // Map 넘김
+
+	    // 4) 모델 바인딩
+	    model.addAttribute("adminList", adminList);
+	    model.addAttribute("keyword", key);
+	    model.addAttribute("roleType", role);
 		
 		return "admin/account/adminList";
 	} //adminPage
@@ -124,5 +145,36 @@ public class AdminAccountAdminController {
 		
 		return map;
 	} //modifyProcess
+	
+	/**
+	 * 관리자 비밀번호 초기화
+	 * @param admNum 수정할 관리자 번호
+	 * @return map 성공시 true, 실패 시 false 반환
+	 */
+	@ResponseBody
+	@PostMapping("/account/adminPassModifyProcess")
+	public Map<String, Object> passModifyProcess(@RequestParam("admNum") String admNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			boolean modifyFlag = adminService.passModifyAdmin(admNum);
+			// 초기화 성공
+			map.put("result", modifyFlag);
+			
+			if (!modifyFlag) {
+				// 초기화 실패
+				map.put("msg", "비밀번호 초기화 처리에 실패했습니다.");
+			} //end if
+		} catch(Exception e) {
+			e.printStackTrace();
+			
+			// 초기화 실패
+			map.put("result", false);
+			map.put("msg", "서버 오류로 인해 초기화에 실패했습니다.");
+		} //end try catch
+		
+		return map;
+	} //passModifyProcess
+	
 	
 } //class

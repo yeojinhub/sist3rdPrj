@@ -9,6 +9,8 @@
 <link rel="stylesheet" th:href="@{/css/admin/style.css}">
 <!-- 페이지 타이틀 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+<!-- 공통 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/dlatl.css}">
 
 <!-- 관리자 계정 관리 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
@@ -56,12 +58,6 @@
   			배송지 조회
 		</a>
 
-        <!-- 포인트 조회 -->
-        <a type="button" class="tab"
-   			th:classappend="${tab=='point'} ? ' active' : ''"
-   			th:href="@{/admin/account/userDetail(userNum=${userDTO.userNum},tab='point')}">
-  			포인트 조회
-		</a>
       </div>
       
       <!-- 컨테이너 -->
@@ -85,11 +81,6 @@
               <div th:replace="~{admin/account/address :: address(userDTO=${userDTO})}"></div>
             </div>
 
-            <!-- POINT -->
-            <div th:case="'point'">
-              <div th:replace="~{admin/account/point :: point(userDTO=${userDTO})}"></div>
-            </div>
-
             <!-- PERSONAL 혹은 그 외 -->
             <div th:case="*">
               <!-- personal 탭엔 오른쪽 내용 비워두거나 기본 메시지 -->
@@ -98,6 +89,8 @@
           </div>
         </div>
       </section>
+      <!-- 사이드바 동작 스크립트 -->
+      <script src="/js/admin/script.js" defer></script>
   	</div>
   </div>
 </body>

@@ -4,6 +4,22 @@
 
 <mapper namespace="kr.co.sist.admin.DAO.AdminAccountAdminDAO">
 
+	<select id="selectKeyword" resultType="kr.co.sist.DTO.AdminDTO" parameterType="map">
+	SELECT
+		ADM_NUM, NAME, ROLLTYPE, BANTYPE, INPUT_DATE
+	FROM ADMIN
+	<where>
+    	<if test="keyword != null and keyword != ''">
+     	AND (NAME LIKE '%' || #{keyword} || '%')
+    	</if>
+    	<if test="roleType != null and roleType != ''">
+      	AND ROLLTYPE = #{roleType, jdbcType=INTEGER}
+    	</if>
+  	</where>
+	ORDER BY
+		INPUT_DATE DESC
+	</select>
+
 	<select id="selectAdminList" resultType="kr.co.sist.DTO.AdminDTO" parameterType="String">
 	SELECT
 		ADM_NUM, NAME, ROLLTYPE, BANTYPE, INPUT_DATE
@@ -18,7 +34,7 @@
 	FROM ADMIN
 	WHERE
 		ADM_NUM=#{admNum}
-	</select>
+	</select> 
 	
 	<insert id="insertAdmin" parameterType="kr.co.sist.DTO.AdminDTO">
 	INSERT INTO ADMIN
@@ -34,8 +50,17 @@
 		ROLLTYPE = #{rollType, jdbcType=INTEGER},
 		BANTYPE=#{banType, jdbcType=CHAR},
 		<if test="banType.equals('Y')">
-			BANDATE=SYSDATE
+			BAN_DATE=SYSDATE
 		</if>
+	</set>
+	WHERE
+		ADM_NUM=#{admNum}
+	</update>
+	
+	<update id="passUpdateAdmin" parameterType="String">
+	UPDATE ADMIN
+	<set>
+		PASS='a12345689@'
 	</set>
 	WHERE
 		ADM_NUM=#{admNum}

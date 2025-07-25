@@ -9,6 +9,8 @@
 <link rel="stylesheet" th:href="@{/css/admin/style.css}">
 <!-- 페이지 타이틀 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+<!-- 공통 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/dlatl.css}">
 
 <!-- 관리자 계정 관리 CSS -->
 <link rel="stylesheet" th:href="@{/css/admin/account/add.css}">
@@ -43,20 +45,20 @@
           </div>
 
           <label for="name">이름 <span class="required">*</span></label>
-          <input id="name" type="text" maxlength="10" class="form-input" placeholder="이름 입력" />
+          <input id="name" type="text" maxlength="10" class="form-input" placeholder="이름 입력" /><div id="error-message" class="error-message"></div>
 
           <label for="nickname">닉네임</label>
-          <input id="nickname" type="text" maxlength="50" class="form-input" placeholder="닉네임 입력" />
+          <input id="nickname" type="text" maxlength="50" class="form-input" placeholder="닉네임 입력" /><div id="error-message" class="error-message"></div>
 
           <label for="tel">전화번호</label>
-          <input id="tel" type="text" class="form-input" placeholder="전화번호 입력"  />
+          <input id="tel" type="text" maxlength="11" class="form-input" placeholder="전화번호 입력"  /><div id="error-message" class="error-message"></div>
 
           <div class="account-form-section">계정정보</div>
 
           <label for="email">이메일 <span class="required">*</span></label>
           <div style="display:flex; gap:8px;">
-            <input id="email-id" type="text"  class="form-input" placeholder="이메일 입력" />
-            <input id="email-domain" type="text"  class="form-input" />
+            <input id="email-id" type="text" maxlength="15" class="form-input" placeholder="이메일 입력" />
+            <input id="email-domain" type="text"  class="form-input" /><div id="error-message" class="error-message"></div>
             <select  id="select" class="form-select">
               <option>도메인 선택</option>
               <option>gmail.com</option>
@@ -68,10 +70,10 @@
           </div>
 
           <label for="pass">비밀번호</label>
-          <input id="pass" type="password" class="form-input" placeholder="비밀번호 입력" />
+          <input id="pass" type="password" maxlength="16" class="form-input" placeholder="비밀번호 입력" />
           
           <label for="pass-check">비밀번호 확인</label>
-          <input id="pass-check" type="password" class="form-input" placeholder="비밀번호 확인 입력" />
+          <input id="pass-check" type="password" maxlength="16" class="form-input" placeholder="비밀번호 확인 입력" /><div id="error-message" class="error-message"></div>
 
           <div class="account-form-section">주소</div>
 
@@ -118,9 +120,13 @@
     </div>
   </div>
 	</div>
+	<!-- 사이드바 동작 스크립트 -->
+	<script src="/js/admin/script.js" defer></script>
 	<!-- 다음 주소 API -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<!-- 우편번호 찾기 스크립트 -->
 	<script th:src="@{/js/admin/account/postcode.js}" defer></script>
+	<!-- 버튼 동작 스크립트 -->
 	<script th:src="@{/js/admin/account/userAdd.js}" defer></script>
 </body>
 </html>
