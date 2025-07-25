@@ -28,4 +28,6 @@ public class ChatroomDTO {
 	
 	private String prdNum; /* 상품번호 */
 
+	private String userNum;/* 사용자번호 */
+
 } //class

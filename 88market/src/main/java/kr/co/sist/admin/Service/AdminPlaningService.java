@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.sist.DTO.CategoryDTO;
 import kr.co.sist.DTO.ImageDTO;
+import kr.co.sist.DTO.OrderManageDTO;
 import kr.co.sist.DTO.ProductDTO;
 import kr.co.sist.admin.DAO.AdminPlaningDAO;
 
@@ -155,6 +156,25 @@ public class AdminPlaningService {
         adminPlaningDAO.deleteProductByPrdNum(prdNum);
     }
     
+    // 주문 리스트 조회
+    public List<OrderManageDTO> getOrderList(String comNum, String keyword, String tradeStatus, int startRow, int endRow) {
+        return adminPlaningDAO.selectOrdersByCompany(comNum, keyword, tradeStatus, startRow, endRow);
+    }
+
+    // 주문 개수 조회
+    public int getOrderCount(String comNum, String keyword, String tradeStatus) {
+        return adminPlaningDAO.countOrdersByCompany(comNum, keyword, tradeStatus);
+    }
+
+    // 거래 상세 조회
+    public OrderManageDTO getOrderDetail(String tradeId) {
+        return adminPlaningDAO.selectOrderDetailByTradeId(tradeId);
+    }
+
+    // 거래 상태 변경
+    public void updateTradeStatus(String tradeId, String tradeStatus) {
+        adminPlaningDAO.updateTradeStatus(tradeId, tradeStatus);
+    }
     
     
 }

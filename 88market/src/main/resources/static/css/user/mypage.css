@@ -7,7 +7,6 @@
     box-sizing: border-box;
 }
 
-
 .main-content {
     display: flex;
     padding: 20px 0; /* 좌우 패딩은 main-container에서 처리 */

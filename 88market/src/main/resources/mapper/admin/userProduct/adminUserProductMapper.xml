@@ -54,6 +54,7 @@
 		<where>
 		AND p.com_num IS NULL
 		<!-- 검색어 필터 -->
+
 		<if test="searchType != null and searchType.equals('title') and keyword != null and keyword != ''">
 			AND p.TITLE LIKE '%' || #{keyword} || '%'
 		</if>

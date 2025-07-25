@@ -123,5 +123,5 @@ public class AdminAccountAdminService {
 		
 		return flag;
 	} //passModifyAdmin
-	
+
 } //class

@@ -45,7 +45,6 @@ public class AdminUserTradesController {
 	 * trade = tradeService.findById(tradeId); model.addAttribute("trade", trade);
 	 * return "admin/userTrade/userTradeDetail"; }
 	 */
-    // 거래 상세 
     @GetMapping("/detail/{tradeId}")
     public String detail(@PathVariable Integer tradeId, Model model) {
       TradesDTO trade = tradeService.findById(tradeId);

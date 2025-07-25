@@ -166,8 +166,6 @@ public class ProductController {
         int dotIndex = originalFilename.lastIndexOf(".");
         return (dotIndex >= 0) ? originalFilename.substring(dotIndex) : "";
     }
-
-
     
     @GetMapping("/detail")
     public String detail(@RequestParam("id") String prdNum, Model model, HttpSession session,

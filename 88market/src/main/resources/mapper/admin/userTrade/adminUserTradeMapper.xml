@@ -9,6 +9,7 @@
 		<id     column="trade_id"     property="tradeId"/>
 		<result column="buyer_id"     property="buyerId"/>
 		<result column="seller_id"    property="sellerId"/>
+
 		<result column="trade_date"   property="tradeDate"/>
 		<result column="delivery_num" property="deliveryNum"/>
 		<result column="prd_num"      property="prdNum"/>

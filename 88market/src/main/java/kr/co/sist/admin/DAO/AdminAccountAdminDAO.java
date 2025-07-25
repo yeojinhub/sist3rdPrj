@@ -3,6 +3,7 @@ package kr.co.sist.admin.DAO;
 import java.util.List;
 import java.util.Map;
 
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -34,12 +35,14 @@ public interface AdminAccountAdminDAO {
 	 * @return int 성공시 true, 실패 시 false 반환
 	 */
 	public int insertAdmin(@RequestBody AdminDTO adminDTO);
+	
 	/**
 	 * 관리자 계정 수정
 	 * @param adminDTO 수정할 관리자 정보
 	 * @return int 성공시 true, 실패 시 false 반환
 	 */
 	public int updateAdmin(@RequestBody AdminDTO adminDTO);
+
 	/**
 	 * 관리자 비밀번호 초기화
 	 * @param admNum 조회할 관리자 번호

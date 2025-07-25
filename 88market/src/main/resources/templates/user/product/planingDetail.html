@@ -79,7 +79,7 @@
 					<div class="price-wrapper">
 						<strong class="product-price"><span th:text="${#numbers.formatInteger(Product[0].price, 3, 'COMMA')} + '원'">가격</span></strong> 
 					</div>
-					<div class="product-meta"><span th:text="|조회 ${Product[0].clickNum}회 · 찜 ${Product[0].favNum}|">조회수,찜</span> </div>
+					<div class="product-meta"><span th:text="|조회 ${Product[0].clickNum}회|">조회수</span> </div>
 				</div>
 
 				<!-- 상품 거래 조건 -->
@@ -96,10 +96,7 @@
 
 				<!-- 행동 버튼 -->
 				<div class="action-buttons">
-					<button class="wish-btn-border">
-						<img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon" />
-					</button>
-					<button class="btn-buy" th:onclick="|location.href='@{/buy/{prdNum}(prdNum=${Product[0].prdNum})}'|">구매하기</button>
+					<button class="btn-buy" th:onclick="|location.href='@{/buy}'|">구매하기</button>
 				</div>
 				</div>
 
@@ -111,9 +108,6 @@
 						 <a th:href="@{/planingSeller(id=${Product[0].prdNum}, comNum=${Product[0].comNum},sellType=${Product[0].sellType})}" style="text-decoration: none; cursor: pointer; color: inherit;">
 						 <span th:text="${Product[0].comName}"> 
 						  기업명</span></a></div>
-					</div>
-					<div class="seller-stats">
-						<span>거래후기 <b th:text="${ reviewCount }">후기 갯수</b></span>
 					</div>
 
 				</div>

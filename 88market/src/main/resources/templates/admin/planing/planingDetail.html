@@ -2,278 +2,295 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>관리자 - 상품 등록</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 상품 등록</title>
 
-  <!-- 기본 스타일 -->
-  <link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
-  <th:block th:replace="~{components/admin/external :: external}"></th:block>
+<!-- 기본 스타일 -->
+<link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
 
-  <style>
-    .form-container {
-      width: 900px;
-      margin: 0 auto;
-      padding: 40px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+<style>
+.form-container {
+	width: 900px;
+	margin: 0 auto;
+	padding: 40px;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-    .form-row {
-      display: flex;
-      margin-bottom: 24px;
-      align-items: flex-start;
-    }
+.form-row {
+	display: flex;
+	margin-bottom: 24px;
+	align-items: flex-start;
+}
 
-    .form-label {
-      width: 160px;
-      font-weight: 600;
-      padding-top: 8px;
-    }
+.form-label {
+	width: 160px;
+	font-weight: 600;
+	padding-top: 8px;
+}
 
-    .form-field {
-      flex: 1;
-    }
+.form-field {
+	flex: 1;
+}
 
-    input[type="text"],
-    input[type="number"],
-    textarea {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
+input[type="text"], input[type="number"], textarea {
+	width: 100%;
+	padding: 12px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+}
 
-    textarea {
-      height: 160px;
-    }
+textarea {
+	height: 160px;
+}
 
-    .radio-group,
-    .checkbox-group {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
+.radio-group, .checkbox-group {
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap;
+}
 
-    .button-group {
-      text-align: center;
-      margin-top: 40px;
-    }
+.button-group {
+	text-align: center;
+	margin-top: 40px;
+}
 
-    .btn {
-      padding: 12px 36px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+.btn {
+	padding: 12px 36px;
+	font-size: 16px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
 
-    .btn-submit {
-      background-color: #2563eb;
-      color: white;
-    }
+.btn-submit {
+	background-color: #2563eb;
+	color: white;
+}
 
-    .btn-cancel {
-      background: transparent;
-      border: 1px solid #ccc;
-      margin-left: 12px;
-    }
+.btn-cancel {
+	background: transparent;
+	border: 1px solid #ccc;
+	margin-left: 12px;
+}
 
-    .image-preview-box {
-      display: flex;
-      gap: 12px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
+.image-preview-box {
+	display: flex;
+	gap: 12px;
+	margin-top: 12px;
+	flex-wrap: wrap;
+}
 
-    .image-wrapper {
-      position: relative;
-      width: 80px;
-      height: 80px;
-    }
+.image-wrapper {
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
 
-    .image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 6px;
-    }
+.image-wrapper img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 6px;
+}
 
-    .delete-image {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      width: 20px;
-      height: 20px;
-      background: black;
-      color: white;
-      text-align: center;
-      line-height: 20px;
-      font-size: 12px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
+.delete-image {
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	width: 20px;
+	height: 20px;
+	background: black;
+	color: white;
+	text-align: center;
+	line-height: 20px;
+	font-size: 12px;
+	border-radius: 50%;
+	cursor: pointer;
+}
 
-    .upload-box {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+.upload-box {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
 
-    .upload-box img {
-      width: 80px;
-      height: 80px;
-      cursor: pointer;
-    }
+.upload-box img {
+	width: 80px;
+	height: 80px;
+	cursor: pointer;
+}
 
-    .image-count-box {
-      font-size: 14px;
-      color: #666;
-    }
-    
-    /* input number 화살표 제거 (모든 브라우저용) */
-	input[type=number]::-webkit-inner-spin-button,
-	input[type=number]::-webkit-outer-spin-button {
-	  -webkit-appearance: none;
-	  margin: 0;
-	}
-	input[type=number] {
-	  -moz-appearance: textfield;
-	}
-	
-  </style>
+.image-count-box {
+	font-size: 14px;
+	color: #666;
+}
+
+/* input number 화살표 제거 (모든 브라우저용) */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button
+	{
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>
 </head>
 
 <body style="background: #f3f4f6">
-  <div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+	<!-- 상단 헤더 -->
+	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
 
-  <div class="admin-wrapper">
-    <div class="main-content">
-      <header class="main-header">
-        <div class="breadcrumbs">
-          <span>기업관 관리 &gt;</span> <span class="current-page">상품 등록</span>
-        </div>
-      </header>
+	<div class="admin-wrapper">
+		<div class="main-content">
+			<header class="main-header">
+				<div class="breadcrumbs">
+					<span>기업관 관리 &gt;</span> <span class="current-page">상품 등록</span>
+				</div>
+			</header>
 
-      <main>
-        <div class="form-container">
-          <form th:action="@{/admin/planing/planingDetail}" th:object="${productDTO}"
-						      method="post"
-						      enctype="multipart/form-data"
-						      onsubmit="return false">
-						      
-	      <input type="hidden" th:field="*{prdNum}"/>
-		  <input type="hidden" th:field="*{imgNum}"/>
-		  <input type="hidden" th:field="*{userNum}"/>
-		  <input type="hidden" th:field="*{comNum}"/>
-		  
-            <!-- 이미지 업로드 -->
-            <div class="form-row">
-              <div class="form-label">이미지</div>
-              <div class="form-field">
-                <div class="upload-box">
-                  <label for="image-upload-input">
-                    <img src="/images/upload.png" alt="업로드 버튼">
-                  </label>
-                  <input type="file" id="image-upload-input" name="images" accept="images/*" multiple style="display: none;">
-                  <div class="image-count-box"><span id="image-count">0/5</span></div>
-                </div>
-                <div id="image-preview-box" class="image-preview-box">
-                <img th:if="${imageDTO != null}" th:src="@{${imageDTO.mainImage}}" alt="메인 이미지" width="200">
-				  <img th:if="${imageDTO.subImage1 != null}" th:src="@{${imageDTO.subImage1}}" alt="서브1" width="100">
-				  <img th:if="${imageDTO.subImage2 != null}" th:src="@{${imageDTO.subImage2}}" alt="서브2" width="100">
-				  <img th:if="${imageDTO.subImage3 != null}" th:src="@{${imageDTO.subImage3}}" alt="서브3" width="100">
-				  <img th:if="${imageDTO.subImage4 != null}" th:src="@{${imageDTO.subImage4}}" alt="서브4" width="100">
-                </div>
-              </div>
-            </div>
+			<main>
+				<div class="form-container">
+					<form th:action="@{/admin/planing/planingDetail}"
+						th:object="${productDTO}" method="post"
+						enctype="multipart/form-data" onsubmit="return false">
 
-            <!-- 제목 -->
-            <div class="form-row">
-              <label for="title" class="form-label">제목</label>
-              <div class="form-field">
-                <input type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요">
-              </div>
-            </div>
+						<input type="hidden" th:field="*{prdNum}" /> <input type="hidden"
+							th:field="*{imgNum}" /> <input type="hidden"
+							th:field="*{userNum}" /> <input type="hidden"
+							th:field="*{comNum}" />
 
-            <!-- 내용 -->
-            <div class="form-row">
-              <label for="content" class="form-label">내용</label>
-              <div class="form-field">
-                <textarea id="content" th:field="*{content}" placeholder="내용을 입력하세요"></textarea>
-              </div>
-            </div>
+						<!-- 이미지 업로드 -->
+						<div class="form-row">
+							<div class="form-label">이미지</div>
+							<div class="form-field">
+								<div class="upload-box">
+									<label for="image-upload-input"> <img
+										src="/images/upload.png" alt="업로드 버튼">
+									</label> <input type="file" id="image-upload-input" name="images"
+										accept="images/*" multiple style="display: none;">
+									<div class="image-count-box">
+										<span id="image-count">0/5</span>
+									</div>
+								</div>
+								<div id="image-preview-box" class="image-preview-box">
+									<img th:if="${imageDTO != null}"
+										th:src="@{${imageDTO.mainImage}}" alt="메인 이미지" width="200">
+									<img th:if="${imageDTO.subImage1 != null}"
+										th:src="@{${imageDTO.subImage1}}" alt="서브1" width="100">
+									<img th:if="${imageDTO.subImage2 != null}"
+										th:src="@{${imageDTO.subImage2}}" alt="서브2" width="100">
+									<img th:if="${imageDTO.subImage3 != null}"
+										th:src="@{${imageDTO.subImage3}}" alt="서브3" width="100">
+									<img th:if="${imageDTO.subImage4 != null}"
+										th:src="@{${imageDTO.subImage4}}" alt="서브4" width="100">
+								</div>
+							</div>
+						</div>
 
-            <!-- 카테고리 -->
-            <div class="form-row">
-              <div class="form-label">카테고리</div>
-              <div class="form-field radio-group">
-                <label th:each="cat : ${categories}">
-				  <input type="radio" th:field="*{catNum}" th:value="${cat.catNum}" />
-				  <span th:text="${cat.name}"></span>
-				</label>
-              </div>
-            </div>
+						<!-- 제목 -->
+						<div class="form-row">
+							<label for="title" class="form-label">제목</label>
+							<div class="form-field">
+								<input type="text" id="title" th:field="*{title}"
+									placeholder="제목을 입력하세요">
+							</div>
+						</div>
 
-            <!-- 가격 -->
-            <div class="form-row">
-			  <label for="price" class="form-label">가격</label>
-			  <div class="form-field">
-			    <input type="text" id="price" name="price" th:field="*{price}" placeholder="예: 10,000 원" style="width: 200px;">
-			    <div id="price-error" style="color:red; display:none;">가격을 올바르게 입력해주세요.</div>
-			  </div>
-			</div>
-			
-			<!-- 재고 -->
-            <div class="form-row">
-			  <label for="prdCnt" class="form-label">재고</label>
-			  <div class="form-field">
-			    <input type="text" id="prdCnt" name="prdCnt" th:field="*{prdCnt}" style="width: 200px;">
-			  </div>
-			</div>
+						<!-- 내용 -->
+						<div class="form-row">
+							<label for="content" class="form-label">내용</label>
+							<div class="form-field">
+								<textarea id="content" th:field="*{content}"
+									placeholder="내용을 입력하세요"></textarea>
+							</div>
+						</div>
 
-            <!-- 거래 방법 -->
-            <div class="form-row">
-              <div class="form-label">거래 방법</div>
-              <div class="form-field checkbox-group">
-                <label><input type="checkbox" value="택배거래" id="delivery" th:field="*{deliveryType}"> 택배거래</label>
-                <div id="trade-method-error" style="color:red; display:none;">거래 방법을 선택해주세요.</div>
-              </div>
-            </div>
+						<!-- 카테고리 -->
+						<div class="form-row">
+							<div class="form-label">카테고리</div>
+							<div class="form-field radio-group">
+								<label th:each="cat : ${categories}"> <input
+									type="radio" th:field="*{catNum}" th:value="${cat.catNum}" />
+									<span th:text="${cat.name}"></span>
+								</label>
+							</div>
+						</div>
 
-            <!-- 판매 상태 -->
-            <div class="form-row">
-			  <div class="form-label">판매 상태</div>
-			  <div class="form-field radio-group">
-			    <label><input type="radio" name="sellType" value="Y" th:field="*{sellType}"> 판매중</label>
-			    <label><input type="radio" name="sellType" value="N" th:field="*{sellType}"> 매진</label>
-			  </div>
-			</div>
-			
-			<div class="form-row">
-			  <div class="form-label">노출 여부</div>
-			  <div class="form-field radio-group">
-			    <label><input type="radio" name="hiddenType" value="N" th:field="*{hiddenType}"> 노출</label>
-			    <label><input type="radio" name="hiddenType" value="Y" th:field="*{hiddenType}"> 숨김</label>
-			  </div>
-			</div>
+						<!-- 가격 -->
+						<div class="form-row">
+							<label for="price" class="form-label">가격</label>
+							<div class="form-field">
+								<input type="text" id="price" name="price" th:field="*{price}"
+									placeholder="예: 10,000 원" style="width: 200px;">
+								<div id="price-error" style="color: red; display: none;">가격을
+									올바르게 입력해주세요.</div>
+							</div>
+						</div>
 
-			
-            <!-- 버튼 -->
-            <div class="button-group">
-              <button type="button" class="btn btn-submit" id="update-btn">수정</button>
-              <a href="javascript:history.back()" class="btn btn-cancel" style="text-decoration: none; cursor: pointer; color: inherit;">취소</a>
-            </div>
-          </form>
-        </div>
-      </main>
-    </div>
-  </div>
+						<!-- 재고 -->
+						<div class="form-row">
+							<label for="prdCnt" class="form-label">재고</label>
+							<div class="form-field">
+								<input type="text" id="prdCnt" name="prdCnt"
+									th:field="*{prdCnt}" style="width: 200px;">
+							</div>
+						</div>
 
-  <script src="/js/admin/script.js" defer></script>
-  <script>
+						<!-- 거래 방법 -->
+						<div class="form-row">
+							<div class="form-label">거래 방법</div>
+							<div class="form-field checkbox-group">
+								<label><input type="checkbox" value="택배거래" id="delivery"
+									th:field="*{deliveryType}"> 택배거래</label>
+								<div id="trade-method-error" style="color: red; display: none;">거래
+									방법을 선택해주세요.</div>
+							</div>
+						</div>
+
+						<!-- 판매 상태 -->
+						<div class="form-row">
+							<div class="form-label">판매 상태</div>
+							<div class="form-field radio-group">
+								<label><input type="radio" name="sellType" value="Y"
+									th:field="*{sellType}"> 판매중</label> <label><input
+									type="radio" name="sellType" value="N" th:field="*{sellType}">
+									매진</label>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-label">노출 여부</div>
+							<div class="form-field radio-group">
+								<label><input type="radio" name="hiddenType" value="N"
+									th:field="*{hiddenType}"> 노출</label> <label><input
+									type="radio" name="hiddenType" value="Y"
+									th:field="*{hiddenType}"> 숨김</label>
+							</div>
+						</div>
+
+
+						<!-- 버튼 -->
+						<div class="button-group">
+							<button type="button" class="btn btn-submit" id="update-btn">수정</button>
+							<a href="javascript:history.back()" class="btn btn-cancel"
+								style="text-decoration: none; cursor: pointer; color: inherit;">취소</a>
+						</div>
+					</form>
+				</div>
+			</main>
+		</div>
+	</div>
+
+	<script src="/js/admin/script.js" defer></script>
+	<script>
     $(function () {
     	
 		//이미지
@@ -397,4 +414,3 @@
   </script>
 </body>
 </html>
-

@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
 import kr.co.sist.DTO.CategoryDTO;
 import kr.co.sist.DTO.ImageDTO;
+import kr.co.sist.DTO.OrderManageDTO;
 import kr.co.sist.DTO.ProductDTO;
 import kr.co.sist.admin.Service.AdminPlaningService;
 import kr.co.sist.admin.util.Pagination;
@@ -226,44 +227,60 @@ public class AdminPlaningContorller {
 
 	@GetMapping("/planingOrderList")
 	public String planingOrderList(@RequestParam(defaultValue = "1") int page,
-		    @RequestParam(defaultValue = "") String keyword,
-		    @RequestParam(defaultValue = "all") String hidden, // all, Y, N
-		    Model model,
-		    HttpSession session) {
-		
-		String id = (String) session.getAttribute("loginId");  // 로그인 시 저장된 세션값
+	                               @RequestParam(defaultValue = "") String keyword,
+	                               @RequestParam(defaultValue = "all") String tradeStatus, // all, WAITING, DONE 등
+	                               Model model,
+	                               HttpSession session) {
+
+	    String id = (String) session.getAttribute("loginId");
 	    if (id == null) {
-	        return "redirect:/admin/login"; // 로그인 안 되어 있으면 로그인 페이지로
+	        return "redirect:/admin/login";
 	    }
-		
-		// 1. comNum 조회
+
 	    String comNum = adminPlaningService.getComNumById(id);
 
-	    // 2. 상품 리스트 + pagination 처리
 	    int pageSize = 10;
 	    int startRow = (page - 1) * pageSize + 1;
-        int endRow = page * pageSize;
+	    int endRow = page * pageSize;
 
-        List<ProductDTO> products = adminPlaningService.searchProductsByCondition(comNum, keyword, hidden, startRow, endRow);
-        int totalCount = adminPlaningService.getTotalCountByCondition(comNum, keyword, hidden);
-        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+	    List<OrderManageDTO> orderList = adminPlaningService.getOrderList(comNum, keyword, tradeStatus, startRow, endRow);
+	    int totalCount = adminPlaningService.getOrderCount(comNum, keyword, tradeStatus);
+	    int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 
-	    PlaningPaginationDTO pagination = new PlaningPaginationDTO(page, pageSize, totalCount);
+	    model.addAttribute("orderList", orderList);
+	    model.addAttribute("pagination", Map.of(
+	        "pageNum", page,
+	        "pageSize", pageSize,
+	        "totalCount", totalCount,
+	        "totalPages", totalPages
+	    ));
+	    model.addAttribute("param", Map.of(
+	        "keyword", keyword,
+	        "tradeStatus", tradeStatus
+	    ));
 
-	    model.addAttribute("productsList", products);
-        model.addAttribute("pagination", Map.of(
-            "pageNum", page,
-            "pageSize", pageSize,
-            "totalCount", totalCount,
-            "totalPages", totalPages
-        ));
-        model.addAttribute("param", Map.of(
-            "keyword", keyword,
-            "hidden", hidden
-        ));
-		
-        return "admin/planing/planingOrderList";
+	    return "admin/planing/planingOrderList";
 	}
+
+
+	@GetMapping("/planingOrderDetail")
+	public String planingOrderDetail(@RequestParam("tradeId") String tradeId,
+			Model model, HttpSession session) {
+		String id = (String) session.getAttribute("loginId");
+	    if (id == null) return "redirect:/login";
+		
+	    OrderManageDTO trade = adminPlaningService.getOrderDetail(tradeId);
+        model.addAttribute("trade", trade);
+		
+		return "admin/planing/planingOrderDetail";
+	}
+	
+	// 거래 상태 업데이트
+//    @PostMapping("/update")
+//    public String updateTradeStatus(@ModelAttribute("trade") OrderManageDTO dto) {
+//        adminPlaningService.updateTradeStatus(dto.getTradeId(), dto.getTradeStatus());
+//        return "redirect:/admin/userTrade/detail?tradeId=" + dto.getTradeId();
+//    }
 	
 	
 }

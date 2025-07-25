@@ -2,6 +2,7 @@ package kr.co.sist.admin.DAO;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.sist.DTO.CategoryDTO;
 import kr.co.sist.DTO.ImageDTO;
+import kr.co.sist.DTO.OrderManageDTO;
 import kr.co.sist.DTO.ProductDTO;
 
 @Mapper
@@ -66,5 +68,23 @@ public interface AdminPlaningDAO {
     
     void deleteProductByPrdNum(@Param("prdNum") String prdNum);
     void deleteImageByPrdNum(@Param("prdNum") String prdNum);
+    
+    // 주문 리스트 조회
+    List<OrderManageDTO> selectOrdersByCompany(@Param("comNum") String comNum,
+                                               @Param("keyword") String keyword,
+                                               @Param("tradeStatus") String tradeStatus,
+                                               @Param("startRow") int startRow,
+                                               @Param("endRow") int endRow);
+
+    // 주문 총 개수 조회 (페이징용)
+    int countOrdersByCompany(@Param("comNum") String comNum,
+                             @Param("keyword") String keyword,
+                             @Param("tradeStatus") String tradeStatus);
+
+    // 단일 거래 조회
+    OrderManageDTO selectOrderDetailByTradeId(String tradeId);
+
+    // 거래 상태 업데이트 (추가)
+    void updateTradeStatus(String tradeId, String tradeStatus);
     
 }
