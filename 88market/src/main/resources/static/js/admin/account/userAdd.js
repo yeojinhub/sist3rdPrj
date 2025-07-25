@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    validateNick(nickInput.value);
 	}); //nickInput
 		
-	// 이름 유효성 검사 함수
+	// 닉네임 유효성 검사 함수
 	function validateNick(nick) {
 		const nickText = /^[가-힣]+$/;
 		// null 검사 실패

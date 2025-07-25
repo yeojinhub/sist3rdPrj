@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	    inputElement.style.borderColor = 'red';
 	    inputElement.style.borderWidth = '1px';
 	    inputElement.style.borderStyle = 'solid';
+		inputElement.style.backgroundColor = '';
 	} //showErrorMessage
 
 	// 에러 메시지를 숨기는 함수
@@ -210,32 +211,29 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const regDate = document.getElementById("reg-date").value;
 		const banValue = document.querySelector('input[name="ban"]:checked').value;
 
-		// 전화번호 null 검사
+		// 이름 null 검사
 		if( !validateNullEul(name, "이름") ){
 			// null 검사 실패
 			return;
 		} //end if
-		// null 검사 성공
 		
-		// 전화번호 유효성 검사
+		// 전화번호 null 검사
 		if(!validateNullRul(tel, "전화번호")){
-			// 유효성 검사 실패
+			// null 검사 실패
 			return;
 		} //end if
-		// 유효성 검사 성공
 		
-		// 아이디 유효성 검사
+		// 아이디 null 검사
 		if(!validateNullRul(id, "아이디")){
-			// 유효성 검사 실패
+			// null 검사 실패
 			return;
 		} //end if
-		// 유효성 검사 성공
 		
+		// 비밀번호, 비밀번호 확인 null 검사
 		if(!validateNullRul(pass, "비밀번호") || !validateNullEul(passCheck, "비밀번호 확인")){
-			// 유효성 검사 실패
+			// null 검사 실패
 			return;
 		} //end if
-		// 유효성 검사 성공
 		
 	    const jsonParam = {
 			name : name,
