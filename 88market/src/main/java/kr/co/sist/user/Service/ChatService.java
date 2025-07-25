@@ -63,4 +63,7 @@ public class ChatService {
     	chatDAO.insertMessage(message);
     }
     
+    public List<ChatmessageDTO> getMessagesByChatRoomNum(int chatroomNum){
+    	return chatDAO.getMessagesByChatRoomNum(chatroomNum);
+    }
 }
