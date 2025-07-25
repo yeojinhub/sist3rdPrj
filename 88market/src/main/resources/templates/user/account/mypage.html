@@ -40,9 +40,34 @@
 		  <th:block th:if="${tab=='wishlist'}">
 		    <th:block th:replace="fragments/user/mypageList/wishlist :: mypageInfo"/>
 		  </th:block>
+		  
+		  <!-- info -->
+		  <th:block th:if="${tab=='info'}">
+		    <th:block th:replace="fragments/user/mypageList/info :: mypageInfo"/>
+		  </th:block>
 		
+		  <!-- bank -->
+		  <th:block th:if="${tab=='bank'}">
+		    <th:block th:replace="fragments/user/mypageList/bank :: mypageInfo"/>
+		  </th:block>
+		
+		  <!-- address -->
+		  <th:block th:if="${tab=='address'}">
+		    <th:block th:replace="fragments/user/mypageList/address :: mypageInfo"/>
+		  </th:block>
+		  
+		  <!-- review -->
+		  <th:block th:if="${tab=='review'}">
+		    <th:block th:replace="fragments/user/mypageList/review :: mypageInfo"/>
+		  </th:block>
+		
+		  <!-- withdraw -->
+		  <th:block th:if="${tab=='withdraw'}">
+		    <th:block th:replace="fragments/user/mypageList/withdraw :: mypageInfo"/>
+		  </th:block>
+		  
 		  <!-- default -->
-		  <th:block th:if="${tab!='sales' and tab!='purchase' and tab!='wishlist'}">
+		  <th:block th:if="${tab!='sales' and tab!='purchase' and tab!='wishlist' and tab!='info' and tab!='bank' and tab!='address' and tab!='review' and tab!='withdraw'}">
 		    <th:block th:replace="fragments/user/mypageList/mypageMain :: mypageInfo"/>
 		  </th:block>
         </section>
