@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>관리자 - 상품 상세</title>
-  <!-- 기존 CSS -->
-  <link rel="stylesheet" th:href="@{/css/admin/userProduct/userProductDetail.css}" />
-  <!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 - 상품 상세 조회</title>
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
+<!-- 관리자 공지사항 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/userProduct/userProductDetail.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
 <th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
 
@@ -18,12 +24,9 @@
 
   <div class="admin-wrapper">
     <div class="main-content">
-    	<!-- 헤더 -->
-			<header class="main-header">
-				<div class="breadcrumbs">
-					<span>일반회원 상품 관리 &gt;</span> <span class="current-page">상품 상세</span>
-				</div>
-			</header>
+			<!-- 페이지 타이틀 -->
+			<th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('상품 상세','일반 회원 상품 관리')}" />	
+
 		<!-- 메인 컨텐츠 (상품 관리) -->
       <main class="container">
         <section class="notice-form-section">

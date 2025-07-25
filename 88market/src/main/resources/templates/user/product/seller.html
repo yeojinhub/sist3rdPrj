@@ -11,7 +11,43 @@
 </head>
 <script>
 	$(function() {
+		// 초기 상태: 전체 표시
+		showProducts('all');
 
+		// 필터 클릭 이벤트
+		$('.product-filter-nav_seller a').click(function(e) {
+			e.preventDefault();
+
+			// active 클래스 변경
+			$('.product-filter-nav_seller a').removeClass('active_seller');
+			$(this).addClass('active_seller');
+
+			// 필터에 따른 상품 표시
+			const filter = $(this).data('filter');
+			showProducts(filter);
+			updateProductCount(filter);
+		});
+
+		function showProducts(filter) {
+			$('.product-card_seller').removeClass('show');
+
+			if (filter === 'all') {
+				$('.product-card_seller').addClass('show');
+			} else {
+				$('.product-card_seller[data-status="' + filter + '"]')
+						.addClass('show');
+			}
+		}
+
+		function updateProductCount(filter) {
+			let count = 0;
+			if (filter === 'all') {
+				count = $('.product-card_seller').length;
+			} else {
+				count = $('.product-card_seller[data-status="' + filter + '"]').length;
+			}
+			$('.total-products_seller').text('총 ' + count + '개');
+		}
 	});
 </script>
 <body>
@@ -22,23 +58,20 @@
 		<div class="profile-main_seller">
 			<section class="profile-header_seller">
 				<div class="profile-avatar_seller">
-					<img th:src="@{images/default_profile.jpg}" alt="판매자 아바타">
+					<img th:src="${users.image}" alt="판매자 아바타">
 				</div>
 				<div class="profile-info_seller">
-					<h1 class="seller-name_seller">송민철엉</h1>
-					<div class="trust-bar_seller">
-						<div class="trust-level_seller" style="width: 77.5%;"></div>
+					<h1 class="seller-name_seller" th:text="${users.nickname}">닉네임</h1>
+					<p class="trust-label_seller">신뢰지수</p>
+					<div class="trust-bar-container_seller">
+						<div class="trust-bar_seller">
+							<div class="trust-level_seller"
+								th:style="'width: ' + ${users.point / 10.0} + '%;'"></div>
+						</div>
+						<span class="trust-score_seller"> <span class="score"
+							th:text="${users.point}">775</span><span class="total">/1000</span>점
+						</span>
 					</div>
-				</div>
-				<div class="chat-prompt_seller">
-					<img th:src="@{images/chatlogo.png}" alt="채팅 아이콘">
-					<div class="chat-text_seller">
-						<p>
-							<strong>송민철엉</strong>님과 채팅하기
-						</p>
-						<span>상품에 대한 자세한 정보를 알고 싶다면?</span>
-					</div>
-					<button class="chat-button_seller">채팅하기</button>
 				</div>
 				<div class="seller-stats_seller">
 					<div>
@@ -55,18 +88,17 @@
 			<section class="products-section_seller">
 				<h2 class="section-title_seller">판매상품</h2>
 				<nav class="product-filter-nav_seller">
-					<a href="#" class="active_seller">전체</a> <a href="#">판매중</a> <a
-						href="#">예약중</a> <a href="#">판매완료</a>
+					<a href="#" class="active_seller" data-filter="all">전체</a> <a
+						href="#" data-filter="selling">판매중</a> <a href="#"
+						data-filter="reserved">예약중</a> <a href="#" data-filter="sold">판매완료</a>
 				</nav>
 				<div class="products-header_seller">
-					<span class="total-products_seller">총 20개</span>
-					<div class="sort-options_seller">
-						<a href="#">최신순</a> | <a href="#">낮은가격순</a> | <a href="#">높은가격순</a>
-					</div>
+					<span class="total-products_seller">총 8개</span>
 				</div>
 				<div class="product-grid_seller">
-					<!-- 상품 카드 예시 -->
-					<div class="product-card_seller">
+
+					<!-- 판매중 상품 1 -->
+					<div class="product-card_seller show" data-status="selling">
 						<img th:src="@{images/main/img1.png}" alt="루미녹스 랜드블랙 88000">
 						<div class="product-info_seller">
 							<p class="product-name_seller">루미녹스 랜드블랙 88000</p>
@@ -77,8 +109,50 @@
 							</div>
 						</div>
 					</div>
-					<div class="product-card_seller sold-out_seller">
-						<img th:src="@{images/main/img2.png}" alt="루미녹스 랜드블랙 88000">
+
+					<!-- 판매중 상품 2 -->
+					<div class="product-card_seller show" data-status="selling">
+						<img th:src="@{images/main/img2.png}" alt="애플워치 SE">
+						<div class="product-info_seller">
+							<p class="product-name_seller">애플워치 SE 2세대</p>
+							<p class="product-price_seller">250,000원</p>
+							<p class="product-meta_seller">청라동 | 25분전</p>
+							<div class="product-tags_seller">
+								<span class="tag_seller safe-deal_seller">안전거래</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- 예약중 상품 1 -->
+					<div class="product-card_seller show" data-status="reserved">
+						<img th:src="@{images/main/img3.png}" alt="맥북프로">
+						<div class="overlay_seller">
+							<p>예약중</p>
+						</div>
+						<div class="product-info_seller">
+							<p class="product-name_seller">맥북프로 M2 14인치</p>
+							<p class="product-price_seller">1,800,000원</p>
+							<p class="product-meta_seller">송도동 | 1시간전</p>
+						</div>
+					</div>
+
+					<!-- 예약중 상품 2 -->
+					<div class="product-card_seller show" data-status="reserved">
+						<img th:src="@{images/main/img4.png}" alt="아이폰15">
+						<div class="overlay_seller">
+							<p>예약중</p>
+						</div>
+						<div class="product-info_seller">
+							<p class="product-name_seller">아이폰15 프로맥스</p>
+							<p class="product-price_seller">1,200,000원</p>
+							<p class="product-meta_seller">검단동 | 2시간전</p>
+						</div>
+					</div>
+
+					<!-- 판매완료 상품 1 -->
+					<div class="product-card_seller sold-out_seller show"
+						data-status="sold">
+						<img th:src="@{images/main/img5.png}" alt="리모와트렁크">
 						<div class="overlay_seller">
 							<p>판매완료</p>
 						</div>
@@ -88,7 +162,21 @@
 							<p class="product-meta_seller">영종동 | 4분전</p>
 						</div>
 					</div>
-					<!-- ... 다른 상품 카드들 ... -->
+
+					<!-- 판매완료 상품 2 -->
+					<div class="product-card_seller sold-out_seller show"
+						data-status="sold">
+						<img th:src="@{images/main/img6.png}" alt="다이슨청소기">
+						<div class="overlay_seller">
+							<p>판매완료</p>
+						</div>
+						<div class="product-info_seller">
+							<p class="product-name_seller">다이슨 V15 청소기</p>
+							<p class="product-price_seller">450,000원</p>
+							<p class="product-meta_seller">계양동 | 1일전</p>
+						</div>
+					</div>
+
 				</div>
 			</section>
 		</div>

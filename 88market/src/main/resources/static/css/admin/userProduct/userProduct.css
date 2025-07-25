@@ -29,24 +29,6 @@ body, html {
     flex-direction: column;
 }
 
-/* 메인 헤더 */
-.main-header {
-    background-color: white;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.breadcrumbs span {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-.breadcrumbs .current-page {
-    color: #555;
-}
 
 /* 컨테이너 */
 .container {

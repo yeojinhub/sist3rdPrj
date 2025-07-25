@@ -112,7 +112,7 @@
 				<div class="seller-info">
 					<h4>판매자정보</h4>
 					<div class="seller-profile">
-						<div class="seller-name" th:onclick="|location.href='@{/seller?id=1}'|" style="cursor: pointer;"
+						<div class="seller-name" th:onclick="|location.href='@{/seller/{id}(id=${product.userNum})}'|" style="cursor: pointer;"
 							th:text="${user.nickname}">송민철영</div>
 						<div class="trust-score">
 							<span th:text="'신뢰지수 ' +${user.manner}"></span>
