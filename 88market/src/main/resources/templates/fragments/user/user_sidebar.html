@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+  <div th:fragment="sidebar(tab)">
+ 				<aside class="left-sidebar">
+					<h2>마이 페이지</h2>
+					<nav>
+						<h3>거래 정보</h3>
+					      <ul>
+					        <li>
+					          <a th:href="@{/mypage(tab='sales')}"
+					             th:classappend="${tab=='sales'} ? 'active'">
+					            판매내역
+					          </a>
+					        </li>
+					        <li>
+					          <a th:href="@{/mypage(tab='purchase')}"
+					             th:classappend="${tab=='purchase'} ? 'active'">
+					            구매내역
+					          </a>
+					        </li>
+					        <li>
+					          <a th:href="@{/mypage(tab='wishlist')}"
+					             th:classappend="${tab=='wishlist'} ? 'active'">
+					            찜한 상품
+					          </a>
+					        </li>
+					      </ul>
+						<hr />
+						<h3>내 정보</h3>
+						<ul>
+							<li><a href="#">계좌 관리</a></li>
+							<li><a href="#">배송지 관리</a></li>
+							<li><a href="#">거래 후기</a></li>
+							<li><a href="#">탈퇴하기</a></li>
+						</ul>
+					</nav>
+				</aside>
+  </div>
+</body>
+</html>

@@ -9,133 +9,116 @@
 		<id     column="trade_id"     property="tradeId"/>
 		<result column="buyer_id"     property="buyerId"/>
 		<result column="seller_id"    property="sellerId"/>
-		<result column="trade_status" property="tradeStatus"/>
 		<result column="trade_date"   property="tradeDate"/>
 		<result column="delivery_num" property="deliveryNum"/>
 		<result column="prd_num"      property="prdNum"/>
 		<!-- email 매핑 -->
 		<result column="buyer_email"  property="buyerEmail"/>
 		<result column="seller_email" property="sellerEmail"/>
+		<result column="sell_type" property="sellType"/>
 	</resultMap>
 	
-	<!-- 전체 건수 -->
-	<select id="countTrades" parameterType="kr.co.sist.admin.util.AdminSearchUserTradeDTO" resultType="int">
-  SELECT COUNT(*)
-    FROM TRADES t
-    <!-- 이메일 검색을 위한 JOIN 추가 -->
-    LEFT JOIN USERS ub ON t.buyer_id  = ub.user_num
-    LEFT JOIN USERS us ON t.seller_id = us.user_num
-   WHERE 1=1
-     <if test="statusFilter != null and statusFilter != 'all'">
-       <choose>
-         <when test="statusFilter == 'active'">AND t.trade_status = '판매중'</when>
-         <when test="statusFilter == 'inactive'">AND t.trade_status = '거래진행중'</when>
-         <when test="statusFilter == 'sold'">   AND t.trade_status = '결제완료'</when>
-       </choose>
-     </if>
-     <if test="keyword != null and keyword != ''">
-       <choose>
-         <when test="searchType == 'buyerEmail'">
-           AND ub.email LIKE '%' || #{keyword} || '%'
-         </when>
-         <when test="searchType == 'sellerEmail'">
-           AND us.email LIKE '%' || #{keyword} || '%'
-         </when>
-         <when test="searchType == 'prdNum'">
-           AND t.prd_num LIKE '%' || #{keyword} || '%'
-         </when>
-         <otherwise>
-           AND (
-             ub.email  LIKE '%' || #{keyword} || '%' OR
-             us.email  LIKE '%' || #{keyword} || '%' OR
-             t.prd_num LIKE '%' || #{keyword} || '%'
-           )
-         </otherwise>
-       </choose>
-     </if>
+		<!-- 전체 건수 -->
+		<select id="countTrades" parameterType="kr.co.sist.admin.util.AdminSearchUserTradeDTO" resultType="int">
+		SELECT COUNT(*)
+		FROM TRADES t
+		<!-- 이메일 검색을 위한 JOIN 추가 -->
+		LEFT JOIN USERS ub ON t.buyer_id  = ub.user_num
+		    LEFT JOIN USERS us ON t.seller_id = us.user_num
+		    LEFT JOIN PRODUCT p ON t.prd_num = p.prd_num
+		    WHERE p.com_num IS NULL
+			AND p.sell_type ='Y'
+		     <if test="keyword != null and keyword != ''">
+		       <choose>
+		         <when test="searchType == 'buyerEmail'">
+		           AND ub.email LIKE '%' || #{keyword} || '%'
+		         </when>
+		         <when test="searchType == 'sellerEmail'">
+		           AND us.email LIKE '%' || #{keyword} || '%'
+		         </when>
+		         <when test="searchType == 'prdNum'">
+		           AND t.prd_num LIKE '%' || #{keyword} || '%'
+		         </when>
+		         <otherwise>
+		           AND (
+		             ub.email  LIKE '%' || #{keyword} || '%' OR
+		             us.email  LIKE '%' || #{keyword} || '%' OR
+		             t.prd_num LIKE '%' || #{keyword} || '%'
+		           )
+		         </otherwise>
+		       </choose>
+		     </if>
+			</select>
+	
+		<!-- 페이징+검색 -->
+		<select id="searchTrades" parameterType="map" resultMap="tradeMap">
+		SELECT * FROM (
+	    SELECT A.*, ROWNUM rn FROM (
+	    SELECT
+	        t.trade_id       AS trade_id,
+	        t.prd_num        AS prd_num,
+	        ub.email         AS buyer_email,
+	        us.email         AS seller_email,
+	        t.seller_id      AS seller_id,
+	        t.trade_date     AS trade_date,
+	        t.delivery_num   AS delivery_num,
+	        p.sell_type		 AS sell_type
+	      FROM TRADES t
+	      LEFT JOIN USERS ub ON t.buyer_id  = ub.user_num
+	      LEFT JOIN USERS us ON t.seller_id = us.user_num
+	      LEFT JOIN PRODUCT p ON t.prd_num = p.prd_num
+	      WHERE p.com_num IS NULL
+	      AND p.sell_type ='Y'
+	      <if test="search.keyword != null and search.keyword != ''">
+	        <choose>
+	          <when test="search.searchType == 'buyerEmail'">
+	            AND ub.email LIKE '%' || #{search.keyword} || '%'
+	          </when>
+	          <when test="search.searchType == 'sellerEmail'">
+	            AND us.email LIKE '%' || #{search.keyword} || '%'
+	          </when>
+	          <when test="search.searchType == 'prdNum'">
+	            AND t.prd_num LIKE '%' || #{search.keyword} || '%'
+	          </when>
+	          <otherwise>
+	            AND (
+	              ub.email  LIKE '%' || #{search.keyword} || '%' OR
+	              us.email  LIKE '%' || #{search.keyword} || '%' OR
+	              t.prd_num LIKE '%' || #{search.keyword} || '%'
+	            )
+	          </otherwise>
+	        </choose>
+	      </if>
+	      ORDER BY t.trade_date DESC
+	    ) A
+	    WHERE ROWNUM &lt;= #{endRow}
+	  )
+	  WHERE rn &gt; #{startRow}
 		</select>
 	
-	<!-- 페이징+검색 -->
-	<select id="searchTrades" parameterType="map" resultMap="tradeMap">
-  SELECT * FROM (
-    SELECT A.*, ROWNUM rn FROM (
-      SELECT
-        t.trade_id       AS trade_id,
-        t.prd_num        AS prd_num,
-        ub.email         AS buyer_email,
-        us.email         AS seller_email,
-        t.seller_id      AS seller_id,
-        t.trade_status   AS trade_status,
-        t.trade_date     AS trade_date,
-        t.delivery_num   AS delivery_num
-      FROM TRADES t
-      LEFT JOIN USERS ub ON t.buyer_id  = ub.user_num
-      LEFT JOIN USERS us ON t.seller_id = us.user_num
-      WHERE 1=1
-      <!-- 상태 필터, 키워드 필터는 기존대로 -->
-      <if test="search.statusFilter != null and search.statusFilter != 'all'">
-        <choose>
-          <when test="search.statusFilter == 'active'">
-            AND t.trade_status = '판매중'
-          </when>
-          <when test="search.statusFilter == 'inactive'">
-            AND t.trade_status = '거래진행중'
-          </when>
-          <when test="search.statusFilter == 'sold'">
-            AND t.trade_status = '결제완료'
-          </when>
-        </choose>
-      </if>
-      <if test="search.keyword != null and search.keyword != ''">
-        <choose>
-          <when test="search.searchType == 'buyerEmail'">
-            AND ub.email LIKE '%' || #{search.keyword} || '%'
-          </when>
-          <when test="search.searchType == 'sellerEmail'">
-            AND us.email LIKE '%' || #{search.keyword} || '%'
-          </when>
-          <when test="search.searchType == 'prdNum'">
-            AND t.prd_num LIKE '%' || #{search.keyword} || '%'
-          </when>
-          <otherwise>
-            AND (
-              ub.email  LIKE '%' || #{search.keyword} || '%' OR
-              us.email  LIKE '%' || #{search.keyword} || '%' OR
-              t.prd_num LIKE '%' || #{search.keyword} || '%'
-            )
-          </otherwise>
-        </choose>
-      </if>
-      ORDER BY t.trade_date DESC
-    ) A
-    WHERE ROWNUM &lt;= #{endRow}
-  )
-  WHERE rn &gt; #{startRow}
-	</select>
-	
-	<!-- 주문 조회 -->
-	  <select id="selectTradeById" parameterType="int" resultMap="tradeMap">
+	<!-- 단건 조회 -->
+		<select id="selectTradeById" parameterType="int" resultMap="tradeMap">
 	    SELECT
 	      t.trade_id     AS trade_id,
 	      t.buyer_id     AS buyer_id,
 	      ub.email		 AS	buyer_email,
 	      t.seller_id    AS seller_id,
 	      us.email		 AS	seller_email,
-	      t.trade_status AS trade_status,
 	      t.trade_date   AS trade_date,
 	      t.delivery_num AS delivery_num,
 	      t.prd_num      AS prd_num
 
 	    FROM TRADES t
-	    LEFT JOIN USERS ub
-	      ON t.buyer_id = ub.user_num
-	    LEFT JOIN USERS us
-		  ON t.seller_id = us.user_num
+	    LEFT JOIN USERS ub ON t.buyer_id = ub.user_num
+	    LEFT JOIN USERS us ON t.seller_id = us.user_num
+	    LEFT JOIN PRODUCT p ON t.prd_num = p.prd_num
 	    WHERE t.trade_id = #{tradeId}
-	  </select>
+	    	AND p.com_num IS NULL
+	    	AND p.sell_type ='Y'
+		</select>
 	  
-	  <!-- 결제 수단 -->
-	  <select id="selectPaymentByTradeId" parameterType="int" resultType="kr.co.sist.DTO.PaymentsDTO">
+	  <!-- 결제 수단 조회-->
+		<select id="selectPaymentByTradeId" parameterType="int" resultType="kr.co.sist.DTO.PaymentsDTO">
 		  SELECT
 		    payment_uid     AS paymentUid,
 		    amount          AS amount,

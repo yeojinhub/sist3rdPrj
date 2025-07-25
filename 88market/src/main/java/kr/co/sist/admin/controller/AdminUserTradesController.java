@@ -24,8 +24,8 @@ public class AdminUserTradesController {
     //trade List 출력
     @GetMapping({"", "/list"})
     public String list(@ModelAttribute("search") AdminSearchUserTradeDTO searchDTO, Model model) {
-        if (searchDTO.getStatusFilter() == null) {
-            searchDTO.setStatusFilter("all");
+        if (searchDTO.getKeyword() == null) {
+            searchDTO.setKeyword("");
         }
         if (searchDTO.getSearchType() == null) {
             searchDTO.setSearchType("");
@@ -45,7 +45,7 @@ public class AdminUserTradesController {
 	 * trade = tradeService.findById(tradeId); model.addAttribute("trade", trade);
 	 * return "admin/userTrade/userTradeDetail"; }
 	 */
-    
+    // 거래 상세 
     @GetMapping("/detail/{tradeId}")
     public String detail(@PathVariable Integer tradeId, Model model) {
       TradesDTO trade = tradeService.findById(tradeId);

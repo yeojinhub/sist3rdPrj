@@ -7,7 +7,7 @@
     box-sizing: border-box;
 }
 
-/* 기존 .main-content 코드는 그대로 사용하면 됩니다! */
+
 .main-content {
     display: flex;
     padding: 20px 0; /* 좌우 패딩은 main-container에서 처리 */
@@ -22,14 +22,14 @@
 }
 
 .left-sidebar h2 {
-    font-size: 24px;
+    font-size: 25px;
     font-weight: bold;
     color: #333333;
     margin-bottom: 20px;
 }
 
 .left-sidebar h3 {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
     color: #333333;
     margin-top: 16px;
@@ -44,15 +44,16 @@
 
 .left-sidebar nav li a {
     text-decoration: none;
-    font-size: 12px;
-    font-weight: 100; /* Thin */
+    font-size: 18px;
+    font-weight: 400; 
     color: #333333;
     display: block;
     padding: 8px 0;
 }
 
 .left-sidebar nav a:hover {
-    color: #7fd0f4;
+    color: #333333;
+    background-color: #7fd0f4;;
 }
 
 .left-sidebar hr {
@@ -67,7 +68,7 @@
 .center-content {
     flex-grow: 1;
     border: 1px solid #e6e6e6;
-    padding: 20px;
+    padding: 20px 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -302,4 +303,68 @@
     padding: 50px 0;
     color: #999999;
     font-size: 16px;
+}
+
+/* 메인페이지 내 상품 */
+/* ─────────────────────────────────────── */
+/*  탭 컨테이너 */
+.product-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid #e6e6e6;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  margin-bottom: 1px; /* 탭과 콘텐츠 사이 간격 */
+}
+
+/* ─────────────────────────────────────── */
+/*  탭 버튼 */
+.product-tabs .tab-button {
+  background-color: #ffffff;
+  border: none;
+  padding: 12px 0;
+  font-size: 14px;
+  color: #666666;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.product-tabs .tab-button:hover {
+  background-color: #f5f5f5;
+}
+
+/* ─────────────────────────────────────── */
+/*  마지막 버튼 우측 경계선 제거 */
+.product-tabs .tab-button:last-child {
+  border-right: none;
+}
+
+/* ─────────────────────────────────────── */
+/*  활성화된 탭 */
+.product-tabs .tab-button.active {
+  background-color: #7fd0f4;
+  color: #333333;
+  font-weight: 600;
+  border-bottom: 2px solid #7fd0f4;
+}
+
+/* ─────────────────────────────────────── */
+/*  “상품 없음” 메시지 중앙 정렬 */
+.products-list-empty {
+  text-align: center;
+  padding: 60px 0;
+  color: #999999;
+  font-size: 16px;
+}
+
+/* ─────────────────────────────────────── */
+/* 탭 콘텐츠: 기본 숨김 */
+.tab-content {
+  display: none;
+}
+
+/* active 클래스가 붙은 것만 보이도록 */
+.tab-content.active {
+  display: block;
 }

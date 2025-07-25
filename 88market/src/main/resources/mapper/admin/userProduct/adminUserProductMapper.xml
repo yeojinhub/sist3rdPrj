@@ -52,6 +52,8 @@
 		LEFT JOIN USERS    u ON p.USER_NUM = u.USER_NUM
 		LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
 		<where>
+		AND p.com_num IS NULL
+		<!-- 검색어 필터 -->
 		<if test="searchType != null and searchType.equals('title') and keyword != null and keyword != ''">
 			AND p.TITLE LIKE '%' || #{keyword} || '%'
 		</if>
@@ -79,7 +81,7 @@
 		</where>
 	</select>
 
-		<!-- ② 페이징 + 검색 결과 -->
+		<!-- 페이징 + 검색 결과 -->
 		<select id="searchAdminUserProducts" parameterType="map" resultMap="adminUserProductMap">
 			SELECT * FROM (
 			SELECT A.*, ROWNUM rn FROM (
@@ -146,7 +148,7 @@
 		WHERE rn &gt; #{startRow}
 		</select>
   
-    <!-- ③ 숨김 상태 일괄 업데이트 -->
+    <!--숨김 상태 일괄 업데이트 -->
 		<update id="updateHiddenType">
 		  UPDATE PRODUCT
 		    SET HIDDEN_TYPE = #{hidden, jdbcType=VARCHAR}
@@ -203,7 +205,9 @@
 				SAFE_TYPE      = #{product.safeType},
 				DELIVERY_TYPE  = #{product.deliveryType},
 				MEET_TYPE      = #{product.meetType},
-				HIDDEN_TYPE    = #{product.hiddenType}
+				HIDDEN_TYPE    = #{product.hiddenType},
+				SELL_TYPE      = #{product.sellType},
+				APPOINT_TYPE   = #{product.appointType}
 			WHERE PRD_NUM       = #{product.prdNum}
 		</update>
 		

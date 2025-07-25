@@ -32,18 +32,19 @@
 				<div class="menu-item">
 					<i class="fa-solid fa-comments"></i> <span id="chat">채팅하기</span>
 				</div>
-				<!-- 로그인 안 된 경우: 마이 → 로그인 -->
-				<div class="menu-item" th:unless="${session.user != null}" th:onclick="|location.href='@{/login}'|">
-				  <i class="fa-solid fa-user"></i> <span>마이</span>
+				<!-- 마이 -->
+				<div class="menu-item" th:onclick="|location.href='@{/mypage}'|">
+					 <i class="fa-solid fa-user" ></i> <span>마이</span>
 				</div>
-				<!-- 로그인된 경우: 마이 → 드롭다운 메뉴 -->
-				<div class="menu-item dropdown" th:if="${session.user != null}">
-				  <i class="fa-solid fa-user"></i> <span>마이</span>
-				  <div class="dropdown-content">
-				    <a th:href="@{/mypage}">마이페이지</a>
-				    <a th:href="@{/logout}">로그아웃</a>
-				  </div>
+				<!-- ----------------------------------------- -->
+				<!-- 로그인 버튼 / 로그인전 : 로그인 , 로그인 후 : 로그 아웃 -->
+				<div class="menu-item" th:onclick="|location.href='@{/login}'|">
+				  <i class="fa-solid fa-sign-in-alt"></i> <span>로그인</span>
 				</div>
+				<!-- 토큰 없을때 -->
+<!-- 				<div class="menu-item" th:onclick="|location.href='@{/logout}'|">
+				  <i class="fa-solid fa-sign-out-alt"></i> <span>로그아웃</span>
+				</div> -->
 			</div>
 		</div>
 	</div>
