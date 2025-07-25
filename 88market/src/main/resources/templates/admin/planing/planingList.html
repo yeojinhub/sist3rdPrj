@@ -5,8 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>관리자 - 상품관리</title>
-  <link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
-  <th:block th:replace="~{components/admin/external :: external}"></th:block>
+<!-- 사이드바 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/style.css}">
+<!-- 페이지 타이틀 CSS -->
+<link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+
+<link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
+<!-- 외부파일(jQuery, Font Awesome, favicon 등) -->
+<th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
 
 <body>
@@ -15,11 +21,8 @@
 	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
 	<div class="admin-wrapper">
     <div class="main-content">
-      <header class="main-header">
-        <div class="breadcrumbs">
-          <span>기업관 관리 &gt;</span> <span class="current-page">상품 관리</span>
-        </div>
-      </header>
+    <!-- 페이지 타이틀 -->
+    <th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('기업관 관리','상품 관리')}" />
 
       <main class="container">
         <section class="search-section">
