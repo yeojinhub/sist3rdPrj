@@ -1,0 +1,56 @@
+<div th:fragment="mypageInfo" style="border:1px solid #f00; padding:1rem;">
+	<div class="profile-section"> 
+		<h2>찜한 상품</h2>
+	</div>
+	
+	  <div class="my-products-section">
+    <div class="products-header">
+      <h3>찜한 상품 목록 </h3>
+      <div class="product-filters">
+        <span>총 <span th:text="${wishlist.size()}">0</span>개</span>
+      </div>
+    </div>
+	
+	
+  <table class="wishlist-table">
+    <thead>
+      <tr>
+        <th>상품 이미지</th>
+        <th>상품명</th>
+        <th>가격</th>
+        <th>상태</th>
+        <th>찜</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 찜 목록 항목들 -->
+      <tr th:each="item : ${wishlist}">
+        <td>
+          <a th:href="@{/detail(id=${item.prdNum})}">
+            <img class="table-thumb" th:src="@{/images/{img}(img=${item.imgNum})}" alt="상품 이미지"/>
+          </a>
+        </td>
+        <td><a th:href="@{/detail(id=${item.prdNum})}" th:text="${item.title}">상품명</a></td>
+        <td th:text="|${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}원|"></td>
+        <td>
+          <span th:switch="${item.sellType}">
+            <span th:case="'N'" class="badge orange">판매중</span>
+            <span th:case="'Y'" class="badge gray">판매완료</span>
+          </span>
+          <span th:if="${item.appointType == 'Y' and item.sellType == 'N'}" class="badge orange">예약중</span>
+        </td>
+        <td>
+          <form th:action="@{/mypage/wishlist/remove}" method="post">
+            <input type="hidden" th:value="${item.prdNum}" name="productId"/>
+            <button type="submit" class="delete-btn">삭제</button>
+          </form>
+        </td>
+      </tr>
+
+      <!-- 찜 목록이 비었을 때 -->
+      <tr th:if="${#lists.isEmpty(wishlist)}">
+        <td colspan="5" class="no-data">찜한 상품이 없습니다.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

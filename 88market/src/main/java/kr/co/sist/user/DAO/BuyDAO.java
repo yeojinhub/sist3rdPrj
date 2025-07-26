@@ -18,4 +18,7 @@ public interface BuyDAO {
     public void updateProductAppointType(String prdNum);
     public void insertProductTrades(TradesDTO tDTO);
     public void insertProductPayments(PaymentsDTO pDTO);
+    
+    //민경 - 구매목록 가져오기
+    public List<TradesDTO> selectPurchaseHistory(String buyerId);
 }

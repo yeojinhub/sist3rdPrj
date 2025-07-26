@@ -53,6 +53,7 @@
 		LEFT JOIN CATEGORY c ON p.CAT_NUM  = c.CAT_NUM
 		<where>
 		AND p.com_num IS NULL
+		AND p.user_num IS NOT NULL
 		<!-- 검색어 필터 -->
 
 		<if test="searchType != null and searchType.equals('title') and keyword != null and keyword != ''">

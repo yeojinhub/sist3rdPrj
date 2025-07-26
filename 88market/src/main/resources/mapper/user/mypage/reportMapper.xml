@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="kr.co.sist.user.DAO.ReportDAO">
+
+  <!-- ReportDTO와 컬럼 매핑 -->
+  <resultMap id="reportResult" type="kr.co.sist.DTO.ReportDTO">
+    <id     property="repNum"     column="REP_NUM"/>
+    <result property="title"      column="TITLE"/>
+    <result property="content"    column="CONTENT"/>
+    <result property="name"       column="NAME"/>
+    <result property="inputDate"  column="INPUT_DATE"/>
+    <result property="reportType" column="REPORT_TYPE"/>
+    <result property="searchType" column="SEARCH_TYPE"/>
+    <result property="userNum"    column="USER_NUM"/>
+  </resultMap>
+
+  <!-- 1) 사용자별 신고 내역 리스트 -->
+  <select id="selectReportsByUserNum"
+          parameterType="String"
+          resultMap="reportResult">
+    SELECT
+      REP_NUM,
+      TITLE,
+      CONTENT,
+      NAME,
+      INPUT_DATE,
+      REPORT_TYPE,
+      SEARCH_TYPE,
+      USER_NUM
+    FROM REPORT
+    WHERE USER_NUM = #{userNum}
+    ORDER BY INPUT_DATE DESC
+  </select>
+
+  <!-- 2) 사용자별 신고 건수 집계 -->
+  <select id="countByUserNum"
+          parameterType="String"
+          resultType="int">
+    SELECT COUNT(*)
+      FROM REPORT
+     WHERE USER_NUM = #{userNum}
+  </select>
+
+</mapper>

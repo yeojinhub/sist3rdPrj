@@ -71,5 +71,34 @@ public class ProductDAO {
     public void decreaseLikeNum(String prdNum) {
     	sqlSession.update("ProductMapper.decreaseLikeNum",prdNum);
     }
+    
+    //민경 - 마이페이지 내상품 
+    // 상품
+    public List<ProductDTO> selectByLoginId(String loginId) {
+        Map<String, String> param = new HashMap<>();
+        param.put("loginId", loginId);
+        return sqlSession.selectList("ProductMapper.selectByLoginId", param);
+    }
+
+    // 유저 정보
+    public UserDTO getUserByLoginId(String email) {
+        Map<String, String> param = new HashMap<>();
+        param.put("email", email);
+        return sqlSession.selectOne("ProductMapper.getUserByLoginId", param);
+    }
+
+    // 안전거래 건수
+    public int getSafeByLoginId(String email) {
+        Map<String, String> param = new HashMap<>();
+        param.put("email", email);
+        return sqlSession.selectOne("ProductMapper.getSafeByLoginId", param);
+    }
+
+    // 거래후기 건수
+    public int getReviewByLoginId(String email) {
+        Map<String, String> param = new HashMap<>();
+        param.put("email", email);
+        return sqlSession.selectOne("ProductMapper.getReviewByLoginId", param);
+    }
 }
 

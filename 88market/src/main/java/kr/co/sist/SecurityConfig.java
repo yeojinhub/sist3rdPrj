@@ -35,7 +35,8 @@ public class SecurityConfig {
                     "/buy/**",
                     "/sell",
                     "/product/**",
-                    "/inquiry"
+                    "/inquiry",
+                    "/mypage"
                 ).authenticated()
                 // 그 외(메인, 로그인, 회원가입, 정적 리소스 등)는 모두 허용
                 .anyRequest().permitAll()

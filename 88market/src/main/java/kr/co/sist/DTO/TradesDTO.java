@@ -30,5 +30,4 @@ public class TradesDTO {
 	private String buyerEmail; /* 구매자Email */
 	private String sellerEmail; /* 판매자Email */
 	
-
 } //class

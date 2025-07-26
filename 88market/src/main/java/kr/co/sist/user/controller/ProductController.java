@@ -297,6 +297,28 @@ public class ProductController {
         
         return map;
     }
-
+    
+    // 민경 - 마이페이지 내상품 (전체)
+    @GetMapping("/mypage/products")
+    public String myPageProducts(@AuthenticationPrincipal  UserDetails user, Model model) {
+        String loginId = user.getUsername();
+    	
+        List<ProductDTO> myProducts = productService.getProductsByLoginId(loginId);
+        model.addAttribute("myProducts", myProducts);
+        model.addAttribute("totalCount", myProducts.size());
+    	
+        UserDTO userInfo    = productService.getUserByLoginId(loginId);
+        int     safeCount   = productService.getSafeByLoginId(loginId);
+        int     reviewCount = productService.getReviewByLoginId(loginId);
+        model.addAttribute("userInfo",    userInfo);
+        model.addAttribute("safeCount",   safeCount);
+        model.addAttribute("reviewCount", reviewCount);
+        
+    	
+        model.addAttribute("tab", "");
+        
+    	return "user/mypage";
+    }
+    
 
 }

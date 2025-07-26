@@ -1,0 +1,112 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="mypageInfo" style="border:1px solid #f00; padding:1rem;">
+  <div class="profile-section">
+    <h2>구매 내역</h2>
+  </div>
+
+  <div class="my-products-section">
+    <div class="products-header">
+      <h3>구입 상품</h3>
+      <div class="product-filters">
+        <span>총 <span th:text="${purchaseHistory.size()}">0</span>개</span>
+      </div>
+    </div>
+
+    <!-- 3) 탭 버튼 -->
+    <div class="product-tabs">
+      <button class="tab-button active" data-target="all">전체</button>
+      <button class="tab-button" data-target="reserved">예약중</button>
+      <button class="tab-button" data-target="completed">구입완료</button>
+    </div>
+
+    <div class="tab-content-wrapper">
+
+      <!-- 전체 -->
+      <div id="all" class="tab-content active">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>상품 이미지</th>
+              <th>상품명</th>
+              <th>구매 가격</th>
+              <th>구매 상태</th>
+              <th>구매 날짜</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="p : ${purchaseHistory}">
+              <td>
+                <a th:href="@{/detail(id=${p.productDTO.prdNum})}">
+                  <img class="table-thumb" th:src="@{/images/{img}(img=${p.productDTO.imgNum})}" alt="상품 이미지"/>
+                </a>
+              </td>
+              <td><a th:href="@{/detail(id=${p.productDTO.prdNum})}" th:text="${p.productDTO.title}">상품명</a></td>
+              <td th:text="|${#numbers.formatDecimal(p.productDTO.price, 0, 'COMMA', 0, 'POINT')}원|"></td>
+              <td>
+                <span th:switch="${p.productDTO.sellType}">
+                  <span th:case="'N'" class="badge orange">판매중</span>
+                  <span th:case="'Y'" class="badge gray">판매완료</span>
+                </span>
+                <span th:if="${p.productDTO.appointType == 'Y' and p.productDTO.sellType == 'N'}" class="badge orange">예약중</span>
+              </td>
+              <td th:text="${#dates.format(p.tradesDTO.tradeDate, 'yyyy.MM.dd')}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(purchaseHistory)}">
+              <td colspan="5" class="no-data">구매 내역이 없습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 예약중 -->
+      <div id="reserved" class="tab-content">
+        <table class="product-table">
+          <thead>
+            <!-- 동일한 테이블 헤더 -->
+          </thead>
+          <tbody>
+            <tr th:each="p : ${purchaseHistory.?[productDTO.appointType == 'Y' and productDTO.sellType == 'N']}">
+              <td>
+                <a th:href="@{/detail(id=${p.productDTO.prdNum})}">
+                  <img class="table-thumb" th:src="@{/images/{img}(img=${p.productDTO.imgNum})}" alt="상품 이미지"/>
+                </a>
+              </td>
+              <td><a th:href="@{/detail(id=${p.productDTO.prdNum})}" th:text="${p.productDTO.title}">상품명</a></td>
+              <td th:text="|${#numbers.formatDecimal(p.productDTO.price, 0, 'COMMA', 0, 'POINT')}원|"></td>
+              <td><span class="badge orange">예약중</span></td>
+              <td th:text="${#dates.format(p.tradesDTO.tradeDate, 'yyyy.MM.dd')}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(purchaseHistory.?[productDTO.appointType == 'Y' and productDTO.sellType == 'N'])}">
+              <td colspan="5" class="no-data">예약된 상품이 없습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 구입완료 -->
+      <div id="completed" class="tab-content">
+        <table class="product-table">
+          <thead>
+            <!-- 동일한 테이블 헤더 -->
+          </thead>
+          <tbody>
+            <tr th:each="p : ${purchaseHistory.?[productDTO.sellType == 'Y']}">
+              <td>
+                <a th:href="@{/detail(id=${p.productDTO.prdNum})}">
+                  <img class="table-thumb" th:src="@{/images/{img}(img=${p.productDTO.imgNum})}" alt="상품 이미지"/>
+                </a>
+              </td>
+              <td><a th:href="@{/detail(id=${p.productDTO.prdNum})}" th:text="${p.productDTO.title}">상품명</a></td>
+              <td th:text="|${#numbers.formatDecimal(p.productDTO.price, 0, 'COMMA', 0, 'POINT')}원|"></td>
+              <td><span class="badge gray">구입완료</span></td>
+              <td th:text="${#dates.format(p.tradesDTO.tradeDate, 'yyyy.MM.dd')}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(purchaseHistory.?[productDTO.sellType == 'Y'])}">
+              <td colspan="5" class="no-data">구입완료 상품이 없습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

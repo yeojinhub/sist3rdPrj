@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.user.DAO.UserDAO">
+
+  <!-- DTO와 컬럼 매핑 -->
+  <resultMap id="userResult" type="kr.co.sist.DTO.UserDTO">
+    <id     property="userNum"     column="USER_NUM"/>
+    <result property="name"        column="NAME"/>
+    <result property="nickname"    column="NICKNAME"/>
+    <result property="image"       column="IMAGE"/>
+    <result property="email"       column="EMAIL"/>
+    <result property="pass"        column="PASS"/>
+    <result property="tel"         column="TEL"/>
+    <result property="zipcode"     column="ZIPCODE"/>
+    <result property="address"     column="ADDRESS"/>
+    <result property="manner"      column="MANNER"/>
+    <result property="point"       column="POINT"/>
+    <result property="inputDate"   column="INPUT_DATE"/>
+    <result property="banDate"     column="BAN_DATE"/>
+    <result property="banType"     column="BANTYPE"/>
+    <result property="drawDate"    column="DRAW_DATE"/>
+    <result property="withdraw"    column="WITHDRAW"/>
+    <!-- 누적 신고 수 매핑 (서브쿼리 사용 시 아래 컬럼도 결과에 포함되어야 합니다) -->
+    <result property="totalReport" column="TOTAL_REPORT"/>
+  </resultMap>
+
+  <select id="selectUserInfoByUserNum"
+          parameterType="String"
+          resultMap="userResult">
+    SELECT
+      u.USER_NUM,
+      u.NAME,
+      u.NICKNAME,
+      u.IMAGE,
+      u.EMAIL,
+      u.PASS,
+      u.TEL,
+      u.ZIPCODE,
+      u.ADDRESS,
+      u.MANNER,
+      u.POINT,
+      u.INPUT_DATE,
+      u.BAN_DATE,
+      u.BANTYPE,
+      u.DRAW_DATE,
+      u.WITHDRAW,
+      u.AUTH_CODE,
+      /* inline subquery 로 신고 수를 함께 조회 */
+      (
+        SELECT COUNT(*)
+          FROM REPORT r
+         WHERE r.USER_NUM = u.USER_NUM
+      ) AS TOTAL_REPORT
+    FROM USERS u
+    WHERE u.USER_NUM = #{userNum}
+  </select>
+
+  <select id="selectUserInfoByEmail"
+          parameterType="String"
+          resultMap="userResult">
+    SELECT
+      u.USER_NUM,
+      u.NAME,
+      u.NICKNAME,
+      u.IMAGE,
+      u.EMAIL,
+      u.PASS,
+      u.TEL,
+      u.ZIPCODE,
+      u.ADDRESS,
+      u.MANNER,
+      u.POINT,
+      u.INPUT_DATE,
+      u.BAN_DATE,
+      u.BANTYPE,
+      u.DRAW_DATE,
+      u.WITHDRAW,
+      u.AUTH_CODE,
+      (
+        SELECT COUNT(*)
+          FROM REPORT r
+         WHERE r.USER_NUM = u.USER_NUM
+      ) AS TOTAL_REPORT
+    FROM USERS u
+    WHERE u.EMAIL = #{email}
+  </select>
+
+</mapper>
