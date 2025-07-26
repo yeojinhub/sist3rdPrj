@@ -36,7 +36,7 @@
    SELECT COUNT(*)
   FROM PRODUCT p
   JOIN COMPANY c ON p.com_num = c.com_num
-  WHERE p.COM_NUM = #{comNum}L
+  WHERE p.COM_NUM = #{comNum}
   <if test="keyword != null and keyword != ''">
     AND p.TITLE LIKE '%' || #{keyword} || '%'
   </if>
