@@ -57,11 +57,12 @@
 									<th>결제상태</th>
 									<td>
 									<select class="search-filter" th:field="*{tradeStatus}">
-										<option th:value="결제완료" th:selected="${trade.tradeStatus == '결제완료'}">결제완료</option>
-										<option th:value="준비중" th:selected="${trade.tradeStatus == '상품 준비중'}">상품 준비중</option>
-										<option th:value="배송중" th:selected="${trade.tradeStatus == '배송중'}">배송중</option>
-										<option th:value="배송완료" th:selected="${trade.tradeStatus == '배송완료'}">배송완료</option>
-										<option th:value="구매확정" th:selected="${trade.tradeStatus == '구매확정'}">구매확정</option>
+									    <option th:value="결제완료">결제완료</option>
+									    <option th:value="준비중">상품 준비중</option>
+									    <option th:value="배송중">배송중</option>
+									    <option th:value="배송완료">배송완료</option>
+									    <option th:value="구매확정">구매확정</option>
+									    <option th:value="거래진행중">거래진행중</option>
 									</select>
 									</td>
 								</tr>
@@ -90,7 +91,7 @@
 
 						<div class="form-actions" align="center">
 							<button type="submit" class="control-button">저장</button>
-							<a th:href="@{/admin/userTrade/list}" class="control-button">뒤로가기</a>
+							<a href="javascript:history.back()" class="control-button">뒤로</a>
 						</div>
 					</form>
 				</section>

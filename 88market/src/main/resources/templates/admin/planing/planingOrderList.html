@@ -2,110 +2,105 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 - 상품관리</title>
-<link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
-<th:block th:replace="~{components/admin/external :: external}"></th:block>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 - 주문관리</title>
+  <link rel="stylesheet" th:href="@{/css/admin/notice/notice.css}">
+  <th:block th:replace="~{components/admin/external :: external}"></th:block>
 </head>
 
 <body>
-	<div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+  <div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
 	<!-- 상단 헤더 -->
 	<div th:replace="~{fragments/admin/admin_header :: header}"></div>
-	<div class="admin-wrapper">
-		<div class="main-content">
-			<header class="main-header">
-				<div class="breadcrumbs">
-					<span>기업관 관리 &gt;</span> <span class="current-page">주문 관리</span>
-				</div>
-			</header>
+  <div class="admin-wrapper">
+    <div class="main-content">
+      <header class="main-header">
+        <div class="breadcrumbs">
+          <span>기업관 관리 &gt;</span> <span class="current-page">주문 관리</span>
+        </div>
+      </header>
 
-			<main class="container">
-				<section class="search-section">
-					<form id="searchForm"
-						th:action="@{/admin/planing/planingOrderList}" method="get">
-						<div class="search-box">
-							<input type="text" class="search-input" name="keyword"
-								th:value="${param.keyword}" placeholder="상품명 검색"> <label><input
-								type="radio" name="hidden" value="all"
-								th:checked="${param.hidden == null or param.hidden == 'all'}">
-								전체</label> <label><input type="radio" name="hidden" value="Y"
-								th:checked="${param.hidden == 'Y'}"> 보임</label> <label><input
-								type="radio" name="hidden" value="N"
-								th:checked="${param.hidden == 'N'}"> 숨김</label>
+      <main class="container">
+        <section class="search-section">
+          <form id="searchForm" th:action="@{/admin/planing/planingOrderList}" method="get">
+            <div class="search-box">
+              <input type="text" class="search-input" name="keyword"
+                th:value="${param.keyword}" placeholder="상품명 검색">
 
-							<button type="submit" class="search-button">검색</button>
-							<button type="button" class="search-button" id="resetSearch">초기화</button>
-						</div>
-					</form>
-				</section>
+              <!-- 거래상태 드롭다운 -->
+              <select name="tradeStatus" class="search-select">
+                <option value="all" th:selected="${param.tradeStatus == 'all'}">전체</option>
+                <option th:value="결제완료" th:selected="${param.tradeStatus == '결제완료'}">결제완료</option>
+				<option th:value="상품준비중" th:selected="${param.tradeStatus == '상품 준비중'}">상품 준비중</option>
+				<option th:value="배송중" th:selected="${param.tradeStatus == '배송중'}">배송중</option>
+				<option th:value="배송완료" th:selected="${param.tradeStatus == '배송완료'}">배송완료</option>
+				<option th:value="구매확정" th:selected="${param.tradeStatus == '구매확정'}">구매확정</option>
+              </select>
 
-				<section class="notice-section">
-					<table class="notice-table">
-						<thead>
-							<tr>
-								<th>주문번호</th>
-								<th>상품명</th>
-								<th>브랜드</th>
-								<th>구매자</th>
-								<th>거래상태</th>
-								<th>주문일자</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="item, i : ${orderList}" class="table-row">
-								<td th:text="${item.orderNumber}"></td>
-								<td class="notice-title" th:text="${item.productName}"
-									style="cursor: pointer; text-align: center;"
-									th:onclick="|location.href='@{/admin/planing/planingOrderDetail(tradeId=${item.tradeId})}'|"></td>
-								<td th:text="${item.brandName}"></td>
-								<td th:text="${item.buyerName}"></td>
-								<td th:text="${item.tradeStatus}"></td>
-								<td th:text="${item.orderDate}"></td>
-							</tr>
-							<tr th:if="${#lists.isEmpty(orderList)}">
-								<td colspan="6" style="text-align: center;">등록된 주문이 없습니다.</td>
-							</tr>
-						</tbody>
+              <button type="submit" class="search-button">검색</button>
+              <button type="button" class="search-button" id="resetSearch">초기화</button>
+            </div>
+          </form>
+        </section>
 
-					</table>
+        <section class="notice-section">
+          <table class="notice-table">
+            <thead>
+              <tr>
+                <th>주문번호</th>
+                <th>상품명</th>
+                <th>브랜드</th>
+                <th>구매자</th>
+                <th>거래상태</th>
+                <th>주문일자</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="item : ${orderList}" class="table-row">
+                <td th:text="${item.orderNumber}"></td>
+                <td class="notice-title" th:text="${item.productName}"
+                    style="cursor: pointer; text-align: center;"
+                    th:onclick="|location.href='@{/admin/planing/planingOrderDetail(tradeId=${item.tradeId})}'|">
+                </td>
+                <td th:text="${item.brandName}"></td>
+                <td th:text="${item.buyerName}"></td>
+                <td th:text="${item.tradeStatus}"></td>
+                <td th:text="${item.orderDate}"></td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(orderList)}">
+                <td colspan="6" style="text-align: center;">등록된 주문이 없습니다.</td>
+              </tr>
+            </tbody>
+          </table>
 
-					<div class="table-footer">
-						<div class="table-controls">
-							<button class="control-button"
-								th:onclick="|location.href='@{/admin/planing/planingAdd}'|">등록</button>
-							<button class="control-button" id="deleteBtn">삭제</button>
-						</div>
+          <div class="table-footer">
 
-						<div class="pagination" th:if="${pagination.totalPages > 1}">
-						    <a th:if="${pagination.pageNum > 1}"
-						       th:href="@{/admin/planing/planingOrderList(page=${pagination.pageNum - 1}, keyword=${param.keyword}, tradeStatus=${param.tradeStatus})}"
-						       class="prev">&lt;</a>
-						
-						    <a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
-						       th:href="@{/admin/planing/planingOrderList(page=${i}, keyword=${param.keyword}, tradeStatus=${param.tradeStatus})}"
-						       th:classappend="${i == pagination.pageNum} ? 'active' : ''"
-						       th:text="${i}"></a>
-						
-						    <a th:if="${pagination.pageNum < pagination.totalPages}"
-						       th:href="@{/admin/planing/planingOrderList(page=${pagination.pageNum + 1}, keyword=${param.keyword}, tradeStatus=${param.tradeStatus})}"
-						       class="next">&gt;</a>
-						</div>
+            <div class="pagination" th:if="${pagination.totalPages > 1}">
+              <a th:if="${pagination.pageNum > 1}"
+                 th:href="@{/admin/planing/planingOrderList(page=${pagination.pageNum - 1}, keyword=${param.keyword}, tradeStatus=${param.tradeStatus})}"
+                 class="prev">&lt;</a>
 
-					</div>
-				</section>
-			</main>
+              <a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
+                 th:href="@{/admin/planing/planingOrderList(page=${i}, keyword=${param.keyword}, tradeStatus=${param.tradeStatus})}"
+                 th:classappend="${i == pagination.pageNum} ? 'active' : ''"
+                 th:text="${i}"></a>
 
-			<script src="/js/admin/script.js" defer></script>
-		</div>
-	</div>
+              <a th:if="${pagination.pageNum < pagination.totalPages}"
+                 th:href="@{/admin/planing/planingOrderList(page=${pagination.pageNum + 1}, keyword=${param.keyword}, tradeStatus=${param.tradeStatus})}"
+                 class="next">&gt;</a>
+            </div>
+          </div>
+        </section>
+      </main>
+      <script src="/js/admin/script.js" defer></script>
+    </div>
+  </div>
 
-	<script>
-		$(function() {
-
-		});
-	</script>
+  <script>
+    document.getElementById('resetSearch').addEventListener('click', function () {
+      window.location.href = '/admin/planing/planingOrderList';
+    });
+  </script>
 </body>
-
 </html>

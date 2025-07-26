@@ -22,80 +22,102 @@
       </header>
 
       <main class="container">
-        <section class="search-section">
-          <form id="searchForm" th:action="@{/admin/planing/planingList}" method="get">
-            <div class="search-box">
-              <input type="text" class="search-input" name="keyword"
-                th:value="${param.keyword}" placeholder="상품명 검색">
-              
-              <label><input type="radio" name="hidden" value="all"
-                th:checked="${param.hidden == null or param.hidden == 'all'}"> 전체</label>
-              <label><input type="radio" name="hidden" value="Y"
-                th:checked="${param.hidden == 'Y'}"> 보임</label>
-              <label><input type="radio" name="hidden" value="N"
-                th:checked="${param.hidden == 'N'}"> 숨김</label>
+		  <section class="search-section">
+		    <form id="searchForm" th:action="@{/admin/planing/planingList}" method="get">
+		      <div class="search-box">
+		        <input type="text" class="search-input" name="keyword"
+		               th:value="${param.keyword}" placeholder="상품명 검색">
+		
+		        <label><input type="radio" name="hidden" value="all"
+		                      th:checked="${param.hidden == null or param.hidden == 'all'}"> 전체</label>
+		        <label><input type="radio" name="hidden" value="Y"
+		                      th:checked="${param.hidden == 'Y'}"> 보임</label>
+		        <label><input type="radio" name="hidden" value="N"
+		                      th:checked="${param.hidden == 'N'}"> 숨김</label>
+		
+		        <button type="submit" class="search-button">검색</button>
+		        <button type="button" class="search-button" id="resetSearch">초기화</button>
+		      </div>
+		    </form>
+		  </section>
+		
+		  <section class="notice-section">
+		    <table class="notice-table">
+			  <thead>
+			    <tr>
+			      <th><input type="checkbox" class="all-checkbox"></th>
+			      <th>상품번호</th>
+			      <th>상품명</th>
+			      <th>기업명</th> <!-- 기업명 컬럼 추가 -->
+			      <th>가격</th>
+			      <th>숨김</th>
+			      <th>조회수</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <!-- 기업 계정일 때 -->
+			    <tr th:if="${session.loggedInAccountType == 'COMPANY'}"
+			        th:each="item : ${productsList}" class="table-row">
+			      <td><input type="checkbox" class="checkbox"
+			                 th:data-prd-num="${item.prdNum}"></td>
+			      <td th:text="${item.prdNum}"></td>
+			      <td class="notice-title" th:text="${item.title}"
+			          style="cursor: pointer; text-align: center;"
+			          th:onclick="|location.href='@{/admin/planing/planingDetail(prdNum=${item.prdNum})}'|"></td>
+			      <td></td> <!-- 기업명은 기업 계정이라 필요 없으면 빈 칸 -->
+			      <td th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')} + '원'"></td>
+			      <td th:text="${item.sellType}"></td>
+			      <td th:text="${item.clickNum}"></td>
+			    </tr>
+			
+			    <!-- 관리자 계정일 때 -->
+			    <tr th:if="${session.loggedInAccountType == 'ADMIN'}"
+			        th:each="item : ${productsList}" class="table-row">
+			      <td><input type="checkbox" class="checkbox"
+			                 th:data-prd-num="${item.prdNum}"></td>
+			      <td th:text="${item.prdNum}"></td>
+			      <td class="notice-title" th:text="${item.title}"
+			          style="cursor: pointer; text-align: center;"
+			          th:onclick="|location.href='@{/admin/planing/planingDetail(prdNum=${item.prdNum})}'|"></td>
+			      <td th:text="${item.comName}">기업명 없음</td> <!-- 기업명 출력 -->
+			      <td th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')} + '원'"></td>
+			      <td th:text="${item.sellType}"></td>
+			      <td th:text="${item.clickNum}"></td>
+			    </tr>
+			
+			    <!-- 공통: 리스트가 비어있을 때 -->
+			    <tr th:if="${#lists.isEmpty(productsList)}">
+			      <td colspan="7" style="text-align: center;">등록된 상품이 없습니다.</td>
+			    </tr>
+			  </tbody>
+			</table>
 
-              <button type="submit" class="search-button">검색</button>
-              <button type="button" class="search-button" id="resetSearch">초기화</button>
-            </div>
-          </form>
-        </section>
+		
+		    <div class="table-footer">
+		      <div class="table-controls">
+		        <button class="control-button"
+		                th:onclick="|location.href='@{/admin/planing/planingAdd}'|">등록</button>
+		        <button class="control-button" id="deleteBtn">삭제</button>
+		      </div>
+		
+		      <div class="pagination" th:if="${pagination.totalPages > 1}">
+		        <a th:if="${pagination.pageNum > 1}"
+		           th:href="@{/admin/planing/planingList(page=${pagination.pageNum - 1}, keyword=${param.keyword}, hidden=${param.hidden})}"
+		           class="prev">&lt;</a>
+		
+		        <a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
+		           th:href="@{/admin/planing/planingList(page=${i}, keyword=${param.keyword}, hidden=${param.hidden})}"
+		           th:classappend="${i == pagination.pageNum} ? 'active' : ''"
+		           th:text="${i}"></a>
+		
+		        <a th:if="${pagination.pageNum < pagination.totalPages}"
+		           th:href="@{/admin/planing/planingList(page=${pagination.pageNum + 1}, keyword=${param.keyword}, hidden=${param.hidden})}"
+		           class="next">&gt;</a>
+		      </div>
+		    </div>
+		  </section>
+		</main>
 
-        <section class="notice-section">
-          <table class="notice-table">
-            <thead>
-              <tr>
-                <th><input type="checkbox" class="all-checkbox"></th>
-                <th>상품번호</th>
-                <th>상품명</th>
-                <th>가격</th>
-                <th>숨김</th>
-                <th>조회수</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:each="item, i : ${productsList}" class="table-row">
-                <td><input type="checkbox" class="checkbox"
-                  th:id="'checkbox'"
-                  th:data-prd-num="${item.prdNum}"></td>
-                <td th:text="${item.prdNum}"></td>
-                <td class="notice-title" th:text="${item.title}"
-                  style="cursor: pointer; text-align: center;"
-                  th:onclick="|location.href='@{/admin/planing/planingDetail(prdNum=${item.prdNum})}'|"></td>
-                <td th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')} + '원'"></td>
-                <td th:text="${item.sellType}"></td>
-                <td th:text="${item.clickNum}"></td>
-              </tr>
-              <tr th:if="${#lists.isEmpty(productsList)}">
-                <td colspan="6" style="text-align: center;">등록된 상품이 없습니다.</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="table-footer">
-            <div class="table-controls">
-              <button class="control-button"
-                th:onclick="|location.href='@{/admin/planing/planingAdd}'|">등록</button>
-              <button class="control-button" id="deleteBtn">삭제</button>
-            </div>
-
-            <div class="pagination" th:if="${pagination.totalPages > 1}">
-              <a th:if="${pagination.pageNum > 1}"
-                th:href="@{/admin/planing/planingList(page=${pagination.pageNum - 1}, keyword=${param.keyword}, hidden=${param.hidden})}"
-                class="prev">&lt;</a>
-
-              <a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
-                th:href="@{/admin/planing/planingList(page=${i}, keyword=${param.keyword}, hidden=${param.hidden})}"
-                th:classappend="${i == pagination.pageNum} ? 'active' : ''"
-                th:text="${i}"></a>
-
-              <a th:if="${pagination.pageNum < pagination.totalPages}"
-                th:href="@{/admin/planing/planingList(page=${pagination.pageNum + 1}, keyword=${param.keyword}, hidden=${param.hidden})}"
-                class="next">&gt;</a>
-            </div>
-          </div>
-        </section>
-      </main>
 
       <script src="/js/admin/script.js" defer></script>
     </div>

@@ -157,14 +157,30 @@ public class AdminPlaningService {
     }
     
     // 주문 리스트 조회
-    public List<OrderManageDTO> getOrderList(String comNum, String keyword, String tradeStatus, int startRow, int endRow) {
-        return adminPlaningDAO.selectOrdersByCompany(comNum, keyword, tradeStatus, startRow, endRow);
-    }
+//    public List<OrderManageDTO> getOrderList(String comNum, String keyword, String tradeStatus, int startRow, int endRow) {
+//        
+//    	
+//    	return adminPlaningDAO.selectOrdersByCompany(comNum, keyword, tradeStatus, startRow, endRow);
+//    }
+    public List<OrderManageDTO> getOrderList(String accountType, String comNum,String keyword, String tradeStatus,int startRow, int endRow) {
+		if ("ADMIN".equalsIgnoreCase(accountType)) {
+		return adminPlaningDAO.selectOrdersForAdmin(keyword, tradeStatus, startRow, endRow);
+		} else {
+		return adminPlaningDAO.selectOrdersByCompany(comNum, keyword, tradeStatus, startRow, endRow);
+		}
+	}
 
     // 주문 개수 조회
-    public int getOrderCount(String comNum, String keyword, String tradeStatus) {
-        return adminPlaningDAO.countOrdersByCompany(comNum, keyword, tradeStatus);
-    }
+//    public int getOrderCount(String comNum, String keyword, String tradeStatus) {
+//        return adminPlaningDAO.countOrdersByCompany(comNum, keyword, tradeStatus);
+//    }
+    public int getOrderCount(String accountType, String comNum, String keyword, String tradeStatus) {
+		if ("ADMIN".equalsIgnoreCase(accountType)) {
+		return adminPlaningDAO.countOrdersForAdmin(keyword, tradeStatus);
+		} else {
+		return adminPlaningDAO.countOrdersByCompany(comNum, keyword, tradeStatus);
+		}
+	}
 
     // 거래 상세 조회
     public OrderManageDTO getOrderDetail(String tradeId) {
@@ -174,6 +190,16 @@ public class AdminPlaningService {
     // 거래 상태 변경
     public void updateTradeStatus(String tradeId, String tradeStatus) {
         adminPlaningDAO.updateTradeStatus(tradeId, tradeStatus);
+    }
+    
+    // 관리자 전체 상품 검색
+    public List<ProductDTO> searchAllProducts(String keyword, String hidden, int startRow, int endRow) {
+        return adminPlaningDAO.searchAllProducts(keyword, hidden, startRow, endRow);
+    }
+
+    // 관리자 전체 상품 수 조회
+    public int getAllProductCount(String keyword, String hidden) {
+        return adminPlaningDAO.getAllProductCount(keyword, hidden);
     }
     
     

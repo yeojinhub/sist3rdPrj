@@ -12,34 +12,37 @@
 
 <!-- 기업번호로 상품 조회 리스트 -->
 <select id="searchProductsByCondition" resultType="kr.co.sist.DTO.ProductDTO">
-   SELECT * FROM (
-     SELECT ROWNUM AS rn, a.*
-     FROM (
-       SELECT * FROM PRODUCT
-       WHERE COM_NUM = #{comNum}
-       <if test="keyword != null and keyword != ''">
-         AND TITLE LIKE '%' || #{keyword} || '%'
-       </if>
-       <if test="hidden != 'all'">
-         AND SELL_TYPE = #{hidden}
-       </if>
-       ORDER BY INPUT_DATE DESC
-     ) a
-     WHERE ROWNUM &lt;= #{endRow}
-   )
-   WHERE rn &gt;= #{startRow}
+  SELECT * FROM (
+    SELECT ROWNUM AS rn, a.*
+    FROM (
+      SELECT p.*, c.com_name AS comName
+      FROM PRODUCT p
+      JOIN COMPANY c ON p.com_num = c.com_num
+      WHERE p.COM_NUM = #{comNum}
+      <if test="keyword != null and keyword != ''">
+        AND p.TITLE LIKE '%' || #{keyword} || '%'
+      </if>
+      <if test="hidden != 'all'">
+        AND p.SELL_TYPE = #{hidden}
+      </if>
+      ORDER BY p.INPUT_DATE DESC
+    ) a
+    WHERE ROWNUM &lt;= #{endRow}
+  )
+  WHERE rn &gt;= #{startRow}
  </select>
 
  <select id="getTotalCountByCondition" resultType="int">
    SELECT COUNT(*)
-   FROM PRODUCT
-   WHERE COM_NUM = #{comNum}
-   <if test="keyword != null and keyword != ''">
-     AND TITLE LIKE '%' || #{keyword} || '%'
-   </if>
-   <if test="hidden != 'all'">
-     AND SELL_TYPE = #{hidden}
-   </if>
+  FROM PRODUCT p
+  JOIN COMPANY c ON p.com_num = c.com_num
+  WHERE p.COM_NUM = #{comNum}L
+  <if test="keyword != null and keyword != ''">
+    AND p.TITLE LIKE '%' || #{keyword} || '%'
+  </if>
+  <if test="hidden != 'all'">
+    AND p.SELL_TYPE = #{hidden}
+  </if>
  </select>
   
 <!-- 카테고리  -->
@@ -258,5 +261,95 @@ WHERE rn BETWEEN #{startRow} AND #{endRow}
     SET trade_status = #{tradeStatus}
     WHERE trade_id = #{tradeId}
 </update>
+
+<!-- 전체 상품 검색 -->
+<select id="searchAllProducts" resultType="kr.co.sist.DTO.ProductDTO">
+  SELECT * FROM (
+    SELECT ROWNUM AS rn, a.*
+    FROM (
+      SELECT p.*, c.com_name AS comName
+      FROM PRODUCT p
+      JOIN COMPANY c ON p.com_num = c.com_num
+      WHERE p.COM_NUM IS NOT NULL
+      <if test="keyword != null and keyword != ''">
+        AND p.TITLE LIKE '%' || #{keyword} || '%'
+      </if>
+      <if test="hidden != 'all'">
+        AND p.SELL_TYPE = #{hidden}
+      </if>
+      ORDER BY p.INPUT_DATE DESC
+    ) a
+    WHERE ROWNUM &lt;= #{endRow}
+  )
+  WHERE rn &gt;= #{startRow}
+</select>
+
+<select id="getAllProductCount" resultType="int">
+  SELECT COUNT(*)
+  FROM PRODUCT p
+  JOIN COMPANY c ON p.com_num = c.com_num
+  WHERE p.COM_NUM IS NOT NULL
+  <if test="keyword != null and keyword != ''">
+    AND p.TITLE LIKE '%' || #{keyword} || '%'
+  </if>
+  <if test="hidden != 'all'">
+    AND p.SELL_TYPE = #{hidden}
+  </if>
+</select>
+<!-- 관리자 주문 -->
+<select id="selectOrdersForAdmin" resultType="kr.co.sist.DTO.OrderManageDTO">
+SELECT *
+FROM (
+    SELECT 
+        ROWNUM AS rn,
+        ordered_data.*
+    FROM (
+        SELECT 
+            p.PAYMENT_UID       AS orderNumber,
+            pr.TITLE            AS productName,
+            c.COM_NAME          AS brandName,
+            u.NAME              AS buyerName,
+            t.TRADE_ID          AS tradeId,
+            t.TRADE_STATUS      AS tradeStatus,
+            t.TRADE_DATE        AS orderDate,
+            u.ADDRESS           AS buyerAddress,
+            u.TEL               AS buyerTel,
+            pr.PRD_CNT          AS quantity,
+            p.METHOD            AS paymentMethod,
+            p.AMOUNT            AS paymentAmount
+        FROM trades t
+        JOIN users u ON t.BUYER_ID = u.USER_NUM
+        JOIN product pr ON t.PRD_NUM = pr.PRD_NUM
+        JOIN company c ON pr.COM_NUM = c.COM_NUM
+        JOIN payments p ON t.TRADE_ID = p.TRADE_ID
+        WHERE pr.COM_NUM IS NOT NULL
+        <if test="keyword != null and keyword != ''">
+            AND (
+                LOWER(pr.TITLE) LIKE '%' || LOWER(#{keyword}) || '%'
+                OR LOWER(u.NAME) LIKE '%' || LOWER(#{keyword}) || '%'
+            )
+        </if>
+        <if test="tradeStatus != null and tradeStatus != 'all'">
+            AND t.TRADE_STATUS = #{tradeStatus}
+        </if>
+        ORDER BY t.TRADE_DATE DESC
+    ) ordered_data
+)
+WHERE rn BETWEEN #{startRow} AND #{endRow}
+</select>
+
+<select id="countOrdersForAdmin" resultType="int">
+    SELECT COUNT(*)
+    FROM TRADES t
+    JOIN PRODUCT pr ON t.prd_num = pr.prd_num
+    JOIN USERS u ON t.buyer_id = u.user_num
+    WHERE pr.com_num IS NOT NULL
+    <if test="keyword != null and keyword != ''">
+        AND (pr.title LIKE '%' || #{keyword} || '%' OR u.name LIKE '%' || #{keyword} || '%')
+    </if>
+    <if test="tradeStatus != null and tradeStatus != 'all'">
+        AND t.trade_status = #{tradeStatus}
+    </if>
+</select>
 
 </mapper>
