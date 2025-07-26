@@ -61,7 +61,6 @@
       <div id="reserved" class="tab-content">
         <table class="product-table">
           <thead>
-            <!-- 동일한 테이블 헤더 -->
           </thead>
           <tbody>
             <tr th:each="p : ${purchaseHistory.?[productDTO.appointType == 'Y' and productDTO.sellType == 'N']}">
@@ -86,7 +85,6 @@
       <div id="completed" class="tab-content">
         <table class="product-table">
           <thead>
-            <!-- 동일한 테이블 헤더 -->
           </thead>
           <tbody>
             <tr th:each="p : ${purchaseHistory.?[productDTO.sellType == 'Y']}">

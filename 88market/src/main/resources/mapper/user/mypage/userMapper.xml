@@ -47,7 +47,6 @@
       u.DRAW_DATE,
       u.WITHDRAW,
       u.AUTH_CODE,
-      /* inline subquery 로 신고 수를 함께 조회 */
       (
         SELECT COUNT(*)
           FROM REPORT r

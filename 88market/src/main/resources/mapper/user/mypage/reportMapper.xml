@@ -4,7 +4,7 @@
   
   <mapper namespace="kr.co.sist.user.DAO.ReportDAO">
 
-  <!-- ReportDTO와 컬럼 매핑 -->
+  <!-- ReportDTO와  -->
   <resultMap id="reportResult" type="kr.co.sist.DTO.ReportDTO">
     <id     property="repNum"     column="REP_NUM"/>
     <result property="title"      column="TITLE"/>
@@ -16,7 +16,7 @@
     <result property="userNum"    column="USER_NUM"/>
   </resultMap>
 
-  <!-- 1) 사용자별 신고 내역 리스트 -->
+  <!-- 사용자별 신고 내역 리스트 -->
   <select id="selectReportsByUserNum"
           parameterType="String"
           resultMap="reportResult">
@@ -34,7 +34,7 @@
     ORDER BY INPUT_DATE DESC
   </select>
 
-  <!-- 2) 사용자별 신고 건수 집계 -->
+  <!-- 사용자별 신고 건수 집계 -->
   <select id="countByUserNum"
           parameterType="String"
           resultType="int">
