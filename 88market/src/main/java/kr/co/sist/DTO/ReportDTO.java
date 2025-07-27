@@ -27,5 +27,6 @@ public class ReportDTO {
 	private String searchType; /* 사기조회가능여부(Y,N)*/
 	
 	private String userNum; /* 사용자번호 */
+	private String prdNum; /* 상품번호 */
 
 } //class

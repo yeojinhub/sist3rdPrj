@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.co.sist.DTO.ChatmessageDTO;
 import kr.co.sist.DTO.ChatroomDTO;
+import kr.co.sist.DTO.ReportDTO;
 import kr.co.sist.DTO.UserDTO;
 
 @Repository
@@ -57,4 +58,16 @@ public class ChatDAO {
     public List<ChatmessageDTO> getMessagesByChatRoomNum(int chatroomNum){
     	return sqlSession.selectList("ChatMapper.getMessagesByChatRoomNum",chatroomNum);
     }
+    
+    public void insertReport (ReportDTO report) {
+    	sqlSession.insert("ChatMapper.insertReport",report);
+    }
+    
+    public String selectChatRoomId(String prdNum, String sellerNum, String buyerNum) {
+    	Map<String,String> param = new HashMap<>();
+    	param.put("prdNum", prdNum);
+    	param.put("sellerNum", sellerNum);
+    	param.put("buyerNum", buyerNum);
+    	return sqlSession.selectOne("ChatMapper.getChatRoomId",param);
+    } 
 }

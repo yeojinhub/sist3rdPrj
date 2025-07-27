@@ -16,18 +16,26 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.sist.DTO.ChatmessageDTO;
 import kr.co.sist.DTO.ChatroomDTO;
+import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.ReportDTO;
 import kr.co.sist.DTO.UserDTO;
 import kr.co.sist.user.Service.ChatService;
+import kr.co.sist.user.Service.ProductService;
 
 @RestController
 public class ChatController {
 
+	@Autowired
+	private ProductService productService;
+	
     @Autowired
     private ChatService chatService;
 
@@ -59,7 +67,7 @@ public class ChatController {
         	return;
         }
 
-//        chatService.addMessage(message);
+        chatService.addMessage(message);
         
         // 클라이언트에게 해당 채팅방에 메시지 전송
         messagingTemplate.convertAndSend("/topic/chatroom/" + chatroomNum, message);
@@ -80,7 +88,7 @@ public class ChatController {
 
         // 본인 물건에 대해 채팅 생성 요청 막기 (선택 사항)
         if (buyerNum.equals(sellerNum)) {
-            return ResponseEntity.badRequest().body("자신의 상품에 대해 채팅을 시작할 수 없습니다.");
+            return ResponseEntity.badRequest().body("");
         }
 
         boolean exists = chatService.checkChatRoomExist(prdNum, sellerNum, buyerNum);
@@ -120,15 +128,21 @@ public class ChatController {
             String lastMessageContent = (lastMessage != null) ? lastMessage.getContent() : "메시지가 없습니다";
             String lastMessageTime = (lastMessage != null) ? lastMessage.getCreateDate().toString() : "";
             
+            //상품 이름
+			ProductDTO currentPrd =productService.selectProductByNum(chatRoom.getPrdNum());
+			String productName = currentPrd.getTitle();
+		
             
             // chatRoom에 추가 정보를 추가하여 Map에 담습니다.
             Map<String, Object> chatRoomInfo = new HashMap<>();
             chatRoomInfo.put("chatroomNum", chatRoom.getChatroomNum());
+            chatRoomInfo.put("opponentNum", opponentNum);
             chatRoomInfo.put("opponentNickname", opponentProfile.getNickname());
             chatRoomInfo.put("opponentImgPath", profileImage);
             chatRoomInfo.put("lastMessage", lastMessageContent);
             chatRoomInfo.put("lastMessageTime", lastMessageTime);
-            
+            chatRoomInfo.put("productName", productName);
+            chatRoomInfo.put("productNum", chatRoom.getPrdNum());            
             chatRoomDetails.add(chatRoomInfo);
         }
 
@@ -136,7 +150,7 @@ public class ChatController {
     }
     
     @GetMapping("/chat/messages/{chatroomNum}")
-    public ResponseEntity<List<ChatmessageDTO>> getMessagesByChatRoomNum(
+    public ResponseEntity<List<Map<String, String>>> getMessagesByChatRoomNum(
             @PathVariable("chatroomNum") int chatroomNum,
             @AuthenticationPrincipal UserDetails currentUser) {
 
@@ -144,16 +158,36 @@ public class ChatController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String userNum = currentUser.getUsername();
-
-        // 이 유저가 이 채팅방에 속해있는지 체크.
-        // boolean isParticipant = chatService.isUserInChatRoom(chatroomNum, userNum);
-        // if (!isParticipant) {
-        //     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        // }
-
         List<ChatmessageDTO> messages = chatService.getMessagesByChatRoomNum(chatroomNum);
-        return ResponseEntity.ok(messages);
+        List<Map<String, String>> enrichedMessages = new ArrayList<>();
+
+        for (ChatmessageDTO msg : messages) {
+            Map<String, String> messageMap = new HashMap<>();
+            messageMap.put("nickname", chatService.selectUserByUserNum(msg.getUserNum()).getNickname());
+            messageMap.put("content", msg.getContent());
+            messageMap.put("userNum", msg.getUserNum());
+            enrichedMessages.add(messageMap);
+        }
+
+        return ResponseEntity.ok(enrichedMessages);
     }
 
+    @PostMapping("/report")
+    public ResponseEntity<String> submitReport(@RequestBody ReportDTO report,
+    		@AuthenticationPrincipal UserDetails currentUser) {
+        try {
+        	String user = currentUser.getUsername();
+        	UserDTO currentUserDTO = productService.getUser(user);
+        	String username = currentUserDTO.getNickname();
+        	
+        	report.setName(username);
+        	
+            chatService.saveReport(report);
+            return ResponseEntity.ok("신고 완료");
+        } catch (Exception e) {
+            e.printStackTrace(); // 오류 발생 시 스택 트레이스 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("신고 실패");
+        }
+    }
+    
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//MyBatis Generator//DTD MyBatis 3 Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.admin.DAO.AdminChatDAO">
+
+<!-- 두 개의 파라미터를 전달하기 위해 Map 사용 -->
+<select id="selectAllChat" resultType="kr.co.sist.DTO.ChatroomDTO" parameterType="map">
+    SELECT *
+    FROM (
+        SELECT ROWNUM rn, A.*
+        FROM (
+            SELECT * 
+            FROM chatroom
+           <where>
+              <if test="nsDTO.searchType == 'buyerNum' and nsDTO.keyword != null and nsDTO.keyword != ''">
+                AND buyer_num LIKE '%' || #{nsDTO.keyword} || '%'
+              </if>
+              <if test="nsDTO.searchType == 'sellerNum' and nsDTO.keyword != null and nsDTO.keyword != ''">
+                AND seller_num LIKE '%' || #{nsDTO.keyword} || '%'
+              </if>
+            </where>
+            ORDER BY create_date DESC
+        ) A
+        WHERE ROWNUM &lt;= #{pagination.endRow}
+    )
+    WHERE rn &gt; #{pagination.startRow}
+</select>
+    
+<!-- 전체 개수 조회 쿼리 -->
+<select id="selectTotalCount" resultType="int">
+    SELECT COUNT(*) FROM CHATROOM
+    <where>
+        <if test="nsDTO.searchType == 'title' and nsDTO.keyword != null and nsDTO.keyword != ''">
+            AND title LIKE '%' || #{nsDTO.keyword} || '%'
+        </if>
+        <if test="nsDTO.searchType == 'name' and nsDTO.keyword != null and nsDTO.keyword != ''">
+                AND buyName LIKE '%' || #{nsDTO.keyword} || '%'
+              </if>
+              <if test="nsDTO.searchType == 'name' and nsDTO.keyword != null and nsDTO.keyword != ''">
+                AND sellerName LIKE '%' || #{nsDTO.keyword} || '%'
+              </if>
+    </where>
+</select>
+
+<delete id="deleteChatrooms" parameterType="list">
+  DELETE FROM chatroom
+  WHERE chatroom_num IN
+  <foreach item="num" collection="list" open="(" separator="," close=")">
+    #{num}
+  </foreach>
+</delete>
+
+<select id="getMessagesByChatRoomNum" resultType="kr.co.sist.DTO.ChatmessageDTO">
+    SELECT * FROM chatmessage
+    WHERE chatroom_num = #{chatroomNum}
+    ORDER BY create_date ASC
+</select>
+
+<select id="selectNicknameByUserNum" resultType="String">
+    SELECT nickname FROM users WHERE user_num = #{userNum}
+</select>
+
+</mapper>

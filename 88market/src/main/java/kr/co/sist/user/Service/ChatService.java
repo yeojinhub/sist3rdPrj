@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.sist.DTO.ChatmessageDTO;
 import kr.co.sist.DTO.ChatroomDTO;
+import kr.co.sist.DTO.ReportDTO;
 import kr.co.sist.DTO.UserDTO;
 import kr.co.sist.user.DAO.ChatDAO;
 
@@ -26,6 +28,7 @@ public class ChatService {
         return chatDAO.checkChatRoomExist(chatRoom);
 	}
 
+	@Transactional
     // 채팅방 생성
     public void createChatRoom(String prdNum, String sellerNum, String buyerNum) {
     	
@@ -65,5 +68,13 @@ public class ChatService {
     
     public List<ChatmessageDTO> getMessagesByChatRoomNum(int chatroomNum){
     	return chatDAO.getMessagesByChatRoomNum(chatroomNum);
+    }
+    
+    public void saveReport(ReportDTO report) {
+    	chatDAO.insertReport(report);
+    }
+    
+    public String getChatRoomId(String prdNum, String sellerNum, String buyerNum) {
+    	return chatDAO.selectChatRoomId(prdNum, sellerNum, buyerNum);
     }
 }

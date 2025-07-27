@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>채팅 관리</title>
+  <link rel="stylesheet" th:href="@{/css/admin/chat/chat.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/style.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+  <th:block th:replace="~{components/admin/external :: external}" />
+</head>
+
+<body>
+  <div th:replace="~{fragments/admin/admin_sidebar :: sidebar}" />
+  <div th:replace="~{fragments/admin/admin_header :: header}" />
+
+  <div class="admin-wrapper">
+    <div class="main-content">
+      <th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('채팅 관리','목록')}" />
+
+      <main class="container">
+        <!-- 검색 -->
+        <section class="search-section">
+          <form id="searchForm" th:action="@{/admin/chat}" method="get">
+            <div class="search-box">
+              <select name="searchType" class="search-filter">
+                <option value="buyerNum" th:selected="${param.searchType == 'buyerNum'}">구매자 번호</option>
+                <option value="sellerNum" th:selected="${param.searchType == 'sellerNum'}">판매자 번호</option>
+              </select>
+              <input type="text" name="keyword" class="search-input" th:value="${param.keyword}" placeholder="검색">
+              <button type="submit" class="search-button">검색</button>
+              <button type="button" class="search-button" id="resetSearch">초기화</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- 채팅 목록 -->
+        <section class="chat-list-section">
+          <table class="chat-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="all-checkbox"></th>
+                <th>번호</th>
+                <th>상품명</th>
+                <th>구매자</th>
+                <th>판매자</th>
+                <th>생성일</th>
+                <th>로그</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="chat, i : ${chatList}">
+                <td><input type="checkbox" class="checkbox" th:data-chatroom-num="${chat.chatroomNum}"></td>
+                <td th:text="${pagination.totalCount - ((pagination.pageNum - 1) * pagination.pageSize) - (i.index)}">1</td>
+                <td th:text="${chatListPrd[i.index].title}">상품명</td>
+                <td th:text="|${buyerNameList[i.index]}(${chat.buyerNum})|">구매자</td>
+                <td th:text="|${sellerNameList[i.index]}(${chat.sellerNum})|">판매자</td>
+                <td th:text="${#dates.format(chat.createDate, 'yyyy-MM-dd')}">2024-01-01</td>
+                <td>
+                  <button class="log-button"
+                    th:onclick="|location.href='@{/admin/chat/download(chatroomNum=${chat.chatroomNum})}'|">다운로드</button>
+                </td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(chatList)}">
+                <td colspan="7" style="text-align: center;">등록된 채팅이 없습니다.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 하단 컨트롤 -->
+          <div class="chat-footer">
+            <button class="btn-delete" id="deleteBtn">삭제</button>
+          </div>
+
+          <!-- 페이지네이션 -->
+          <div class="pagination" th:if="${pagination.totalPages > 0}">
+            <a th:if="${pagination.pageNum > 1}"
+               th:href="@{/admin/chat(page=${pagination.pageNum - 1}, searchType=${param.searchType}, keyword=${param.keyword})}"
+               class="prev">&lt;</a>
+            <a th:unless="${pagination.pageNum > 1}" class="prev disabled">&lt;</a>
+
+            <a th:each="i : ${#numbers.sequence(1, pagination.totalPages)}"
+               th:href="@{/admin/chat(page=${i}, searchType=${param.searchType}, keyword=${param.keyword})}"
+               th:text="${i}"
+               th:classappend="${i == pagination.pageNum} ? 'active' : ''">1</a>
+
+            <a th:if="${pagination.pageNum < pagination.totalPages}"
+               th:href="@{/admin/chat(page=${pagination.pageNum + 1}, searchType=${param.searchType}, keyword=${param.keyword})}"
+               class="next">&gt;</a>
+            <a th:unless="${pagination.pageNum < pagination.totalPages}" class="next disabled">&gt;</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/admin/script.js" defer></script>
+  <script>
+    $(function () {
+      $('.all-checkbox').click(function () {
+        $('.checkbox').prop('checked', this.checked);
+      });
+
+      $('#resetSearch').click(function () {
+        $('input[name="keyword"]').val('');
+        $('#searchForm').submit();
+      });
+      
+      $('#deleteBtn').click(function () {
+          const selected = [];
+          $('.checkbox:checked').each(function () {
+            selected.push($(this).data('chatroom-num'));
+          });
+
+          if (selected.length === 0) {
+            alert('삭제할 항목을 선택해주세요.');
+            return;
+          }
+
+          if (confirm('정말 삭제하시겠습니까?')) {
+            axios.post('/admin/chat/delete', { chatroomNums: selected })
+              .then(() => {
+                alert('삭제가 완료되었습니다.');
+                location.reload();
+              })
+              .catch(() => {
+                alert('삭제 중 오류가 발생했습니다.');
+              });
+          }
+        });
+    });
+  </script>
+</body>
+</html>
