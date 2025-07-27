@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.sist.DTO.CategoryDTO;
@@ -249,15 +250,32 @@ public class AdminPlaningContorller {
     }
 
 
+ // 주문 상세 조회
     @GetMapping("/planingOrderDetail")
     public String planingOrderDetail(@RequestParam("tradeId") String tradeId,
                                      Model model, HttpSession session) {
         String id = (String) session.getAttribute("loginId");
-        if (id == null) return "redirect:/admin/login";
+        if (id ==  null) return "redirect:/admin/login";
 
         OrderManageDTO trade = adminPlaningService.getOrderDetail(tradeId);
+        
+        if (trade == null) {
+            return "redirect:/admin/planing/planingOrderList"; // 없으면 리스트로
+        }
+        
         model.addAttribute("trade", trade);
 
         return "admin/planing/planingOrderDetail";
+    }
+
+    // 거래 상태 수정 처리
+    @PostMapping("/planingOrderDetail/update")
+    public String updateTradeStatus(@ModelAttribute("trade") OrderManageDTO dto,
+                                    RedirectAttributes ra) {
+
+        adminPlaningService.updateTradeStatus(dto);
+
+        ra.addAttribute("tradeId", dto.getTradeId());
+        return "redirect:/admin/planing/planingOrderDetail";
     }
 }

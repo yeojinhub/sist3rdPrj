@@ -235,6 +235,7 @@ WHERE rn BETWEEN #{startRow} AND #{endRow}
 <!-- 단일 거래 상세 조회 -->
 <select id="selectOrderDetailByTradeId" resultType="kr.co.sist.DTO.OrderManageDTO">
     SELECT 
+    	t.TRADE_ID          AS tradeId,
         p.PAYMENT_UID       AS orderNumber,
         pr.TITLE            AS productName,
         c.COM_NAME          AS brandName,
@@ -256,7 +257,7 @@ WHERE rn BETWEEN #{startRow} AND #{endRow}
 
 
 <!-- 거래 상태 업데이트 -->
-<update id="updateTradeStatus">
+<update id="updateTradeStatus" parameterType="kr.co.sist.DTO.OrderManageDTO">
     UPDATE TRADES
     SET trade_status = #{tradeStatus}
     WHERE trade_id = #{tradeId}
@@ -351,5 +352,11 @@ WHERE rn BETWEEN #{startRow} AND #{endRow}
         AND t.trade_status = #{tradeStatus}
     </if>
 </select>
+
+<update id="updateProductImgNum">
+  UPDATE PRODUCT
+     SET IMG_NUM = #{imgNum}
+   WHERE PRD_NUM = #{prdNum}
+</update>
 
 </mapper>

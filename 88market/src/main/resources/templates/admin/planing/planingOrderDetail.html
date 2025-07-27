@@ -29,7 +29,7 @@
 			<!-- 메인 컨텐츠 (상품 관리) -->
 			<main class="container">
 				<section class="product-section">
-					<form th:action="@{/admin/userTrade/update}" th:object="${trade}"
+					<form th:action="@{/admin/planing/planingOrderDetail/update}" th:object="${trade}"
 						method="post">
 						<input type="hidden" th:field="*{tradeId}" />
 						<table class="product-table detail-table">
@@ -91,7 +91,8 @@
 
 						<div class="form-actions" align="center">
 							<button type="submit" class="control-button">저장</button>
-							<a href="javascript:history.back()" class="control-button">뒤로</a>
+							<a th:href="@{/admin/planing/planingOrderList}" class="control-button">취소</a>
+
 						</div>
 					</form>
 				</section>

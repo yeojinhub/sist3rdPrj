@@ -113,5 +113,9 @@ public interface AdminPlaningDAO {
 	    @Param("keyword") String keyword,
 	    @Param("tradeStatus") String tradeStatus
 	);
-    
+	
+	void updateProductImgNum(@Param("prdNum") String prdNum,@Param("imgNum") int imgNum);
+	
+	int updateTradeStatus(OrderManageDTO dto);
+	
 }
