@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	  } //end if
 
 	  // 길이 검사 실패
-	  if (email < 4){
+	  if (email.length < 4){
 		styleError("email-id");
 		showErrorMessage("email-message","이메일은 최소 4자리, 최대 15자리 가능합니다.")
 		return false;
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	  } //end if
 
 	  // 길이 검사 실패
-	  if (domain < 4){
+	  if (domain.length < 4){
 		styleError("email-domain");
 		showErrorMessage("email-message","도메인을 최소 4자리, 최대 15자리 가능합니다.")
 		return false;

@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   	<title>88마켓 - 로그인</title>
-  	<!-- 로그인 CSS -->
-  	<link rel="stylesheet" th:href="@{/css/user/login.css}">
+  	<!-- 회원가입 CSS -->
+	<link rel="stylesheet" th:href="@{/css/user/account/email.css}">
   	<!-- 외부파일(jQuery, Font Awesome, 파비콘 등) -->
   	<th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
@@ -30,29 +30,28 @@
             			<span></span>
           			</div>
 
-          			<form th:action="@{/loginProcess}" th:method="post" id="frm">
+          			<form class="frm" th:action="@{/loginProcess}" th:method="post" >
           				<!-- 이메일 입력 Form	-->    			
           				<div class="form-group">
           					<label for="email">이메일</label>
 							<div class="email-field">
 								<input type="text" id="email" name="email" placeholder="이메일 입력" />
 								<span>@</span>
-								<input type="text" id="email-domain" name="email-domain" placeholder="naver.com" />
+								<input type="text" id="email-domain" name="email-domain" placeholder="naver.com" /><div id="error-message" class="error-message"></div>
 							</div>
 						</div>
 						
 						<!-- 비밀번호 입력 From -->
 						<div class="form-group">
 							<label for="pass">비밀번호</label>
-							<input type="password" id="pass" name="pass" class="input-error" placeholder="영문, 숫자 포함 8자 이상">
-							<p class="error-message">비밀번호를 입력해주세요</p>
+							<input type="password" id="pass" name="pass" class="input-error" placeholder="영문, 숫자 포함 8자 이상"><div id="error-message" class="error-message"></div>
 						</div>
 						
 						<div class="form-group">
-							<input type="button" id="btn" value="로그인" class="btn btn-login" />
+							<button type="submit" id="btn" class="submit-btn">로그인</button>
 						</div>
 					</form>
-          			<button th:onclick="|location.href='@{/signup}'|" class="btn btn-signup-link">회원가입</button>
+          			<button th:onclick="|location.href='@{/signup}'|" class="submit-btn">회원가입</button>
         		</div>
       		</div>
     	</div>
@@ -60,37 +59,8 @@
 
   	<!-- 푸터 -->
   	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
-<script th:inline="javascript">
-var loginURL = "/loginProcess";
-var mainURL = "/";
-</script>
-<script>
-/*<![CDATA[*/
-$(function(){
- $("#btn").click(function(){
-   const email = $("#email").val() + "@" + $("#email-domain").val();
-   const pass  = $("#pass").val();
-   
-   $.ajax({
-     url: loginURL,
-     type: "POST",
-     contentType: "application/json; charset=UTF-8",
-     dataType: "json",
-     data: JSON.stringify({ email, pass }),
-     success: function(response){
-       // 쿠키에 토큰이 담겼으니 바로 메인 페이지로 이동
-       window.location.href = mainURL;
-     }, //success
-     error: function(xhr, status, error){
-    console.error("Login error:", status, error, xhr.responseText);
-       alert("이메일 또는 비밀번호가 잘못되었습니다.");
-     } //error
-   }); //ajax
-   
- }); //click
- 
-}); //ready
-/*]]>*/
-</script>
+  	<!-- 버튼 동작 스크립트 -->
+	<script th:src="@{/js/user/email.js}" defer></script>
+
 </body>
 </html>
