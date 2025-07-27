@@ -37,7 +37,7 @@
             <tr th:each="p : ${myProducts}">
               <td>
                 <a th:href="@{/detail(id=${p.prdNum})}">
-                  <img class="table-thumb" alt="상품 이미지"/>
+                  <img class="table-thumb" th:src="${p.imgDTO.mainImage}" alt="상품 이미지"/>
                 </a>
               </td>
               <td>

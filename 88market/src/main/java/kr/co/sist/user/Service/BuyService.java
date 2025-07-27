@@ -12,6 +12,7 @@ import kr.co.sist.DTO.AddressDTO;
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.PaymentsDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.PurchaseDTO;
 import kr.co.sist.DTO.TradesDTO;
 import kr.co.sist.user.DAO.BuyDAO;
 
@@ -74,7 +75,7 @@ public class BuyService {
     }// addTradeHistory
     
     //민경 - 구입내역가져오기
-    public List<TradesDTO> getPurchaseHistory(String buyerId) {
+    public List<PurchaseDTO> getPurchaseHistory(String buyerId) {
         return buyDAO.selectPurchaseHistory(buyerId);
     }
     

@@ -27,7 +27,7 @@
       <tr th:each="item : ${wishlist}">
         <td>
           <a th:href="@{/detail(id=${item.prdNum})}">
-            <img class="table-thumb" th:src="@{/images/{img}(img=${item.imgNum})}" alt="상품 이미지"/>
+            <img class="table-thumb" th:src="${item.imgDTO.mainImage}" alt="상품 이미지"/>
           </a>
         </td>
         <td><a th:href="@{/detail(id=${item.prdNum})}" th:text="${item.title}">상품명</a></td>

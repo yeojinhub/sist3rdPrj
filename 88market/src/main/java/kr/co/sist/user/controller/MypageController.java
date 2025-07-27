@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.PurchaseDTO;
 import kr.co.sist.DTO.TradesDTO;
 import kr.co.sist.DTO.UserDTO;
 import kr.co.sist.user.Service.BuyService;
@@ -70,19 +71,28 @@ public class MypageController {
         // 내 상품 조회
         String loginId = userInfo.getEmail();
         List<ProductDTO> myProducts = productService.getProductsByLoginId(loginId);
+
+        // 상품 이미지
+        for (ProductDTO item : myProducts) {
+        	item.setImgDTO(productService.selectImageByNum(item.getImgNum()));
+        }// end for
+
+        // 좋아 상품 조회도, 이미지도 모두 담겨있다
         model.addAttribute("myProducts", myProducts);
         model.addAttribute("totalCount", myProducts.size());
-
-        
-        // 상품 이미지
-
         
         // 내 구매 내역 조회
-        List<TradesDTO> purchaseHistory = buyService.getPurchaseHistory(userNum);
+        List<PurchaseDTO> purchaseHistory = buyService.getPurchaseHistory(userNum);
+        for (PurchaseDTO item : purchaseHistory) {
+        	item.getProductDTO().setImgDTO(productService.selectImageByNum(item.getProductDTO().getImgNum()));
+        }
         model.addAttribute("purchaseHistory", purchaseHistory);
         
         // 내 찜 목록 조회
         List<ProductDTO> wishlist = productService.getWishlist(userNum);
+        for (ProductDTO item : wishlist) {
+        	item.setImgDTO(productService.selectImageByNum(item.getImgNum()));
+        }
         model.addAttribute("wishlist", wishlist);
         
         // fragment

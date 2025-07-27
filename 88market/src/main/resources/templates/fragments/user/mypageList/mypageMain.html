@@ -70,8 +70,7 @@
 				<div class="product-card" th:each="p : ${myProducts}">
 					<a th:href="@{/detail(id=${p.prdNum})}"> <!-- 이미지 -->
 						<div class="product-image-container">
-							<!--               <img th:src="@{/images/{img}(img=${p.imgNum})}"
-                   alt="상품 이미지" /> -->
+							<img th:src="${p.imgDTO.mainImage}" alt="상품 이미지" />
 						</div> <!-- 제목·가격 -->
 						<div class="product-info">
 							<p class="product-name" th:text="${p.title}">상품명</p>
@@ -94,7 +93,7 @@
 					th:each="p : ${myProducts.?[sellType=='N']}">
 					<a th:href="@{/detail(id=${p.prdNum})}">
 						<div class="product-image-container">
-							<img th:src="@{/images/{img}(img=${p.imgNum})}" alt="상품 이미지" />
+							<img th:src="${p.imgDTO.mainImage}" alt="상품 이미지" />
 						</div>
 						<div class="product-info">
 							<p class="product-name" th:text="${p.title}">상품명</p>
@@ -118,7 +117,7 @@
 					th:each="p : ${myProducts.?[appointType=='Y' and sellType=='N']}">
 					<a th:href="@{/detail(id=${p.prdNum})}">
 						<div class="product-image-container">
-							<img th:src="@{/images/{img}(img=${p.imgNum})}" alt="상품 이미지" />
+							<img th:src="${p.imgDTO.mainImage}" alt="상품 이미지" />
 						</div>
 						<div class="product-info">
 							<p class="product-name" th:text="${p.title}">상품명</p>
@@ -141,7 +140,7 @@
 					th:each="p : ${myProducts.?[sellType=='Y']}">
 					<a th:href="@{/detail(id=${p.prdNum})}">
 						<div class="product-image-container">
-							<img th:src="@{/images/{img}(img=${p.imgNum})}" alt="상품 이미지" />
+							<img th:src="${p.imgDTO.mainImage}" alt="상품 이미지" />
 						</div>
 						<div class="product-info">
 							<p class="product-name" th:text="${p.title}">상품명</p>

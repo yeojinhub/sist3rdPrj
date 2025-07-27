@@ -36,7 +36,7 @@
             <tr th:each="p : ${purchaseHistory}">
               <td>
                 <a th:href="@{/detail(id=${p.productDTO.prdNum})}">
-                  <img class="table-thumb" th:src="@{/images/{img}(img=${p.productDTO.imgNum})}" alt="상품 이미지"/>
+                  <img class="table-thumb" th:src="${p.productDTO.imgDTO.mainImage}" alt="상품 이미지"/>
                 </a>
               </td>
               <td><a th:href="@{/detail(id=${p.productDTO.prdNum})}" th:text="${p.productDTO.title}">상품명</a></td>
