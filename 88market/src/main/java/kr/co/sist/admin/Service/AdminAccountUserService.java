@@ -2,9 +2,11 @@ package kr.co.sist.admin.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.sist.DTO.AddressDTO;
 import kr.co.sist.DTO.AdminDTO;
@@ -17,6 +19,20 @@ public class AdminAccountUserService {
 
 	@Autowired
 	private AdminAccountUserDAO userDAO;
+	
+	/**
+	 * 키워드, 계정유형에 따른 회원 전체 조회
+	 * @param map 검색할 키워드, 검색할 계정유형
+	 * @return userList 조회한 회원 리스트
+	 */
+	public List<UserDTO> searchKeyword(Map<String, Object> map){
+		List<UserDTO> userList = new ArrayList<UserDTO>();
+		System.out.println("Service searchKeyword "+map);
+		userList= userDAO.selectKeyword(map);
+		
+		System.out.println("Service searchKeyword "+map);
+		return userList;
+	} //searchKeyword
 	
 	/**
 	 * 회원 전체 조회
@@ -48,19 +64,30 @@ public class AdminAccountUserService {
 	 * @param userDTO 등록할 회원 정보
 	 * @return flag 성공시 true, 실패 시 false 반환
 	 */
+	@Transactional
 	public boolean addUser(UserDTO userDTO) {
+
 		boolean flag = false;
 		
 		try {
-			boolean insertFlag = userDAO.insertUser(userDTO) == 1;
+			boolean userFlag = userDAO.insertUser(userDTO) == 1;
+			boolean addressFlag = userDAO.insertAddress(userDTO) == 1;
 			
-			if( insertFlag ) {
+			// 등록 실패
+			if( !userFlag || !addressFlag ) {
+				// 트랜잭션 사용하기 위해 롤백 처리
+				throw new RuntimeException("회원 insert 실패");
+			} else {
 				// 등록 성공
 				flag = true;
-			} //end if
+			} //end if else
 		} catch(Exception e) {
 			// 등록 실패
 			e.printStackTrace();
+			// 트랜잭션 사용하기 위해 롤백 처리
+			flag = false;
+			
+			throw new RuntimeException("등록 실패 오류 :", e);
 		} //end try catch
 		
 		return flag;

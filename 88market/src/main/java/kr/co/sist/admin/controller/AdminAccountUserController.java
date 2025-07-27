@@ -1,6 +1,7 @@
 package kr.co.sist.admin.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +25,34 @@ public class AdminAccountUserController {
 
 	/**
 	 * 사용자 계정관리 페이지로 이동
+	 * @param keyword 검색할 키워드
+	 * @param roleType 검색할 계정타입
 	 * @param model
 	 * @return admin/account/userList
 	 */
 	@GetMapping("/account/users")
-	public String userPage(Model model) {
-		model.addAttribute("userList", userService.searchAllUser());
+	public String userPage(@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(value="rollType" ,defaultValue = "") String rollType, Model model) {
+	    
+		String key = keyword.isBlank() ? null : keyword.trim();
+	    String role = rollType.isBlank() ? null : rollType.trim();
 		
+	    // 2) Map 생성
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("keyword", key);
+	    map.put("rollType", role);
+	    System.out.println("Controller userPage "+map);
+	    
+	    // 3) 조건 유무 판단 후 조회
+	    boolean noCond = (key == null) && (role == null);
+	    List<UserDTO> userList = noCond
+	            ? userService.searchAllUser()
+	            : userService.searchKeyword(map); 
+	    
+		model.addAttribute("userList", userList);
+		model.addAttribute("keyword", key);
+		model.addAttribute("rollType", role);
+		System.out.println("Controller userPage "+map);
 		return "admin/account/userList";
 	} //userPage
 	

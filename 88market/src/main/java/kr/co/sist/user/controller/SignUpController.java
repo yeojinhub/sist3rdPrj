@@ -27,13 +27,15 @@ public class SignUpController {
 		System.out.println("SignUpController : DTO 값 "+userDTO);
 		
 		try {
+			boolean addFlag = service.addMember(userDTO);
+			
 			// 회원가입 실패
-			if(!service.addMember(userDTO)) {
+			if(!addFlag) {
 				map.put("success", false);
 				map.put("message", "회원가입 처리에 실패했습니다.");
 			} else {
 				// 회원가입 성공
-				map.put("success", service.addMember(userDTO));
+				map.put("success", true);
 			} //end if else
 		} catch(Exception e) {
 			e.printStackTrace();

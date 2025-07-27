@@ -30,7 +30,9 @@
 	
 	<select id="selectOneAdmin" resultType="kr.co.sist.DTO.AdminDTO" parameterType="String">
 	SELECT
-		ADM_NUM, NAME, TEL, ID, PASS, INPUT_DATE, ROLLTYPE, BANTYPE, BAN_DATE
+		ADM_NUM, NAME, 
+		REPLACE(TEL,'-','') AS TEL,
+		ID, PASS, INPUT_DATE, ROLLTYPE, BANTYPE, BAN_DATE
 	FROM ADMIN
 	WHERE
 		ADM_NUM=#{admNum}
@@ -47,11 +49,9 @@
 	UPDATE ADMIN
 	<set>
 		NAME=#{name}, ID=#{id}, TEL=#{tel},
-		ROLLTYPE = #{rollType, jdbcType=INTEGER},
+		ROLLTYPE = #{rollType},
 		BANTYPE=#{banType, jdbcType=CHAR},
-		<if test="banType.equals('Y')">
-			BAN_DATE=SYSDATE
-		</if>
+		BAN_DATE= CASE WHEN #{banType} = 'Y' THEN SYSDATE ELSE NULL END
 	</set>
 	WHERE
 		ADM_NUM=#{admNum}

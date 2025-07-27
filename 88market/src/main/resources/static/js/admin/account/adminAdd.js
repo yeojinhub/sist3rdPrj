@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		} //end if
 		
 		// 길이 검사 실패
-		if(name.length < 1) {
+		if(name.length < 2) {
 			showErrorMessage("name", "이름은 최소 2자리, 최대 10자리 가능합니다.");
 			return false;
 		} //end if
@@ -31,43 +31,34 @@ document.addEventListener('DOMContentLoaded', function() {
 		hideErrorMessage("name");
 		return true;
 	} //validateName
-/*	
+	
 	// 전화번호 실시간 유효성 검사
 	const telInput = document.getElementById("tel");
 	telInput.addEventListener('input', function() {
-	    // 전화번호 포맷
-	    const formattedTel = formatTel(telInput.value);
-	    telInput.value = formattedTel;
-
-	    // 포맷 후 전화번호 유효성 검사
-	    validateTel(formattedTel);
+	    validateTel(telInput.value);
 	}); //telInput
 
-	// 전화번호 포맷 함수
-	function formatTel(tel) {
-	    // 숫자만 추출
-	    let cleaned = tel.replace(/[^0-9]/g, '');
-	    if (cleaned.length < 4) {
-	        return cleaned;
-	    } else if (cleaned.length < 7) {
-	        return cleaned.replace(/(\d{3})(\d{0,4})/, "$1-$2");
-	    } else {
-	        return cleaned.replace(/(\d{3})(\d{3})(\d{0,4})/, "$1-$2-$3");
-	    }
-	}
 	// 전화번호 유효성 검사
 	function validateTel(tel) {
-		const telText = /^\d{3}-\d{3,4}-\d{4}$/;
-		if (!tel || !telText.test(tel)) {
-			showErrorMessage("tel","전화번호는 숫자만 입력하고, 10자리 또는 11자리만 가능합니다.");
-			// 유효성 검사 실패
+		const telText = /^\d{10,11}$/;
+		
+		// null 검사 실패
+		if (!tel) {
+			showErrorMessage("tel","전화번호를 입력하세요.");
 			return false;
 		} //end if
+		
+		// 길이 검사 실패
+		if (!telText.test(tel)) {
+			showErrorMessage("tel","전화번호는 숫자만 입력 가능, 최소 10자리, 최대 11자리만 가능합니다.");
+			return false;
+		} //end if
+		
 		// 유효성 검사 성공
 		hideErrorMessage("tel");
 		return true;
 	} //validateTel
-*/	
+	
 	// 아이디 실시간 유효성 검사
 	const idInput = document.getElementById("id");
 	idInput.addEventListener('input', function() {
@@ -76,36 +67,36 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	// 아이디 유효성 검사 함수
 	function validateID(id) {
-	  const idRegex = /^[a-zA-Z0-9]+$/;
+		const idRegex = /^[a-zA-Z0-9]+$/;
 
-	  // null 검사 실패
-	  if (!id) {
-	    showErrorMessage("id", "아이디를 입력하세요.");
-	    return false;
-	  } //end if
+		// null 검사 실패
+		if (!id) {
+			showErrorMessage("id", "아이디를 입력하세요.");
+			return false;
+		} //end if
 
-	  // 길이 검사 실패
-	  if (id < 4){
-		showErrorMessage("id","아이디는 최소 4자리, 최대 15자리 가능합니다.")
-		return false;
-	  } //end if
+		// 길이 검사 실패
+		if (id < 4){
+			showErrorMessage("id","아이디는 최소 4자리, 최대 15자리 가능합니다.")
+			return false;
+	  	} //end if
 	  
-	  // 영문, 숫자 검사 실패
-	  if (!idRegex.test(id)) {
-	    showErrorMessage("id", "아이디는 영문 포함 숫자만 가능합니다.");
-	    return false;
-	  } //end if
-
-	  // 유효성 검사 성공
-	  hideErrorMessage("id");
-	  return true;
+	  	// 영문, 숫자 검사 실패
+	  	if (!idRegex.test(id)) {
+		    showErrorMessage("id", "아이디는 영문 포함 숫자만 가능합니다.");
+		    return false;
+	  	} //end if
+	  
+	  	// 유효성 검사 성공
+		hideErrorMessage("id");
+		return true;
 	} //validateID
 	
 	// 비밀번호와 비밀번호 확인 실시간 유효성 검사
 	const passInput = document.getElementById("pass");
 	const passCheckInput = document.getElementById("pass-check");
 	passInput.addEventListener('input', function() {
-	    validatePass(passInput.value, passCheckInput.value);
+		validatePass(passInput.value, passCheckInput.value);
 	}); //passInput
 
 	passCheckInput.addEventListener('input', function() {
@@ -117,17 +108,19 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		// null 검사 실패
 		if (!pass) {
-		  showErrorMessage("pass-check", "비밀번호를 입력하세요.");
-		  return false;
+			styleError("pass");
+			showErrorMessage("pass-check", "비밀번호를 입력하세요.");
+			return false;
 		} //end if
 		// null 검사 실패
 		if (!passCheck) {
-		  showErrorMessage("pass-check", "비밀번호 확인을 입력하세요.");
-		  return false;
+			showErrorMessage("pass-check", "비밀번호 확인을 입력하세요.");
+			return false;
 		} //end if
 		
 		// 길이 검사 실패
 		if (pass.length < 4){
+			styleError("pass");
 			showErrorMessage("pass-check","비밀번호는 최소 4자리, 최대 16자리 가능합니다.")
 			return false;
 		} //end if
@@ -138,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		} //end if
 		
 		if(pass != passCheck){
+			styleError("pass");
 			showErrorMessage("pass-check","비밀번호와 비밀번호 확인이 일치하지 않습니다.\n비밀번호를 다시 확인해주세요.");
 			return false;
 		} //end if
@@ -164,13 +158,19 @@ document.addEventListener('DOMContentLoaded', function() {
 	    inputElement.style.borderStyle = 'solid';
 		inputElement.style.backgroundColor = '';
 	} //showErrorMessage
+	
+	function styleError(inputId) {
+		const style = document.getElementById(inputId);
+		style.style.border       = '1px solid red';
+		style.style.backgroundColor = ''; // 배경색 제거
+	} //styleError
 
 	// 에러 메시지를 숨기는 함수
 	function hideErrorMessage(fieldName) {
 	    const errorDiv =  document.querySelector(`#${fieldName} + .error-message`);
 
 	    if (errorDiv && errorDiv.classList.contains('error-message')) {
-	        errorDiv.style.display = 'none';
+			errorDiv.style.display = 'none';
 	    } //end if
 		// 입력값이 있을 때
 	    const inputElement = document.getElementById(fieldName);
@@ -202,9 +202,25 @@ document.addEventListener('DOMContentLoaded', function() {
 		return true;
 	} //validateNullRul
 	
+	// 전화번호 포맷 함수
+	function formatTel(tel) {
+		// 10자리
+		if(tel.length === 10){
+			return tel.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')
+		} //end if
+		
+		// 11자리
+		if(tel.length === 11){
+			return tel.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')
+		} //end if
+		
+		return tel;
+	} //formatTel
+	
 	const btnAdd = document.getElementById("btnAdd");
 	btnAdd.addEventListener("click", function () {
 		const name = document.getElementById("name").value;
+		const tel = document.getElementById("tel").value;
 		const id = document.getElementById("id").value;
 	    const pass = document.getElementById("pass").value;
 	    const passCheck = document.getElementById("pass-check").value;
@@ -235,9 +251,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			return;
 		} //end if
 		
+		const telString = formatTel(tel);
+		
 	    const jsonParam = {
 			name : name,
-			tel : tel,
+			tel : telString,
 			id : id,
 			pass : pass,
 			inputDate : regDate,
@@ -257,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.log(data);
 			if(data.result){
 				// 등록 성공
-				alert("관리자 정보 등록이 완료되었습니다.");
+				alert("관리자 등록이 완료되었습니다.");
 	    		// 이전 화면으로 이동
 	        	window.location.href = '/admin/account/admins';
 	    	} else {

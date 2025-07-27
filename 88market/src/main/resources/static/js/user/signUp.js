@@ -192,6 +192,33 @@ document.addEventListener("DOMContentLoaded", function () {
 		return true;
 	} //validatePass
 	
+	// 전화번호 실시간 유효성 검사
+	const telInput = document.getElementById("tel");
+	telInput.addEventListener('input', function() {
+	    validateTel(telInput.value);
+	}); //telInput
+
+	// 전화번호 유효성 검사
+	function validateTel(tel) {
+		const telText = /^\d{10,11}$/;
+		
+		// null 검사 실패
+		if (!tel) {
+			showErrorMessage("tel","전화번호를 입력하세요.");
+			return false;
+		} //end if
+		
+		// 길이 검사 실패
+		if (!telText.test(tel)) {
+			showErrorMessage("tel","전화번호는 숫자만 입력 가능, 최소 10자리, 최대 11자리만 가능합니다.");
+			return false;
+		} //end if
+		
+		// 유효성 검사 성공
+		hideErrorMessage("tel");
+		return true;
+	} //validateTel
+	
 	// 우편번호 실시간 유효성 검사
 	const zipcodeInput = document.getElementById("zipcode");
 	zipcodeInput.addEventListener('input', function() {
@@ -315,6 +342,21 @@ document.addEventListener("DOMContentLoaded", function () {
 		return true;
 	} //validateNullRul
 	
+	// 전화번호 포맷 함수
+	function formatTel(tel) {
+		// 10자리
+		if(tel.length === 10){
+			return tel.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')
+		} //end if
+		
+		// 11자리
+		if(tel.length === 11){
+			return tel.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')
+		} //end if
+		
+		return tel;
+	} //formatTel
+	
 	const form = document.querySelector(".signup-form");
 	form.addEventListener("submit", function (e) {
 		e.preventDefault();
@@ -393,12 +435,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			return;
 		} //end if
 		
+		const telString = formatTel(tel);
+		
 	    const jsonParam = {
 			name : name,
 			nickname : nickname,
 			email : email,
 			pass : pass,
-			tel : tel,
+			tel : telString,
 			zipcode : zipcode,
 			address : address,
 	    };

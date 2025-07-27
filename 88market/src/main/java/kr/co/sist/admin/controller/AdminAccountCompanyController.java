@@ -17,97 +17,97 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.sist.DTO.AdminDTO;
-import kr.co.sist.admin.Service.AdminAccountAdminService;
+import kr.co.sist.DTO.CompanyDTO;
+import kr.co.sist.admin.Service.AdminAccountCompanyService;
 
 @RequestMapping("/admin")
 @Controller
-public class AdminAccountAdminController {
+public class AdminAccountCompanyController {
 
 	@Autowired
-	private AdminAccountAdminService adminService;
-
+	private AdminAccountCompanyService comService;
+	
 	/**
-	 * 관리자 계정 관리 페이지로 이동,
-	 * 키워드, 계정유형에 따른 관리자 전체 조회
+	 * 기업 계정 관리 페이지로 이동,
+	 * 키워드, 계정유형에 따른 기업 전체 조회
 	 * @param keyword 검색할 키워드
 	 * @param roleType 검색할 계정타입
 	 * @param model
-	 * @return admin/account/adminList
+	 * @return admin/account/companyList
 	 */
-	@GetMapping("/account/admins")
-	public String adminPage(@RequestParam(defaultValue = "") String keyword,
-			@RequestParam(defaultValue = "") String roleType, Model model) {
+	@GetMapping("/account/company")
+	public String companyPage(@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "") String withdraw, Model model) {
 		
 	    String key = keyword.isBlank() ? null : keyword.trim();
-	    String role = roleType.isBlank() ? null : roleType.trim();
+	    String type = withdraw.isBlank() ? null : withdraw.trim();
 
 	    // 2) Map 생성
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("keyword", key);
-	    map.put("roleType", role); // or cond.put("roleType", rtInt);
-
+	    map.put("withdraw", type);
+	    
 	    // 3) 조건 유무 판단 후 조회
-	    boolean noCond = (key == null) && (role == null);
-	    List<AdminDTO> adminList = noCond
-	            ? adminService.searchAllAdmin()
-	            : adminService.searchKeyword(map);  // Map 넘김
+	    boolean noCond = (key == null) && (type == null);
+	    List<CompanyDTO> companyList = noCond
+	            ? comService.searchAllCompany()
+	            : comService.searchKeyword(map);  // Map 넘김
 
 	    // 4) 모델 바인딩
-	    model.addAttribute("adminList", adminList);
+	    model.addAttribute("companyList", companyList);
 	    model.addAttribute("keyword", key);
-	    model.addAttribute("roleType", role);
+	    model.addAttribute("withdraw", type);
 		
-		return "admin/account/adminList";
-	} //adminPage
+		return "admin/account/companyList";
+	} //companyPage
 	
 	/**
-	 * 관리자 계정 등록 페이지로 이동
+	 * 기업 계정 등록 페이지로 이동
 	 * @param model
-	 * @return adminAdd
+	 * @return admin/account/companyAdd
 	 */
-	@GetMapping("/account/adminAdd")
-	public String adminAddPage(Model model) {
+	@GetMapping("/account/companyAdd")
+	public String companyAddPage(Model model) {
 		model.addAttribute("today", java.time.LocalDate.now());
 		
-		return "admin/account/adminAdd";
-	} //adminAddPage
+		return "admin/account/companyAdd";
+	} //companyAddPage
 	
 	/**
-	 * 관리자 계정 상세 페이지로 이동
-	 * @param admNum 조회할 관리자 번호
+	 * 기업 계정 상세 페이지로 이동
+	 * @param comNum 조회할 기업 번호
 	 * @param model
-	 * @return admin/account/adminDetail
+	 * @return admin/account/companyDetail
 	 */
-	@GetMapping("/account/adminDetail")
-	public String adminDetailPage(@RequestParam("admNum") String admNum,
+	@GetMapping("/account/companyDetail")
+	public String companyDetailPage(@RequestParam("comNum") String comNum,
 			Model model) {
 		
-		model.addAttribute("adminDTO", adminService.searchOneAdmin(admNum));
+		model.addAttribute("companyDTO", comService.searchOneCompany(comNum));
 		
-		return "admin/account/adminDetail";
-	} //adminDetailPage
+		return "admin/account/companyDetail";
+	} //companyDetailPage
 	
 	/**
-	 * 관리자 계정 등록
-	 * @param adminDTO 등록할 관리자 정보
+	 * 기업 계정 등록
+	 * @param companyDTO 등록할 기업 정보
 	 * @return map 성공시 true, 실패 시 false 반환
 	 */
 	@ResponseBody
-	@RequestMapping(value="/account/adminAddProcess", method= { RequestMethod.POST})
-	public Map<String, Object> addProcess(@RequestBody AdminDTO adminDTO){
+	@RequestMapping(value="/account/companyAddProcess", method= { RequestMethod.POST})
+	public Map<String, Object> addProcess(@RequestBody CompanyDTO companyDTO){
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		System.out.println("addProcess DTO 값 "+adminDTO);
+		System.out.println("addProcess DTO 값 "+companyDTO);
 		
 		try {
-	        boolean addFlag = adminService.addAdmin(adminDTO);
+	        boolean addFlag = comService.addCompany(companyDTO);
 	        // 등록 성공
 	        map.put("result", addFlag);
 	        
 	        if (!addFlag) {
 	        	// 등록 실패
-	            map.put("msg", "관리자 정보 등록 처리에 실패했습니다.");
+	            map.put("msg", "기업 등록 처리에 실패했습니다.");
 	        } //end if
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -120,25 +120,25 @@ public class AdminAccountAdminController {
 	} //addProcess
 	
 	/**
-	 * 관리자 계정 수정
-	 * @param adminDTO 수정할 관리자 정보
+	 * 기업 계정 수정
+	 * @param companyDTO 수정할 기업 정보
 	 * @return map 성공시 true, 실패 시 false 반환
 	 */
 	@ResponseBody
-	@RequestMapping(value="/account/adminModifyProcess", method= { RequestMethod.POST})
-	public Map<String, Object> modifyProcess(@RequestBody AdminDTO adminDTO){
+	@RequestMapping(value="/account/companyModifyProcess", method= { RequestMethod.POST})
+	public Map<String, Object> modifyProcess(@RequestBody CompanyDTO companyDTO){
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		System.out.println("modifyProcess DTO 값 "+adminDTO);
+		System.out.println("modifyProcess DTO 값 "+companyDTO);
 		
 		try {
-	        boolean modifyFlag = adminService.modifyAdmin(adminDTO);
+	        boolean modifyFlag = comService.modifyCompany(companyDTO);
 	        // 수정 성공
 	        map.put("result", modifyFlag);
 	        
 	        if (!modifyFlag) {
 	        	// 수정 실패
-	            map.put("msg", "관리자 정보 수정 처리에 실패했습니다.");
+	            map.put("msg", "기업 수정 처리에 실패했습니다.");
 	        } //end if
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -152,17 +152,17 @@ public class AdminAccountAdminController {
 	} //modifyProcess
 	
 	/**
-	 * 관리자 비밀번호 초기화
-	 * @param admNum 수정할 관리자 번호
+	 * 기업 비밀번호 초기화
+	 * @param comNum 수정할 기업 번호
 	 * @return map 성공시 true, 실패 시 false 반환
 	 */
 	@ResponseBody
-	@PostMapping("/account/adminPassModifyProcess")
-	public Map<String, Object> passModifyProcess(@RequestParam("admNum") String admNum) {
+	@PostMapping("/account/companyPassModifyProcess")
+	public Map<String, Object> passModifyProcess(@RequestParam("comNum") String comNum) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
-			boolean modifyFlag = adminService.passModifyAdmin(admNum);
+			boolean modifyFlag = comService.passModifyCompany(comNum);
 			// 초기화 성공
 			map.put("result", modifyFlag);
 			

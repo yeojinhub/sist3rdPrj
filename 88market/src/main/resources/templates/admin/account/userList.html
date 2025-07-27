@@ -33,17 +33,17 @@
 			<main class="container">
 				<section class="search-section">
 					<!-- 검색 폼 추가 (method="get") -->
-					<form id="searchForm" th:action="@{/admin/account}" method="get">
+					<form id="searchForm" th:action="@{/admin/account/users}" method="get">
 						<div class="search-box">
 							<input type="text" class="search-input" name="keyword"
 								 placeholder="검색">
 							<button type="submit" class="search-button">검색</button>
 							<!-- 검색 초기화 버튼 추가 -->
 							<button type="button" class="search-button" id="resetSearch">초기화</button>
-							<input type="radio" checked="checked"/> 전체 회원
-							<input type="radio" /> 일반 회원
-							<input type="radio" /> 정지 회원
-							<input type="radio" /> 탈퇴 회원
+							<input type="radio" name="rollType" value="" checked="checked"/> 전체 회원
+							<input type="radio" name="rollType" value="1" /> 일반 회원
+							<input type="radio" name="rollType" value="2" /> 정지 회원
+							<input type="radio" name="rollType" value="3" /> 탈퇴 회원
 						</div>
 					</form>
 				</section>
@@ -92,5 +92,13 @@
 		</div>
 	</div>
 </body>
+<script type="text/javascript">
+$(function(){
+	$('#resetSearch').click(function () {
+		$('input[name="keyword"]').val('');
+		$('#searchForm').submit();
+	});
+}); //ready
+</script>
 
 </html>
