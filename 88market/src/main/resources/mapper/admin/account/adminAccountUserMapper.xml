@@ -22,6 +22,50 @@
   		<result column="INPUT_DATE"    property="inputDate"/>
 	</resultMap>
 	
+	<select id="selectKeyword" resultType="kr.co.sist.DTO.UserDTO" parameterType="map">
+	SELECT
+		u.USER_NUM 		AS USER_NUM,
+		u.NAME 			AS NAME,
+		COUNT(r.REP_NUM) AS total_report,
+		u.BANTYPE 		AS BANTYPE,
+		u.WITHDRAW 		AS WITHDRAW,
+		u.INPUT_DATE 	AS INPUT_DATE
+	FROM USERS u
+	LEFT JOIN REPORT r
+		ON u.USER_NUM = r.USER_NUM
+	<where>
+    	<if test="keyword != null and keyword != ''">
+     	AND (u.NAME LIKE '%' || #{keyword} || '%')
+    	</if>
+    	<if test="rollType != null and rollType != ''">
+    	<choose>
+    	<when test="rollType == '1'">
+    	AND u.WITHDRAW ='N'
+    	AND u.BANTYPE ='N'
+    	</when>
+    	<when test="rollType == '2'">
+    	AND u.WITHDRAW ='N'
+    	AND u.BANTYPE ='Y'
+    	</when>
+    	<when test="rollType == '3'">
+    	AND u.WITHDRAW ='Y'
+    	AND u.BANTYPE ='N'
+    	</when>
+    	<otherwise>
+    	</otherwise>
+    	</choose>
+    	</if>
+  	</where>
+  	GROUP BY
+		u.USER_NUM,
+		u.NAME,
+		u.BANTYPE,
+		u.WITHDRAW,
+		u.INPUT_DATE
+	ORDER BY
+		u.INPUT_DATE DESC
+	</select>
+	
     <select id="selectUserList" resultMap="userMap">
 	SELECT
 		u.USER_NUM AS USER_NUM,
@@ -45,7 +89,9 @@
 	
 	<select id="selectOneUser" resultType="kr.co.sist.DTO.UserDTO" parameterType="String">
 	SELECT
-		USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE, ADDRESS,
+		USER_NUM, NAME, NICKNAME, EMAIL, PASS,
+		REPLACE(TEL,'-','') AS TEL,
+		ZIPCODE, ADDRESS,
 		MANNER, POINT, INPUT_DATE, BAN_DATE, BANTYPE, DRAW_DATE, WITHDRAW
 	FROM USERS
 	WHERE
@@ -53,12 +99,23 @@
 	</select>
 	
 	<insert id="insertUser" parameterType="kr.co.sist.DTO.UserDTO">
-	INSERT INTO USERS
-    (USER_NUM, NAME, NICKNAME, TEL, EMAIL, PASS, ZIPCODE, ADDRESS,
-    INPUT_DATE, BANTYPE, WITHDRAW)
-    VALUES(SEQ_USER_NUM.NEXTVAL, #{name}, #{nickname}, #{tel}, #{email},
-    #{pass}, #{zipcode}, #{address},
-    #{inputDate, jdbcType=DATE}, #{banType, jdbcType=CHAR}, #{withdraw, jdbcType=CHAR})
+		<selectKey resultType="String" keyProperty="userNum" order="BEFORE">
+			SELECT 	SEQ_USER_NUM.NEXTVAL
+        	FROM 	DUAL
+    	</selectKey>
+    	INSERT INTO USERS
+    		(USER_NUM, NAME, NICKNAME, TEL, EMAIL, PASS, ZIPCODE, ADDRESS,
+    		INPUT_DATE, BANTYPE, WITHDRAW)
+    	VALUES(#{userNum}, #{name}, #{nickname}, #{tel}, #{email},
+    		#{pass}, #{zipcode}, #{address},
+    		SYSDATE, #{banType, jdbcType=CHAR}, #{withdraw, jdbcType=CHAR})
+	</insert>
+	
+	<insert id="insertAddress" parameterType="kr.co.sist.DTO.UserDTO">
+		INSERT INTO ADDRESS
+        	(ADDR_NUM, RECIPIENT_NAME, TEL, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{name}, #{tel}, #{zipcode}, #{address},
+        	'Y', #{userNum})
 	</insert>
 	
 	<update id="updateUser" parameterType="kr.co.sist.DTO.UserDTO">

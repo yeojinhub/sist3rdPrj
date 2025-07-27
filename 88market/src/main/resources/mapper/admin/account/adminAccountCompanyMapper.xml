@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminAccountCompanyDAO">
+
+	<select id="selectKeyword" resultType="kr.co.sist.DTO.CompanyDTO" parameterType="map">
+	SELECT
+		COM_NUM, COM_NAME, WITHDRAW, INPUT_DATE
+	FROM COMPANY
+	<where>
+    	<if test="keyword != null and keyword != ''">
+     	AND (COM_NAME LIKE '%' || #{keyword} || '%')
+    	</if>
+    	<if test="roleType != null and roleType != ''">
+      	AND WITHDRAW = #{withdraw, jdbcType=CHAR}
+    	</if>
+  	</where>
+	ORDER BY
+		INPUT_DATE DESC
+	</select>
+
+	<select id="selectCompanyList" resultType="kr.co.sist.DTO.CompanyDTO" parameterType="String">
+	SELECT
+		COM_NUM, COM_NAME, WITHDRAW, INPUT_DATE
+	FROM COMPANY
+	ORDER BY
+		INPUT_DATE DESC
+	</select>
+	
+	<select id="selectOneCompany" resultType="kr.co.sist.DTO.CompanyDTO" parameterType="String">
+	SELECT
+		COM_NUM, COM_NAME, CEO_NAME, NAME,
+		REPLACE(TEL,'-','') AS TEL, REPLACE(BUSINESS_NUM,'-','') AS BUSINESS_NUM,
+		ID, PASS, ZIPCODE, ADDRESS, INPUT_DATE, WITHDRAW, DRAW_DATE
+	FROM COMPANY
+	WHERE
+		COM_NUM=#{comNum}
+	</select> 
+	
+	<insert id="insertCompany" parameterType="kr.co.sist.DTO.CompanyDTO">
+	INSERT INTO COMPANY
+    	(COM_NUM, COM_NAME, CEO_NAME, NAME,
+		TEL, BUSINESS_NUM,
+		ID, PASS, ZIPCODE, ADDRESS, INPUT_DATE)
+    VALUES(SEQ_COM_NUM.NEXTVAL, #{comName}, #{ceoName}, #{name},
+    	#{tel}, #{businessNum},
+    	#{id}, #{pass}, #{zipcode}, #{address}, SYSDATE)
+	</insert>
+	
+	<update id="updateCompany" parameterType="kr.co.sist.DTO.CompanyDTO">
+	UPDATE COMPANY
+	<set>
+		COM_NAME=#{comName}, CEO_NAME=#{ceoName}, NAME=#{name},
+		TEL=#{tel}, BUSINESS_NUM=#{businessNum},
+		#{id}, #{pass}, #{zipcode}, #{address},
+		WITHDRAW=#{withdraw, jdbcType=CHAR},
+		DRAW_DATE= CASE WHEN #{withdraw} = 'Y' THEN SYSDATE ELSE NULL END
+	</set>
+	WHERE
+		COM_NUM=#{comNum}
+	</update>
+	
+	<update id="passUpdateCompany" parameterType="String">
+	UPDATE COMPANY
+	<set>
+		PASS='a12345689@'
+	</set>
+	WHERE
+		COM_NUM=#{comNum}
+	</update>
+	
+</mapper>

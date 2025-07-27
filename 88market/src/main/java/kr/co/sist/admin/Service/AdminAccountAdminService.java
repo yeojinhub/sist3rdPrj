@@ -18,8 +18,7 @@ public class AdminAccountAdminService {
 	
 	/**
 	 * 키워드, 계정유형에 따른 관리자 전체 조회
-	 * @param keyword 검색할 키워드
-	 * @param roleType 검색할 계정유형
+	 * @param map 검색할 키워드, 검색할 계정유형
 	 * @return adminList 조회한 관리자 리스트
 	 */
 	public List<AdminDTO> searchKeyword(Map<String, Object> map){

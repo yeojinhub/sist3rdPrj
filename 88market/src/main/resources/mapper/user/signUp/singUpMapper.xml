@@ -11,15 +11,15 @@
     	</selectKey>
     	INSERT INTO USERS
        		(USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE,ADDRESS)
-        VALUES(SEQ_USER_NUM.NEXTVAL, #{name}, #{nickname}, #{email},
+        VALUES(#{userNum}, #{name}, #{nickname}, #{email},
         	#{pass}, #{tel}, #{zipcode}, #{address})
 	</insert>
 	
 	<insert id="addAddress" parameterType="kr.co.sist.DTO.UserDTO">
 		INSERT INTO ADDRESS
-        	(ADDR_NUM, TEL, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
-        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{zipcode}, #{address},
-        	'Y', SEQ_USER_NUM.NEXTVAL)
+        	(ADDR_NUM, RECIPIENT_NAME, TEL, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{name}, #{tel}, #{zipcode}, #{address},
+        	'Y', #{userNum})
 	</insert>
 
 	<!-- 카카오 회원가입 쿼리 추가 -->

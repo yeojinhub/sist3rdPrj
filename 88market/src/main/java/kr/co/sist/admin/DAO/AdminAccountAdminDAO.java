@@ -14,6 +14,7 @@ public interface AdminAccountAdminDAO {
 	
 	/**
 	 * 키워드, 계정유형에 따른 관리자 전체 조회
+	 * @param map 검색할 키워드, 검색할 계정유형
 	 * @return 조회한 관리자 리스트
 	 */
 	public List<AdminDTO> selectKeyword(Map<String, Object> map);

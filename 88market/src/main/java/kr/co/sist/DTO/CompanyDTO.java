@@ -26,6 +26,9 @@ public class CompanyDTO {
 	private String id; /* 기업ID */
 	private String pass; /* 기업비밀번호 */
 	private String tel; /* 기업전화번호 */
+	
+	private String businessNum; /* 기업사업자등록번호 */
+	
 	private String zipcode; /* 기업우편번호 */
 	private String address; /* 기업주소 */
 	
