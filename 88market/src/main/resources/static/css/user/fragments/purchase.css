@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+.no-data {
+  text-align: center;
+  color: #999;
+}
+
+.hide-btn {
+  background: #ff4d4d;
+  border: none;
+  color: #fff;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.hide-btn:hover {
+  background: #ff1a1a;
+}

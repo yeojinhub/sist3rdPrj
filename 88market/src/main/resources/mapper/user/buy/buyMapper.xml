@@ -40,4 +40,57 @@
     	VALUES(#{paymentUid}, #{amount}, #{method}, #{cardCompany}, #{tradeId})
     </insert>
     
+    <!-- 민경 - 구입목록가져오기 -->
+	<resultMap id="purchaseDTOResultMap" type="kr.co.sist.DTO.PurchaseDTO">
+	    
+	    <!-- TradesDTO 매핑 -->
+	    <association property="tradesDTO" javaType="kr.co.sist.DTO.TradesDTO">
+	      <id      property="tradeId"     column="trade_id"/>
+	      <result  property="buyerId"     column="buyer_id"/>
+	      <result  property="sellerId"    column="seller_id"/>
+	      <result  property="tradeStatus" column="trade_status"/>
+	      <result  property="tradeDate"   column="trade_date"/>
+	      <result  property="deliveryNum" column="delivery_num"/>
+	      <result  property="prdNum"      column="prd_num"/>
+	    </association>
+	    
+	    <!-- ProductDTO 매핑 -->
+	    <association property="productDTO" javaType="kr.co.sist.DTO.ProductDTO">
+	      <result property="prdNum"      column="prd_num"/>
+	      <result property="title"       column="title"/>
+	      <result property="price"       column="price"/>
+	      <result property="location1"   column="location1"/>
+	      <result property="inputDate"   column="input_date"/>
+	      <result property="appointType" column="appoint_type"/>
+	      <result property="hiddenType"  column="hidden_type"/>
+	      <result property="sellType"    column="sell_type"/>
+	      <result property="imgNum"      column="img_num"/>
+	    </association>
+	    
+	    <!-- PaymentsDTO 매핑 -->
+	    <association property="paymentDTO" javaType="kr.co.sist.DTO.PaymentsDTO">
+	      <result property="paymentUid"  column="payment_uid"/>
+	      <result property="amount"      column="amount"/>
+	      <result property="method"      column="method"/>
+	      <result property="cardCompany" column="card_company"/>
+	      <result property="tradeId"     column="trade_id"/>
+	    </association>
+	    
+	</resultMap>
+
+	<!-- 구매 내역 조회 쿼리 -->
+	<select id="selectPurchaseHistory" parameterType="String" resultMap="purchaseDTOResultMap">
+	  SELECT
+	    t.trade_id, t.buyer_id, t.seller_id, t.trade_status, t.trade_date, t.delivery_num, t.prd_num,
+	    p.amount, p.payment_uid, p.method, p.card_company,
+	    prd.title, prd.price, prd.location1, prd.input_date, prd.appoint_type, prd.hidden_type, prd.sell_type, prd.img_num
+	  FROM TRADES t
+	  LEFT JOIN PAYMENTS p ON t.trade_id = p.trade_id
+	  LEFT JOIN PRODUCT prd ON t.prd_num = prd.prd_num
+	  WHERE t.buyer_id = #{buyerId}
+	  ORDER BY t.trade_date DESC
+	</select>
+
+
+    
 </mapper>

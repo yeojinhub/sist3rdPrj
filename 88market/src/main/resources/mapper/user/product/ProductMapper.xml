@@ -154,6 +154,50 @@
     UPDATE product SET like_num = like_num - 1 WHERE prd_num = #{prdNum}
 	</update>
 	
+	
+	<!-- 민경 - 마이페이지 내상품(전체) -->
+	
+	<!-- 로그인 이메일로 유저 정보 조회 -->
+	<resultMap id="userResultMap" type="kr.co.sist.DTO.UserDTO">
+	  <result property="userNum" column="user_num"/>
+	  <result property="email" column="email"/>
+	  <result property="nickname" column="nickname"/>
+	  <result property="manner" column="manner_score"/>
+	  <result property="totalReport" column="total_report"/>
+	</resultMap>
+	
+	<!-- 로그인 이메일로 사용자의 상품 목록 -->
+	<select id="selectByLoginId" parameterType="string" resultMap="productResultMap">
+		SELECT p.*
+		FROM PRODUCT p
+	    JOIN USERS u ON p.USER_NUM = u.USER_NUM
+		WHERE u.EMAIL = #{loginId}
+		ORDER BY p.INPUT_DATE DESC
+	</select>
+	
+	<!--  로그인한 사용자의 데이터 조회 -->
+	<select id="getUserByLoginId" parameterType="string" resultMap="userResultMap">
+	  SELECT u.*
+	    FROM USERS u
+	   WHERE u.EMAIL = #{email}
+	</select>
+	
+	<!-- 로그인 이메일로 안전거래 건수 -->
+	<select id="getSafeByLoginId" parameterType="string" resultType="int">
+	  SELECT COUNT(*)
+	    FROM SAFE_TYPE st
+	    JOIN USERS u ON st.seller_num = u.user_num
+	   WHERE u.EMAIL = #{email}
+	</select>
+	
+	<!-- 로그인 ID로 거래후기 건수 -->
+	<select id="getReviewByLoginId" parameterType="string" resultType="int">
+	  SELECT COUNT(*)
+	    FROM REVIEWS r
+	    JOIN USERS u ON r.reviewee_num = u.user_num
+	   WHERE u.EMAIL = #{email}
+	</select>
+	
 </mapper>
 
 

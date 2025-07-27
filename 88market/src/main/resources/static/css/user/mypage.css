@@ -367,3 +367,27 @@
 .tab-content.active {
   display: block;
 }
+/*----------호버--------------------------------*/
+/* 링크 기본 스타일 제거 */
+a {
+    text-decoration: none;  /* 밑줄 제거 */
+    color: inherit;         /* 기본 색상 유지 */
+}
+
+/* 링크 hover와 focus 상태에서 색상 변화 */
+a:hover, a:focus {
+    color: #7fd0f4;         /* 원하는 색상으로 변경 */
+    outline: none;          /* 포커스 시 outline 제거 */
+}
+
+/* 테이블의 링크 스타일 */
+.product-table td a {
+    color: inherit;  /* 링크 기본 색상 제거 */
+    text-decoration: none;  /* 밑줄 제거 */
+}
+
+.product-table td a:hover, .product-table td a:focus {
+    color: #7fd0f4;         /* 원하는 색상으로 변경 */
+    outline: none;          /* 포커스 시 outline 제거 */
+}
+

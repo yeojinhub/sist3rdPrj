@@ -17,7 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserDTO {
-	
+
 	private String userNum; /* 사용자번호 */
 	private String name; /* 사용자이름 */
 	private String nickname; /* 사용자닉네임 */

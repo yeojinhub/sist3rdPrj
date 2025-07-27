@@ -73,4 +73,9 @@ public class BuyService {
     	
     }// addTradeHistory
     
+    //민경 - 구입내역가져오기
+    public List<TradesDTO> getPurchaseHistory(String buyerId) {
+        return buyDAO.selectPurchaseHistory(buyerId);
+    }
+    
 }// class

@@ -4,10 +4,7 @@
 			<div class="profile-image">
 				<img th:src="@{/images/default_profile.jpg}" alt="Profile Image" />
 			</div>
-			<span class="nickname">행복가득나무</span>
-		</div>
-		<div class="store-intro">
-			<p>가게 소개를 작성하고 신뢰도를 높여 보세요.</p>
+			<span class="nickname" th:text="${userInfo.nickname}"></span>
 		</div>
 	</div>
 
@@ -16,7 +13,7 @@
 			<div>
 				<p class="action-title">지금 판매상품 등록하기</p>
 				<p class="action-description">
-					다양한 판매상품을 등록하여<br>신뢰지수를 올려보세요
+					다양한 판매상품을 등록하여<br />신뢰지수를 올려보세요
 				</p>
 			</div>
 			<button class="register-button">등록하기</button>
@@ -25,19 +22,24 @@
 		<div class="seller-stats">
 			<div>
 				<p class="stat-title">안전거래</p>
-				<p class="stat-value">0</p>
+				<p class="stat-value" th:text="${safeCount}">0</p>
 			</div>
 			<div>
-				<p class="stat-title">거래후기</p>
-				<p class="stat-value">0</p>
+				<p class="stat-title">신고</p>
+				<p class="stat-value" th:text="${userInfo.totalReport}">0</p>
 			</div>
 		</div>
 	</div>
 
 	<div class="trust-score-section">
-		<span class="trust-score-label">신뢰지수 162</span>
+		<p>
+			신뢰지수 <span class="trust-score-label" th:text="${userInfo.manner}">0</span>
+		</p>
 		<div class="progress-bar-background">
-			<div class="progress-bar-fill" style="width: 41.6%;"></div>
+			<!-- 최대 999점 -->
+			<div class="progress-bar-fill"
+				th:style="'width:' + (${userInfo.manner} / 999.0 * 100) + '%;'">
+			</div>
 		</div>
 	</div>
 
@@ -45,9 +47,10 @@
 		<div class="products-header">
 			<h3>내 상품</h3>
 			<div class="product-filters">
-				<span>총 0개</span>
+				<span>총 <span th:text="${totalCount}">0</span>개
+				</span>
 				<div class="sort-options">
-					<a href="#">최신순</a> <a href="#">낮은가격순</a> <a href="#">높은가격순</a>
+					<!-- <a href="#">최신순</a> <a href="#">낮은가격순</a> <a href="#">높은가격순</a> -->
 				</div>
 			</div>
 		</div>
@@ -58,22 +61,97 @@
 			<button class="tab-button" data-target="reserved">예약중</button>
 			<button class="tab-button" data-target="completed">판매완료</button>
 		</div>
+		<!-- 전체 -->
 		<div id="all" class="tab-content active">
-			<h3>전체 상품</h3>
-			<p>선택한 조건에 관계없이 모든 상품을 표시합니다.</p>
+			<div th:if="${#lists.isEmpty(myProducts)}">
+				<p>상품이 없습니다.</p>
+			</div>
+			<div class="card-list-wrapper-items">
+				<div class="product-card" th:each="p : ${myProducts}">
+					<a th:href="@{/detail(id=${p.prdNum})}"> <!-- 이미지 -->
+						<div class="product-image-container">
+							<!--               <img th:src="@{/images/{img}(img=${p.imgNum})}"
+                   alt="상품 이미지" /> -->
+						</div> <!-- 제목·가격 -->
+						<div class="product-info">
+							<p class="product-name" th:text="${p.title}">상품명</p>
+							<strong class="product-price"
+								th:text="|${#numbers.formatDecimal(p.price,0,'COMMA',0,'POINT')}원|">
+								0원 </strong>
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
+		<!-- 판매중 -->
 		<div id="sales" class="tab-content">
-			<h3>판매중 상품</h3>
-			<p>판매중인 상품이 없습니다.</p>
+			<div th:if="${#lists.isEmpty(myProducts.?[sellType=='N'])}">
+				<p>판매중인 상품이 없습니다.</p>
+			</div>
+			<div class="card-list-wrapper-items"
+				th:unless="${#lists.isEmpty(myProducts.?[sellType=='N'])}">
+				<div class="product-card"
+					th:each="p : ${myProducts.?[sellType=='N']}">
+					<a th:href="@{/detail(id=${p.prdNum})}">
+						<div class="product-image-container">
+							<img th:src="@{/images/{img}(img=${p.imgNum})}" alt="상품 이미지" />
+						</div>
+						<div class="product-info">
+							<p class="product-name" th:text="${p.title}">상품명</p>
+							<strong class="product-price"
+								th:text="|${#numbers.formatDecimal(p.price,0,'COMMA',0,'POINT')}원|">
+								0원 </strong>
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
+		<!-- 예약중 -->
 		<div id="reserved" class="tab-content">
-			<h3>예약중 상품</h3>
-			<p>예약된 상품이 없습니다.</p>
+			<div
+				th:if="${#lists.isEmpty(myProducts.?[appointType=='Y' and sellType=='N'])}">
+				<p>예약된 상품이 없습니다.</p>
+			</div>
+			<div class="card-list-wrapper-items"
+				th:unless="${#lists.isEmpty(myProducts.?[appointType=='Y' and sellType=='N'])}">
+				<div class="product-card"
+					th:each="p : ${myProducts.?[appointType=='Y' and sellType=='N']}">
+					<a th:href="@{/detail(id=${p.prdNum})}">
+						<div class="product-image-container">
+							<img th:src="@{/images/{img}(img=${p.imgNum})}" alt="상품 이미지" />
+						</div>
+						<div class="product-info">
+							<p class="product-name" th:text="${p.title}">상품명</p>
+							<strong class="product-price"
+								th:text="|${#numbers.formatDecimal(p.price,0,'COMMA',0,'POINT')}원|">
+								0원 </strong>
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
+		<!-- 판매완료 -->
 		<div id="completed" class="tab-content">
-			<h3>판매완료 상품</h3>
-			<p>판매 완료된 상품이 없습니다.</p>
+			<div th:if="${#lists.isEmpty(myProducts.?[sellType=='Y'])}">
+				<p>판매 완료된 상품이 없습니다.</p>
+			</div>
+			<div class="card-list-wrapper-items"
+				th:unless="${#lists.isEmpty(myProducts.?[sellType=='Y'])}">
+				<div class="product-card"
+					th:each="p : ${myProducts.?[sellType=='Y']}">
+					<a th:href="@{/detail(id=${p.prdNum})}">
+						<div class="product-image-container">
+							<img th:src="@{/images/{img}(img=${p.imgNum})}" alt="상품 이미지" />
+						</div>
+						<div class="product-info">
+							<p class="product-name" th:text="${p.title}">상품명</p>
+							<strong class="product-price"
+								th:text="|${#numbers.formatDecimal(p.price,0,'COMMA',0,'POINT')}원|">
+								0원 </strong>
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
-
 </div>
