@@ -39,6 +39,8 @@ public class FavoriteDAO {
 	}
 	
 	public List<ProductDTO> selectWishlistByUserNum(String userNum){
+	    List<ProductDTO> wishlist = sqlSession.selectList("FavoriteMapper.selectWishlistByUserNum", userNum);
+
 		return sqlSession.selectList("FavoriteMapper.selectWishlistByUserNum",userNum);
 	}
 }

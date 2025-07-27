@@ -8,6 +8,7 @@ import kr.co.sist.DTO.AddressDTO;
 import kr.co.sist.DTO.ImageDTO;
 import kr.co.sist.DTO.PaymentsDTO;
 import kr.co.sist.DTO.ProductDTO;
+import kr.co.sist.DTO.PurchaseDTO;
 import kr.co.sist.DTO.TradesDTO;
 
 @Mapper
@@ -18,4 +19,7 @@ public interface BuyDAO {
     public void updateProductAppointType(String prdNum);
     public void insertProductTrades(TradesDTO tDTO);
     public void insertProductPayments(PaymentsDTO pDTO);
+    
+    //민경 - 구매목록 가져오기
+    public List<PurchaseDTO> selectPurchaseHistory(String buyerId);
 }

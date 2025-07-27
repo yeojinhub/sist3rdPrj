@@ -15,6 +15,13 @@
 </head>
 <script>
 $(function() {
+	var sellType = "[[${product.sellType}]]";
+	if (sellType == 'Y') {
+		alert('판매완료 상품입니다.')
+		history.back();
+		return;
+	}// end if
+	
 	var userNum = "[[${product.userNum}]]";
 	axios.post('/sameUser',{userNum : userNum}).then(res=>{
 		if (res.data.result) {
@@ -165,7 +172,7 @@ $(function() {
 								<span>상품 금액</span>
 								<span th:text="${#numbers.formatInteger(product.price,3,'COMMA')}+'원'">100,000원</span>
 							</div>
-							<div class="price-item" th:if="${product.deliveryType == 'Y'}">
+							<div class="price-item" th:if="${product.safeType == 'Y'}">
 								<span>안전거래 수수료(2%)</span>
 								<span th:text="${#numbers.formatInteger((product.price*0.02),0,'COMMA')}+'원'">1,000원</span>
 							</div>
@@ -173,7 +180,7 @@ $(function() {
 						<hr>
 						<div class="total-amount">
 							<span><strong>총 결제 금액</strong></span>
-							<span class="final-price" id="final-price" th:data-final-price="${product.deliveryType == 'Y' ? product.price*1.01 : product.price}"><strong th:text="${#numbers.formatInteger((product.deliveryType == 'Y' ? product.price*1.02 : product.price),3,'COMMA')}+'원'">100,000원</strong></span>
+							<span class="final-price" id="final-price" th:data-final-price="${product.safeType == 'Y' ? product.price*1.01 : product.price}"><strong th:text="${#numbers.formatInteger((product.safeType == 'Y' ? product.price*1.02 : product.price),3,'COMMA')}+'원'">100,000원</strong></span>
 						</div>
 						<button class="btn btn-primary w-100 mt-3 order-btn" id="orderBtn" onclick="requestPay()" disabled>
 							<i class="fas fa-credit-card me-2"></i>주문하기

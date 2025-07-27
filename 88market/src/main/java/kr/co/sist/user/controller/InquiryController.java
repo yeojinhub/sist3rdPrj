@@ -12,26 +12,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.sist.DTO.InquiryDTO;
 import kr.co.sist.user.Service.InquiryService;
 
-@Controller
+@RestController
 public class InquiryController {
 
 	@Autowired
 	private InquiryService is;
 	
 	@GetMapping("/inquiry")
-	@ResponseBody
 	public ResponseEntity<String> inquiry(HttpServletRequest request) {
 		return ResponseEntity.ok("로그인 체크 완료");
 	}// inquiry
 
 	@PostMapping("/inquiry/add")
-	@ResponseBody
 	public ResponseEntity<String> inquiryAdd(
 		MultipartFile[] files,
 		InquiryDTO inquiryDTO,
@@ -48,7 +47,6 @@ public class InquiryController {
 	}// inquiryAdd
 
 	@GetMapping("/inquiry/list")
-	@ResponseBody
 	public List<InquiryDTO> inquiryList(
 		@AuthenticationPrincipal UserDetails user
 		) {
@@ -56,7 +54,6 @@ public class InquiryController {
 	}// inquiryList
 
 	@GetMapping("/inquiry/{inqNum}")
-	@ResponseBody
 	public InquiryDTO inquiryDetail(
 		@PathVariable int inqNum
 		) {

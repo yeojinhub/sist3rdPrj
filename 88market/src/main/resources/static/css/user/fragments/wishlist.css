@@ -1,0 +1,112 @@
+/* Wishlist 테이블 스타일 */
+.wishlist-table {
+    width: 100%;                    /* 테이블 너비 100% */
+    border-collapse: collapse;      /* 테이블 경계선 합침 */
+    background-color: #ffffff;      /* 배경색 */
+}
+
+.wishlist-table th, .wishlist-table td {
+    padding: 12px;                  /* 셀 안쪽 여백 */
+    border-bottom: 1px solid #e6e6e6; /* 셀 간 구분선 */
+    text-align: left;                /* 왼쪽 정렬 */
+}
+
+.wishlist-table th {
+    font-size: 16px;                 /* 제목 글자 크기 */
+    font-weight: 600;                /* 글자 두께 */
+    color: #333333;                 /* 제목 색상 */
+    background-color: #f7f7f7;      /* 배경색 */
+}
+
+.wishlist-table td {
+    font-size: 14px;                 /* 내용 글자 크기 */
+    color: #666666;                 /* 내용 색상 */
+}
+
+/* 상품 이미지 */
+.wishlist-table td img {
+    width: 80px;                     /* 이미지 크기 */
+    height: 80px;                    /* 이미지 크기 */
+    object-fit: cover;               /* 이미지를 잘라서 맞추기 */
+    border-radius: 8px;              /* 이미지 둥글게 */
+}
+
+/* 링크 스타일 */
+.wishlist-table td a {
+    color: inherit;                  /* 기본 색상 유지 */
+    text-decoration: none;           /* 밑줄 제거 */
+}
+
+.wishlist-table td a:hover, .wishlist-table td a:focus {
+    color: #7fd0f4;                  /* hover, focus 시 색상 변경 */
+    outline: none;                   /* 포커스 시 outline 제거 */
+}
+
+/* 찜 목록에 있는 상품 정보 */
+.wishlist-item-info {
+    flex-grow: 1;
+    padding-left: 10px;
+}
+
+.wishlist-item-info h5 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+}
+
+/* 삭제 버튼 */
+.wishlist-table button.delete-btn {
+    padding: 8px 12px;
+    background-color: #ff4747;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.wishlist-table button.delete-btn:hover {
+    background-color: #ff1c1c;       /* hover 시 색상 변경 */
+}
+
+/* "찜 목록이 비었을 때" 스타일 */
+.wishlist-empty {
+    text-align: center;
+    color: #999999;
+    font-size: 16px;
+    padding: 50px 0;
+}
+
+/* 각 아이템 */
+.wishlist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.wishlist-item:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 찜 목록 삭제 버튼 */
+.wishlist-item .delete-btn {
+    padding: 8px 12px;
+    background-color: #ff4747;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.wishlist-item .delete-btn:hover {
+    background-color: #ff1c1c;  /* hover 시 색상 변경 */
+}

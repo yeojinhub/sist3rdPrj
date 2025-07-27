@@ -96,6 +96,36 @@ public class ProductService {
     public List<ProductDTO> selectWishlistByUserNum(String userNum){
     	return favoriteDAO.selectWishlistByUserNum(userNum);
     }
+    
+    // 민경 - 마이페이지 내상품 (전체)
+    public List<ProductDTO> getProductsByLoginId(String loginId) {
+        return productDAO.selectByLoginId(loginId);
+    }
+
+    public UserDTO getUserByLoginId(String loginId) {
+        return productDAO.getUserByLoginId(loginId);
+    }
+
+    public int getSafeByLoginId(String loginId) {
+        return productDAO.getSafeByLoginId(loginId);
+    }
+
+    public int getReviewByLoginId(String loginId) {
+        return productDAO.getReviewByLoginId(loginId);
+    }
+    
+    // 민경 - wishlist 불러오기
+    public List<ProductDTO> getWishlist(String userNum) {
+        List<ProductDTO> wishlist = favoriteDAO.selectWishlistByUserNum(userNum);
+    	 System.out.println("Wishlist from ProductService: " + wishlist);
+        return favoriteDAO.selectWishlistByUserNum(userNum);
+    }
+    // 민경 - whishlist 삭제
+    @Transactional
+    public void removeFromWishlist(String userNum, String  productId) {
+        System.out.println("Attempting to remove from wishlist: " + userNum + ", Product ID: " + productId);
+        favoriteDAO.deleteFavorite(userNum,  productId);
+    }
 }
 
 

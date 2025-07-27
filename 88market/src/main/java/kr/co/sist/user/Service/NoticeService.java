@@ -10,6 +10,7 @@ import kr.co.sist.user.DAO.NoticeDAO;
 
 @Service
 public class NoticeService {
+	
 	@Autowired
 	private NoticeDAO noticeDAO;
 	

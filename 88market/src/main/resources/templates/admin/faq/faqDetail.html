@@ -31,7 +31,8 @@
 			<!-- 메인 컨텐츠 (공지사항 관리) -->
 			<main class="container">
 				<section class="faq-form-section">
-					<form id="faqForm" th:action="@{/admin/faq/add}" method="post">
+					<form id="faqForm" th:action="@{/admin/faq/modify}" method="post">
+					<input type="hidden" name="faqNum" th:value="${faqDTO.faqNum}"/>
 						<div class="form-group">
 							<label for="title" class="form-label">제목</label>
 							<div class="title-input-group">
