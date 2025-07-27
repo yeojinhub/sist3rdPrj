@@ -1,0 +1,32 @@
+@charset "UTF-8";
+.account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.account-info {
+  display: flex;
+  gap: 40px; /* 은행 정보와 계좌번호 사이 간격 */
+}
+
+.account-info .bank,
+.account-info .number {
+  display: flex;
+  align-items: center;
+}
+
+.account-info .label {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.actions {
+  /* 버튼 배치 우측 정렬 */
+}
+
+.btn-edit, .btn-delete {
+  margin-left: 8px;
+}

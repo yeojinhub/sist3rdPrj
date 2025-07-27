@@ -2,12 +2,33 @@
 	<div class="profile-section">
 		<div class="profile-info">
 			<div >
-				<h3>계좌</h3>
+				<h3>계좌 관리</h3>
 			</div>
 		</div>
-		<div class="store-intro">
-			<p>가게 소개를 작성하고 신뢰도를 높여 보세요.</p>
+	</div>
+	<div class="account-list">
+		<div class="account-row" th:each="acct : ${bankList}">
+			<!-- 은행 -->
+			<div class="account-info">
+				<div class="bank">
+					<span class="label">은행:</span>
+					<span class="value" th:text="${acct.bank}">팥팔은행</span>
+	        	</div>
+		        <!-- 계좌번호 -->
+		        <div class="number">
+		        	<span class="label">계좌번호:</span>
+		        	<span class="value" th:text="${acct.number}">123‑456‑7890</span>
+				</div>
+			</div>
+			<!-- 버튼 -->
+			<div class="actions">
+				<button type="button" class="btn-edit">수정</button>
+				<button type="button" class="btn-delete">삭제</button>
+			</div>
 		</div>
 	</div>
 
+	<button type="button" id="addAccountBtn" class="add-account-btn">
+		+ 계좌 추가
+	</button>
 </div>
