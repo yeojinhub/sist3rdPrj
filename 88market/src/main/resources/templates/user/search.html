@@ -15,28 +15,6 @@
 
 	});
 </script>
-<script>
-	document.addEventListener('DOMContentLoaded', function() {
-		document.querySelectorAll('.wish-btn').forEach(function(btn) {
-			btn.addEventListener('click', function(event) {
-				event.preventDefault(); // 링크 이동 막기
-				event.stopPropagation(); // 상위 <a> 클릭 이벤트 막기
-
-				// 하트 색 토글
-				btn.classList.toggle('active');
-
-				// btn 내부의 img 태그 찾기
-				const img = btn.querySelector('img');
-				if (btn.classList.contains('active')) {
-					img.src = '/images/productHeart/heart-on.png'; // 활성 하트 이미지
-				} else {
-					img.src = '/images/productHeart/heart-off.png'; // 비활성 하트 이미지
-				}
-			});
-		});
-	});
-</script>
-
 
 </head>
 <body>
@@ -183,7 +161,7 @@
 								</th:block>
 							</div>
 
-							<button class="wish-btn">
+							<button class="wish-btn" th:data-prd-num="${item.prdNum}">
 								<img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기"
 									class="heart-icon" />
 							</button>
@@ -196,5 +174,68 @@
 	</main>
 	<!-- 푸터 -->
 	<div th:insert="~{components/user/footer :: footer}"></div>
+<script>
+$(document).ready(function() {
+    $('.wish-btn').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $btn = $(this);
+        const prdNum = $btn.data('prd-num');  // 상품 번호 가져오기
+        const $img = $btn.find('img');  // 이미지 태그 찾기
+
+        console.log('찜하기 버튼 클릭, 상품번호:', prdNum); // 디버깅용
+
+        // 로그인 상태 확인
+        axios.get('/check-login')
+            .then(res => {
+                console.log('로그인 상태 확인:', res.data); // 디버깅용
+                
+                if (!res.data.loggedIn) {
+                    alert('로그인이 필요합니다.');
+                    location.replace('/login');
+                    return;
+                }
+
+                // 로그인 상태일 때 찜 상태 토글
+                if ($btn.hasClass('active')) {
+                    // 찜 해제 (삭제)
+                    console.log('찜 해제 요청 시작'); // 디버깅용
+                    axios.post('/product/wishlist/remove', { prdNum: prdNum })
+                        .then(res => {
+                            console.log('찜 해제 성공:', res.data); // 디버깅용
+                            $btn.removeClass('active');
+                            $img.attr('src', '/images/productHeart/heart-off.png');
+                            alert("찜 해제 되었습니다");
+                        })  
+                        .catch(err => {
+                            console.error("찜 해제 오류:", err);
+                            alert('찜 해제에 실패했습니다');
+                        });
+                } else {
+                    // 찜 등록 (추가)
+                    console.log('찜 등록 요청 시작'); // 디버깅용
+                    axios.post('/product/wishlist/add', { prdNum: prdNum })
+                        .then(res => {
+                            console.log('찜 등록 성공:', res.data); // 디버깅용
+                            $btn.addClass('active');
+                            $img.attr('src', '/images/productHeart/heart-on.png');
+                            alert("찜 등록 되었습니다");
+                        })
+                        .catch(err => {
+                            console.error("찜 등록 오류:", err);
+                            alert('찜 등록에 실패했습니다');
+                        });
+                }
+            })
+            .catch(err => {
+                console.error("로그인 확인 오류:", err);
+                alert('로그인 확인에 실패했습니다.');
+            });
+    });
+});
+</script>
+
+
 </body>
 </html>

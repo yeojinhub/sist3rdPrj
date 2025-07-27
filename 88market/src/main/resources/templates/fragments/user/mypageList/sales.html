@@ -1,4 +1,4 @@
-<div xmlns:th="http://www.thymeleaf.org" th:fragment="mypageInfo" style="border:1px solid #f00; padding:1rem;">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="mypageInfo" style="padding:1rem;">
      
   <div class="profile-section">
     <h2>판매 내역</h2>
@@ -57,7 +57,7 @@
                   <button class="dropdown-toggle">⋯</button>
                   <ul class="dropdown-menu">
                     <li><a>상태변경</a></li>
-                    <li><a>상품삭제</a></li>
+                    <li><a href="javascript:void(0);" class="delete-product" th:data-prd-num="${p.prdNum}">상품삭제</a></li>
                     <li><a>상품수정</a></li>
                   </ul>
                 </div>
@@ -73,11 +73,21 @@
       <!-- 판매중 -->
       <div id="sales" class="tab-content">
         <table class="product-table">
+          <thead>
+            <tr>
+              <th>상품 이미지</th>
+              <th>상품명</th>
+              <th>판매 가격</th>
+              <th>판매 상태</th>
+              <th>판매 날짜</th>
+              <th>메뉴</th>
+            </tr>
+          </thead>
           <tbody>
             <tr th:each="p : ${myProducts.?[sellType=='N']}">
               <td>
                 <a th:href="@{/detail(id=${p.prdNum})}">
-                  <img class="table-thumb" alt="상품 이미지"/>
+                  <img class="table-thumb" th:src="${p.imgDTO.mainImage}" alt="상품 이미지"/>
                 </a>
               </td>
               <td><a th:href="@{/detail(id=${p.prdNum})}" th:text="${p.title}"></a></td>
@@ -96,11 +106,21 @@
       <!-- 예약중 -->
       <div id="reserved" class="tab-content">
         <table class="product-table">
+          <thead>
+            <tr>
+              <th>상품 이미지</th>
+              <th>상품명</th>
+              <th>판매 가격</th>
+              <th>판매 상태</th>
+              <th>판매 날짜</th>
+              <th>메뉴</th>
+            </tr>
+          </thead>
           <tbody>
             <tr th:each="p : ${myProducts.?[appointType=='Y' and sellType=='N']}">
               <td>
                 <a th:href="@{/detail(id=${p.prdNum})}">
-                  <img class="table-thumb" alt="상품 이미지"/>
+                  <img class="table-thumb"  th:src="${p.imgDTO.mainImage}" alt="상품 이미지"/>
                 </a>
               </td>
               <td><a th:href="@{/detail(id=${p.prdNum})}" th:text="${p.title}">상품명</a></td>
@@ -119,13 +139,21 @@
       <!-- 판매완료 -->
       <div id="completed" class="tab-content">
         <table class="product-table">
+          <thead>
+            <tr>
+              <th>상품 이미지</th>
+              <th>상품명</th>
+              <th>판매 가격</th>
+              <th>판매 상태</th>
+              <th>판매 날짜</th>
+              <th>메뉴</th>
+            </tr>
+          </thead>
           <tbody>
             <tr th:each="p : ${myProducts.?[sellType=='Y']}">
               <td>
                 <a th:href="@{/detail(id=${p.prdNum})}">
-                  <img class="table-thumb"
-                       th:src="@{/images/{img}(img=${p.imgNum})}"
-                       alt="상품 이미지"/>
+                  <img class="table-thumb" th:src="${p.imgDTO.mainImage}" alt="상품 이미지"/>
                 </a>
               </td>
               <td><a th:href="@{/detail(id=${p.prdNum})}" th:text="${p.title}">상품명</a></td>

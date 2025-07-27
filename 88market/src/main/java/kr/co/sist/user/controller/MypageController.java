@@ -3,6 +3,8 @@ package kr.co.sist.user.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -134,5 +137,21 @@ public class MypageController {
         return "redirect:/mypage?tab=wishlist";
     }
 	
-	
+    @PostMapping("/mypage/product/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteProduct(@RequestParam("prdNum") String prdNum,
+                                                @AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+
+        try {
+            // 서비스 메서드 호출하여 상품 삭제
+            productService.deleteProduct(prdNum);  
+            return ResponseEntity.ok("상품 삭제 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 삭제 실패: " + e.getMessage());
+        }
+    }
 }
