@@ -1,6 +1,7 @@
 package kr.co.sist.DTO;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,6 +51,6 @@ public class ProductDTO {
         return location1;  // 하나만 있으면 그대로
     }
 	
- 
+    private ImageDTO imgDTO; /* 태일이가 쓰는겁니다. 함부로 사용하지 마세요. */
 
 } //class

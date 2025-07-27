@@ -9,47 +9,6 @@
 <!-- 외부파일(jQuery, Font Awesome 등) -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
-<script>
-	$(function() {
-		// 초기 상태: 전체 표시
-		showProducts('all');
-
-		// 필터 클릭 이벤트
-		$('.product-filter-nav_seller a').click(function(e) {
-			e.preventDefault();
-
-			// active 클래스 변경
-			$('.product-filter-nav_seller a').removeClass('active_seller');
-			$(this).addClass('active_seller');
-
-			// 필터에 따른 상품 표시
-			const filter = $(this).data('filter');
-			showProducts(filter);
-			updateProductCount(filter);
-		});
-
-		function showProducts(filter) {
-			$('.product-card_seller').removeClass('show');
-
-			if (filter === 'all') {
-				$('.product-card_seller').addClass('show');
-			} else {
-				$('.product-card_seller[data-status="' + filter + '"]')
-						.addClass('show');
-			}
-		}
-
-		function updateProductCount(filter) {
-			let count = 0;
-			if (filter === 'all') {
-				count = $('.product-card_seller').length;
-			} else {
-				count = $('.product-card_seller[data-status="' + filter + '"]').length;
-			}
-			$('.total-products_seller').text('총 ' + count + '개');
-		}
-	});
-</script>
 <body>
 	<!-- 헤더 -->
 	<th:block th:insert="~{components/user/header :: header}"></th:block>
@@ -69,18 +28,18 @@
 								th:style="'width: ' + ${users.point / 10.0} + '%;'"></div>
 						</div>
 						<span class="trust-score_seller"> <span class="score"
-							th:text="${users.point}">775</span><span class="total">/1000</span>점
+							th:text="${users.point}">775</span> <span class="total">/1000</span>점
 						</span>
 					</div>
 				</div>
 				<div class="seller-stats_seller">
 					<div>
 						<p>안전거래</p>
-						<strong>3</strong>
+						<strong th:text="${safeCount}">3</strong>
 					</div>
 					<div id="review">
-						<p>거래후기</p>
-						<strong>2</strong>
+						<p>전체상품</p>
+						<strong th:text="${prdCount}">2</strong>
 					</div>
 				</div>
 			</section>
@@ -93,90 +52,42 @@
 						data-filter="reserved">예약중</a> <a href="#" data-filter="sold">판매완료</a>
 				</nav>
 				<div class="products-header_seller">
-					<span class="total-products_seller">총 8개</span>
+					<span class="total-products_seller" th:text="|총 ${prdCount}개|">총
+						8개</span>
 				</div>
+
+				<!-- 판매상품 반복문 -->
 				<div class="product-grid_seller">
+					<div th:each="product : ${productList}"
+						class="product-card_seller show"
+						th:classappend="${product.sellType == 'Y'} ? 'sold-out_seller' : ''"
+						th:attr="data-status=${product.appointType == 'Y' ? 'reserved' : (product.sellType == 'Y' ? 'sold' : 'selling')}, data-prd-num=${product.prdNum}"
+						style="cursor: pointer;">
 
-					<!-- 판매중 상품 1 -->
-					<div class="product-card_seller show" data-status="selling">
-						<img th:src="@{images/main/img1.png}" alt="루미녹스 랜드블랙 88000">
+						<img th:src="${product.imgDTO.mainImage}"
+							th:alt="${product.title}">
+
+						<!-- 예약중/판매완료 오버레이 -->
+						<div
+							th:if="${product.appointType == 'Y' or product.sellType == 'Y'}"
+							class="overlay_seller">
+							<p th:text="${product.appointType == 'Y' ? '예약중' : '판매완료'}"></p>
+						</div>
+
 						<div class="product-info_seller">
-							<p class="product-name_seller">루미녹스 랜드블랙 88000</p>
-							<p class="product-price_seller">170,000원</p>
-							<p class="product-meta_seller">분리동 | 13분전</p>
-							<div class="product-tags_seller">
+							<p class="product-name_seller" th:text="${product.title}"></p>
+							<p class="product-price_seller"
+								th:text="${#numbers.formatInteger(product.price, 0, 'COMMA')} + '원'"></p>
+							<p class="product-meta_seller"
+								th:text="${product.location1} + ' | ' + ${product.inputDate}"></p>
+
+							<!-- 안전거래 태그 -->
+							<div th:if="${product.safeType == 'Y'}"
+								class="product-tags_seller">
 								<span class="tag_seller safe-deal_seller">안전거래</span>
 							</div>
 						</div>
 					</div>
-
-					<!-- 판매중 상품 2 -->
-					<div class="product-card_seller show" data-status="selling">
-						<img th:src="@{images/main/img2.png}" alt="애플워치 SE">
-						<div class="product-info_seller">
-							<p class="product-name_seller">애플워치 SE 2세대</p>
-							<p class="product-price_seller">250,000원</p>
-							<p class="product-meta_seller">청라동 | 25분전</p>
-							<div class="product-tags_seller">
-								<span class="tag_seller safe-deal_seller">안전거래</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- 예약중 상품 1 -->
-					<div class="product-card_seller show" data-status="reserved">
-						<img th:src="@{images/main/img3.png}" alt="맥북프로">
-						<div class="overlay_seller">
-							<p>예약중</p>
-						</div>
-						<div class="product-info_seller">
-							<p class="product-name_seller">맥북프로 M2 14인치</p>
-							<p class="product-price_seller">1,800,000원</p>
-							<p class="product-meta_seller">송도동 | 1시간전</p>
-						</div>
-					</div>
-
-					<!-- 예약중 상품 2 -->
-					<div class="product-card_seller show" data-status="reserved">
-						<img th:src="@{images/main/img4.png}" alt="아이폰15">
-						<div class="overlay_seller">
-							<p>예약중</p>
-						</div>
-						<div class="product-info_seller">
-							<p class="product-name_seller">아이폰15 프로맥스</p>
-							<p class="product-price_seller">1,200,000원</p>
-							<p class="product-meta_seller">검단동 | 2시간전</p>
-						</div>
-					</div>
-
-					<!-- 판매완료 상품 1 -->
-					<div class="product-card_seller sold-out_seller show"
-						data-status="sold">
-						<img th:src="@{images/main/img5.png}" alt="리모와트렁크">
-						<div class="overlay_seller">
-							<p>판매완료</p>
-						</div>
-						<div class="product-info_seller">
-							<p class="product-name_seller">리모와트렁크플러스 티타늄골드</p>
-							<p class="product-price_seller">2,800,000원</p>
-							<p class="product-meta_seller">영종동 | 4분전</p>
-						</div>
-					</div>
-
-					<!-- 판매완료 상품 2 -->
-					<div class="product-card_seller sold-out_seller show"
-						data-status="sold">
-						<img th:src="@{images/main/img6.png}" alt="다이슨청소기">
-						<div class="overlay_seller">
-							<p>판매완료</p>
-						</div>
-						<div class="product-info_seller">
-							<p class="product-name_seller">다이슨 V15 청소기</p>
-							<p class="product-price_seller">450,000원</p>
-							<p class="product-meta_seller">계양동 | 1일전</p>
-						</div>
-					</div>
-
 				</div>
 			</section>
 		</div>
@@ -184,7 +95,59 @@
 
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
-	<!-- 후기 오버레이 -->
-	<th:block th:insert="~{components/user/reviewOverlay :: reviewOverlay}"></th:block>
+
+	<script>
+		$(document).ready(
+				function() {
+					// 페이지 로드 후 초기 설정
+					showProducts('all');
+					updateProductCount('all');
+
+					// 필터 클릭 이벤트
+					$('.product-filter-nav_seller a').click(
+							function(e) {
+								e.preventDefault();
+
+								// active 클래스 변경
+								$('.product-filter-nav_seller a').removeClass(
+										'active_seller');
+								$(this).addClass('active_seller');
+
+								// 필터에 따른 상품 표시
+								const filter = $(this).data('filter');
+								showProducts(filter);
+								updateProductCount(filter);
+							});
+
+					// 상품 카드 클릭 이벤트
+					$(document).on('click', '.product-card_seller', function() {
+						const prdNum = $(this).data('prd-num');
+						window.location.href = '/detail?id=' + prdNum;
+					});
+
+					function showProducts(filter) {
+						$('.product-card_seller').removeClass('show');
+
+						if (filter === 'all') {
+							$('.product-card_seller').addClass('show');
+						} else {
+							$(
+									'.product-card_seller[data-status="'
+											+ filter + '"]').addClass('show');
+						}
+					}
+
+					function updateProductCount(filter) {
+						let count = 0;
+						if (filter === 'all') {
+							count = $('.product-card_seller').length;
+						} else {
+							count = $('.product-card_seller[data-status="'
+									+ filter + '"]').length;
+						}
+						$('.total-products_seller').text('총 ' + count + '개');
+					}
+				});
+	</script>
 </body>
 </html>

@@ -34,17 +34,18 @@
 				</div>
 				<!-- 마이 -->
 				<div class="menu-item" th:onclick="|location.href='@{/mypage}'|">
-					 <i class="fa-solid fa-user" ></i> <span>마이</span>
+					<i class="fa-solid fa-user"></i> <span>마이</span>
 				</div>
 				<!-- ----------------------------------------- -->
 				<!-- 로그인 버튼 / 로그인전 : 로그인 , 로그인 후 : 로그 아웃 -->
-				<div class="menu-item" th:onclick="|location.href='@{/login}'|">
-				  <i class="fa-solid fa-sign-in-alt"></i> <span>로그인</span>
+				<div class="menu-item" th:if="${isLoggedIn}"
+					th:onclick="|location.href='@{/uesrLogout}'|">
+					<i class="fa-solid fa-sign-out-alt"></i> <span>로그아웃</span>
 				</div>
-				<!-- 토큰 없을때 -->
-<!-- 				<div class="menu-item" th:onclick="|location.href='@{/logout}'|">
-				  <i class="fa-solid fa-sign-out-alt"></i> <span>로그아웃</span>
-				</div> -->
+				<div class="menu-item" th:unless="${isLoggedIn}"
+					th:onclick="|location.href='@{/login}'|">
+					<i class="fa-solid fa-sign-in-alt"></i> <span>로그인</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -54,28 +55,29 @@
 		<div class="nav-container">
 			<!-- 카테고리 버튼 -->
 			<div class="category-button dropdown">
-			  <span>카테고리</span>
-			  <div class="dropdown-content">
-			    <a th:each="cat : ${categories}"
-			       th:href="@{/search(catNum=${cat.catNum})}"
-			       th:text="${cat.name}">카테고리명</a>
-			  </div>
+				<span>카테고리</span>
+				<div class="dropdown-content">
+					<a th:each="cat : ${categories}"
+						th:href="@{/search(catNum=${cat.catNum})}" th:text="${cat.name}">카테고리명</a>
+				</div>
 			</div>
 
 			<!-- 메뉴 항목들 -->
 			<nav class="nav-menu">
 				<a href="/event" class="nav-link">이벤트</a> <a href="/planingsell"
 					class="nav-link">기획관</a> <a href="/anticheat" class="nav-link">사기조회</a>
-					 <a href="/notice" class="nav-link">공지사항</a>
-				<span class="nav-link" id="wishlist">찜한 상품</span>
+				<a href="/notice" class="nav-link">공지사항</a> <span class="nav-link"
+					id="wishlist">찜한 상품</span>
 			</nav>
 		</div>
 	</div>
 
 	<!-- 최근본상품 오버레이 -->
-	<th:block th:insert="~{components/user/recentProduct :: recentProduct}" th:if="@{/}"></th:block>
+	<th:block th:insert="~{components/user/recentProduct :: recentProduct}"
+		th:if="@{/}"></th:block>
 	<!-- 채팅 오버레이 -->
 	<th:block th:insert="~{components/user/chatOverlay :: chatOverlay}"></th:block>
 	<!-- 찜목록 오버레이 -->
-	<th:block th:insert="~{components/user/wishlistOverlay :: wishlistOverlay}"></th:block>
+	<th:block
+		th:insert="~{components/user/wishlistOverlay :: wishlistOverlay}"></th:block>
 </header>

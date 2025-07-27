@@ -6,4 +6,6 @@
 	<select id="selectSellerInfoByUserNum" parameterType="String" resultType="kr.co.sist.DTO.UserDTO">
 		SELECT * FROM USERS WHERE USER_NUM = #{userNum}
 	</select>
+	<select id="selectTradeByUserNum" parameterType="String" resultType="kr.co.sist.DTO.ProductDTO">SELECT * FROM PRODUCT WHERE USER_NUM = #{userNum} AND HIDDEN_TYPE = 'N' ORDER BY INPUT_DATE DESC</select>
+	<select id="selectImgByImgNum" parameterType="Integer" resultType="kr.co.sist.DTO.ImageDTO">SELECT * FROM IMAGE WHERE IMG_NUM = #{imgNum}</select>
 </mapper>
