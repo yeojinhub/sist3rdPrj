@@ -28,7 +28,7 @@
 
 	<!-- 문의 리스트 조회 -->
 	<select id="inquiryList" parameterType="int" resultType="kr.co.sist.DTO.InquiryDTO">
-		SELECT * FROM INQUIRY WHERE USER_NUM = #{userNum}
+		SELECT * FROM INQUIRY WHERE USER_NUM = #{userNum} ORDER BY INPUT_DATE DESC
 	</select>
 
 	<!-- 문의 상세 조회 -->

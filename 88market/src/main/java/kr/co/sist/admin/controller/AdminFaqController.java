@@ -88,6 +88,7 @@ public class AdminFaqController {
 
     @PostMapping("/faq/modify")
     public String faqModify(FaqDTO faqDTO) {
+    	System.out.println(faqDTO);
         afs.updateFaq(faqDTO);
         return "redirect:/admin/faq";
     }

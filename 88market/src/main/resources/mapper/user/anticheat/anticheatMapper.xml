@@ -41,7 +41,7 @@ WHERE
     r.search_type = 'Y'
     AND (u.email = #{inputValue} OR u.tel = #{inputValue})
     </select>
-
+    
     <!-- 계좌 정보로 사기 조회 결과 조회 -->
     <select id="selectScamResultWithBank" resultType="int" parameterType="String">
     SELECT
