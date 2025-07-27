@@ -1,9 +1,13 @@
 package kr.co.sist.user.controller;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +17,9 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class LogoutController {
 
-	@GetMapping("/uesrLogout")
-	public String logout(HttpServletRequest request, HttpServletResponse response) {
+	@GetMapping("/userLogout")
+	@ResponseBody
+	public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
 	    // JWT 쿠키 삭제
 	    Cookie jwtCookie = new Cookie("token", null);
 	    jwtCookie.setMaxAge(0);
@@ -32,7 +37,7 @@ public class LogoutController {
 	        session.invalidate();
 	    }
 	    
-	    return "redirect:/";
+	    return ResponseEntity.ok(Map.of("success",true));
 	}
 	
 }

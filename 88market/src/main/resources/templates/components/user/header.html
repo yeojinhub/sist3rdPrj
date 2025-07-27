@@ -10,6 +10,12 @@
 				}
 			})
 		})
+		
+		function logout() {
+			axios.get('/userLogout').then(res=>{
+				location.reload();
+			})
+		}
 	</script>
 	<div class="header-background">
 		<div class="header-container">
@@ -39,7 +45,7 @@
 				<!-- ----------------------------------------- -->
 				<!-- 로그인 버튼 / 로그인전 : 로그인 , 로그인 후 : 로그 아웃 -->
 				<div class="menu-item" th:if="${isLoggedIn}"
-					th:onclick="|location.href='@{/uesrLogout}'|">
+					onclick="logout()">
 					<i class="fa-solid fa-sign-out-alt"></i> <span>로그아웃</span>
 				</div>
 				<div class="menu-item" th:unless="${isLoggedIn}"
