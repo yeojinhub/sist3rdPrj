@@ -138,7 +138,7 @@
 	    SELECT *
 	    FROM PRODUCT
 	    WHERE CAT_NUM = #{catNum}
-	      AND PRD_NUM != #{prdNum}
+	      AND PRD_NUM != #{prdNum} AND COM_NUM IS NULL
 	      ORDER BY DBMS_RANDOM.VALUE
 	  )
 	  WHERE ROWNUM &lt;= 15

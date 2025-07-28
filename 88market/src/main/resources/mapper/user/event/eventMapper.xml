@@ -4,7 +4,7 @@
 
 <mapper namespace="kr.co.sist.user.DAO.EventDAO">
 	<select id="selectAllEvent" resultType="kr.co.sist.DTO.EventDTO">
-		SELECT * FROM EVENT ORDER BY EVT_NUM DESC
+		SELECT * FROM EVENT ORDER BY START_DATE DESC
 	</select>
 	
 	<select id="selectImageWithImgNum" resultType="kr.co.sist.DTO.ImageDTO" parameterType="int">

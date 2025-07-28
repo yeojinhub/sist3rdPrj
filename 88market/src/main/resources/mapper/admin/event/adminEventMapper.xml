@@ -27,6 +27,7 @@
 	        WHERE ROWNUM &lt;= #{pagination.endRow}
 	    )
 	    WHERE rn &gt; #{pagination.startRow}
+	    ORDER BY START_DATE DESC
 	</select>
 
 	<delete id="deleteEvents" parameterType="list">

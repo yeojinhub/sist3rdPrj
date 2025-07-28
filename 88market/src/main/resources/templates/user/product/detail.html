@@ -112,8 +112,7 @@
 				<div class="seller-info">
 					<h4>판매자정보</h4>
 					<div class="seller-profile">
-						<div class="seller-name" th:onclick="|location.href='@{/seller/{id}(id=${product.userNum})}'|" style="cursor: pointer;"
-							th:text="${user.nickname}">송민철영</div>
+						<div class="seller-name" th:onclick="|location.href='@{/seller/{id}(id=${product.userNum})}'|" th:text="${user.nickname}" style="cursor: pointer;"></div>
 						<div class="trust-score">
 							<span th:text="'신뢰지수 ' +${user.manner}"></span>
 							<div class="trust-gauge-bar">
@@ -122,8 +121,7 @@
 						</div>
 					</div>
 					<div class="seller-stats">
-						<span>안전거래 <b th:text="${safeCount}">0</b></span> <span>거래후기
-							<b th:text="${reviewCount}">1</b>
+						<span>안전거래 <b th:text="${safeCount}">0</b></span>
 						</span>
 					</div>
 

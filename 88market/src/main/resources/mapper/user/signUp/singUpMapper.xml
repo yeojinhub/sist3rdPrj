@@ -10,8 +10,8 @@
         	FROM 	DUAL
     	</selectKey>
     	INSERT INTO USERS
-       		(USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE,ADDRESS)
-        VALUES(#{userNum}, #{name}, #{nickname}, #{email},
+       		(IMAGE, USER_NUM, NAME, NICKNAME, EMAIL, PASS, TEL, ZIPCODE,ADDRESS)
+        VALUES('/images/default_profile.jpg', #{userNum}, #{name}, #{nickname}, #{email},
         	#{pass}, #{tel}, #{zipcode}, #{address})
 	</insert>
 	
