@@ -110,11 +110,9 @@ public class ProductService {
         return productDAO.getSafeByLoginId(loginId);
     }
 
-    public int getReviewByLoginId(String loginId) {
-        return productDAO.getReviewByLoginId(loginId);
-    }
+
     
-    // alsrud - 마이페이지 (판매상품 삭제) 
+    // 민경 - 마이페이지 (판매상품 삭제) 
     public void deleteProduct(String prdNum) {
         favoriteDAO.deleteFavoriteByProduct(prdNum);  
         productDAO.deleteProduct(prdNum);

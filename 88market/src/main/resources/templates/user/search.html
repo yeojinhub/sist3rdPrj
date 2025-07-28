@@ -97,20 +97,22 @@
 		<!-- 상품 패널 (하단) -->
 		<section class="results-grid_search">
 
-			<!-- 광고 상품 잇음 ( 카테고리 - 기업) -->
+			<!-- 광고 상품 있음 ( 카테고리 - 기업) -->
 			<div th:if="${adItem != null}" class="product-card_search ad-item">
-				<div class="ad-badge">
-					<p>광고</p>
-				</div>
-				<div class="product-image-wrapper">
-					<img th:src="@{${adImage.mainImage}}" alt="광고 상품" />
-				</div>
-				<div class="product-info_search">
-					<p class="product-name_search" th:text="${adItem.title}">상품명</p>
-					<p class="product-price_search"
-						th:text="|${#numbers.formatDecimal(adItem.price,0,'COMMA',0,'POINT')}원|">가격</p>
-					<p class="product-meta_search" th:text="${adItem.comName}">회사명</p>
-				</div>
+			  <a th:href="@{/detail(id=${adItem.comNum})}">
+			    <div class="ad-badge">
+			      <p>광고</p>
+			    </div>
+			    <div class="product-image-wrapper">
+			      <img th:src="@{${adImage.mainImage}}" alt="광고 상품" />
+			    </div>
+			    <div class="product-info_search">
+			      <p class="product-name_search" th:text="${adItem.title}">상품명</p>
+			      <p class="product-price_search"
+			         th:text="|${#numbers.formatDecimal(adItem.price,0,'COMMA',0,'POINT')}원|">가격</p>
+			      <p class="product-meta_search" th:text="${adItem.comName}">회사명</p>
+			    </div>
+			  </a>
 			</div>
 
 			<!-- 광고 상품 없음 ( 카테고리 - 기업)  + 일반상품도 없을때 -->

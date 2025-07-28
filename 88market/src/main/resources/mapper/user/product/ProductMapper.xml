@@ -183,20 +183,15 @@
 	</select>
 	
 	<!-- 로그인 이메일로 안전거래 건수 -->
-	<select id="getSafeByLoginId" parameterType="string" resultType="int">
-	  SELECT COUNT(*)
-	    FROM SAFE_TYPE st
-	    JOIN USERS u ON st.seller_num = u.user_num
-	   WHERE u.EMAIL = #{email}
-	</select>
+<select id="getSafeByLoginId" parameterType="string" resultType="int">
+  SELECT COUNT(*)
+    FROM PRODUCT p
+    JOIN USERS u ON p.USER_NUM = u.USER_NUM
+   WHERE u.EMAIL = #{email}
+     AND p.SAFE_TYPE = 'Y'
+     AND p.SELL_TYPE = 'Y'
+</select>
 	
-	<!-- 로그인 ID로 거래후기 건수 -->
-	<select id="getReviewByLoginId" parameterType="string" resultType="int">
-	  SELECT COUNT(*)
-	    FROM REVIEWS r
-	    JOIN USERS u ON r.reviewee_num = u.user_num
-	   WHERE u.EMAIL = #{email}
-	</select>
 	
 	
 	<!-- 마이페이지 내상품 삭제 -->
