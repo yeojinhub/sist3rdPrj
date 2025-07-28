@@ -50,4 +50,8 @@ public class UserService {
         int updated = userDao.updateUserInfo(dto);
         return updated > 0;
     }
+    
+    public void withdrawUser(String userNum) {
+        userDao.withdrawUser(userNum);
+    }
 }

@@ -35,14 +35,14 @@ public interface AdminAccountCompanyDAO {
 	 * @param companyDTO 등록할 기업 정보
 	 * @return int 성공시 true, 실패 시 false 반환
 	 */
-	public int insertCompany(@RequestBody CompanyDTO companyDTO);
+	public int insertCompany(CompanyDTO companyDTO);
 	
 	/**
 	 * 기업 계정 수정
 	 * @param companyDTO 수정할 기업 정보
 	 * @return int 성공시 true, 실패 시 false 반환
 	 */
-	public int updateCompany(@RequestBody CompanyDTO companyDTO);
+	public int updateCompany(CompanyDTO companyDTO);
 
 	/**
 	 * 기업 비밀번호 초기화

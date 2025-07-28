@@ -458,7 +458,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			comName : comName,
 			ceoName : ceoName,
 			name : name,
-			nickname : nickname,
 			tel : telString,
 			businessNum : businessString,
 			id : id,

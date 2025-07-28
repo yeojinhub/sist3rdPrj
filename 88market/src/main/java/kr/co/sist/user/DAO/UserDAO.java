@@ -31,5 +31,7 @@ public interface UserDAO {
     
     /** 마이페이지 정보 수정 */
     public int updateUserInfo(UserDTO dto);
+    
+    public void withdrawUser(String userNum);
 
 }

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import kr.co.sist.DTO.BankDTO;
 import kr.co.sist.DTO.ProductDTO;
 import kr.co.sist.DTO.PurchaseDTO;
@@ -116,7 +118,7 @@ public class MypageController {
         model.addAttribute("bankList", bankList);*/
         
         // fragment
-        List<String> validTabs = List.of( "mypageMain","sales","purchase","wishlist","info","bank","address","review","withdraw" );
+        List<String> validTabs = List.of( "mypageMain","sales","purchase","wishlist","info","withdraw" );
         if (!validTabs.contains(tab)) {
             tab = "mypageMain";
         }
@@ -276,5 +278,42 @@ public class MypageController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 삭제 실패: " + e.getMessage());
         }
+        
+        
+    }
+    
+    @PostMapping("/mypage/withdraw")
+    public String withdrawUser(HttpServletRequest request, HttpServletResponse response) {
+        // 1) JWT 토큰 가져오기
+        String token = null;
+        if (request.getCookies() != null) {
+            for (Cookie c : request.getCookies()) {
+                if ("token".equals(c.getName())) {
+                    token = c.getValue();
+                    break;
+                }
+            }
+        }
+
+        // 2) 토큰 유효성 검사
+        if (token == null || !jwtService.validateToken(token)) {
+            // 유효하지 않으면 로그인 페이지로 리다이렉트
+            return "redirect:/login?error=unauthorized";
+        }
+
+        // 3) 토큰에서 사용자 번호 추출
+        String userNum = jwtService.getClaims(token).get("userNum", String.class);
+
+        // 4) 사용자 탈퇴 처리
+        userService.withdrawUser(userNum);
+
+        // 5) 클라이언트에 토큰 삭제 명령 (쿠키 무효화)
+        Cookie deleteCookie = new Cookie("token", null);
+        deleteCookie.setPath("/");
+        deleteCookie.setMaxAge(0); // 즉시 만료
+        response.addCookie(deleteCookie);
+
+        // 6) 홈으로 리다이렉트
+        return "redirect:/";
     }
 }

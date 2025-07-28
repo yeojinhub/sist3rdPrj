@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 - 기업 계정 수정</title>
+  <!-- 사이드바 CSS -->
+  <link rel="stylesheet" th:href="@{/css/admin/style.css}">
+  <!-- 페이지 타이틀 CSS -->
+  <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+  <!-- 공통 CSS -->
+  <link rel="stylesheet" th:href="@{/css/admin/dlatl.css}">
+  <!-- 계정 관리 CSS -->
+  <link rel="stylesheet" th:href="@{/css/admin/account/account.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/account/info.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/account/personal.css}">
+  <th:block th:replace="~{components/admin/external :: external}"></th:block>
+</head>
+<body>
+  <!-- 사이드바 -->
+  <div th:replace="~{fragments/admin/admin_sidebar :: sidebar}"></div>
+  <!-- 헤더 -->
+  <div th:replace="~{fragments/admin/admin_header :: header}"></div>
+
+  <div class="admin-wrapper">
+    <div class="main-content">
+      <!-- 페이지 타이틀 -->
+      <th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('계정 관리','기업 계정 수정')}" />
+
+      <div class="account-form-wrapper">
+        <form class="account-form">
+          <!-- 숨김: comNum -->
+          <input type="hidden" id="comNum" th:value="${companyDTO.comNum}" />
+
+          <div class="account-form-section">기본정보</div>
+          <label for="comName">기업명 <span class="required">*</span></label>
+          <input id="comName" type="text" th:value="${companyDTO.comName}" class="form-input" />
+
+          <label for="ceoName">대표자명 <span class="required">*</span></label>
+          <input id="ceoName" type="text" th:value="${companyDTO.ceoName}" class="form-input" />
+
+          <label for="name">담당자명 <span class="required">*</span></label>
+          <input id="name" type="text" th:value="${companyDTO.name}" class="form-input" />
+
+          <label for="tel">전화번호 <span class="required">*</span></label>
+          <input id="tel" type="text" th:value="${companyDTO.tel}" class="form-input" />
+
+          <label for="businessNum">사업자등록번호 <span class="required">*</span></label>
+          <input id="businessNum" type="text" th:value="${companyDTO.businessNum}" class="form-input" />
+
+          <div class="account-form-section">계정정보</div>
+          <label for="id">아이디 <span class="required">*</span></label>
+          <input id="id" type="text" th:value="${companyDTO.id}" class="form-input" />
+
+          <label for="pass">비밀번호</label>
+          <input id="pass" type="password" th:value="${companyDTO.pass}" class="form-input" />
+
+          <div class="account-form-section">주소</div>
+          <label for="zipcode">우편번호</label>
+          <div style="display:flex; gap:8px;">
+            <input id="zipcode" type="text" th:value="${companyDTO.zipcode}" class="form-input" readonly />
+            <input type="button" value="우편번호 찾기" onclick="sample6_execDaumPostcode()" class="action-button" />
+          </div>
+
+          <div th:with="addrArray=${companyDTO.address.split('/')}">
+            <label for="road-address">도로명 주소</label>
+            <input id="road-address" type="text" th:value="${addrArray[0]}" class="form-input" readonly />
+
+            <label for="detail-address">상세주소</label>
+            <input id="detail-address" type="text"
+                   th:value="${addrArray.length > 1 ? addrArray[1] : ''}"
+                   class="form-input" placeholder="상세주소" />
+
+            <label for="extra-address">참고항목</label>
+            <input id="extra-address" type="text"
+                   th:value="${addrArray.length > 2 ? addrArray[2] : ''}"
+                   class="form-input" readonly placeholder="참고항목" />
+          </div>
+
+          <div class="account-form-section">가입/탈퇴 정보</div>
+          <label>탈퇴여부</label>
+          <div>
+            <input type="radio" name="withdraw" value="Y"
+                   th:checked="${companyDTO.withdraw == 'Y'}" /> 탈퇴
+            <input type="radio" name="withdraw" value="N"
+                   th:checked="${companyDTO.withdraw == 'N'}" /> 정상
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="btnModify" class="submit-btn">수정</button>
+            <button type="button" id="btnBack" class="cancel-btn">뒤로가기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스크립트 -->
+  <script src="/js/admin/script.js" defer></script>
+  <!-- 다음 주소 API -->
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script th:src="@{/js/admin/account/postcode.js}" defer></script>
+  <!-- 기업 수정 JS -->
+  <script th:src="@{/js/admin/account/companyModify.js}" defer></script>
+</body>
+</html>

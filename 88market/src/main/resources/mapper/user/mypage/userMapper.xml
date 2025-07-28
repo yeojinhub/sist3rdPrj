@@ -95,5 +95,13 @@
       address  = #{address}
     WHERE user_num = #{userNum}
   </update>
+  
+  <update id="withdrawUser" parameterType="String">
+  	UPDATE USERS
+  	SET
+  		WITHDRAW = 'Y',
+      	DRAW_DATE = SYSDATE
+  	WHERE USER_NUM = #{userNum}
+	</update>
 
 </mapper>
