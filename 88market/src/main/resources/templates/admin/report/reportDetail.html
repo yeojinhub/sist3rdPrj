@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>신고 상세</title>
+  <link rel="stylesheet" th:href="@{/css/admin/report/report.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/style.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/pageTitle.css}">
+  <th:block th:replace="~{components/admin/external :: external}" />
+</head>
+
+<body>
+  <div th:replace="~{fragments/admin/admin_sidebar :: sidebar}" />
+  <div th:replace="~{fragments/admin/admin_header :: header}" />
+
+  <div class="admin-wrapper">
+    <div class="main-content">
+      <th:block th:replace="~{fragments/admin/admin_pageTitle :: pageTitle('신고 관리','상세')}" />
+
+      <main class="container">
+        <section class="report-detail-section">
+          <div class="report-detail-box">
+            <h2 th:text="${report.title}">제목</h2>
+            <p><strong>신고자:</strong> <span th:text="${report.name}"></span></p>
+            <p><strong>신고 대상:</strong>
+              <span th:text="${report.reportType == 1 ? '판매자' : '상품'}"></span>
+              (<span th:text="${report.userNum != null ? report.userNum : report.prdNum}"></span>)
+            </p>
+            <p><strong>신고일:</strong> <span th:text="${#dates.format(report.inputDate, 'yyyy-MM-dd')}"></span></p>
+            <p><strong>사기 조회 여부:</strong> <span th:text="${report.searchType == 'Y' ? '사기 조회 가능' : '해당 없음'}"></span></p>
+            <hr>
+            <div class="report-content">
+              <p th:text="${report.content}">신고 내용입니다.</p>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="action-button cancel-btn" onclick="history.back()">뒤로가기</button>
+            <form th:action="@{/admin/report/deleteOne}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+			  <input type="hidden" name="repNum" th:value="${report.repNum}" />
+			  <button type="submit" class="action-button submit-btn">삭제</button>
+			</form>
+          </div>
+        </section>
+      </main>
+      <script src="/js/admin/script.js" defer></script>
+    </div>
+  </div>
+</body>
+</html>

@@ -225,7 +225,7 @@
   cursor: pointer;
   display: block;
   margin: 40px auto 0;
-
+}
 .submit-button:hover{
   background-color: #5bbbe3;
 }

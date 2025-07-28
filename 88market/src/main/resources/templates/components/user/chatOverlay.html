@@ -6,23 +6,20 @@
   <script>
     let stompClient = null;
     let currentRoomId = null;
-    let currentUser = null; // username = userNum (문자열)
-    let currentRoomSubscription = null; // 현재 방 구독 관리
+    let currentUser = null;
+    let currentRoomSubscription = null;
+    let currentOpponentUserNum = null;
 
-    // 채팅 오버레이 열기(로그인 체크 + 사용자 정보 세팅)
     $('#chat').click(() => {
-      console.log("Opening chat overlay...");
       axios.get('/chat')
         .then(res => {
-          currentUser = res.data; // userNum
-          console.log("User logged in:", currentUser);
+          currentUser = res.data;
           $('.chat-overlay').fadeIn(300);
           $('.chat-modal').addClass('show');
           $('body').addClass('modal-open');
           loadChatRooms();
         })
         .catch(err => {
-          console.log("Error occurred while fetching user data:", err);
           if (err.response?.status === 401) {
             alert('로그인이 필요합니다.');
             location.href = '/login';
@@ -30,165 +27,202 @@
         });
     });
 
-    // WebSocket 연결 (최초 한 번만)
     function connect() {
-      if (stompClient) return; // 중복 연결 방지
-      console.log("Attempting to connect to WebSocket...");
+      if (stompClient) return;
       const socket = new SockJS('/ws-chat');
       stompClient = Stomp.over(socket);
-      stompClient.debug = function () {};  // 로그 비활성화
-
+      stompClient.debug = null;
       stompClient.connect({}, function (frame) {
-        console.log('WebSocket connected: ' + frame);
-        // 방 구독은 이 시점이 아니라 enterChatRoom에서!
+        console.log('WebSocket connected');
       }, function (error) {
-        console.log('WebSocket connection error:', error);
+        console.error('WebSocket error', error);
       });
     }
 
- 	// 채팅방 목록 로드
     function loadChatRooms() {
-      console.log("Loading chat rooms...");
       axios.get('/chat/rooms')
         .then(res => {
           const chatRooms = res.data;
-          const chatListContainer = document.querySelector('#chatList');
-          chatListContainer.innerHTML = '';
+          const container = document.querySelector('#chatList');
+          container.innerHTML = '';
           chatRooms.forEach(room => {
-            const listItem = `
-              <div class="chat-item" data-room-id="${room.chatroomNum}">
+            const item = `
+              <div class="chat-item" 
+              data-room-id="${room.chatroomNum}" 
+              data-opponent-num="${room.opponentNum}" 
+              data-opponent-nickname="${room.opponentNickname}" 
+              data-product-name="${room.productName}"
+              data-prd-num="${room.productNum}">
                 <div class="chat-content">
                   <div class="chat-info">
-                    <!-- 상대방 프로필 이미지와 닉네임 -->
-                    <img src="${room.opponentImgPath}" alt="Profile" class="profile-image" />
+                    <img src="${room.opponentImgPath}" class="profile-image" />
                     <span class="username">${room.opponentNickname}</span>
                     <span class="last-message-time">${room.lastMessageTime}</span>
                   </div>
-                  <div class="last-message">
-                    <!-- 마지막 메시지 내용 -->
-                    <span class="message-content">${room.lastMessage}</span>
-                  </div>
+                  <div class="last-message">${room.lastMessage}</div>
                 </div>
-              </div>
-            `;
-            chatListContainer.insertAdjacentHTML('beforeend', listItem);
+                <button class="report-btn" data-user-num="${room.opponentNum}">
+                  <img src="/images/report_icon.png" style="width: 20px; height: 20px;" />
+                </button>
+              </div>`;
+            container.insertAdjacentHTML('beforeend', item);
           });
 
           document.querySelectorAll('.chat-item').forEach(item => {
             item.addEventListener('click', function () {
-              const chatroomNum = this.getAttribute('data-room-id');
-              enterChatRoom(chatroomNum); // 채팅방 입장
+              const roomId = this.getAttribute('data-room-id');
+              const opponentNum = this.getAttribute('data-opponent-num');
+              const productName = this.getAttribute('data-product-name');
+              currentOpponentUserNum = opponentNum;
+              enterChatRoom(roomId, productName);
             });
           });
-        })
-        .catch(err => {
-          console.error("채팅방 목록 조회 오류:", err);
+
+          document.querySelectorAll('.report-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+              e.stopPropagation();
+              const opponent = this.getAttribute('data-user-num');
+              openReportRoom(opponent);
+            });
+          });
         });
     }
 
-    // 채팅방 들어가기 및 구독
-    function enterChatRoom(roomId) {
-      console.log("Entering chat room with ID:", roomId);
-
-      // 기존 구독 해제
+ 	// 채팅방 입장 시 상품 이름을 설정하는 부분
+    function enterChatRoom(roomId, productName) {
       if (currentRoomSubscription) {
         currentRoomSubscription.unsubscribe();
-        currentRoomSubscription = null;
       }
 
-      // 메시지 목록 초기화
       document.querySelector('#chatMessages').innerHTML = '';
+      currentRoomId = roomId;
 
-      // 구독 (WebSocket 연결이 되어있어야 함)
       if (stompClient && stompClient.connected) {
-        currentRoomSubscription = stompClient.subscribe(`/topic/chatroom/${roomId}`, function (messageOutput) {
-          const message = JSON.parse(messageOutput.body);
-          console.log("Received message:", message);
-          // 내 메시지는 오른쪽, 남의 메시지는 왼쪽 표시
-          const side = (String(message.userNum) === String(currentUser)) ? 'right' : 'left';
+        currentRoomSubscription = stompClient.subscribe(`/topic/chatroom/${roomId}`, function (msg) {
+          const message = JSON.parse(msg.body);
+          const side = String(message.userNum) === String(currentUser) ? 'right' : 'left';
           document.querySelector('#chatMessages').insertAdjacentHTML('beforeend',
-            `<div class="message-${side}">${message.userNum}: ${message.content}</div>`);
+            `<div class="message-${side}">${message.nickname}: ${message.content}</div>`);
         });
-        console.log("Subscribed to room:", roomId);
       } else {
-        // 혹시 아직 연결이 안됐으면 연결 후에 재시도
         connect();
-        setTimeout(() => enterChatRoom(roomId), 300); // 지연 후 재호출
+        setTimeout(() => enterChatRoom(roomId, productName), 300);
         return;
       }
 
-      // UI 표시 전환 및 전역 변수 세팅
+      // 상대방 닉네임과 상품 이름을 올바르게 설정
+      const opponentNickname = document.querySelector('.chat-item[data-room-id="' + roomId + '"]').getAttribute('data-opponent-nickname');
+      document.querySelector('.chat-partner-name').textContent = productName; // 상품 이름을 설정
+
       document.querySelector('.chat-list').style.display = 'none';
       document.querySelector('.chat-room').style.display = 'block';
-      currentRoomId = roomId;
+      document.querySelector('.report-room').style.display = 'none';
 
-      // (선택) 예전 메시지 불러오기, 실패해도 무시
       loadChatRoomMessages(roomId);
     }
 
-    // 메시지 기록 가져오기 (404 발생 시 무시)
     function loadChatRoomMessages(roomId) {
-      console.log("Loading messages for room:", roomId);
       axios.get(`/chat/messages/${roomId}`)
         .then(res => {
-          const messages = res.data;
-          messages.forEach(message => {
-            const side = (String(message.userNum) === String(currentUser)) ? 'right' : 'left';
-            const messageDiv = `<div class="message-${side}">${message.userNum}: ${message.content}</div>`;
-            document.querySelector('#chatMessages').insertAdjacentHTML('beforeend', messageDiv);
+          res.data.forEach(msg => {
+            const side = String(msg.userNum) === String(currentUser) ? 'right' : 'left';
+            document.querySelector('#chatMessages').insertAdjacentHTML('beforeend',
+              `<div class="message-${side}">${msg.nickname}: ${msg.content}</div>`);
           });
-        })
-        .catch(err => {
-          console.error("채팅 메시지 조회 오류:", err);
         });
     }
 
-    // 메시지 전송
     function sendMessage() {
-      const content = document.querySelector('#chatInput').value.trim();
-      if (!content) return;
-      if (!currentUser || !currentRoomId) {
-        console.log("Invalid message or missing user/room data.");
-        return;
-      }
-      if (!stompClient || !stompClient.connected) {
-        alert("서버와 연결되지 않았습니다. 새로고침 후 시도해주세요.");
-        return;
-      }
+      const input = document.querySelector('#chatInput');
+      const content = input.value.trim();
+      if (!content || !currentUser || !currentRoomId) return;
 
       const message = {
-        userNum: currentUser,          // 서버 ChatmessageDTO와 필드명 1:1
+        userNum: currentUser,
         content: content,
         chatroomNum: Number(currentRoomId)
       };
-      console.log("Sending message:", message);
 
       stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message));
-      document.querySelector('#chatInput').value = '';
-      // 실제 메시지 도착 시 구독 콜백에서 append됨!
+      input.value = '';
+    }
+
+    function openReportRoom(opponentNum) {
+      document.querySelector('.chat-list').style.display = 'none';
+      document.querySelector('.chat-room').style.display = 'none';
+      document.querySelector('.report-room').style.display = 'block';
+      document.querySelector('#reportTypeSelect').value = "1";
+      document.querySelector('#hiddenUserNum').value = opponentNum;
+      document.querySelector('#reportTitle').value = '';
+      document.querySelector('#reportContent').value = '';
+   		// ✅ 현재 선택된 chat-item에서 prdNum 추출하여 hidden에 넣기
+      const chatItem = document.querySelector(`.chat-item[data-opponent-num="${opponentNum}"]`);
+      if (chatItem) {
+        const prdNum = chatItem.getAttribute('data-prd-num'); // 또는 data-room-id로 써도 됨
+        document.querySelector('#hiddenPrdNum').value = prdNum || ''; // 값이 없으면 빈 문자열로
+      }
+    }
+
+    function cancelReport() {
+      document.querySelector('.report-room').style.display = 'none';
+      document.querySelector('.chat-list').style.display = currentRoomId ? 'none' : 'block';
+      document.querySelector('.chat-room').style.display = currentRoomId ? 'block' : 'none';
+    }
+
+    function submitReport() {
+      const title = document.querySelector('#reportTitle').value.trim();
+      const content = document.querySelector('#reportContent').value.trim();
+      const reportType = document.querySelector('#reportTypeSelect').value;
+      const userNum = document.querySelector('#hiddenUserNum').value;
+
+      if (!title || !content) {
+        alert('제목과 내용을 입력해주세요.');
+        return;
+      }
+
+      const payload = {
+        title,
+        content,
+        reportType: parseInt(reportType),
+        searchType: 'Y',
+        userNum: userNum,
+        prdNum: null
+      };
+
+      axios.post('/report', payload)
+        .then(() => {
+          alert('신고가 완료되었습니다.');
+          cancelReport();
+        }).catch(() => {
+          alert('신고 처리 중 오류');
+        });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      console.log("Document loaded, connecting to WebSocket...");
       connect();
-      // 뒤로가기 버튼
-      document.querySelector('.back-button').addEventListener('click', function () {
-        document.querySelector('.chat-room').style.display = 'none';
-        document.querySelector('.chat-list').style.display = 'block';
-        // 방 구독 해제
-        if (currentRoomSubscription) {
-          currentRoomSubscription.unsubscribe();
-          currentRoomSubscription = null;
-        }
-        currentRoomId = null;
-      });
-      // 메시지 전송
+
       document.querySelector('#sendBtn').addEventListener('click', sendMessage);
-      // Enter키로 메시지 전송
-      document.querySelector('#chatInput').addEventListener('keypress', function (e) {
+      document.querySelector('#chatInput').addEventListener('keypress', e => {
         if (e.key === 'Enter') sendMessage();
       });
-      // 채팅 오버레이 닫기
+
+      document.querySelectorAll('.back-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelector('.chat-room').style.display = 'none';
+          document.querySelector('.report-room').style.display = 'none';
+          document.querySelector('.chat-list').style.display = 'block';
+          currentRoomId = null;
+          if (currentRoomSubscription) currentRoomSubscription.unsubscribe();
+        });
+      });
+
+      document.querySelector('.report-btn-inside').addEventListener('click', () => {
+        openReportRoom(currentOpponentUserNum);
+      });
+
+      document.querySelector('#cancelReportBtn').addEventListener('click', cancelReport);
+      document.querySelector('#submitReportBtn').addEventListener('click', submitReport);
+
       document.querySelector('.chat-overlay').addEventListener('click', function () {
         document.querySelector('.chat-modal').classList.remove('show');
         setTimeout(() => {
@@ -197,7 +231,8 @@
           document.querySelector('body').classList.remove('modal-open');
         }, 300);
       });
-      document.querySelector('.close-button').addEventListener('click', function () {
+
+      document.querySelector('.close-button').addEventListener('click', () => {
         document.querySelector('.chat-modal').classList.remove('show');
         setTimeout(() => {
           document.querySelector('.chat-overlay').style.display = 'none';
@@ -205,29 +240,68 @@
           document.querySelector('body').classList.remove('modal-open');
         }, 300);
       });
-      document.querySelector('.chat-modal').addEventListener('click', function (e) {
-        e.stopPropagation();
-      });
+
+      document.querySelector('.chat-modal').addEventListener('click', e => e.stopPropagation());
     });
+    
+ 	// 신고 폼 제출 함수
+    function submitReport() {
+	  const title = document.querySelector('#reportTitle').value.trim();
+	  const content = document.querySelector('#reportContent').value.trim();
+	  const reportType = document.querySelector('#reportTypeSelect').value;
+	  const userNum = document.querySelector('#hiddenUserNum').value;
+	  const prdNum = document.querySelector('#hiddenPrdNum').value;
+	
+	  if (!title || !content) {
+	    alert('제목과 내용을 입력해주세요.');
+	    return;
+	  }
+	
+	  // 신고 유형에 따라 userNum 또는 prdNum만 보내기
+	  const payload = {
+	    title: title,
+	    content: content,
+	    reportType: parseInt(reportType), // 1: 판매자 신고, 2: 상품 신고
+	    searchType: reportType === "1" ? 'Y' : 'N', // 판매자 신고일 경우 'Y', 상품 신고일 경우 'N'
+	    userNum: reportType === "1" ? userNum : null,  // 판매자 신고일 경우 userNum
+	    prdNum: reportType === "2" ? prdNum : null   // 상품 신고일 경우 prdNum
+	  };
+	
+	  // 신고 데이터를 서버로 전송
+	  axios.post('/report', payload)
+	    .then(() => {
+	        alert('신고가 완료되었습니다.');
+	        cancelReport();
+	    })
+	    .catch((err) => {  // err를 catch에 정의
+	        console.error('Error details:', err);  // 오류를 콘솔에 출력
+	        alert('신고 처리 중 오류가 발생했습니다.');
+	    });
+	}
   </script>
 
-  <!-- 채팅 오버레이 UI -->
+  <!-- 채팅 UI -->
   <div class="chat-overlay" style="display:none;"></div>
   <div class="chat-modal">
     <div class="chat-container">
+
+      <!-- 헤더 -->
       <div class="chat-header">
         <h1 class="chat-title">채팅</h1>
         <button class="close-button">X</button>
       </div>
 
-      <!-- 채팅방 목록 -->
+      <!-- 목록 -->
       <div class="chat-list" id="chatList"></div>
 
-      <!-- 채팅방 내용 -->
-      <div class="chat-room" style="display: none;">
+      <!-- 채팅방 -->
+      <div class="chat-room" style="display:none;">
         <div class="chat-room-header">
           <button class="back-button">←</button>
-          <span class="chat-partner-name">상대 이름</span>
+          <span class="chat-partner-name">상품 이름</span>
+          <button class="report-btn-inside">
+            <img src="/images/report_icon.png" style="width: 20px; height: 20px;" />
+          </button>
         </div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input-area">
@@ -235,6 +309,37 @@
           <button id="sendBtn">전송</button>
         </div>
       </div>
+
+      <!-- 신고방 -->
+      <div class="report-room" style="display: none;">
+        <div class="chat-room-header">
+          <button class="back-button">←</button>
+          <span>신고하기</span>
+        </div>
+
+        <form id="reportForm">
+          <label for="reportTitle">제목</label>
+          <input type="text" id="reportTitle" placeholder="제목 입력" />
+
+          <label for="reportContent">내용</label>
+          <textarea id="reportContent" placeholder="신고 사유 입력"></textarea>
+
+          <label for="reportTypeSelect">신고 유형</label>
+          <select id="reportTypeSelect">
+            <option value="1">유저 신고</option>
+            <option value="2">상품 신고</option>
+          </select>
+
+          <div class="report-btns">
+            <button type="button" id="submitReportBtn">신고</button>
+            <button type="button" id="cancelReportBtn">취소</button>
+          </div>
+        </form>
+
+        <input type="hidden" id="hiddenUserNum" />
+        <input type="hidden" id="hiddenPrdNum" />
+      </div>
+
     </div>
   </div>
 </th:block>

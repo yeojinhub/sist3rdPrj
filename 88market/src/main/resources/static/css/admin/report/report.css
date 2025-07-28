@@ -1,0 +1,301 @@
+/* 기본 스타일 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* 전체 레이아웃 */
+.admin-wrapper {
+    display: flex;
+}
+
+/* 공통 레이아웃 */
+.main-content {
+  margin-left: 250px;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  padding: 30px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* 검색 영역 */
+.search-section {
+  margin-bottom: 20px;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.search-filter {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.search-button {
+  padding: 8px 18px;
+  background-color: #353535;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: #353535;
+}
+
+/* 신고 목록 테이블 */
+.report-section {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.report-table th,
+.report-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.report-table th {
+  background-color: #f1f1f1;
+  font-weight: 600;
+  color: #333;
+}
+
+.report-table td.report-title {
+  text-align: left;
+  color: #0077cc;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.report-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* 체크박스 */
+input[type="checkbox"] {
+  transform: scale(1.2);
+}
+
+/* 상태 뱃지 */
+.status-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #eef3f7;
+  color: #555;
+}
+
+/* 버튼 컨트롤 영역 */
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.table-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.control-button {
+  padding: 8px 16px;
+  background-color: #7fd0f4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.control-button:hover {
+  background-color: #5bbbe3;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pagination a {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  background-color: #fff;
+  transition: background-color 0.3s;
+}
+
+.pagination a:hover:not(.active):not(.disabled) {
+  background-color: #f0f0f0;
+}
+
+.pagination a.active {
+  background-color: #7fd0f4;
+  color: white;
+}
+
+.pagination a.disabled {
+  color: #aaa;
+  pointer-events: none;
+  background-color: #f4f4f4;
+}
+
+/* 반응형 처리 */
+@media (max-width: 768px) {
+  .search-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input,
+  .search-filter,
+  .search-button {
+    width: 100%;
+  }
+
+  .table-footer {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+}
+
+/* === 신고 상세 페이지 추가 === */
+
+.report-detail-section {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  max-width: 900px;
+  margin: 0 auto;
+  font-size: 15px;
+}
+
+.report-detail-box h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.report-detail-box p {
+  margin: 10px 0;
+  color: #444;
+  line-height: 1.5;
+}
+
+.report-detail-box strong {
+  color: #000;
+  font-weight: 600;
+}
+
+.report-content {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+/* 버튼 영역 */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.action-button {
+  padding: 10px 18px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #bbb;
+}
+
+.submit-btn {
+  background-color: #7fd0f4;
+  color: white;
+}
+
+.submit-btn:hover {
+  background-color: #5bbbe3;
+}
+
+.alert-box {
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 12px 18px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border: 1px solid #d0e9c6;
+}
+
+

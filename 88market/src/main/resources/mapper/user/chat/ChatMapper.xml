@@ -17,11 +17,20 @@
         VALUES (SEQ_CHATROOM_NUM.NEXTVAL, #{prdNum}, #{sellerNum}, #{buyerNum}, SYSDATE)
     </insert>
 
-    <!-- 채팅방 리스트 가져오기 (예시) -->
+    <!-- 채팅방 리스트 가져오기 리스트 -->
     <select id="getChatRoomsByUser" parameterType="String" resultType="kr.co.sist.DTO.ChatroomDTO">
         SELECT * FROM CHATROOM
         WHERE seller_num = #{userNum} OR buyer_num = #{userNum}
     </select>
+    
+    <select id="getChatRoomId" parameterType="map" resultType="String">
+	    SELECT chatroom_num
+	    FROM (SELECT chatroom_num
+	    FROM chatroom
+	    WHERE prd_num = #{prdNum} AND seller_num = #{sellerNum} AND buyer_num = #{buyerNum}
+	    ORDER BY create_date)
+	    WHERE ROWNUM = 1
+	</select>
     
     <!-- 유저정보 -->
     <select id="selectUserByUserNum" parameterType="string" resultType="kr.co.sist.DTO.UserDTO">
@@ -79,6 +88,12 @@
             CREATE_DATE ASC
     </select>
 
+	<!-- 신고 데이터 저장 -->
+    <insert id="insertReport" parameterType="kr.co.sist.DTO.ReportDTO">
+        INSERT INTO report (rep_num, title, content, name, input_date, report_type, search_type, user_num, prd_num)
+        VALUES (SEQ_REP_NUM.NEXTVAL,#{title}, #{content}, #{name}, SYSDATE, #{reportType}, #{searchType},
+         #{userNum, jdbcType=VARCHAR}, #{prdNum, jdbcType=VARCHAR})
+    </insert>
 	
 	<resultMap id="ChatRoomSummaryMap" type="map">
 	  <result property="chatroomNum" column="chatroom_num"/>
