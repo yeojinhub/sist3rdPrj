@@ -98,7 +98,8 @@
 		<section class="results-grid_search">
 			<!-- 광고 상품 있음 ( 카테고리 - 기업) -->
 			<div th:if="${adItem != null}" class="product-card_search ad-item">
-			  <a th:href="@{/detail(id=${adItem.comNum})}">
+			<!-- http://localhost:8080/planingDetail?id=P_00000032&comNum=1 -->
+			  <a th:href="@{|/planingDetail?id=${adItem.prdNum}&comNum=${adItem.comNum}|}">
 			    <div class="ad-badge">
 			      <p>광고</p>
 			    </div>
@@ -170,70 +171,6 @@
 					</div>
 				</a>
 			</div>
-
-		  <!-- 광고 상품 잇음 ( 카테고리 - 기업) -->
-		  <div th:if="${adItem != null}"
-		       class="product-card_search ad-item">
-		      <div class="ad-badge"><p>광고</p></div>
-		    <div class="product-image-wrapper">
-		      <img th:src="@{${adImage.mainImage}}" alt="광고 상품" />
-		    </div>
-		    <div class="product-info_search">
-		      <p class="product-name_search" th:text="${adItem.title}">상품명</p>
-		      <p class="product-price_search"
-		         th:text="|${#numbers.formatDecimal(adItem.price,0,'COMMA',0,'POINT')}원|">가격</p>
-		      <p class="product-meta_search" th:text="${adItem.comName}">회사명</p>
-		    </div>
-		  </div>
-		
-		  <!-- 광고 상품 없음 ( 카테고리 - 기업)  + 일반상품도 없을때 -->
-		  <div th:if="${adItem == null and #lists.isEmpty(results)}"
-		       class="empty-wrapper">
-		    <div class="empty-state">
-		      <i class="fa fa-box-open empty-icon"></i>
-		      <p class="empty-text">등록된 상품이 없습니다.</p>
-		    </div>
-		  </div>
-		
-		  <!-- 일반 상품 리스트 -->
-		  <div th:each="item, iterstat : ${results}"
-		       class="product-card_search">
-		        <a th:href="@{/detail(id=${item.prdNum})}" class="product-link_search">
-		    <div class="product-image-wrapper">
-		      <div class="overlay_seller"
-		           th:if="${item.sellType=='N' and item.appointType=='Y'}"><p>예약중</p></div>
-		      <div class="overlay_seller"
-		           th:if="${item.sellType=='Y'}"><p>판매완료</p></div>
-		      <img th:src="@{${resultsImage[iterstat.index].mainImage}}" alt="상품 이미지" />
-		    </div>
-		    <div class="product-info_search">
-		      <p class="product-name_search" th:text="${item.title}">상품명</p>
-		      <p class="product-price_search"
-		         th:text="|${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}원|">가격</p>
-		      <th:block>
-		        <p class="product-meta_search" th:if="${item.comNum != null}"
-		           th:text="${item.comName}">회사명</p>
-		        <p class="product-meta_search" th:unless="${item.comNum != null}"
-		           th:text="${item.shortLocation} + ' · ' + ${#dates.format(item.inputDate,'yyyy-MM-dd HH:mm')}">
-		          위치
-		        </p>
-		      </th:block>
-		      <div class="product-meta-row">
-		        <div class="product-engagement_search">
-		          <i class="fa fa-eye"></i><span th:text="${item.clickNum}"></span>
-		          <th:block th:if="${item.comNum == null}">
-		            <!-- <i class="fa fa-comment"></i><span th:text="${ChatCnt[iterstat.index]}"></span> -->
-		            <i class="fa fa-heart"></i><span th:text="${item.likeNum}"></span>
-		          </th:block>
-		        </div>
-		        
-		        <button class="wish-btn">
-		          <img th:src="@{/images/productHeart/heart-off.png}" alt="찜하기" class="heart-icon"/>
-		        </button>
-		      </div>
-		    </div>
-		    </a>
-		  </div>
 		 
 		</section>
 	</main>
