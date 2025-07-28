@@ -63,6 +63,8 @@ public class AdminLoginController {
                 session.setAttribute("loggedInAccountType", "ADMIN");
                 session.setAttribute("loggedInAdmin", admin);
                 session.setAttribute("loggedInName", admin.getName()); // 헤더에 표시할 이름
+                session.setAttribute("loginId", admin.getId());
+                session.setAttribute("rollType", admin.getRollType()); // 또는 admin.getAdminType(), admin.getRoleCode()
                 return "redirect:/admin/home"; // 관리자 홈으로 리다이렉트
             } else {
                 model.addAttribute("error", "관리자 아이디 또는 비밀번호가 올바르지 않습니다.");

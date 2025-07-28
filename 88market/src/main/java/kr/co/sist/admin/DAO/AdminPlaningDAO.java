@@ -87,4 +87,35 @@ public interface AdminPlaningDAO {
     // 거래 상태 업데이트 (추가)
     void updateTradeStatus(String tradeId, String tradeStatus);
     
+ // 관리자 전체 상품 검색
+    List<ProductDTO> searchAllProducts(
+        @Param("keyword") String keyword,
+        @Param("hidden") String hidden,
+        @Param("startRow") int startRow,
+        @Param("endRow") int endRow
+    );
+
+    // 관리자 전체 상품 수 조회
+    int getAllProductCount(
+        @Param("keyword") String keyword,
+        @Param("hidden") String hidden
+    );
+    
+    //관리자 주문관리
+    List<OrderManageDTO> selectOrdersForAdmin(
+	    @Param("keyword") String keyword,
+	    @Param("tradeStatus") String tradeStatus,
+	    @Param("startRow") int startRow,
+	    @Param("endRow") int endRow
+	);
+
+	int countOrdersForAdmin(
+	    @Param("keyword") String keyword,
+	    @Param("tradeStatus") String tradeStatus
+	);
+	
+	void updateProductImgNum(@Param("prdNum") String prdNum,@Param("imgNum") int imgNum);
+	
+	int updateTradeStatus(OrderManageDTO dto);
+	
 }

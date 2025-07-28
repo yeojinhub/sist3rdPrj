@@ -91,25 +91,27 @@ public class AdminPlaningService {
     	    dto.setSellType("N");
     	}
     	
-        /* 1)  상품 기본 정보 UPDATE */
-        adminPlaningDAO.updateProduct(dto);   // 제목·가격·노출여부 등
+    	/* 1) 상품 기본 정보만 먼저 업데이트  ─ imgNum은 건드리지 않음 */
+    	adminPlaningDAO.updateProduct(dto);
 
-        /* 2)  이미지가 넘어온 경우만 처리 */
-        if (newImages != null && !newImages.isEmpty()) {
+    	/* 2) 새 이미지가 넘어온 경우에만 처리 */
+    	if (newImages != null && !newImages.isEmpty()) {
 
-            int imgNum = dto.getImgNum() == 0
-                       ? getNextImageSeq() : dto.getImgNum();
-            dto.setImgNum(imgNum);
+    	    /* ➡ 새 이미지 번호 무조건 발급! */
+    	    int newImgNum = getNextImageSeq();
+    	    dto.setImgNum(newImgNum);          // 상품 DTO에 새 번호 세팅
 
-            // ⇒ 실제 파일 저장 + ImageDTO 생성
-            ImageDTO imgDto = buildImageDTO(imgNum, newImages, dto.getPrdNum());
+    	    /* 2‑1) 실제 파일 저장 + ImageDTO 만들기 */
+    	    ImageDTO imgDto = buildImageDTO(newImgNum, newImages, dto.getPrdNum());
 
-            /* 2‑1) IMAGE 테이블 insert / update 결정 */
-            if (adminPlaningDAO.existsImage(imgNum) == 0)
-                adminPlaningDAO.insertImage(imgDto);
-            else
-                adminPlaningDAO.updateImage(imgDto);
-        }
+    	    /* 2‑2) IMAGE 테이블 INSERT (새 번호니까 insert면 충분) */
+    	    adminPlaningDAO.insertImage(imgDto);
+
+    	    /* 2‑3) PRODUCT 테이블에 img_num 갱신 */
+    	    adminPlaningDAO.updateProductImgNum(dto.getPrdNum(), newImgNum);
+    	}
+        
+        
     }
 
     /* ❷ 파일 저장 + ImageDTO 조립 (등록 때 쓰던 것 재활용) */
@@ -157,14 +159,30 @@ public class AdminPlaningService {
     }
     
     // 주문 리스트 조회
-    public List<OrderManageDTO> getOrderList(String comNum, String keyword, String tradeStatus, int startRow, int endRow) {
-        return adminPlaningDAO.selectOrdersByCompany(comNum, keyword, tradeStatus, startRow, endRow);
-    }
+//    public List<OrderManageDTO> getOrderList(String comNum, String keyword, String tradeStatus, int startRow, int endRow) {
+//        
+//    	
+//    	return adminPlaningDAO.selectOrdersByCompany(comNum, keyword, tradeStatus, startRow, endRow);
+//    }
+    public List<OrderManageDTO> getOrderList(String accountType, String comNum,String keyword, String tradeStatus,int startRow, int endRow) {
+		if ("ADMIN".equalsIgnoreCase(accountType)) {
+		return adminPlaningDAO.selectOrdersForAdmin(keyword, tradeStatus, startRow, endRow);
+		} else {
+		return adminPlaningDAO.selectOrdersByCompany(comNum, keyword, tradeStatus, startRow, endRow);
+		}
+	}
 
     // 주문 개수 조회
-    public int getOrderCount(String comNum, String keyword, String tradeStatus) {
-        return adminPlaningDAO.countOrdersByCompany(comNum, keyword, tradeStatus);
-    }
+//    public int getOrderCount(String comNum, String keyword, String tradeStatus) {
+//        return adminPlaningDAO.countOrdersByCompany(comNum, keyword, tradeStatus);
+//    }
+    public int getOrderCount(String accountType, String comNum, String keyword, String tradeStatus) {
+		if ("ADMIN".equalsIgnoreCase(accountType)) {
+		return adminPlaningDAO.countOrdersForAdmin(keyword, tradeStatus);
+		} else {
+		return adminPlaningDAO.countOrdersByCompany(comNum, keyword, tradeStatus);
+		}
+	}
 
     // 거래 상세 조회
     public OrderManageDTO getOrderDetail(String tradeId) {
@@ -176,5 +194,18 @@ public class AdminPlaningService {
         adminPlaningDAO.updateTradeStatus(tradeId, tradeStatus);
     }
     
+    // 관리자 전체 상품 검색
+    public List<ProductDTO> searchAllProducts(String keyword, String hidden, int startRow, int endRow) {
+        return adminPlaningDAO.searchAllProducts(keyword, hidden, startRow, endRow);
+    }
+
+    // 관리자 전체 상품 수 조회
+    public int getAllProductCount(String keyword, String hidden) {
+        return adminPlaningDAO.getAllProductCount(keyword, hidden);
+    }
+    
+    public void updateTradeStatus(OrderManageDTO dto) {
+        adminPlaningDAO.updateTradeStatus(dto);
+    }
     
 }
