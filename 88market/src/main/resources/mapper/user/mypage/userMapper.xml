@@ -85,5 +85,15 @@
     FROM USERS u
     WHERE u.EMAIL = #{email}
   </select>
+  
+  <update id="updateUserInfo" parameterType="kr.co.sist.DTO.UserDTO">
+    UPDATE USERS
+    SET
+      nickname = #{nickname},
+      tel      = #{tel},
+      zipcode  = #{zipcode},
+      address  = #{address}
+    WHERE user_num = #{userNum}
+  </update>
 
 </mapper>

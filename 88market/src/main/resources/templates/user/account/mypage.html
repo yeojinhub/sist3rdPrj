@@ -9,6 +9,7 @@
 <link rel="stylesheet" th:href="@{/css/user/fragments/mypageMain.css}">
 <link rel="stylesheet" th:href="@{/css/user/fragments/sales.css}">
 <link rel="stylesheet" th:href="@{/css/user/fragments/wishlist.css}">
+<link rel="stylesheet" th:href="@{/css/user/mypage/info.css}">
 <!-- 외부파일(jQuery, Font Awesome 등) -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
@@ -54,11 +55,6 @@
 		    <th:block th:replace="~{fragments/user/mypageList/address :: mypageInfo}"/>
 		  </th:block>
 		  
-		  <!-- review -->
-		  <th:block th:if="${tab=='review'}">
-		    <th:block th:replace="~{fragments/user/mypageList/review :: mypageInfo}"/>
-		  </th:block>
-		
 		  <!-- withdraw -->
 		  <th:block th:if="${tab=='withdraw'}">
 		    <th:block th:replace="~{ragments/user/mypageList/withdraw :: mypageInfo}"/>
@@ -87,9 +83,15 @@
 		    });
 		  });
 		</script>
-
-	<script th:src="@{/js/mypage-tabs.js}"></script>
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
+
+	<script th:src="@{/js/mypage-tabs.js}"></script>
+	<!-- 다음 주소 API -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<!-- 우편번호 찾기 스크립트 -->
+	<script th:src="@{/js/user/postcode.js}" defer></script>
+	<!-- 버튼 동작 스크립트 -->
+	<script th:src="@{/js/user/mypage/info.js}"></script>
 </body>
 </html>

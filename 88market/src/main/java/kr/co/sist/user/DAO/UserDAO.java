@@ -28,5 +28,8 @@ public interface UserDAO {
      * @return 신고 횟수 (없으면 0)
      */
     Integer selectTotalReportByUserNum(String userNum);
+    
+    /** 마이페이지 정보 수정 */
+    public int updateUserInfo(UserDTO dto);
 
 }

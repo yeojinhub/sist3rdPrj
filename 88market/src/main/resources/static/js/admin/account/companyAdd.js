@@ -1,19 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-	const select = document.getElementById('select');
-	const input  = document.getElementById('email-domain');
-
-	select.addEventListener('change', function() {
-		const val = this.value;
-		
-		if (val === 'other' || val === '') {
-			input.value = '';
-			input.removeAttribute('readonly');
-			input.focus();
-		} else {
-			input.value = val;
-			input.setAttribute('readonly', 'readonly');
-		} //end if else
-	}); //addEventListener
 
 	// 이름 실시간 유효성 검사
 	const nameInput = document.getElementById("name");
@@ -47,37 +32,62 @@ document.addEventListener('DOMContentLoaded', function() {
 		return true;
 	} //validateName
 	
-	// 닉네임 실시간 유효성 검사
-	const nickInput = document.getElementById("nickname");
-	nickInput.addEventListener('input', function() {
-	    validateNick(nickInput.value);
+	// 기업명 실시간 유효성 검사
+	const comInput = document.getElementById("comName");
+	comInput.addEventListener('input', function() {
+	    validateCom(comInput.value);
 	}); //nickInput
 		
-	// 닉네임 유효성 검사 함수
-	function validateNick(nick) {
-		const nickText = /^[가-힣]+$/;
+	// 기업명 유효성 검사 함수
+	function validateCom(company) {
 		// null 검사 실패
-		if (!nick){
-			showErrorMessage("nickname", "닉네임을 입력하세요.");
+		if (!company){
+			showErrorMessage("comName", "기업명을 입력하세요.");
 			return false;
 		} //end if
 			
 		// 길이 검사 실패
-		if(nick.length < 1) {
-			showErrorMessage("nickname", "닉네임은 최소 2자리, 최대 50자리 가능합니다.");
-			return false;
-		} //end if
-		
-		// 한글 검사 실패
-		if (!nickText.test(nick)) {
-			showErrorMessage("nickname", "닉네임은 한글만 가능합니다.");
+		if(company.length < 1) {
+			showErrorMessage("comName", "기업명은 최소 2자리, 최대 50자리 가능합니다.");
 			return false;
 		} //end if
 		
 		// 유효성 검사 성공
-		hideErrorMessage("nickname");
+		hideErrorMessage("comName");
 		return true;
-	} //validateNick
+	} //validateCom
+	
+	// 대표자명 실시간 유효성 검사
+	const ceoInput = document.getElementById("ceoName");
+	ceoInput.addEventListener('input', function() {
+	    validateCeo(ceoInput.value);
+	}); //ceoInput
+		
+	// 대표자명 유효성 검사 함수
+	function validateCeo(ceo) {
+		const ceoText = /^[가-힣]+$/;
+		// null 검사 실패
+		if (!ceo){
+			showErrorMessage("ceoName", "대표자명을 입력하세요.");
+			return false;
+		} //end if
+			
+		// 길이 검사 실패
+		if(ceo.length < 1) {
+			showErrorMessage("ceoName", "대표자명은 최소 2자리, 최대 50자리 가능합니다.");
+			return false;
+		} //end if
+		
+		// 한글 검사 실패
+		if (!ceoText.test(ceo)) {
+			showErrorMessage("ceoName", "대표자명은 한글만 가능합니다.");
+			return false;
+		} //end if
+		
+		// 유효성 검사 성공
+		hideErrorMessage("ceoName");
+		return true;
+	} //validateCeo
 	
 	// 전화번호 실시간 유효성 검사
 	const telInput = document.getElementById("tel");
@@ -106,69 +116,66 @@ document.addEventListener('DOMContentLoaded', function() {
 		return true;
 	} //validateTel
 	
-	// 이메일 실시간 유효성 검사
-	const emailInput = document.getElementById("email-id");
-	emailInput.addEventListener('input', function() {
-	    validateEmail(emailInput.value);
-	}); //emailInput
+	// 사업자등록번호 실시간 유효성 검사
+	const businessInput = document.getElementById("businessNum");
+	businessInput.addEventListener('input', function() {
+	    validateBusiness(businessInput.value);
+	}); //businessInput
+
+	// 전화번호 유효성 검사
+	function validateBusiness(tel) {
+		const businessText = /^\d{10}$/;
+		
+		// null 검사 실패
+		if (!tel) {
+			showErrorMessage("businessNum","사업자번호를 입력하세요.");
+			return false;
+		} //end if
+		
+		// 길이 검사 실패
+		if (!businessText.test(tel)) {
+			showErrorMessage("businessNum","사업자번호는 숫자만 입력 가능, 최소 10자리만 가능합니다.");
+			return false;
+		} //end if
+		
+		// 유효성 검사 성공
+		hideErrorMessage("businessNum");
+		return true;
+	} //validateBusiness
 	
-	// 이메일 유효성 검사 함수
-	function validateEmail(email) {
-	  const emailRegex = /^[a-zA-Z0-9]+$/;
+	// 아이디 실시간 유효성 검사
+	const idInput = document.getElementById("id");
+	idInput.addEventListener('input', function() {
+	    validateId(idInput.value);
+	}); //idInput
+	
+	// 아이디 유효성 검사 함수
+	function validateId(id) {
+	  const idRegex = /^[a-zA-Z0-9]+$/;
 
 	  // null 검사 실패
-	  if (!email) {
-		styleError('email-id');
-	    showErrorMessage("email-domain", "이메일을 입력하세요.");
+	  if (!id) {
+	    showErrorMessage("id", "아이디를 입력하세요.");
 	    return false;
 	  } //end if
 
 	  // 길이 검사 실패
-	  if (email < 4){
-		styleError('email-id');
-		showErrorMessage("email-domain","이메일은 최소 4자리, 최대 15자리 가능합니다.")
+	  if (id.length < 4){
+		showErrorMessage("id","아이디는 최소 4자리, 최대 15자리 가능합니다.")
 		return false;
 	  } //end if
 	  
 	  // 영문, 숫자 검사 실패
-	  if (!emailRegex.test(email)) {
-		styleError('email-id');
-	    showErrorMessage("email-domain", "이메일은 영문 포함 숫자만 가능합니다.");
+	  if (!idRegex.test(id)) {
+	    showErrorMessage("id", "아이디는 영문 포함 숫자만 가능합니다.");
 	    return false;
 	  } //end if
 
 	  // 유효성 검사 성공
-	  hideErrorMessage("email-id");
+	  hideErrorMessage("id");
 	  return true;
-	} //validateEmail
+	} //validateId
 	
-	// 도메인 실시간 유효성 검사
-	const domainInput = document.getElementById("email-domain");
-	domainInput.addEventListener('input', function() {
-	    validateDomain(domainInput.value);
-	}); //domainInput
-
-	// 도메인 유효성 검사 함수
-	function validateDomain(domain) {
-
-	  // null 검사 실패
-	  if (!domain) {
-		styleError("email-domain");
-	    showErrorMessage("email-domain", "도메인을 입력하세요.");
-	    return false;
-	  } //end if
-
-	  // 길이 검사 실패
-	  if (domain < 4){
-		styleError("email-domain");
-		showErrorMessage("email-domain","도메인을 최소 4자리, 최대 15자리 가능합니다.")
-		return false;
-	  } //end if
-	  
-	  // 유효성 검사 성공
-	  hideErrorMessage("email-domain");
-	  return true;
-	} //validateDomain
 	
 	// 비밀번호와 비밀번호 확인 실시간 유효성 검사
 	const passInput = document.getElementById("pass");
@@ -356,12 +363,24 @@ document.addEventListener('DOMContentLoaded', function() {
 		return tel;
 	} //formatTel
 	
+	// 사업자등록번호 포맷 함수
+	function formatBusiness(num) {
+		// 10자리
+		if(num.length === 10){
+			return num.replace(/(\d{3})(\d{2})(\d{5})/,'$1-$2-$3')
+		} //end if
+		
+		return num;
+	} //formatBusiness
+	
 	const btnAdd = document.getElementById("btnAdd");
 	btnAdd.addEventListener("click", function () {
+		const comName = document.getElementById("comName").value;
+		const ceoName = document.getElementById("ceoName").value;
 		const name = document.getElementById("name").value;
-	    const nickname = document.getElementById("nickname").value;
 	    const tel = document.getElementById("tel").value;
-	    const email = document.getElementById("email-id").value + "@" + document.getElementById("email-domain").value;
+	    const businessNum = document.getElementById("businessNum").value;
+	    const id = document.getElementById("id").value;
 	    const pass = document.getElementById("pass").value;
 	    const passCheck = document.getElementById("pass-check").value;
 	    const zipcode = document.getElementById("zipcode").value;
@@ -370,17 +389,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	      document.getElementById("detail-address").value + "/"+
 	      document.getElementById("extra-address").value;
 	    const regDate = document.getElementById("reg-date").value;
-		const banValue = document.querySelector('input[name="ban"]:checked').value;
 		const withdrawValue = document.querySelector('input[name="withdraw"]:checked').value;
 
-		// 이름 null 검사
-		if( !validateNullEul(name, "이름") ){
+		// 기업명 null 검사
+		if( !validateNullEul(comName, "기업명") ){
 			// null 검사 실패
 			return;
 		} //end if
 		
-		// 닉네임 null 검사
-		if( !validateNullEul(nickname, "닉네임") ){
+		// 대표자명 null 검사
+		if( !validateNullEul(ceoName, "대표자명") ){
+			// null 검사 실패
+			return;
+		} //end if
+		
+		// 담당자명 null 검사
+		if( !validateNullEul(name, "담당자명") ){
 			// null 검사 실패
 			return;
 		} //end if
@@ -391,14 +415,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			return;
 		} //end if
 		
-		// 이메일 null 검사
-		if(!validateNullEul(document.getElementById("email-id").value, "이메일")){
+		// 사업자등록번호 null 검사
+		if(!validateNullRul(businessNum, "사업자등록번호")){
 			// null 검사 실패
 			return;
 		} //end if
 		
-		// 도메인 null 검사
-		if(!validateNullEul(document.getElementById("email-domain").value, "도메인")){
+		// 아이디 null 검사
+		if(!validateNullRul(id, "아이디")){
 			// null 검사 실패
 			return;
 		} //end if
@@ -428,21 +452,24 @@ document.addEventListener('DOMContentLoaded', function() {
 		} //end if
 		
 		const telString = formatTel(tel);
+		const businessString = formatBusiness(businessNum);
 		
 	    const jsonParam = {
+			comName : comName,
+			ceoName : ceoName,
 			name : name,
 			nickname : nickname,
 			tel : telString,
-			email : email,
+			businessNum : businessString,
+			id : id,
 			pass : pass,
 			zipcode : zipcode,
 			address : address,
 			inputDate : regDate,
-			banType : banValue,
 			withdraw : withdrawValue
 		};
 		
-		fetch('/admin/account/userAddProcess', {
+		fetch('/admin/account/companyAddProcess', {
 			method: "POST",
 			headers: {
 				 "Content-Type": "application/json; charset=UTF-8",
@@ -455,9 +482,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.log(data);
 			if(data.result){
 				// 등록 성공
-				alert("회원 등록이 완료되었습니다.");
+				alert("기업 등록이 완료되었습니다.");
 	    		// 이전 화면으로 이동
-	        	window.location.href = '/admin/account/users';
+	        	window.location.href = '/admin/account/company';
 	    	} else {
 	    		// 등록 실패
 	    		alert(data.msg);
@@ -470,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const btnBack = document.getElementById("btnBack");
 	btnBack.addEventListener("click", function () {
 		// 이전 화면으로 이동
-		window.location.href = '/admin/account/users';
+		window.location.href = '/admin/account/company';
 	}); //btnBack
 	
 }); //DOMContentLoaded

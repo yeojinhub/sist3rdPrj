@@ -41,7 +41,13 @@ public class UserService {
         return (cnt != null ? cnt : 0);
     }
     
-    
-    
-    
+    /**
+     * 마이페이지→정보변경용
+     * @param dto (userNum, nickname, tel, zipcode, address)
+     * @return 수정에 성공하면 true
+     */
+    public boolean updateUserInfo(UserDTO dto) {
+        int updated = userDao.updateUserInfo(dto);
+        return updated > 0;
+    }
 }

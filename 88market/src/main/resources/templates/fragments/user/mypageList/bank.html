@@ -31,4 +31,44 @@
 	<button type="button" id="addAccountBtn" class="add-account-btn">
 		+ 계좌 추가
 	</button>
+	
+	<script>
+  (function(){
+    const MAX = 5;
+    const list = document.querySelector('.account-list');
+    const addBtn = document.getElementById('addAccountBtn');
+
+    addBtn.addEventListener('click', () => {
+      const rows = list.querySelectorAll('.account-row').length;
+      if (rows >= MAX) {
+        alert(`최대 ${MAX}개의 계좌만 추가 가능합니다.`);
+        return;
+      }
+      const div = document.createElement('div');
+      div.className = 'account-row';
+      div.innerHTML = `
+        <div class="account-info">
+          <div class="bank">
+            <span class="label">은행:</span>
+            <input type="text" name="bank" placeholder="은행명" />
+          </div>
+          <div class="number">
+            <span class="label">계좌번호:</span>
+            <input type="text" name="number" placeholder="계좌번호" />
+          </div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn-save">저장</button>
+          <button type="button" class="btn-delete">삭제</button>
+        </div>`;
+      list.appendChild(div);
+    });
+
+    list.addEventListener('click', e => {
+      if (e.target.classList.contains('btn-delete')) {
+        e.target.closest('.account-row').remove();
+      }
+    });
+  })();
+</script>
 </div>

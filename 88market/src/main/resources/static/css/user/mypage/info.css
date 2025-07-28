@@ -1,0 +1,129 @@
+@charset "UTF-8";
+/* 폼 요소들을 감싸는 form 태그 */
+.signup-form {
+    width: 415px; /* 입력 필드 너비에 맞춤 */
+}
+
+/* 트랜지션 주면 부드럽게 바뀝니다 */
+.signup-form input {
+   border: 1px solid #ccc;
+   transition: all 0.2s;
+}
+
+/* 각 입력 필드 그룹 (라벨 + 입력창) */
+.form-group {
+    margin-bottom: 24px;
+}
+
+/* 라벨 스타일 */
+.form-group label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #9d978e;
+    margin-bottom: 10px;
+}
+
+/* 모든 input 필드의 기본 스타일 */
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="tel"] {
+    width: 100%;
+    height: 49px;
+    padding: 0 15px;
+    border: 1px solid #eceef2;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #333;
+}
+
+/* input 필드 placeholder 스타일 */
+.form-group input::placeholder {
+    color: #b3aebd;
+}
+
+/* 이메일 입력 필드 (아이디 + @ + 도메인) */
+.email-field {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.email-field span {
+    color: #bcaab0;
+    font-size: 14px;
+}
+
+/* 전화번호 입력 에러 상태 */
+.form-group .input-error {
+    border-color: #ff0000;
+}
+
+/* 에러 메시지 */
+.error-message {
+    font-size: 12px;
+    font-weight: 300;
+    color: #ff0000;
+    margin-top: 8px;
+}
+
+/* 주소 입력 필드 그룹 */
+.address-field input {
+    margin-bottom: 12px;
+}
+.address-field input:last-child {
+    margin-bottom: 0;
+}
+
+/* 우편번호 찾기 필드 (입력창 + 버튼) */
+.zip-code-field {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.zip-code-field input {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+/* '우편번호 찾기' 버튼 */
+.find-zipcode-btn {
+    width: 101px;
+    height: 49px;
+    background-color: #999999;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.find-zipcode-btn:hover {
+    background-color: #888888;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  display: none; /* 처음에는 안 보이게 */
+}
+
+/* '제출하기' 버튼 */
+.submit-btn {
+    width: 100%;
+    height: 49px;
+    background-color: #999999;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background-color: #888888;
+}
