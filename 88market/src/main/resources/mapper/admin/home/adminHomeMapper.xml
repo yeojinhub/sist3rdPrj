@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.sist.admin.DAO.AdminHomeDAO">
+
+    <!-- 사용자 일별 가입자 수 -->
+<select id="selectMonthlyUserRegistrations" resultType="java.util.HashMap">
+    SELECT
+        TO_CHAR(TRUNC(INPUT_DATE), 'MM-DD') AS join_date,
+        COUNT(*) AS join_count
+    FROM USERS
+    WHERE INPUT_DATE >= TRUNC(SYSDATE) - 29
+    GROUP BY TRUNC(INPUT_DATE)
+    ORDER BY TRUNC(INPUT_DATE)
+</select>
+
+<!-- 일별 거래 수 (일반 사용자 / 사업자 구분) -->
+<select id="selectMonthlyTradeData" resultType="java.util.HashMap">
+    SELECT
+        TO_CHAR(TRUNC(t.TRADE_DATE), 'MM-DD') AS trade_date,
+        SUM(CASE WHEN p.COM_NUM IS NULL THEN 1 ELSE 0 END) AS user_trades,
+        SUM(CASE WHEN p.COM_NUM IS NOT NULL THEN 1 ELSE 0 END) AS company_trades
+    FROM TRADES t
+    JOIN PRODUCT p ON t.PRD_NUM = p.PRD_NUM
+    WHERE t.TRADE_DATE >= TRUNC(SYSDATE) - 29
+    GROUP BY TRUNC(t.TRADE_DATE)
+    ORDER BY TRUNC(t.TRADE_DATE)
+</select>
+
+
+    <!-- 총 상품 수 조회 -->
+    <select id="selectTotalProductCount" resultType="int">
+        SELECT COUNT(*) FROM product
+    </select>
+
+    <!-- 기업 상품 수 조회 -->
+    <select id="selectCompanyProductCount" resultType="int">
+        SELECT COUNT(*) FROM product WHERE com_num IS NOT NULL
+    </select>
+
+    <!-- 사용자 등록 상품 수 조회 -->
+    <select id="selectUserProductCount" resultType="int">
+        SELECT COUNT(*) FROM product WHERE com_num IS NULL
+    </select>
+
+    <!-- 대기 중인 문의사항 조회 -->
+    <select id="selectPendingInquiries" resultType="kr.co.sist.DTO.InquiryDTO">
+        SELECT * FROM (
+            SELECT 
+                inq_num,
+                title,
+                user_num,
+                input_date,
+                status_type
+            FROM inquiry
+            WHERE status_type = '대기'
+            ORDER BY input_date DESC
+        ) WHERE ROWNUM <![CDATA[<=]]> 5
+    </select>
+
+</mapper>

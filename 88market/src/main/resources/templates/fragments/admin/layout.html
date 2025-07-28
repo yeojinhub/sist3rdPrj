@@ -20,6 +20,8 @@
 	<div class="content">
 		<div th:insert="${contentFragment}"></div>
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/admin/dashboard.js}" defer></script>
 
 	<!-- 필요하다면 하단 스크립트 -->
 	<script th:src="@{/js/admin/script.js}" defer></script>
