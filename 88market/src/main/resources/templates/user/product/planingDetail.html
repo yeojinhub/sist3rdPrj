@@ -49,12 +49,12 @@
 	
 	<!-- 메인 콘텐츠 -->
 	<main class="product-page-container">
-		<div class="product-main-content">
+		<div class="product-main-content" >
 			<!-- 왼쪽 영역: 상품 이미지 및 상세 설명 -->
-			<section class="product-gallery-section">
+			<section class="product-gallery-section" >
 				<!-- 메인 이미지 캐러셀 -->
-				<div class="main-image-carousel fade">
-				<th:block th:each="imgName : ${imgNum}">
+				<div class="main-image-carousel fade" style="width: 600px; height: 500px">
+				<th:block th:each="imgName : ${imgNum}" >
 				  <div>
 				    <img th:src="@{${imgName}}" alt="상품 이미지">
 				  </div>
