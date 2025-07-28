@@ -309,16 +309,16 @@ public class ProductController {
     	
         UserDTO userInfo = productService.getUserByLoginId(loginId);
         int safeCount = productService.getSafeByLoginId(loginId);
-        int reviewCount = productService.getReviewByLoginId(loginId);
         model.addAttribute("userInfo",    userInfo);
         model.addAttribute("safeCount",   safeCount);
-        model.addAttribute("reviewCount", reviewCount);
         
     	
         model.addAttribute("tab", "");
         
     	return "user/mypage";
     }
+    
+ 
     
     // 민경 - 검색 - 찜하기( 로그인 )
     @GetMapping("/check-login")
@@ -335,12 +335,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-	/*
-	 * // 찜하기 리스트 - 이메일로 가져오기 private String getUserNumByEmail(String email) {
-	 * UserDTO user = productService.getUserByLoginId(email); return user != null ?
-	 * user.getUserNum() : null; }
-	 */
-    
+
     //더하기
     @PostMapping("/product/wishlist/add")
     @ResponseBody
@@ -383,8 +378,7 @@ public class ProductController {
 
     @GetMapping("/mypage/product/delete")
     @ResponseBody
-    public ResponseEntity<String> deleteProduct(@RequestParam("prdNum") String prdNum,
-                                               @AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<String> deleteProduct(@RequestParam("prdNum") String prdNum, @AuthenticationPrincipal UserDetails user) {
         System.out.println("상품 삭제 요청 - 상품번호: " + prdNum);
         
         if (user == null) {
