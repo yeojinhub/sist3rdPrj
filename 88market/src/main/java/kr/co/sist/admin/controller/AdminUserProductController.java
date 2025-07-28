@@ -23,6 +23,7 @@ import kr.co.sist.admin.Service.AdminUserProductService;
 import kr.co.sist.admin.util.AdminSearchUserProductDTO;
 import kr.co.sist.admin.util.UserProductPagination;
 import kr.co.sist.user.Service.CategoryService;
+import kr.co.sist.user.Service.ProductService;
 
 @Controller
 @RequestMapping("/admin/userProduct")
@@ -34,6 +35,9 @@ public class AdminUserProductController {
   // 카테고리 조회용 서비스
   @Autowired
   private CategoryService categoryService;
+  
+  @Autowired
+  private ProductService ps;
   
   
   //@GetMapping({"/userProduct", "/userProductList"})
@@ -84,6 +88,11 @@ public class AdminUserProductController {
 	  public String detail(@PathVariable("prdNum") String prdNum, Model model) {
 		  AdminUserProductDTO dto = service.findByPrdNum(prdNum);
 		  model.addAttribute("product", dto);
+		  
+		  dto.getProduct().setImgDTO(ps.selectImageByNum(dto.getProduct().getImgNum()));
+		  
+		  System.out.println(dto.getProduct());
+		  
 		  model.addAttribute("categories", categoryService.getAllCategories());
 		  return "admin/userProduct/userProductDetail";
 	  }
