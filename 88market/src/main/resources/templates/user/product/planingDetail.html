@@ -97,7 +97,7 @@
 
 				<!-- 행동 버튼 -->
 				<div class="action-buttons">
-					<button class="btn-buy" th:onclick="|location.href='@{/buy}'|">구매하기</button>
+					<button class="btn-buy" th:onclick="|location.href='@{/buy/{id}(id=${Product[0].prdNum})}'|">구매하기</button>
 				</div>
 				</div>
 

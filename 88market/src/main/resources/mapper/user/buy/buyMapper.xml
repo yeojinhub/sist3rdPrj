@@ -31,7 +31,7 @@
 			SELECT SEQ_TRD_NUM.NEXTVAL FROM DUAL
 		</selectKey>
     	INSERT INTO TRADES (TRADE_ID, BUYER_ID, SELLER_ID, DELIVERY_NUM, PRD_NUM)
-    	VALUES(#{tradeId}, #{buyerId}, #{sellerId}, #{deliveryNum}, #{prdNum})
+    	VALUES(#{tradeId}, #{buyerId}, '15', #{deliveryNum}, #{prdNum})
     </insert>
     
     <!-- #-3. PAYMENTS 테이블에 INSERT -->

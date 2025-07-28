@@ -37,8 +37,8 @@
     <!-- 카카오 사용자 주소 추가 -->
     <insert id="addKakaoAddress" parameterType="kr.co.sist.DTO.UserDTO">
         INSERT INTO ADDRESS
-            (ADDR_NUM, TEL, RECIPIENT_NAME, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
-        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{name}, #{zipcode}, #{address},
+            (ADDR_NUM, TEL, NAME, RECIPIENT_NAME, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{tel}, #{name}, #{name}, #{zipcode}, #{address},
             'Y', #{userNum})
     </insert>
 
