@@ -17,8 +17,8 @@
 	
 	<insert id="addAddress" parameterType="kr.co.sist.DTO.UserDTO">
 		INSERT INTO ADDRESS
-        	(ADDR_NUM, RECIPIENT_NAME, TEL, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
-        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{name}, #{tel}, #{zipcode}, #{address},
+        	(ADDR_NUM, RECIPIENT_NAME, NAME, TEL, ZIPCODE, ADDRESS, ADDR_TYPE, USER_NUM)
+        VALUES(SEQ_ADDR_NUM.NEXTVAL, #{name}, #{name}, #{tel}, #{zipcode}, #{address},
         	'Y', #{userNum})
 	</insert>
 
