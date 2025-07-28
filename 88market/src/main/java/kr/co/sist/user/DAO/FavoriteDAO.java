@@ -39,8 +39,17 @@ public class FavoriteDAO {
 	}
 	
 	public List<ProductDTO> selectWishlistByUserNum(String userNum){
-	    List<ProductDTO> wishlist = sqlSession.selectList("FavoriteMapper.selectWishlistByUserNum", userNum);
+		System.out.println("selectWishlistByUserNum 호출 - userNum: " + userNum);
+		List<ProductDTO> wishlist = sqlSession.selectList("FavoriteMapper.selectWishlistByUserNum", userNum);
 
+		System.out.println("Wishlist size: " + (wishlist != null ? wishlist.size() : 0));
 		return sqlSession.selectList("FavoriteMapper.selectWishlistByUserNum",userNum);
 	}
+	
+	// 삭제
+	public void deleteFavoriteByProduct(String prdNum) {
+	    sqlSession.delete("FavoriteMapper.deleteFavoriteByProduct", prdNum);
+	}
+	
+	
 }

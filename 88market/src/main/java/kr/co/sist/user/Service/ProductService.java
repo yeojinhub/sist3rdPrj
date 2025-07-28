@@ -114,18 +114,34 @@ public class ProductService {
         return productDAO.getReviewByLoginId(loginId);
     }
     
-    // 민경 - wishlist 불러오기
+    // alsrud - 마이페이지 (판매상품 삭제) 
+    public void deleteProduct(String prdNum) {
+        favoriteDAO.deleteFavoriteByProduct(prdNum);  
+        productDAO.deleteProduct(prdNum);
+        imageDAO.deleteImageByProduct(prdNum);
+    }
+    
+    
+    // 민경 - wishlist
     public List<ProductDTO> getWishlist(String userNum) {
-        List<ProductDTO> wishlist = favoriteDAO.selectWishlistByUserNum(userNum);
-    	 System.out.println("Wishlist from ProductService: " + wishlist);
         return favoriteDAO.selectWishlistByUserNum(userNum);
     }
-    // 민경 - whishlist 삭제
-    @Transactional
-    public void removeFromWishlist(String userNum, String  productId) {
-        System.out.println("Attempting to remove from wishlist: " + userNum + ", Product ID: " + productId);
-        favoriteDAO.deleteFavorite(userNum,  productId);
+    // 찜 등록
+    public void addToWishlist(String userNum, String prdNum) {
+        favoriteDAO.insertFavorite(userNum, prdNum);
     }
+
+    // 찜 해제
+    public void removeFromWishlist(String userNum, String prdNum) {
+        favoriteDAO.deleteFavorite(userNum, prdNum);
+    }
+
+    // 사용자 찜 목록 가져오기
+    public List<ProductDTO> getWishlistByUserNum(String userNum) {
+        return favoriteDAO.selectWishlistByUserNum(userNum);
+    }   
+    
+    
 }
 
 
