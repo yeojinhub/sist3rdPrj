@@ -30,8 +30,11 @@
 				</a>
 					<ul class="submenu">
 						<li><a th:href="@{/admin/account/users}">ㄴ 회원 계정관리</a></li>
-						<li><a th:href="@{/admin/account/admins}">ㄴ 관리자 계정관리</a></li>
-						<li><a th:href="@{/admin/account/admins}">ㄴ 기업 계정관리</a></li>
+						<li
+							th:if="${session.loggedInAccountType == 'ADMIN' and session.rollType == 1}">
+							<a th:href="@{/admin/account/admins}">ㄴ 관리자 계정관리</a>
+						</li>
+						<li><a th:href="@{/admin/account/company}">ㄴ 기업 계정관리</a></li>
 					</ul></li>
 
 				<li class="menu-item has-submenu"
@@ -45,12 +48,15 @@
 					</ul></li>
 				<!-- 관리자/기업 모두 보이는 항목들 -->
 				<li class="menu-item has-submenu"
-					th:if="${session.loggedInAccountType == 'ADMIN' || session.loggedInAccountType == 'COMPANY' }"><a href="#"
-					class="toggle-submenu"> <i class="fas fa-clipboard-list"></i>기획전 관리 <i class="fas fa-chevron-down arrow"></i>
+					th:if="${session.loggedInAccountType == 'ADMIN' || session.loggedInAccountType == 'COMPANY' }"><a
+					href="#" class="toggle-submenu"> <i
+						class="fas fa-clipboard-list"></i>기획전 관리 <i
+						class="fas fa-chevron-down arrow"></i>
 				</a>
 					<ul class="submenu">
 						<li><a th:href="@{/admin/planing/planingList}">ㄴ 상품 관리</a></li>
-						<li><a th:href="@{/admin/planing/planingOrderList}">ㄴ 주문 관리</a></li>
+						<li><a th:href="@{/admin/planing/planingOrderList}">ㄴ 주문
+								관리</a></li>
 					</ul></li>
 
 				<li class="menu-item"
@@ -60,7 +66,8 @@
 
 				<li class="menu-item has-submenu"
 					th:if="${session.loggedInAccountType == 'ADMIN'}"><a href="#"
-					class="toggle-submenu"> <i class="fas fa-map-marker-alt"></i>게시판 관리 <i class="fas fa-chevron-down arrow"></i>
+					class="toggle-submenu"> <i class="fas fa-map-marker-alt"></i>게시판
+						관리 <i class="fas fa-chevron-down arrow"></i>
 				</a>
 					<ul class="submenu">
 						<li><a th:href="@{/admin/notice}">ㄴ 공지사항 관리</a></li>
