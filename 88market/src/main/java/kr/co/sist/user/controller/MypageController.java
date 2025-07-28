@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -256,6 +258,23 @@ public class MypageController {
        if (!ok) result.put("msg", "서버 오류로 계좌를 삭제하지 못했습니다.");
        return result;
    }
-	
-	*/
+*/	
+
+    @PostMapping("/mypage/product/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteProduct(@RequestParam("prdNum") String prdNum,
+                                                @AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+
+        try {
+            // 서비스 메서드 호출하여 상품 삭제
+            productService.deleteProduct(prdNum);  
+            return ResponseEntity.ok("상품 삭제 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 삭제 실패: " + e.getMessage());
+        }
+    }
 }

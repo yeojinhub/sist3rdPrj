@@ -24,5 +24,10 @@ public class ImageDAO {
     public ImageDTO selectImageByNum(@Param("imgNum") Integer imgNum) {
     	return sqlSession.selectOne("ImageMapper.selectImageByNum",imgNum);
     }
+    
+    // 삭제
+    public void deleteImageByProduct(String prdNum) {
+        sqlSession.delete("ImageMapper.deleteImageByProduct", prdNum);
+    }
 }
 

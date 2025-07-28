@@ -198,6 +198,12 @@
 	   WHERE u.EMAIL = #{email}
 	</select>
 	
+	
+	<!-- 마이페이지 내상품 삭제 -->
+	<delete id="deleteProduct" parameterType="String">
+    DELETE FROM PRODUCT WHERE PRD_NUM = #{prdNum}
+	</delete>
+	
 </mapper>
 
 

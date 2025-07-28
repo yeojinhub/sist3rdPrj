@@ -307,9 +307,9 @@ public class ProductController {
         model.addAttribute("myProducts", myProducts);
         model.addAttribute("totalCount", myProducts.size());
     	
-        UserDTO userInfo    = productService.getUserByLoginId(loginId);
-        int     safeCount   = productService.getSafeByLoginId(loginId);
-        int     reviewCount = productService.getReviewByLoginId(loginId);
+        UserDTO userInfo = productService.getUserByLoginId(loginId);
+        int safeCount = productService.getSafeByLoginId(loginId);
+        int reviewCount = productService.getReviewByLoginId(loginId);
         model.addAttribute("userInfo",    userInfo);
         model.addAttribute("safeCount",   safeCount);
         model.addAttribute("reviewCount", reviewCount);
@@ -320,5 +320,88 @@ public class ProductController {
     	return "user/mypage";
     }
     
+    // 민경 - 검색 - 찜하기( 로그인 )
+    @GetMapping("/check-login")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkLogin(@AuthenticationPrincipal UserDetails user) {
+        Map<String, Object> response = new HashMap<>();
+        
+        if (user == null) {
+            response.put("loggedIn", false);  // 로그인되지 않음
+        } else {
+            response.put("loggedIn", true);   // 로그인됨
+        }
+        
+        return ResponseEntity.ok(response);
+    }
 
+	/*
+	 * // 찜하기 리스트 - 이메일로 가져오기 private String getUserNumByEmail(String email) {
+	 * UserDTO user = productService.getUserByLoginId(email); return user != null ?
+	 * user.getUserNum() : null; }
+	 */
+    
+    //더하기
+    @PostMapping("/product/wishlist/add")
+    @ResponseBody
+    public ResponseEntity<String> addToWishlist(@RequestBody Map<String, String> request,
+                                                @AuthenticationPrincipal UserDetails user) {
+        String prdNum = request.get("prdNum");
+        
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+
+        String email = user.getUsername();
+        System.out.println("로그인된 사용자 이메일: " + email); // 디버깅
+        
+        // 먼저 getUserByLoginId로 시도
+        UserDTO userInfo = productService.getUserByLoginId(email);
+        System.out.println("getUserByLoginId 결과: " + (userInfo != null ? userInfo.getUserNum() : "null")); // 디버깅
+        
+        String userNum = null;
+        
+        if (userInfo != null) {
+            userNum = userInfo.getUserNum();
+        } else {
+            // getUserByLoginId가 실패하면 email을 직접 userNum으로 사용
+            System.out.println("getUserByLoginId 실패, email을 직접 userNum으로 사용 시도");
+            userNum = email;
+        }
+        
+        System.out.println("최종 사용할 userNum: " + userNum); // 디버깅
+
+        try {
+            productService.likeProduct(userNum, prdNum);
+            return ResponseEntity.ok("찜 등록 성공!");
+        } catch (Exception e) {
+            System.out.println("찜 등록 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("찜 등록 실패: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/mypage/product/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteProduct(@RequestParam("prdNum") String prdNum,
+                                               @AuthenticationPrincipal UserDetails user) {
+        System.out.println("상품 삭제 요청 - 상품번호: " + prdNum);
+        
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
+        
+        try {
+             productService.deleteProduct(prdNum);
+            
+            System.out.println("상품 삭제 성공");
+            return ResponseEntity.ok("상품이 삭제되었습니다.");
+        } catch (Exception e) {
+            System.out.println("상품 삭제 실패: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                               .body("상품 삭제에 실패했습니다: " + e.getMessage());
+        }
+    }
+    
 }

@@ -83,6 +83,50 @@
 		    });
 		  });
 		</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // 기존 탭 전환 로직
+    document.querySelectorAll('.product-tabs .tab-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const prevTab = document.querySelector('.product-tabs .tab-button.active');
+            const prevCont = document.querySelector('.tab-content.active');
+            if (prevTab) prevTab.classList.remove('active');
+            if (prevCont) prevCont.classList.remove('active');
+
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.target).classList.add('active');
+        });
+    });
+
+    // 상품삭제 링크 클릭 시 삭제 요청
+    document.querySelectorAll('.delete-product').forEach(link => {
+        link.addEventListener('click', function() {
+            const prdNum = this.getAttribute('data-prd-num'); // 삭제할 상품 번호
+            
+            // 삭제 확인
+            if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+                // URL로 삭제 요청
+                axios.get('/mypage/product/delete', {
+                    params: {
+                        prdNum: prdNum
+                    }
+                })
+                .then(function(response) {
+                    alert('상품이 삭제되었습니다.');
+                    location.reload();  // 페이지 새로고침
+                })
+                .catch(function(error) {
+                    console.error("상품 삭제 실패:", error);
+                    alert('상품 삭제에 실패했습니다.');
+                });
+            }
+        });
+    });
+});
+
+</script>
+		
+	<script th:src="@{/js/mypage-tabs.js}"></script>
 	<!-- 푸터 -->
 	<th:block th:insert="~{components/user/footer :: footer}"></th:block>
 

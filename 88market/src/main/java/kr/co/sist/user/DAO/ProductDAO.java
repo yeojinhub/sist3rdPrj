@@ -100,5 +100,10 @@ public class ProductDAO {
         param.put("email", email);
         return sqlSession.selectOne("ProductMapper.getReviewByLoginId", param);
     }
+    
+    // 민경 판매상품 삭제
+    public void deleteProduct(String prdNum) {
+        sqlSession.delete("ProductMapper.deleteProduct", prdNum);  
+    }
 }
 
