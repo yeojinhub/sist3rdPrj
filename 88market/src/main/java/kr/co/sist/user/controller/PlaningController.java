@@ -165,6 +165,7 @@ public class PlaningController {
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("reviewCount", reviewCount);
 		
+       
 		return "user/product/planingSeller";
 	}
 	
@@ -196,6 +197,7 @@ public class PlaningController {
 	        map.put("mainImage", p.getMainImage());
 	        productList.add(map);
 	    }
+	    
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("products", productList);

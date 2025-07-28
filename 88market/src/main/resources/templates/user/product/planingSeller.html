@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>88마켓 - 판매등록</title>
 <!-- 메인 CSS -->
-<link rel="stylesheet" th:href="@{/css/user/seller.css}">
+<link rel="stylesheet" th:href="@{/css/user/seller2.css}">
 <!-- 외부파일(jQuery, Font Awesome 등) -->
 <th:block th:replace="~{components/user/external :: external}"></th:block>
 </head>
@@ -41,7 +41,7 @@ $(function() {
 	            ? '<div class="overlay_seller"><p>판매완료</p></div>'
 	            : '';
 	          const cardHtml = `
-	            <div class="product-card_seller${soldClass}">
+	            <div class="product-card_seller_1${soldClass}">
 	              <a href="/planingDetail?id=${p.prdNum}&comNum=${p.comNum}" style="text-decoration: none; color: inherit;">
 	                <img src="${p.mainImage}" alt="${p.title}">
 	                ${overlayHtml}
@@ -104,18 +104,18 @@ $(function() {
 					<a href="#" class="filter-tab_seller" data-type="Y">판매중 <span th:text="${sellAllCnt}"></span></a>
 					<a href="#" class="filter-tab_seller" data-type="N">판매완료 <span th:text="${sellSoldOutCnt}"></span></a>
 				</nav>
-				<div class="products-header_seller">
+				<div class="products-header_seller_1">
 					<span class="total-products_seller" th:text="|총 ${ ProductAllCnt }개|">상품총 갯수</span>
-					<div class="sort-options_seller">
+					<div class="sort-options_seller_1">
 						<a href="#" class="sort-option" data-sort="recent" >최신순</a> | 
 						<a href="#" class="sort-option" data-sort="low">낮은가격순</a> | 
 						<a href="#" class="sort-option" data-sort="high">높은가격순</a>
 					</div>
 				</div>
 				<div class="product-grid_seller">
-				  <div th:each="product : ${AllProductsByCompany}" class="product-card_seller">
-					  <a th:href="@{/planingDetail(id=${product.PRD_NUM}, comNum=${product.COM_NUM})}" style="text-decoration: none; color: inherit;">
-					    <img th:src="@{product['MAIN_IMAGE']}" alt="상품 이미지" />
+				  <div th:each="product : ${AllProductsByCompany}" class="product-card_seller_1">
+					  <a th:href="@{'/planingDetail'(id=${product['prdNum']}, comNum=${product['comNum']})}"  style="text-decoration: none; color: inherit;">
+					    <img th:src="${product['mainImage']}" alt="상품 이미지"  />
 					    <div th:if="${product.SELL_TYPE == 'N'}" class="overlay_seller">
 					      <p>판매완료</p>
 					    </div>
