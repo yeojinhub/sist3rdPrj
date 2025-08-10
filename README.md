@@ -10,13 +10,13 @@ sist 쌍용교육센터 3차 프로젝트
 </p>
 
 ## 📌 목차
-1. [개요](#-개요)
-2. [프로젝트 목표](#-프로젝트-목표)
-3. [개발기간](#-개발기간)
-4. [멤버구성](#-멤버구성)
-5. [기술스택](#-Stacks)
+1. [💻 개요](#-개요)
+2. [🚀 프로젝트 목표](#-프로젝트-목표)
+3. [📅 개발 기간](#-개발기간)
+4. [🧑‍🤝‍🧑 멤버 구성](#-멤버구성)
+5. [🛠️ 기술스택](#-Stacks)
 
-## 🖥️ 개요
+## 💻 개요
 > 프로젝트 이름: 88마켓
 > 
 > Spring Boot 기반 중고거래 플랫폼 사이트
@@ -26,7 +26,7 @@ sist 쌍용교육센터 3차 프로젝트
 > 상품 등록/거래/문의/신고 관리, 관리자용 서비스까지 구현
 > 
 
-## 🖥️ 프로젝트 목표
+## 🚀 프로젝트 목표
 > 기업 전용 판매 영역인 기획관, 거래 상태 관리,
 > 
 > 개인 거래간 1:1 문의·답변, 신고 기능 등 실용적인 기능
@@ -36,8 +36,9 @@ sist 쌍용교육센터 3차 프로젝트
 > 관리자 페이지를 통해 플랫폼 운영의 효율성까지 설계
 > 
 
-## 🕰️ 개발기간
+## 📅 개발기간
 > 2025/6/16~2025/7/29(6주)
+> 
 
 ## 🧑‍🤝‍🧑 멤버구성
 > ### 이여진(조장)[@yeojinhub](https://github.com/yeojinhub)
@@ -64,7 +65,7 @@ sist 쌍용교육센터 3차 프로젝트
 > 관리자 채팅 관리, 신고 관리 기능구현
 > 
 
-## ⚙️ Stacks
+## 🛠️ Stacks
 > ### Front-End
 > 
 > ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
@@ -97,5 +98,6 @@ sist 쌍용교육센터 3차 프로젝트
 > ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 > ![KakaoTalk](https://img.shields.io/badge/kakaotalk-ffcd00.svg?style=for-the-badge&logo=kakaotalk&logoColor=000000)
 > ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+> 
 
 
