@@ -17,29 +17,40 @@ sist 쌍용교육센터 3차 프로젝트
 
 ## 🖥️ 개요
 > 프로젝트 이름: 88마켓
+> 
+> Spring Boot 기반 중고거래 플랫폼 사이트
+> 
+> 개인, 기업 모두 사용 가능한 중고거래 웹 서비스
+> 
+> 상품 등록/거래/문의/신고 관리, 관리자용 서비스까지 구현
+> 
 
 ## 🕰️ 개발기간
 > 2025/6/16~2025/7/29(6주)
 
 ## 🧑‍🤝‍🧑 멤버구성
 > ### 이여진(조장)[@yeojinhub](https://github.com/yeojinhub)
-> 로그인, 회원가입
+> 사용자 로그인, 회원가입, 마이페이지 기능구현
+> 관리자 계정 관리(사용자, 기업, 관리자) 기능구현
 > 
 > ### 강태일(부조장)[@tgncosist2](https://github.com/tgncosist2)
-> 사용자 게시판(이벤트, 공지사항, FAQ, 문의사항), 사기조회 기능구현
-> 관리자 게시판(이벤트, 공지사항, FAQ, 문의사항) 기능구현
+> 사용자 게시판(이벤트, 공지사항, FAQ, 문의사항), 사기조회, 기획관 결제 기능구현
+> 관리자 게시판 관리(이벤트, 공지사항, FAQ, 문의사항) 기능구현
 > 
 > ### 김민경[@min-7343](https://github.com/min-7343)
-> 사용자 메인페이지, 카테고리, 찜, 상품 광고, 키워드 검색 기능구현
+> 사용자 메인페이지, 카테고리, 찜, 상품 광고, 키워드 검색, 마이페이지 기능구현
+> 관리자 상품 관리(상품 관리, 거래 관리) 기능구현
 > 
 > ### 장태규[@taegu825](https://github.com/taegu825)
->
+> 관리자 로그인, 대시보드 기능구현
 > 
 > ### 유명규[@RyuMG](https://github.com/RyuMG)
-> 기획관 메인페이지, 기업 상품등록, 기획관 상세페이지, 결제 기능구현
+> 기획관 메인페이지, 기업 상품등록, 기획관 상세페이지
+> 관리자 기획관 관리(상품 관리, 주문 관리) 기능구현
 > 
 > ### 이대웅[@bkj0517](https://github.com/bkj0517)
-> 사용자 상품등록, 상품 상세페이지, 안전결제, 채팅 기능구현
+> 사용자 상품등록, 상품 상세페이지, 채팅, 신고 기능구현
+> 관리자 채팅 관리, 신고 관리 기능구현
 > 
 
 ## ⚙️ Stacks
@@ -52,15 +63,16 @@ sist 쌍용교육센터 3차 프로젝트
 > 
 > ### Back-End
 >
+> ![Java17](https://img.shields.io/badge/java17-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 > ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 > ![Thymeleaf 3.5.3](https://img.shields.io/badge/Thymeleaf%203.5.3-%23005C0F.svg?style=for-the-badge&logo=Thymeleaf&logoColor=white)
-> ![Java17](https://img.shields.io/badge/java17-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 > ![JPA](https://img.shields.io/badge/JPA-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 > ![Lombok](https://img.shields.io/badge/Lombok-%23CC0000.svg?style=for-the-badge&logo=ruby-on-rails&logoColor=white)
 > 
 > ### DataBase
 > 
 > ![Oracle DataBase 19c](https://img.shields.io/badge/Oracle%20DataBase%2019c-F80000?style=for-the-badge&logo=oracle&logoColor=white)
+> ![Mybatis](https://img.shields.io/badge/Mybatis-FFFFFF?style=for-the-badge&logo=Mybatis&logoColor=#7D929E)
 >
 > ### Environment
 > 
