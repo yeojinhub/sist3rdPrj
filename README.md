@@ -12,9 +12,9 @@ sist 쌍용교육센터 3차 프로젝트
 ## 📌 목차
 1. [💻 개요](#-개요)
 2. [🚀 프로젝트 목표](#-프로젝트-목표)
-3. [📅 개발 기간](#-개발기간)
-4. [🧑‍🤝‍🧑 멤버 구성](#-멤버구성)
-5. [🛠️ 기술스택](#-Stacks)
+3. [📅 개발 기간](#-개발-기간)
+4. [🧑‍🤝‍🧑 멤버 구성](#-멤버-구성)
+5. [🛠️ 기술 스택](#-기술-스택)
 
 ## 💻 개요
 > 프로젝트 이름: 88마켓
@@ -36,11 +36,11 @@ sist 쌍용교육센터 3차 프로젝트
 > 관리자 페이지를 통해 플랫폼 운영의 효율성까지 설계
 > 
 
-## 📅 개발기간
+## 📅 개발 기간
 > 2025/6/16~2025/7/29(6주)
 > 
 
-## 🧑‍🤝‍🧑 멤버구성
+## 🧑‍🤝‍🧑 멤버 구성
 > ### 이여진(조장)[@yeojinhub](https://github.com/yeojinhub)
 > 사용자 로그인, 회원가입, 마이페이지 기능구현
 > 관리자 계정 관리(사용자, 기업, 관리자) 기능구현
@@ -65,7 +65,7 @@ sist 쌍용교육센터 3차 프로젝트
 > 관리자 채팅 관리, 신고 관리 기능구현
 > 
 
-## 🛠️ Stacks
+## 🛠️ 기술 스택
 > ### Front-End
 > 
 > ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
@@ -77,20 +77,23 @@ sist 쌍용교육센터 3차 프로젝트
 >
 > ![Java17](https://img.shields.io/badge/java17-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 > ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+> ![Spring MVC](https://img.shields.io/badge/Spring%20MVC-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+> ![Spring Security JWT](https://img.shields.io/badge/Spring%20Security-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 > ![Thymeleaf 3.5.3](https://img.shields.io/badge/Thymeleaf%203.5.3-%23005C0F.svg?style=for-the-badge&logo=Thymeleaf&logoColor=white)
 > ![JPA](https://img.shields.io/badge/JPA-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+> ![Mybatis](https://img.shields.io/badge/Mybatis-FFFFFF?style=for-the-badge&logo=Mybatis&logoColor=#7D929E)
 > ![Lombok](https://img.shields.io/badge/Lombok-%23CC0000.svg?style=for-the-badge&logo=ruby-on-rails&logoColor=white)
 > 
 > ### DataBase
 > 
 > ![Oracle DataBase 19c](https://img.shields.io/badge/Oracle%20DataBase%2019c-F80000?style=for-the-badge&logo=oracle&logoColor=white)
-> ![Mybatis](https://img.shields.io/badge/Mybatis-FFFFFF?style=for-the-badge&logo=Mybatis&logoColor=#7D929E)
 >
 > ### Environment
 > 
 > #### IDE ![Eclipse](https://img.shields.io/badge/Eclipse-FE7A16.svg?style=for-the-badge&logo=Eclipse&logoColor=white)
 > #### Build tools ![Maven](https://img.shields.io/badge/Maven-C71A36.svg?style=for-the-badge&logo=apachemaven&logoColor=white)
 > #### Version control ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+> #### CI/CD ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white)
 >
 > ### Communication
 > 
