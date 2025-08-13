@@ -17,7 +17,9 @@ sist 쌍용교육센터 3차 프로젝트
 4. [🧑‍🤝‍🧑 멤버 구성](#-멤버-구성)
 5. [🛠️ 기술 스택](#기술스택)
 6. [🗂 아키텍처 구조](#-아키텍처-구조)
-7. [🛢 ERD Diagram](#-Entity-Relationship-Diagram)
+7. [🎬 사용자 시연 영상](#-사용자-시연-영상)
+8. [🎬 관리자 시연 영상](#-관리자-시연-영상)
+9. [🛢 ERD Diagram](#-Entity-Relationship-Diagram)
 
 ## 📝 개요
 > 🔹 **프로젝트명** : 88마켓
@@ -57,14 +59,14 @@ sist 쌍용교육센터 3차 프로젝트
 > 
 
 ## 🧑‍🤝‍🧑 멤버 구성
-> ### 👩‍💻 이여진(조장)\[[@yeojinhub\]](https://github.com/yeojinhub)
+> ### 👩‍💻 이여진(조장)\[[GitHub : @yeojinhub\]](https://github.com/yeojinhub)
 > 🔹 **사용자 회원 기능** : 회원가입, 로그인
 >
 > 🔹 **사용자 마이페이지** : 내 정보 변경, 탈퇴하기
 > 
 > 🔹 **관리자 계정 관리** : 회원/기업/관리자 계정 CRUD
 > 
-> ### 👨‍💻 강태일(부조장)\[[@tgncosist2\]](https://github.com/tgncosist2)
+> ### 👨‍💻 강태일(부조장)\[[GitHub : @tgncosist2\]](https://github.com/tgncosist2)
 > 🔹 **사용자 게시판** : 이벤트, 공지사항, FAQ, 문의사항
 >
 > 🔹 **사용자 사기조회** : 이메일, 전화번호 등 검색하여 사기 조회
@@ -73,7 +75,7 @@ sist 쌍용교육센터 3차 프로젝트
 > 
 > 🔹 **관리자 게시판 관리** : 이벤트, 공지사항, FAQ, 문의사항 CRUD
 > 
-> ### 👩‍💻 김민경\[[@min-7343\]](https://github.com/min-7343)
+> ### 👩‍💻 김민경\[[GitHub : @min-7343\]](https://github.com/min-7343)
 > 🔹 **사용자 메인페이지** : UI 및 키워드 검색
 >
 > 🔹 **사용자 카테고리** : 카테고리별 상품 리스트, 찜, 상품 광고 기능 구현
@@ -82,19 +84,19 @@ sist 쌍용교육센터 3차 프로젝트
 >  
 > 🔹 **관리자 상품 관리** : 상품 및 거래 관리 CRUD
 > 
-> ### 👨‍💻 장태규\[[@taegu825\]](https://github.com/taegu825)
+> ### 👨‍💻 장태규\[[GitHub : @taegu825\]](https://github.com/taegu825)
 > 🔹 **관리자 로그인**
 >
 > 🔹 **관리자 대시보드** : 상품 거래/등록 통계, 최근 문의 내역
 > 
-> ### 👨‍💻 유명규\[[@RyuMG\]](https://github.com/RyuMG)
+> ### 👨‍💻 유명규\[[GitHub : @RyuMG\]](https://github.com/RyuMG)
 > 🔹 **사용자 기획관** : 기업별 상품 리스트, 등록, 상세페이지 기능 구현
 > 
 > 🔹 **관리자 기획관 관리** : 전체 기업의 상품 및 주문 관리 CRUD
 >
 > 🔹 **기업 상품 관리** : 해당 기업의 상품 및 주문 관리 CRUD
 > 
-> ### 👨‍💻 이대웅\[[@bkj0517\]](https://github.com/bkj0517)
+> ### 👨‍💻 이대웅\[[GitHub : @bkj0517\]](https://github.com/bkj0517)
 > 🔹 **사용자 상품** : 상품 등록 및 상세페이지
 > 
 > 🔹 **사용자 채팅** : 채팅 및 신고 기능 구현 
@@ -174,6 +176,13 @@ sist 쌍용교육센터 3차 프로젝트
 >
 > **Client** → **JWT Fliter** → **Security Context** → **Controller** → **Service** → **DAO** → **DB**
 >
+<p align="right">
+  <a href="#목차">🔝 목차로 돌아가기</a>
+</p>
+
+## 🎬 사용자 시연 영상
+
+## 🎬 관리자 시연 영상
 
 ## 🛢 Entity Relationship Diagram
 <p>
