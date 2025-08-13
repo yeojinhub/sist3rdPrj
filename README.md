@@ -139,7 +139,7 @@ sist 쌍용교육센터 3차 프로젝트
 > ![네이버 로그인 API](https://img.shields.io/badge/Naver%20Login%20API-03C75A?style=for-the-badge&logo=naver&logoColor=white)
 > ![카카오 로그인 API](https://img.shields.io/badge/Kakao%20Login%20API-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=000000)
 > ![가상 결제 API](https://img.shields.io/badge/Payment%20API-005BAC?style=for-the-badge&logo=paypal&logoColor=white)
-
+> 
 > ### 🧰 Development Tools
 > 
 > #### IDE ![Eclipse](https://img.shields.io/badge/Eclipse-FE7A16.svg?style=for-the-badge&logo=Eclipse&logoColor=white)
@@ -181,8 +181,10 @@ sist 쌍용교육센터 3차 프로젝트
 </p>
 
 ## 🎬 사용자 시연 영상
+수정중..
 
 ## 🎬 관리자 시연 영상
+수정중..
 
 ## 🛢 Entity Relationship Diagram
 <p>
